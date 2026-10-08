@@ -1,6 +1,6 @@
 FROM python:3.14.7-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2 AS builder
 
-ARG UV_VERSION=0.11.19
+ARG UV_VERSION=0.12.23
 WORKDIR /build
 
 COPY pyproject.toml uv.lock README.md LICENSE NOTICE ./

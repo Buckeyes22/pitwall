@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -15,31 +16,40 @@ SHA = re.compile(r"^[0-9a-f]{40}$")
 RELEASE_WORKFLOWS = {"release.yml"}
 
 
-def unprovisioned_uv_sync_jobs(text: str) -> list[str]:
-    """Jobs that run ``uv sync`` without first provisioning Python 3.14.
+def _steps(job: Any) -> list[dict[str, Any]]:
+    return list((job or {}).get("steps") or [])
 
-    A runner without the pinned interpreter fails ``uv sync`` (scheduled CI,
-    2026-09-21). Accepted: ``actions/setup-python``, ``uv python install 3.14.7``, or
-    ``setup-uv`` with a 3.14 ``python-version``.
+
+def unprovisioned_uv_sync_jobs(text: str) -> list[str]:
+    """Jobs that run ``uv sync`` without first provisioning Python with ``actions/setup-python``.
+
+    A runner without the pinned interpreter fails ``uv sync`` (scheduled CI, 2026-09-21), and
+    ``uv python install`` cannot fetch a CPython release newer than the pinned uv knows
+    (release run 37827528877). ``actions/setup-python`` is the only accepted provisioner.
     """
     document = yaml.safe_load(text) or {}
     missing: list[str] = []
     for name, job in (document.get("jobs") or {}).items():
-        steps = (job or {}).get("steps") or []
+        steps = _steps(job)
         if not any("uv sync" in str(step.get("run", "")) for step in steps):
             continue
-        provisioned = any(
-            "setup-python" in str(step.get("uses", ""))
-            or "uv python install 3.14.7" in str(step.get("run", ""))
-            or (
-                "setup-uv" in str(step.get("uses", ""))
-                and str((step.get("with") or {}).get("python-version", "")).startswith("3.14")
-            )
-            for step in steps
-        )
-        if not provisioned:
+        if not any("actions/setup-python@" in str(step.get("uses", "")) for step in steps):
             missing.append(str(name))
     return missing
+
+
+def setup_python_without_version_file(text: str) -> list[str]:
+    """Jobs whose ``actions/setup-python`` step does not read ``.python-version``."""
+    document = yaml.safe_load(text) or {}
+    wrong: list[str] = []
+    for name, job in (document.get("jobs") or {}).items():
+        for step in _steps(job):
+            if "actions/setup-python@" not in str(step.get("uses", "")):
+                continue
+            with_ = step.get("with") or {}
+            if with_.get("python-version-file") != ".python-version" or "python-version" in with_:
+                wrong.append(str(name))
+    return wrong
 
 
 def check_workflow(path: Path) -> list[str]:
@@ -52,8 +62,12 @@ def check_workflow(path: Path) -> list[str]:
     if "concurrency:" not in text:
         errors.append("a concurrency policy is required")
     errors.extend(
-        f"job {job} runs uv sync without provisioning Python 3.14"
+        f"job {job} runs uv sync without actions/setup-python"
         for job in unprovisioned_uv_sync_jobs(text)
+    )
+    errors.extend(
+        f"job {job}: actions/setup-python must use python-version-file: .python-version alone"
+        for job in setup_python_without_version_file(text)
     )
     for line_number, line in enumerate(text.splitlines(), 1):
         match = IMMUTABLE_ACTION.match(line)

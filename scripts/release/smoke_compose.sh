@@ -40,17 +40,27 @@ docker compose config -q
 
 for service in api reconciler webhook cost-exporter mcp; do
     image="pitwall/${service}:${PITWALL_IMAGE_TAG}"
+    # The expected interpreter is the base image tag in this service's Dockerfile.
+    expected_python="$(sed -nE 's/^FROM python:([0-9]+\.[0-9]+\.[0-9]+)-slim@.*/\1/p' \
+        "docker/Dockerfile.${service}" | sort -u)"
+    if [[ ! "${expected_python}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        printf 'docker/Dockerfile.%s must pin exactly one python:X.Y.Z-slim base, found: %s\n' \
+            "${service}" "${expected_python:-none}" >&2
+        exit 2
+    fi
     test "$(docker image inspect --format '{{.Config.User}}' "${image}")" = "10001:10001"
     test "$(docker image inspect --format '{{if .Config.Healthcheck}}yes{{end}}' "${image}")" = "yes"
     docker run --rm --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m \
         --cap-drop ALL --security-opt no-new-privileges \
+        --env "EXPECTED_PYTHON=${expected_python}" \
         --entrypoint python "${image}" -c '
 import importlib.util
+import os
 import pathlib
 import platform
 import shutil
 
-assert platform.python_version() == "3.14.7"
+assert platform.python_version() == os.environ["EXPECTED_PYTHON"], platform.python_version()
 assert importlib.util.find_spec("pip") is None
 assert importlib.util.find_spec("ensurepip") is None
 assert importlib.util.find_spec("model_routing") is None
@@ -79,7 +89,7 @@ component_paths = (
     pathlib.Path("/app/docs/prompting"),
 )
 assert not [path for path in component_paths if path.exists()]
-print("Python 3.14.7; Agent Routing absent")
+print(f"Python {platform.python_version()}; Agent Routing absent")
 ' >"${PITWALL_SMOKE_ARTIFACT_DIR}/${service}-image-policy.txt"
 done
 
