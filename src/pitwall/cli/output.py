@@ -102,6 +102,15 @@ class Output:
             return
         self._stderr.print(Panel(message, title="Error", border_style="red"))
 
+    def print_error_line(self, message: str) -> None:
+        """Print one unwrapped line to stderr (no-op in JSON mode).
+
+        A boxed panel wraps at the terminal width and splits the remedy; use this for a
+        failure whose one sentence tells the reader what to do.
+        """
+        if not self.json_mode:
+            self._stderr.print(message, soft_wrap=True)
+
     def print_warning(self, message: str) -> None:
         """Render a warning panel or record warning for JSON."""
         if self.json_mode:

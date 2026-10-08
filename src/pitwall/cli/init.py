@@ -279,8 +279,15 @@ def cmd_init(argv: list[str]) -> int:
     except (
         Exception
     ) as exc:  # reason: CLI boundary: report a fixed code and the class, never the text
-        out.set_json({"error": "init_failed", "exception": type(exc).__name__})
-        if not out.json_mode:
-            out.print_error(f"Error: init_failed ({type(exc).__name__})")
+        from pitwall.cli.runtime_errors import report_failure
+
+        name = type(exc).__name__
+        report_failure(
+            out,
+            "init_failed",
+            exc,
+            extra={"exception": name},
+            fallback=f"Error: init_failed ({name})",
+        )
         out.emit()
         return 1

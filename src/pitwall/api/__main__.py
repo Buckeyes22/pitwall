@@ -14,6 +14,11 @@ from pitwall.service_args import parse_service_args
 def main(argv: Sequence[str] | None = None) -> None:
     parse_service_args("pitwall-api", argv)
     require_valid_service_env("api")
+    from pitwall.cli.runtime_errors import database_preflight, exit_with
+
+    reason = database_preflight()
+    if reason:
+        exit_with("pitwall-api", reason)
     host = os.environ.get("PITWALL_API_HOST", "127.0.0.1")
     port = int(os.environ.get("PITWALL_API_PORT", "8080"))
     concurrency = int(os.environ.get("PITWALL_API_MAX_CONCURRENCY", "100"))

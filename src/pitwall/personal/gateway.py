@@ -25,6 +25,7 @@ STOP_WAIT_S = 5.0
 DEFAULT_HEALTH_URL = "http://127.0.0.1:20130/health"
 DEFAULT_PORT = 20130
 DEFAULT_BIND = "127.0.0.1"
+PROC_ROOT = Path("/proc")
 
 
 _ROUTES_IN_CHECKOUT = Path(__file__).resolve().parents[3] / "config" / "gateway-routes.json"
@@ -250,24 +251,34 @@ def _alive(pid: int) -> bool:
     return True
 
 
-def _process_identity(pid: int) -> str | None:
+def _process_identity(pid: int, *, proc: Path | None = None) -> str | None:
     """Return ``boot:<boot_id>:start:<ticks>`` for a live pid, or None when unknowable.
+
+    Without procfs (macOS) the identity is ``pitwall.agents.pids.process_identity``'s
+    ``ps``-based start time, so ``stop()`` still recognises the gateway it started.
 
     ``/proc/<pid>/stat`` field 22 is the start time in clock ticks since boot, fixed at fork,
     and the kernel boot id separates boots. A recycled pid never shares both. The command line
     is deliberately not used: it is empty while the child is mid-exec, which is exactly when
     ``start()`` records it, and a process may rewrite it later.
     """
+    proc = PROC_ROOT if proc is None else proc
     try:
-        stat = (Path("/proc") / str(pid) / "stat").read_text(encoding="utf-8", errors="replace")
-        boot_id = Path("/proc/sys/kernel/random/boot_id").read_text(encoding="utf-8").strip()
+        stat = (proc / str(pid) / "stat").read_text(encoding="utf-8", errors="replace")
+        boot_id = (proc / "sys/kernel/random/boot_id").read_text(encoding="utf-8").strip()
     except OSError:
-        return None
+        return _portable_identity(pid)
     # The comm field is parenthesised and may contain spaces; split after it.
     fields = stat.rsplit(")", 1)[-1].split()
     if len(fields) < 20:
-        return None
+        return _portable_identity(pid)
     return f"boot:{boot_id}:start:{fields[19]}"
+
+
+def _portable_identity(pid: int) -> str | None:
+    from pitwall.agents.pids import process_identity
+
+    return process_identity(pid)
 
 
 def _is_ours(record: GatewayProcess) -> bool:

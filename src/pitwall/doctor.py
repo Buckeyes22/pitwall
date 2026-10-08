@@ -543,14 +543,33 @@ async def run_doctor(
             )
         )
         loaded = None
+        config_failed = True
     else:
+        config_failed = False
+
+    mode: Mode = "personal"
+    try:
+        mode = select_backend(environ)
+    except ValueError as exc:  # an unparseable file or a bad `[personal] backend`
+        if not config_failed:
+            checks.append(
+                _check(
+                    "config.file",
+                    "config",
+                    "fail",
+                    format_settings_load_error(exc),
+                    "fix the config file, then rerun pitwall doctor",
+                )
+            )
+            config_failed = True
+        loaded = None
+    if not config_failed:
         checks.append(
             _check("config.file", "config", "ok", f"loaded {config_path}")
             if config_path is not None
             else _check("config.file", "config", "skip", "no pitwall.toml in use")
         )
 
-    mode: Mode = select_backend(environ)
     if mode == "personal":
         return DoctorReport("personal", _version(), tuple(checks + _personal_checks(environ)))
     checks.extend(

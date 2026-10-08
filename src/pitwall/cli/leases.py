@@ -131,9 +131,9 @@ def cmd_leases(argv: list[str]) -> int:
         raise AssertionError(f"unhandled leases command: {args.command}")
     except Exception as exc:  # reason: CLI lease errors must never reflect request/provider text.
         code = _lease_error_code(exc)
-        out.set_json({"error": code})
-        if not out.json_mode:
-            out.print_error(f"lease operation failed: {code}")
+        from pitwall.cli.runtime_errors import report_failure
+
+        report_failure(out, code, exc, fallback=f"error: lease operation failed: {code}")
         out.emit()
         return 1
 

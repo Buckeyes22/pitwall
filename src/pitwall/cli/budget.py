@@ -7,8 +7,11 @@ import asyncio
 from typing import Any
 
 from pitwall.cli.output import Output, add_json_argument, json_mode
+from pitwall.cli.runtime_errors import report_failure
 from pitwall.cost.budget_limits import BudgetLimitsError, budget_status, set_limits
 from pitwall.db import get_pool
+
+_BUDGET_UNAVAILABLE = "budget_unavailable"
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
@@ -54,6 +57,10 @@ def cmd_budget(argv: list[str]) -> int:
         output.print(f"pitwall budget: {exc}")
         output.emit()
         return 2
+    except Exception as exc:  # reason: CLI boundary: one line naming the fix, never a traceback
+        report_failure(output, _BUDGET_UNAVAILABLE, exc)
+        output.emit()
+        return 1
     if output.json_mode:
         output.set_json(status)
     else:

@@ -3,7 +3,16 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+import pytest
+
+from pitwall.personal import setup as personal_setup
 from pitwall.personal.setup import run_setup
+
+
+@pytest.fixture(autouse=True)
+def _linux_profile(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Bash reads ``~/.bashrc`` on Linux; macOS login shells read ``~/.bash_profile``."""
+    monkeypatch.setattr(personal_setup.sys, "platform", "linux")
 
 
 def test_setup_creates_key_and_offers_profile_line(tmp_path: Path) -> None:

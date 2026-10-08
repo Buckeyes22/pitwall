@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from pitwall.cli.output import Output, json_mode
+from pitwall.cli.runtime_errors import runtime_reason
 from pitwall.mcp_install import (
     SERVER_NAME,
     VERIFY_HINT,
@@ -166,8 +167,8 @@ def _install_one(
             remove=remove,
             force=force,
         )
-    except McpInstallError as exc:
-        result["error"] = str(exc)
+    except (McpInstallError, OSError) as exc:
+        result["error"] = _error_text(exc)
         _report_error(out, exc)
         return result
 
@@ -179,8 +180,8 @@ def _install_one(
 
     try:
         backup = apply_plan(plan)
-    except McpInstallError as exc:
-        result["error"] = str(exc)
+    except (McpInstallError, OSError) as exc:
+        result["error"] = _error_text(exc)
         _report_error(out, exc)
         return result
 
@@ -225,6 +226,13 @@ def _stderr_line(message: str) -> None:
     sys.stderr.flush()
 
 
-def _report_error(out: Output, exc: McpInstallError) -> None:
+def _error_text(exc: McpInstallError | OSError) -> str:
+    """The message for *exc*; an unwritable config path names the fix instead of an errno."""
+    if isinstance(exc, McpInstallError):
+        return str(exc)
+    return runtime_reason(exc) or f"{type(exc).__name__}: {exc.strerror or exc}"
+
+
+def _report_error(out: Output, exc: McpInstallError | OSError) -> None:
     if not out.json_mode:
-        _stderr_line(f"error: {exc}")
+        _stderr_line(f"error: {_error_text(exc)}")
