@@ -105,7 +105,12 @@ def cmd_routing(
         output.emit()
         return 1
     except Exception as exc:  # reason: stable boundary must not emit provider detail
-        output.print_error(f"routing operation failed ({exc.__class__.__name__})")
+        from pitwall.cli.runtime_errors import report_failure, runtime_reason
+
+        if runtime_reason(exc):
+            report_failure(output, "routing_operation_failed", exc)
+        else:
+            output.print_error(f"routing operation failed ({exc.__class__.__name__})")
         output.emit()
         return 1
     output.emit()

@@ -13,6 +13,7 @@ import datetime as dt
 from typing import Any
 
 from pitwall.cli.output import Output, add_json_argument, json_mode
+from pitwall.cli.runtime_errors import report_failure
 from pitwall.core.cost_reporting import cost_summary_read, recent_workloads_read
 from pitwall.db import get_pool
 
@@ -181,10 +182,7 @@ def cmd_cost(argv: list[str]) -> int:
     try:
         asyncio.run(_run(args, output))
     except Exception as exc:  # reason: persistence/config failures can contain secret material
-        del exc
-        output.set_json({"error": _COST_UNAVAILABLE})
-        if not output.json_mode:
-            output.print_error(_COST_UNAVAILABLE)
+        report_failure(output, _COST_UNAVAILABLE, exc)
         output.emit()
         return 1
     output.emit()

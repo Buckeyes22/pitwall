@@ -106,6 +106,7 @@ def _models_show(args: argparse.Namespace, out: Output) -> int:
         "Variants",
         ["ID", "Engine", "Format", "Min VRAM", "Confidence"],
         [[v.id, v.engine, v.format, v.min_vram_gb, v.confidence] for v in dossier.variants],
+        keep_whole=("ID",),
     )
     out.print(dossier.body)
     return 0
@@ -171,6 +172,7 @@ async def _models_list(args: argparse.Namespace, out: Output) -> int:
                 ]
                 for row in rows
             ],
+            keep_whole=("Model",),
         )
     return 0
 

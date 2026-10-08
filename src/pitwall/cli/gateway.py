@@ -324,6 +324,7 @@ def cmd_quotas(argv: list[str]) -> int:
             ]
             for row in rows
         ],
+        keep_whole=("PROVIDER",),
     )
     out.emit()
     return 0

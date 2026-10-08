@@ -21,11 +21,13 @@ from collections import deque
 from collections.abc import Callable
 from pathlib import Path
 
+from pitwall.workbench.state_dir import workbench_state_dir
+
 _POLL_SECONDS = 0.02
 
 
 def default_admission_dir() -> Path:
-    return Path.home() / ".local/state/pitwall/pi-workbench/admission"
+    return workbench_state_dir("admission")
 
 
 class RequestCancelled(RuntimeError):

@@ -27,6 +27,7 @@ from pitwall.workbench.account_budget import default_account_budget_dir
 from pitwall.workbench.admission import default_admission_dir, prepare_private_directory
 from pitwall.workbench.profile import CompiledProfile
 from pitwall.workbench.restricted import RestrictedPolicy, build_restricted_command
+from pitwall.workbench.state_dir import workbench_state_dir
 
 PI_EXTENSIONS_DIR = Path(__file__).resolve().parent / "pi_extensions"
 PI_PACKAGE = "@earendil-works/pi-coding-agent"
@@ -140,7 +141,7 @@ def _runtime_base(options: PiLaunchOptions) -> Path:
     configured = options.runtime_dir or os.environ.get("PITWALL_WORKBENCH_RUNTIME_DIR")
     if configured:
         return Path(configured)
-    return Path.home() / ".local/state/pitwall/pi-workbench/runtime"
+    return workbench_state_dir("runtime")
 
 
 def runtime_root(options: PiLaunchOptions) -> Path:

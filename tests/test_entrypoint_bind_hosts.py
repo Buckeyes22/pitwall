@@ -5,6 +5,14 @@ import os
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def _startup_preflight_passes(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These cases fake ``uvicorn.run``; the startup checks (database reachable, budget set)
+    are covered by ``tests/test_brittleness_runtime_errors.py``."""
+    monkeypatch.setattr("pitwall.cli.runtime_errors.database_preflight", lambda *a, **k: None)
+    monkeypatch.setenv("PITWALL_MONTHLY_BUDGET_USD", "100")
+
+
 @pytest.mark.parametrize(
     (
         "module_name",

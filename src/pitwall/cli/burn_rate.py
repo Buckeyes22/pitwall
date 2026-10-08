@@ -8,6 +8,7 @@ import datetime as dt
 from decimal import Decimal
 
 from pitwall.cli.output import Output, add_json_argument, json_mode
+from pitwall.cli.runtime_errors import report_failure
 from pitwall.db import get_pool
 from pitwall.finops.burn_rate import BurnRateRead, read_configured_burn_rate
 
@@ -99,10 +100,7 @@ def cmd_burn_rate(argv: list[str]) -> int:
     try:
         result = asyncio.run(_read_burn_rate(args))
     except Exception as exc:  # reason: persistence/config failures can contain secret material
-        del exc
-        out.set_json({"error": _BURN_RATE_UNAVAILABLE})
-        if not out.json_mode:
-            out.print_error(_BURN_RATE_UNAVAILABLE)
+        report_failure(out, _BURN_RATE_UNAVAILABLE, exc)
         out.emit()
         return 1
 

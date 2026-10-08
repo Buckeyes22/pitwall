@@ -192,7 +192,17 @@ def _cmd_usage(args: Sequence[str]) -> int:
     return 0
 
 
+def _require_linux() -> None:
+    """The Pi extension serialises admission with ``flock(1)``, which only Linux provides."""
+    if sys.platform != "linux":
+        raise CliError(
+            "pitwall workbench launch needs Linux: its admission extension uses flock, which "
+            f"{sys.platform} does not provide. Run the workbench on a Linux host."
+        )
+
+
 def _cmd_launch(raw: Sequence[str]) -> int:
+    _require_linux()
     parsed = parse_launch_args(raw)
     args = parsed.positional
     if not args or len(args) > 3 or any(arg.startswith("--") for arg in args):

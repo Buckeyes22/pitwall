@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import os
+import shlex
 import shutil
 import subprocess
+import sys
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -33,13 +35,32 @@ class SetupReport:
     backend: BackendName
 
 
+def _shell_kind(environ: Mapping[str, str]) -> str:
+    """``zsh``, ``fish``, or ``bash`` from ``$SHELL`` (zsh when unset on macOS, else bash)."""
+    name = Path(environ.get("SHELL", "")).name
+    if name in {"zsh", "fish"}:
+        return name
+    if not name and sys.platform == "darwin":
+        return "zsh"
+    return "bash"
+
+
 def _profile_for(environ: Mapping[str, str], home: Path) -> Path:
-    shell = environ.get("SHELL", "")
-    if shell.endswith("zsh"):
+    """The startup file the user's shell reads: login shells on macOS skip ``~/.bashrc``."""
+    kind = _shell_kind(environ)
+    if kind == "zsh":
         return home / ".zshrc"
-    if shell.endswith("fish"):
+    if kind == "fish":
         return home / ".config" / "fish" / "config.fish"
-    return home / ".bashrc"
+    return home / (".bash_profile" if sys.platform == "darwin" else ".bashrc")
+
+
+def _export_line(environ: Mapping[str, str], key_path: Path) -> str:
+    """The profile line that exports the endpoint key, in the syntax of the user's shell."""
+    quoted = shlex.quote(str(key_path))
+    if _shell_kind(environ) == "fish":
+        return f"set -gx {ENDPOINT_KEY_ENV} (cat {quoted})"
+    return f'export {ENDPOINT_KEY_ENV}="$(cat {quoted})"'
 
 
 def run_setup(
@@ -78,7 +99,7 @@ def run_setup(
         tightened = True
 
     key_path = ensure_endpoint_key(state_root)
-    line = f'export {ENDPOINT_KEY_ENV}="$(cat {key_path})"'
+    line = _export_line(environ, key_path)
     profile = _profile_for(environ, home)
     profile_updated = False
     existing = profile.read_text(encoding="utf-8") if profile.exists() else ""

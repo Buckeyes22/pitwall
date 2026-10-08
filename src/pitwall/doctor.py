@@ -18,13 +18,13 @@ from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlsplit
 
+from pitwall.cli.base_url import default_base_url
 from pitwall.config import PitwallSettings
 from pitwall.personal.routes import DEFAULT_ROUTING_CLI, routing_available
 
 Status = Literal["ok", "warn", "fail", "skip"]
 Mode = Literal["personal", "registry"]
 SCHEMA_VERSION = 1
-DEFAULT_API_URL = "http://127.0.0.1:8080"
 DEFAULT_TIMEOUT_S = 5.0
 CANARY_TEXT = "pitwall doctor canary"
 _DEPENDENTS_OF_DB = (
@@ -543,14 +543,33 @@ async def run_doctor(
             )
         )
         loaded = None
+        config_failed = True
     else:
+        config_failed = False
+
+    mode: Mode = "personal"
+    try:
+        mode = select_backend(environ)
+    except ValueError as exc:  # an unparseable file or a bad `[personal] backend`
+        if not config_failed:
+            checks.append(
+                _check(
+                    "config.file",
+                    "config",
+                    "fail",
+                    format_settings_load_error(exc),
+                    "fix the config file, then rerun pitwall doctor",
+                )
+            )
+            config_failed = True
+        loaded = None
+    if not config_failed:
         checks.append(
             _check("config.file", "config", "ok", f"loaded {config_path}")
             if config_path is not None
             else _check("config.file", "config", "skip", "no pitwall.toml in use")
         )
 
-    mode: Mode = select_backend(environ)
     if mode == "personal":
         return DoctorReport("personal", _version(), tuple(checks + _personal_checks(environ)))
     checks.extend(
@@ -631,7 +650,7 @@ async def _registry_checks(
         checks.append(_check("spend.kill_switch", "spend", "skip", "database unreachable"))
         checks.append(_check("spend.burn_rate", "spend", "skip", "database unreachable"))
 
-    resolved_api_url = api_url or environ.get("PITWALL_API_URL") or DEFAULT_API_URL
+    resolved_api_url = api_url or default_base_url(environ)
     resolved_api_token = api_token or environ.get("PITWALL_API_TOKEN")
     api_ok = False
     try:

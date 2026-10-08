@@ -248,9 +248,16 @@ def cmd_register_endpoint(argv: list[str]) -> int:
     except (
         Exception
     ) as exc:  # reason: CLI boundary: report a fixed code and the class, never the text
-        out.set_json({"error": "register_endpoint_failed", "exception": type(exc).__name__})
-        if not out.json_mode:
-            out.print_error(f"Error: register_endpoint_failed ({type(exc).__name__})")
+        from pitwall.cli.runtime_errors import report_failure
+
+        name = type(exc).__name__
+        report_failure(
+            out,
+            "register_endpoint_failed",
+            exc,
+            extra={"exception": name},
+            fallback=f"Error: register_endpoint_failed ({name})",
+        )
         out.emit()
         return 1
 
@@ -302,8 +309,15 @@ def cmd_set_provider_health(argv: list[str]) -> int:
     except (
         Exception
     ) as exc:  # reason: CLI boundary: report a fixed code and the class, never the text
-        out.set_json({"error": "set_provider_health_failed", "exception": type(exc).__name__})
-        if not out.json_mode:
-            out.print_error(f"Error: set_provider_health_failed ({type(exc).__name__})")
+        from pitwall.cli.runtime_errors import report_failure
+
+        name = type(exc).__name__
+        report_failure(
+            out,
+            "set_provider_health_failed",
+            exc,
+            extra={"exception": name},
+            fallback=f"Error: set_provider_health_failed ({name})",
+        )
         out.emit()
         return 1
