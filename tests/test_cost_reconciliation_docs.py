@@ -34,6 +34,14 @@ def test_the_runbook_exists() -> None:
     assert DOC.is_file()
 
 
+def test_the_runbook_names_reporting_lag_and_pod_uptime() -> None:
+    # Guards the reasoning: billing reports lag, so spend is reconciled from pod uptime.
+    text = DOC.read_text(encoding="utf-8").lower()
+
+    assert "reporting lag" in text
+    assert "pod uptime" in text
+
+
 def test_it_records_all_three_billing_observations_as_wire_fields() -> None:
     # One quoted response field per observed limit: reporting lag (all-zero default buckets), an
     # empty same-day window, and a granularity that was not honoured.

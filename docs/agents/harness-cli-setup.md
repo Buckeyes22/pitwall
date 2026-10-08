@@ -46,7 +46,7 @@ pitwall agents setup harnesses --dry-run
 pitwall agents setup harnesses --no-color
 ```
 
-`--dry-run` opens the same selector and confirmation, then prints the manifest-defined URL and interpreter without downloading or executing anything. Re-running normal setup is the recovery path after a partial failure: successfully installed CLIs are detected and disabled, leaving only missing providers selectable.
+`--dry-run` opens the same selector and confirmation, then downloads each pinned installer script and verifies its sha256, then prints the manifest-defined URL and interpreter it would run, but never runs the script. Re-running normal setup is the recovery path after a partial failure: successfully installed CLIs are detected and disabled, leaving only missing providers selectable.
 
 ## Inventory connected harness capabilities
 

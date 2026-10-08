@@ -16,6 +16,15 @@ SKILLS = {
     "copilot": ROOT / "plugins" / "copilot" / "skills" / "subagent-model-routing" / "SKILL.md",
 }
 SECTION = "### Subscription usage"
+# The 90 percent and 10 percent reserve figures are policy in the skill text, not constants in src.
+USAGE_RULE_PHRASES = (
+    "Do not choose an account whose status is `limit`.",
+    "at or above 90 percent",
+    "10 percent reserve",
+    "use the route of the account with the most room",
+    "Treat `error`, `stale`, and `unknown` as no information.",
+    "say so to the user and continue",
+)
 
 
 def _usage_section(text: str) -> str:
@@ -50,6 +59,15 @@ class UsageSkillRuleTests(unittest.TestCase):
                 text = path.read_text(encoding="utf-8")
                 self.assertEqual(1, text.count(SECTION))
                 self.assertEqual(reference, _usage_section(text))
+
+    def test_every_host_teaches_the_selection_rules_in_these_words(self) -> None:
+        # Guards the account-selection promises: skip `limit`, keep a 10 percent reserve below 90,
+        # prefer the most room, and never treat missing data as a reason to avoid an account.
+        for host, path in SKILLS.items():
+            body = _usage_section(path.read_text(encoding="utf-8"))
+            for rule in USAGE_RULE_PHRASES:
+                with self.subTest(host=host, rule=rule):
+                    self.assertEqual(1, body.count(rule))
 
     def test_the_rules_come_before_the_self_hosted_section(self) -> None:
         for host, path in SKILLS.items():
