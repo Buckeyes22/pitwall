@@ -1,0 +1,41 @@
+{
+  "name": "pitwall-codex",
+  "version": "0.3.0a1",
+  "description": "Codex-native model routing workflow for flat external-model dispatch, route profiles, and dependency workflows over the local external-model shims.",
+  "author": {
+    "name": "Buckeyes22"
+  },
+  "keywords": [
+    "pitwall",
+    "codex",
+    "kimi",
+    "moonshot",
+    "opencode",
+    "claude",
+    "anthropic",
+    "grok",
+    "xai",
+    "shims",
+    "external-models"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Model Routing for Codex",
+    "shortDescription": "Route Codex work through local model CLI shims.",
+    "longDescription": "A Codex-native companion to the Claude Code pitwall plugin. It keeps flat dispatch and dependency-workflow guidance in Codex terms without loading Claude-only commands, agents, hooks, or Workflow instructions.",
+    "developerName": "Buckeyes22",
+    "category": "Productivity",
+    "capabilities": [
+      "Write",
+      "Shell"
+    ],
+    "defaultPrompt": [
+      "Use model routing for this task.",
+      "Dispatch this review through Claude.",
+      "Dispatch this review through Kimi.",
+      "Plan a dependency workflow across models."
+    ],
+    "brandColor": "#3B82F6"
+  }
+}

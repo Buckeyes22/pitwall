@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "snapshot": "2026-09-26",
+  "sources": ["token-plan-overview", "base-url", "regions", "error-code", "context-cache"],
+  "paths": {"openai": "/compatible-mode/v1", "anthropic": "/apps/anthropic", "native": "/api/v1"},
+  "openApi": {
+    "host": "modelstudio.ap-southeast-1.aliyuncs.com",
+    "version": "2026-02-10",
+    "sources": ["get-subscription-stats", "api-modelstudio-2026-02-10-getbillingoverview"]
+  },
+  "plans": {
+    "token-plan-personal": {
+      "family": "token-plan",
+      "edition": "personal",
+      "regions": ["ap-southeast-1"],
+      "keyPrefix": "sk-sp-",
+      "unit": "credits",
+      "cycleDays": 30,
+      "exhaustion": "blocking",
+      "baseUrls": {
+        "openai": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "anthropic": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/apps/anthropic",
+        "native": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/api/v1"
+      },
+      "tiers": {
+        "lite": {"credits": 11500, "concurrency": [1, 2]},
+        "essential": {"credits": 25500, "concurrency": [2, 3]},
+        "standard": {"credits": 45000, "concurrency": [3, 4]},
+        "pro": {"credits": 180000, "concurrency": [6, 8]}
+      },
+      "sources": ["token-plan-overview", "token-plan-personal-overview", "token-plan-personal-faq", "token-plan-personal-quick-start"]
+    },
+    "token-plan-team": {
+      "family": "token-plan",
+      "edition": "team",
+      "regions": ["ap-southeast-1"],
+      "keyPrefix": "sk-sp-",
+      "unit": "credits",
+      "cycleDays": 30,
+      "exhaustion": "blocking",
+      "baseUrls": {
+        "openai": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "anthropic": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/apps/anthropic",
+        "native": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/api/v1"
+      },
+      "tiers": {
+        "standard": {"credits": 25000, "concurrency": null},
+        "advanced": {"credits": 100000, "concurrency": null},
+        "premium": {"credits": 250000, "concurrency": null}
+      },
+      "sources": ["token-plan-team-overview", "token-plan-team-faq", "token-plan-team-quickstart"]
+    },
+    "pay-as-you-go": {
+      "family": "pay-as-you-go",
+      "edition": null,
+      "regions": ["ap-southeast-1", "cn-beijing", "us-east-1", "eu-central-1", "ap-northeast-1", "cn-hongkong"],
+      "keyPrefix": null,
+      "unit": "usd",
+      "cycleDays": null,
+      "exhaustion": "billing",
+      "baseUrls": null,
+      "tiers": null,
+      "sources": ["get-api-key", "regions", "base-url", "budget-management"]
+    }
+  },
+  "regions": {
+    "ap-southeast-1": {"workspaceHost": "{workspace}.ap-southeast-1.maas.aliyuncs.com", "legacyHost": "dashscope-intl.aliyuncs.com", "priced": true},
+    "cn-beijing": {"workspaceHost": "{workspace}.cn-beijing.maas.aliyuncs.com", "legacyHost": "dashscope.aliyuncs.com", "priced": false},
+    "us-east-1": {"workspaceHost": "{workspace}.us-east-1.maas.aliyuncs.com", "legacyHost": "dashscope-us.aliyuncs.com", "priced": false},
+    "eu-central-1": {"workspaceHost": "{workspace}.eu-central-1.maas.aliyuncs.com", "legacyHost": null, "priced": false},
+    "ap-northeast-1": {"workspaceHost": "{workspace}.ap-northeast-1.maas.aliyuncs.com", "legacyHost": null, "priced": false},
+    "cn-hongkong": {"workspaceHost": "{workspace}.cn-hongkong.maas.aliyuncs.com", "legacyHost": "cn-hongkong.dashscope.aliyuncs.com", "priced": false}
+  },
+  "models": {
+    "auto": {"kind": "text", "contextTokens": null, "maxInputTokens": null, "maxInputTokensThinking": null, "maxOutputTokens": null, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "router", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": false}, "prices": null, "sources": ["token-plan-personal-overview"]},
+    "qwen3.8-max": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 991808, "maxInputTokensThinking": 983616, "maxOutputTokens": 131072, "maxReasoningTokens": 262144, "inputs": ["text", "image", "video"], "reasoning": "hybrid-on", "effort": {"param": "reasoning_effort", "values": ["xhigh", "medium", "low"], "default": "xhigh", "exclusiveWith": ["thinking_budget"]}, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "2", "output": "6", "cachedInput": "0.25"}, "sources": ["qwen3-8-max", "qwen-api-via-openai-chat-completions"]},
+    "qwen3.8-flash": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 991808, "maxInputTokensThinking": 983616, "maxOutputTokens": 131072, "maxReasoningTokens": 262144, "inputs": ["text", "image", "video"], "reasoning": "hybrid-on", "effort": {"param": "reasoning_effort", "values": ["xhigh", "medium", "low"], "default": "xhigh", "exclusiveWith": ["thinking_budget"]}, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "0.15", "output": "0.47", "cachedInput": "0.016"}, "sources": ["qwen3-8-flash", "qwen-api-via-openai-chat-completions"]},
+    "qwen3.7-max": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 991808, "maxInputTokensThinking": 983616, "maxOutputTokens": 131072, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "2.5", "output": "7.5", "cachedInput": "0.5"}, "sources": ["qwen3-7-max"]},
+    "qwen3.7-plus": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 991808, "maxInputTokensThinking": 983616, "maxOutputTokens": 131072, "maxReasoningTokens": null, "inputs": ["text", "image", "video"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "0.4", "output": "1.6", "cachedInput": "0.08", "tiers": [{"aboveInputTokens": 256000, "input": "1.2", "output": "4.8", "cachedInput": "0.24"}]}, "sources": ["qwen3-7-plus"]},
+    "qwen3.6-plus": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 991808, "maxInputTokensThinking": 983616, "maxOutputTokens": 65536, "maxReasoningTokens": 81920, "inputs": ["text", "image", "video"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": {"input": "0.5", "output": "3", "cachedInput": null, "tiers": [{"aboveInputTokens": 256000, "input": "2", "output": "6", "cachedInput": null}]}, "sources": ["qwen3-6-plus"]},
+    "qwen3.6-flash": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 991808, "maxInputTokensThinking": 983616, "maxOutputTokens": 65536, "maxReasoningTokens": null, "inputs": ["text", "image", "video"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "0.25", "output": "1.5", "cachedInput": null, "tiers": [{"aboveInputTokens": 256000, "input": "1", "output": "4", "cachedInput": null}]}, "sources": ["qwen3-6-flash"]},
+    "deepseek-v4.1-flash": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 1000000, "maxInputTokensThinking": 1000000, "maxOutputTokens": 393216, "maxReasoningTokens": null, "inputs": ["text", "image"], "reasoning": "hybrid-on", "effort": {"param": "reasoning_effort", "values": ["max", "high", "low"], "default": "high", "exclusiveWith": []}, "maxTokensIncludesReasoning": true, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "0.3", "output": "1.2", "cachedInput": "0.03", "note": "busy-hour prices; idle hours cost half"}, "sources": ["deepseek-v4-1-flash"]},
+    "deepseek-v4-pro": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 1000000, "maxInputTokensThinking": 1000000, "maxOutputTokens": 393216, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": true, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "2.4", "output": "4.8", "cachedInput": "0.2"}, "sources": ["deepseek-v4-pro"]},
+    "deepseek-v4-pro-0813": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 1000000, "maxInputTokensThinking": 1000000, "maxOutputTokens": 393216, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": true, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": null, "sources": ["deepseek-v4-pro", "quota-management"]},
+    "deepseek-v4-flash": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 1000000, "maxInputTokensThinking": 1000000, "maxOutputTokens": 393216, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": true, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": {"input": "0.2", "output": "0.4", "cachedInput": "0.04"}, "sources": ["deepseek-v4-flash"]},
+    "deepseek-v4-flash-0731": {"kind": "text", "contextTokens": 1000000, "maxInputTokens": 1000000, "maxInputTokensThinking": 1000000, "maxOutputTokens": 393216, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": true, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": null, "sources": ["deepseek-v4-flash"]},
+    "deepseek-v3.2": {"kind": "text", "contextTokens": 131072, "maxInputTokens": 98304, "maxInputTokensThinking": null, "maxOutputTokens": 65536, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-off", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": {"input": "0.57", "output": "1.71", "cachedInput": "0.114"}, "sources": ["deepseek-v3-3"]},
+    "kimi-k2.7-code": {"kind": "text", "contextTokens": 262144, "maxInputTokens": 229376, "maxInputTokensThinking": null, "maxOutputTokens": 16384, "maxReasoningTokens": null, "inputs": ["text", "image", "video"], "reasoning": "always", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": {"input": "0.95", "output": "4", "cachedInput": "0.19"}, "sources": ["kimi-k2-7-code"]},
+    "kimi-k2.6": {"kind": "text", "contextTokens": 262144, "maxInputTokens": 229376, "maxInputTokensThinking": null, "maxOutputTokens": 16384, "maxReasoningTokens": null, "inputs": ["text", "image", "video"], "reasoning": "hybrid-off", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": null, "sources": ["kimi-k2-6"]},
+    "kimi-k2.5": {"kind": "text", "contextTokens": 262144, "maxInputTokens": 229376, "maxInputTokensThinking": null, "maxOutputTokens": 16384, "maxReasoningTokens": null, "inputs": ["text", "image", "video"], "reasoning": "hybrid-off", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": null, "sources": ["kimi-k2-5"]},
+    "glm-5.3": {"kind": "text", "contextTokens": 1048576, "maxInputTokens": 1048576, "maxInputTokensThinking": null, "maxOutputTokens": 131072, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "always", "effort": {"param": "reasoning_effort", "values": ["max", "high", "low"], "default": "max", "exclusiveWith": []}, "maxTokensIncludesReasoning": true, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "1.4", "output": "4.4", "cachedInput": "0.28"}, "sources": ["glm-5-3"]},
+    "glm-5.2": {"kind": "text", "contextTokens": 1048576, "maxInputTokens": 1048576, "maxInputTokensThinking": null, "maxOutputTokens": 131072, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "prices": {"input": "1.4", "output": "4.4", "cachedInput": "0.28"}, "sources": ["glm-5-2"]},
+    "glm-5.1": {"kind": "text", "contextTokens": 202745, "maxInputTokens": 202745, "maxInputTokensThinking": 169984, "maxOutputTokens": 131072, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": {"input": "1.4", "output": "4.4", "cachedInput": "0.26"}, "sources": ["glm-5-1"]},
+    "glm-5": {"kind": "text", "contextTokens": 202752, "maxInputTokens": 169984, "maxInputTokensThinking": null, "maxOutputTokens": 16384, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "hybrid-on", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": null, "sources": ["glm-9"]},
+    "MiniMax-M2.5": {"kind": "text", "contextTokens": 204800, "maxInputTokens": 196608, "maxInputTokensThinking": null, "maxOutputTokens": 32768, "maxReasoningTokens": null, "inputs": ["text"], "reasoning": "always", "effort": null, "maxTokensIncludesReasoning": false, "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "prices": null, "sources": ["minimax-m2-5"]},
+    "qwen-image-3.0-pro": {"kind": "image", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["qwen-image-3-0-pro"]},
+    "qwen-image-2.0": {"kind": "image", "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "sources": ["qwen-image-2-0"]},
+    "qwen-image-2.0-pro": {"kind": "image", "eligibility": {"personal": false, "team": true, "payAsYouGo": true}, "sources": ["qwen-image-2-0-pro"]},
+    "wan2.7-image": {"kind": "image", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["wan2-7-image"]},
+    "wan2.7-image-pro": {"kind": "image", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["wan2-7-image-pro"]},
+    "happyhorse-1.1-t2v": {"kind": "video", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["happyhorse-1-1-t2v"]},
+    "happyhorse-1.1-i2v": {"kind": "video", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["happyhorse-1-1-i2v"]},
+    "happyhorse-1.1-r2v": {"kind": "video", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["happyhorse-1-1-r2v"]},
+    "qwen-audio-3.0-tts-plus": {"kind": "speech", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["qwen-audio-3-0-tts-plus"]},
+    "qwen-audio-3.0-realtime-plus": {"kind": "realtime", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["qwen-audio-3-0-realtime-plus"]},
+    "qwen-audio-3.0-asr-flash": {"kind": "speech", "eligibility": {"personal": true, "team": true, "payAsYouGo": true}, "sources": ["qwen-audio-3-0-asr-flash"]}
+  },
+  "errors": [
+    {"status": 429, "code": "Throttling.RateQuota", "classification": "rate_limit", "cooldownSeconds": 60},
+    {"status": 429, "code": "Throttling.BurstRate", "classification": "rate_limit", "cooldownSeconds": 60},
+    {"status": 429, "code": "Throttling.AllocationQuota", "classification": "rate_limit", "cooldownSeconds": 60},
+    {"status": 429, "code": "BudgetLimitExceeded", "classification": "billing_state", "cooldownSeconds": 3600},
+    {"status": 429, "code": "PrepaidBillOverdue", "classification": "billing_state", "cooldownSeconds": 3600},
+    {"status": 429, "code": "PostpaidBillOverdue", "classification": "billing_state", "cooldownSeconds": 3600},
+    {"status": 400, "code": "Arrearage", "classification": "billing_state", "cooldownSeconds": 3600},
+    {"status": 401, "code": "InvalidApiKey", "classification": "invalid_endpoint_pairing", "cooldownSeconds": null},
+    {"status": 403, "code": "AccessDenied.Unpurchased", "classification": "model_not_eligible", "cooldownSeconds": null},
+    {"status": 403, "code": "Endpoint.AccessDenied", "classification": "model_not_eligible", "cooldownSeconds": null},
+    {"status": 403, "code": "AccessDenied", "classification": "model_not_eligible", "cooldownSeconds": null},
+    {"status": 403, "code": "AllocationQuota.FreeTierOnly", "classification": "billing_state", "cooldownSeconds": 3600},
+    {"status": 404, "code": "model_not_found", "classification": "model_not_found", "cooldownSeconds": null},
+    {"status": 404, "code": "model_not_supported", "classification": "model_not_found", "cooldownSeconds": null},
+    {"status": 503, "code": "ModelUnavailable", "classification": "unavailable", "cooldownSeconds": 60},
+    {"status": 429, "message": "token-plan quota has been exhausted", "classification": "credits_exhausted", "cooldownSeconds": null},
+    {"status": 429, "message": "allocated quota exceeded", "classification": "rate_limit", "cooldownSeconds": 60},
+    {"status": 401, "message": "invalid access token or token expired", "classification": "invalid_endpoint_pairing", "cooldownSeconds": null}
+  ]
+}

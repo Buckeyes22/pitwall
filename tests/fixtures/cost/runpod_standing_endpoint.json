@@ -1,0 +1,21 @@
+{
+  "adapter": "runpod",
+  "capability_cost_mode": "per_second",
+  "execution_timeout_ms": 120000,
+  "provider_config": {
+    "cost": {
+      "kind": "active_idle",
+      "active_rate_per_second": "0.00040",
+      "idle_rate_per_second": "0.00010",
+      "minimum_billing_increment_seconds": "60",
+      "scale_to_zero": false,
+      "max_idle_seconds": "300"
+    }
+  },
+  "payload": {
+    "active_seconds": "61",
+    "idle_seconds": "1"
+  },
+  "expected_estimate": "0.054000",
+  "expected_ceiling": "0.078000"
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/src/pitwall/agents/resources/schemas/model-catalog.schema.json",
+  "title": "Pitwall agents open-weight model catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceVerifiedOn", "models"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sourceVerifiedOn": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "models": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["displayName", "vendor", "modelId", "hfRepo", "license", "contextWindow", "reasoningControl", "modelCardUrl"],
+        "properties": {
+          "displayName": { "type": "string", "minLength": 1 },
+          "vendor": { "type": "string", "minLength": 1 },
+          "family": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "modelId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$" },
+          "hfRepo": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*$" },
+          "license": { "type": "string", "minLength": 1 },
+          "contextWindow": { "type": "integer", "minimum": 1 },
+          "reasoningControl": { "type": "string", "minLength": 1 },
+          "servingHint": { "type": "string", "minLength": 1 },
+          "modelCardUrl": { "type": "string", "pattern": "^https://" }
+        }
+      }
+    }
+  }
+}

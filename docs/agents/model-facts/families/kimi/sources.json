@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/kimi",
+  "sources": [
+    {
+      "id": "kimi-models",
+      "url": "https://platform.kimi.ai/docs/models.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1d7822731345b9501d669e4464b93eff933c17ad11c6b2598c5a3abc3d56f310",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1d7822731345b9501d669e4464b93eff933c17ad11c6b2598c5a3abc3d56f310",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k3",
+      "url": "https://platform.kimi.ai/docs/guide/kimi-k3-quickstart.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:84dff32b6bcf4ea35c4d03bf4ef5fec660d38c3efe86a238737a4414106ed077",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:84dff32b6bcf4ea35c4d03bf4ef5fec660d38c3efe86a238737a4414106ed077",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-reasoning-effort",
+      "url": "https://platform.kimi.ai/docs/guide/use-reasoning-effort.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a46386de494976ff700420c0b658946f8815c0d09b2aff7d71e48cc1ce2be6d0",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:a46386de494976ff700420c0b658946f8815c0d09b2aff7d71e48cc1ce2be6d0",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-thinking-models",
+      "url": "https://platform.kimi.ai/docs/guide/use-thinking-models.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:7d376ed10fc4060fa60c82d47ae2d69c937afdfe0177f97fc191a4627d1c3eef",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:7d376ed10fc4060fa60c82d47ae2d69c937afdfe0177f97fc191a4627d1c3eef",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k3-tool-calling",
+      "url": "https://platform.kimi.ai/docs/guide/kimi-k3-tool-calling-best-practice.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:49522035056e689e508b47674d39c0bd2ac9f6d10d496b30fa7deb0b96d8cb38",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:49522035056e689e508b47674d39c0bd2ac9f6d10d496b30fa7deb0b96d8cb38",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-prompt-best-practice",
+      "url": "https://platform.kimi.ai/docs/guide/prompt-best-practice.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:9caf32e3dd4b4d9a2698e5bc13c2d5067e84f379ac3e69bbf97a260f008055ac",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:9caf32e3dd4b4d9a2698e5bc13c2d5067e84f379ac3e69bbf97a260f008055ac",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-changelog",
+      "url": "https://platform.kimi.ai/docs/platform-changelog.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:0632ea8e27f5c7625f9d67571cf1d8ee1d412c6c95165957b763e15b6121ffee",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:0632ea8e27f5c7625f9d67571cf1d8ee1d412c6c95165957b763e15b6121ffee",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-kimi-k3",
+      "url": "https://huggingface.co/moonshotai/Kimi-K3",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "moonshotai/Kimi-K3",
+      "observedHash": "revision:f831ab66814297da540d832a5235f8e904f29d06",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:f831ab66814297da540d832a5235f8e904f29d06",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-kimi-k2.7-code",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "moonshotai/Kimi-K2.7-Code",
+      "observedHash": "revision:74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-kimi-k2.6",
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.6",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "moonshotai/Kimi-K2.6",
+      "observedHash": "revision:7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "kimi-guides",
+      "kind": "index",
+      "url": "https://platform.kimi.ai/docs/llms.txt",
+      "pattern": "guide/(kimi-k[0-9][0-9a-z-]*)-quickstart\\.md",
+      "ignore": [],
+      "seen": []
+    },
+    {
+      "id": "moonshotai",
+      "kind": "huggingface-org",
+      "org": "moonshotai",
+      "pattern": "Kimi-K[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(Base|Instruct|Thinking|FP8)"
+      ],
+      "seen": [
+        "Kimi-K2-Instruct-0905",
+        "Kimi-K2.5"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "pitwall-copilot",
+  "version": "0.3.0a1",
+  "description": "Copilot-compatible model routing workflow for flat external-model dispatch, route profiles, and dependency workflows over the local external-model shims.",
+  "author": {
+    "name": "Buckeyes22"
+  },
+  "keywords": [
+    "pitwall",
+    "copilot",
+    "codex",
+    "kimi",
+    "moonshot",
+    "opencode",
+    "claude",
+    "anthropic",
+    "grok",
+    "xai",
+    "shims",
+    "external-models"
+  ],
+  "category": "Productivity",
+  "skills": "skills/"
+}

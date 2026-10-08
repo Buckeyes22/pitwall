@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "endpoints": {"ms": {"kind": "model-studio", "plan": "token-plan-personal", "apiKeyEnv": "K", "baseUrl": "http://example.invalid/v1"}},
+  "models": {}
+}

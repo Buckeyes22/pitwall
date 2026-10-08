@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/grok",
+  "sources": [
+    {
+      "id": "xai-grok-4-7",
+      "url": "https://docs.x.ai/developers/grok-4-7.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:0540f6f8c138a4319065f8cef075012e6d1cb883c2e482dfce1816fb7e80377a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:0540f6f8c138a4319065f8cef075012e6d1cb883c2e482dfce1816fb7e80377a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "xai-models",
+      "url": "https://docs.x.ai/developers/models.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6d648f765fefe227d4cdac169bb96abf6d6dfaf396ba72c4c4c8d58324f3bbd4",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6d648f765fefe227d4cdac169bb96abf6d6dfaf396ba72c4c4c8d58324f3bbd4",
+      "reviewedAt": "2026-09-28",
+      "unordered": true
+    },
+    {
+      "id": "xai-reasoning",
+      "url": "https://docs.x.ai/developers/model-capabilities/text/reasoning.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a6681853e7bdd5fb0d8c5e498aca7abd3662e93956c5390876235ece3a374a48",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:a6681853e7bdd5fb0d8c5e498aca7abd3662e93956c5390876235ece3a374a48",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "xai-release-notes",
+      "url": "https://docs.x.ai/developers/release-notes.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:ff4c876fbf0707ee7439b06357af40f5acc1103b4e7a9b264be7909f8a8753c7",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:ff4c876fbf0707ee7439b06357af40f5acc1103b4e7a9b264be7909f8a8753c7",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "xai-build-rules",
+      "url": "https://docs.x.ai/build/features/project-rules.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1077d4bf3497f8c2a9022d82c251876e091f621e98f85e0b1c4eb1d5fceab383",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1077d4bf3497f8c2a9022d82c251876e091f621e98f85e0b1c4eb1d5fceab383",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "guidance",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "every heading in https://docs.x.ai/llms-full.txt and the launch post https://x.ai/news/grok-4-7; guidance exists only for multi-agent research and voice"
+    }
+  ],
+  "watch": [
+    {
+      "id": "xai-models",
+      "kind": "index",
+      "url": "https://docs.x.ai/llms.txt",
+      "pattern": "developers/(grok-[0-9][0-9a-z.-]*)\\.md",
+      "ignore": [],
+      "seen": []
+    }
+  ]
+}

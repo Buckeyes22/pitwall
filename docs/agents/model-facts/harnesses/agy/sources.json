@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/agy",
+  "sources": [
+    {
+      "id": "agy-headless",
+      "url": "https://antigravity.google/docs/cli/headless.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:51c2ce352aa42c67ef4b5a5c0f8003eb7dad6f35a4ab3cb811c826869ae2698d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:51c2ce352aa42c67ef4b5a5c0f8003eb7dad6f35a4ab3cb811c826869ae2698d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-reference",
+      "url": "https://antigravity.google/docs/cli/reference.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:cbf900c3ebb3e5f7ac7d5319ba2bd9416b6a68c528461cce2ad1a06a617d282a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:cbf900c3ebb3e5f7ac7d5319ba2bd9416b6a68c528461cce2ad1a06a617d282a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-permissions",
+      "url": "https://antigravity.google/docs/permissions.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:bc1d763205225f30df70020ede5096ae3a805f000593d3566bb912f12d04807e",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:bc1d763205225f30df70020ede5096ae3a805f000593d3566bb912f12d04807e",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-sandbox",
+      "url": "https://antigravity.google/docs/sandbox.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:8cecb13050046638feafd15a8c7a9c1c5791dc4b6f8fee7f8d8a0e3db8bdde8e",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:8cecb13050046638feafd15a8c7a9c1c5791dc4b6f8fee7f8d8a0e3db8bdde8e",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-rules",
+      "url": "https://antigravity.google/docs/rules.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:8aed9a81426349a65e258f8beb445e7815b77f2582be79a6f3e982affc52ce63",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:8aed9a81426349a65e258f8beb445e7815b77f2582be79a6f3e982affc52ce63",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-subagents",
+      "url": "https://antigravity.google/docs/subagents.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:5247da729ef77b5ee50b910e1a31ed214c7c537ce26ade9eeb81ad0c3a98bd17",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:5247da729ef77b5ee50b910e1a31ed214c7c537ce26ade9eeb81ad0c3a98bd17",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-best-practices",
+      "url": "https://antigravity.google/docs/cli/best-practices.md",
+      "kind": "harness",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4c3da278f7b9d7d6f5f6428f73a1ce28a733c9673bc0f5d35e3ef7120a1cfd2b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:4c3da278f7b9d7d6f5f6428f73a1ce28a733c9673bc0f5d35e3ef7120a1cfd2b",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://antigravity.google/llms.txt; no change log page"
+    }
+  ],
+  "watch": []
+}

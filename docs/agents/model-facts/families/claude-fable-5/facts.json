@@ -1,0 +1,641 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-fable-5",
+  "runtimeReference": "references/model-prompting.md#claude-fable-51",
+  "promptReference": "prompting/anthropic-claude-fable-5-prompting-reference.md",
+  "models": {
+    "claude-fable-5": {
+      "status": "current",
+      "displayName": "Claude Fable 5",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5",
+              "locator": "Capabilities table, Context window row"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5",
+              "locator": "Capabilities table, Max output row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-effort",
+              "locator": "Effort levels table, availability column (max and xhigh list Claude Fable 5)"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5",
+              "locator": "Capabilities table, Default effort row"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-migration",
+              "locator": "Thinking bullet, line 25"
+            },
+            {
+              "source": "anthropic-fable-5",
+              "locator": "Capabilities table, Thinking row"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-deprecations",
+              "locator": "API parameter deprecations table, temperature/top_p/top_k row"
+            }
+          ],
+          "note": "Non-default temperature, top_p or top_k returns a 400 on Claude 4.7 and later models."
+        },
+        "knowledgeCutoff": {
+          "value": "Jan 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5",
+              "locator": "Capabilities table, Reliable knowledge cutoff row"
+            }
+          ]
+        }
+      }
+    },
+    "claude-fable-5.1": {
+      "status": "current",
+      "displayName": "Claude Fable 5.1",
+      "routes": [
+        {
+          "harness": "claude",
+          "model": "fable",
+          "register": true
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1",
+              "locator": "Capabilities table, Context window row"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1",
+              "locator": "Capabilities table, Max output row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1",
+              "locator": "Capabilities table, Input to output row"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Jun 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1",
+              "locator": "Capabilities table, Reliable knowledge cutoff row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-effort",
+              "locator": "Recommended effort levels for Claude Fable 5.1 (supports all five levels); Effort levels table, availability column"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1",
+              "locator": "Capabilities table, Default effort row"
+            },
+            {
+              "source": "anthropic-fable-5-1-prompting",
+              "locator": "Consider all effort levels"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1-whats-new",
+              "locator": "Behavior differences, Unchanged from Claude Fable 5, adaptive thinking bullet"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1-whats-new",
+              "locator": "Behavior differences, Unchanged from Claude Fable 5, temperature bullet"
+            },
+            {
+              "source": "anthropic-deprecations",
+              "locator": "API parameter deprecations table, temperature/top_p/top_k row"
+            }
+          ],
+          "note": "Non-default temperature, top_p or top_k returns a 400 error."
+        },
+        "released": {
+          "value": "2026-09-01",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1",
+              "locator": "Availability table, Released row"
+            }
+          ]
+        }
+      }
+    },
+    "claude-mythos-5.1": {
+      "status": "current",
+      "displayName": "Claude Mythos 5.1",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Capabilities table, Context window row"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Capabilities table, Max output row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Capabilities table, Input to output row"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Jun 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Capabilities table, Reliable knowledge cutoff row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-effort",
+              "locator": "Recommended effort levels for Claude Fable 5.1 (the same recommendations apply to Claude Mythos 5.1); Effort levels table, availability column"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Capabilities table, Default effort row"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Capabilities table, Thinking row (Adaptive, always on)"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-fable-5-1-whats-new",
+              "locator": "Behavior differences, Unchanged from Claude Fable 5, temperature bullet"
+            },
+            {
+              "source": "anthropic-deprecations",
+              "locator": "API parameter deprecations table, temperature/top_p/top_k row"
+            }
+          ],
+          "note": "Non-default temperature, top_p or top_k returns a 400 error."
+        },
+        "released": {
+          "value": "2026-09-01",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-mythos-5-1",
+              "locator": "Availability table, Released row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "fable-5-effort-high-default",
+      "text": "Start at high effort. Use xhigh for the most capability-sensitive work and medium or low for routine work; low effort still often beats xhigh on older models.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Consider all effort levels",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-long-turns",
+      "text": "Hard tasks at high effort can run many minutes per request and autonomous runs can last hours. Raise client timeouts and prefer asynchronous check-ins over blocking.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Longer turns by default",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-no-thinking-disable",
+      "text": "Thinking is always on. Disabling it or setting a thinking budget returns a 400 error, and sampling parameters must stay at defaults; steer cost with effort instead.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-migration",
+      "locator": "Model overview and migration guide, thinking bullets",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-no-reasoning-echo",
+      "text": "Do not tell the model to echo or explain its reasoning in the reply; that can trigger a reasoning_extraction refusal, which fallback does not retry. Read thinking blocks instead.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Recommended scaffolding changes",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-ground-progress",
+      "text": "On long runs, tell it to check each progress claim against a tool result from the session and to say plainly what is unverified; this nearly eliminated fabricated status reports.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Ground progress claims during long runs",
+      "surfaces": [
+        "card",
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-state-boundaries",
+      "text": "It can take unrequested actions, such as drafting email or making backup branches. State what it may and may not do, and say that a described problem needs an assessment, not a fix.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "State the boundaries",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-safety-classifiers",
+      "text": "Safety classifiers target offensive cyber, biology and life-sciences work and can decline benign requests with a refusal stop reason. Configure fallback to Opus 4.8.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Note under the introduction",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-parallel-subagents",
+      "text": "It dispatches parallel subagents readily. Give explicit delegation guidance and prefer asynchronous communication; long-lived subagents save cost through cache reads.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Parallel subagents",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-early-stopping",
+      "text": "Late in long sessions it may end a turn on a stated intent without the tool call, or ask permission needlessly. For autonomous runs, tell it nobody can answer and to finish the work.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Rare cases of early stopping",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-no-token-countdown",
+      "text": "Avoid showing it a remaining-token countdown; that can make it suggest a new session or trim work. If unavoidable, tell it that ample context remains.",
+      "applies": [
+        "claude-fable-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-prompting",
+      "locator": "Rare cases of context-budget concern",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-alias-reaches-5-1",
+      "text": "In Claude Code the fable alias reaches Fable 5.1, except in Claude apps gateway sessions where it stays on Fable 5. Select claude-fable-5 by name to get Fable 5.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "harness",
+      "source": "cc-model-config",
+      "locator": "Fable alias resolution",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-effort-high",
+      "text": "Start at high, the default. At medium it roughly matches Fable 5 at lower cost, and at low it often rivals Opus and Sonnet models on cost per task. Re-run sweeps, as levels are recalibrated.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-prompting",
+      "locator": "Consider all effort levels",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-thinking-always-on",
+      "text": "Thinking is always on. Disabled and budget_tokens return 400, as do forced tool use and non-default sampling parameters. Steer cost with effort.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-whats-new",
+      "locator": "Breaking changes; Unchanged from Claude Fable 5",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-quiet-tool-runs",
+      "text": "It writes fewer updates during long tool runs. Set thinking display to updates to receive them, remove lines that hold findings for the end, and ask for a standalone recap.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-prompting",
+      "locator": "Ask for user-facing progress updates",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-finish-task",
+      "text": "On autonomous runs it may announce a next step instead of doing it, or ask permission for work already requested. Tell it nobody can answer and to proceed on reversible steps.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-prompting",
+      "locator": "Finish the whole task",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-long-output-room",
+      "text": "At xhigh and max it may draft a long deliverable in thinking and again in the reply. Prefer high for such requests and set max_tokens for thinking plus reply.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-prompting",
+      "locator": "Leave room for long outputs at xhigh and max effort",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-low-effort-search",
+      "text": "At low effort it searches less and answers from memory. Raise effort for turns needing fresh facts, or add a nudge to verify with a search tool.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-prompting",
+      "locator": "Search triggering at low effort",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-targeted-edits",
+      "text": "It tends to rewrite a whole file for a small change, costing output tokens. Ask for targeted edits and to keep changes and tests to what the task asks.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-prompting",
+      "locator": "Prefer targeted edits over whole-file rewrites",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "fable-5-1-append-only-history",
+      "text": "Thinking blocks are bound to the model and conversation, and earlier models cannot read them. Editing earlier turns can fail with a 400, so keep history append-only.",
+      "applies": [
+        "claude-fable-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-whats-new",
+      "locator": "Breaking changes",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "mythos-5-1-verification-required",
+      "text": "Mythos 5.1 is the same model, specs and price as Fable 5.1 under the id claude-mythos-5-1. It is open only to organizations verified through an Anthropic program, such as the Cyber Verification Program; apply to the program that fits.",
+      "applies": [
+        "claude-mythos-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-mythos-5-1",
+      "locator": "Page header and Availability paragraph",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "mythos-5-1-no-conversation-check",
+      "text": "Unlike Fable 5.1 it does not run the check that rejects thinking blocks after earlier turns change, though edits still restart the prompt cache. Keep history append-only anyway to keep cache hits.",
+      "applies": [
+        "claude-mythos-5.1"
+      ],
+      "class": "vendor",
+      "source": "anthropic-fable-5-1-migration",
+      "locator": "Migrating to Claude Mythos 5.1 from Claude Mythos 5",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    }
+  ]
+}

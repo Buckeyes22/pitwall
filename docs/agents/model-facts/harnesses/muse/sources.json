@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/muse",
+  "sources": [
+    {
+      "id": "muse-code",
+      "url": "https://dev.meta.ai/docs/muse-code.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:67aff60c35fc443368513d1800392065e4fe72bc2856775b5be89c0d6d6847d1",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:67aff60c35fc443368513d1800392065e4fe72bc2856775b5be89c0d6d6847d1",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-configuration",
+      "url": "https://dev.meta.ai/docs/muse-code/configuration.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-permissions",
+      "url": "https://dev.meta.ai/docs/muse-code/permissions.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1013ccb88a47a1ce41aca6f928a8b1c1d3253029a03f482a00775dfb8362fd5d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1013ccb88a47a1ce41aca6f928a8b1c1d3253029a03f482a00775dfb8362fd5d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-extending",
+      "url": "https://dev.meta.ai/docs/muse-code/extending.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:03b031831b275de180bae0e1eb6e27e2abae2746d89c640663811061741a17ef",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:03b031831b275de180bae0e1eb6e27e2abae2746d89c640663811061741a17ef",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-changelog",
+      "url": "https://dev.meta.ai/docs/muse-code/changelog.md",
+      "kind": "harness",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": []
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/src/pitwall/agents/resources/schemas/doctor-result.schema.json",
+  "title": "Pitwall agents doctor report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "tool", "generatedAt", "modes", "status", "summary", "checks"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "tool": { "const": "pitwall agents doctor" },
+    "generatedAt": { "type": "string" },
+    "modes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["installationOnly", "liveAuth", "discoverModels", "probeRoutes", "providerFilter", "sourceMode"],
+      "properties": {
+        "installationOnly": { "type": "boolean" },
+        "liveAuth": { "type": "boolean" },
+        "discoverModels": { "type": "boolean" },
+        "probeRoutes": { "type": "boolean" },
+        "providerFilter": { "enum": ["agy", "claude", "cline", "codex", "dsh", "goose", "grok", "hermes", "kimi", "muse", "opencode", "pi", "qwen", "zcode", null] },
+        "sourceMode": { "type": "boolean" }
+      }
+    },
+    "status": { "enum": ["pass", "warn", "fail"] },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pass", "warn", "fail", "skip"],
+      "properties": {
+        "pass": { "type": "integer", "minimum": 0 },
+        "warn": { "type": "integer", "minimum": 0 },
+        "fail": { "type": "integer", "minimum": 0 },
+        "skip": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "category", "status", "summary"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "category": { "enum": ["runtime", "provider", "plugin", "security", "routes"] },
+          "status": { "enum": ["PASS", "WARN", "FAIL", "SKIP"] },
+          "summary": { "type": "string", "minLength": 1 },
+          "remediation": { "type": "string", "minLength": 1 },
+          "provider": { "enum": ["agy", "claude", "cline", "codex", "dsh", "goose", "grok", "hermes", "kimi", "muse", "opencode", "pi", "qwen", "zcode"] },
+          "details": { "type": "object" }
+        }
+      }
+    }
+  }
+}

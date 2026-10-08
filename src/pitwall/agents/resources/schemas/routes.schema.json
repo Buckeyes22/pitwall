@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/src/pitwall/agents/resources/schemas/routes.schema.json",
+  "title": "Pitwall agents user routes",
+  "$comment": "JSON Schema covers standalone structure. Runtime validation additionally enforces harness-registry harness/model/effort rules, secret-key scans, shared-endpoint existence and Pitwall inline-endpoint requirements, and limits.output <= limits.context.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion"],
+  "$defs": {
+    "endpoint": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["baseUrl"],
+          "properties": {
+            "baseUrl": {"type": "string", "pattern": "^https?://\\S+$"},
+            "apiKeyEnv": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "plan", "apiKeyEnv"],
+          "properties": {
+            "kind": {"const": "model-studio"},
+            "plan": {"enum": ["token-plan-personal", "token-plan-team", "pay-as-you-go"]},
+            "region": {"enum": ["ap-southeast-1", "cn-beijing", "us-east-1", "eu-central-1", "ap-northeast-1", "cn-hongkong"]},
+            "workspace": {"type": "string", "pattern": "^[A-Za-z0-9-]{1,64}$"},
+            "protocol": {"enum": ["openai", "anthropic"]},
+            "tier": {"enum": ["lite", "essential", "standard", "pro", "advanced", "premium"]},
+            "concurrency": {"type": "integer", "minimum": 1},
+            "renewsOn": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+            "tokenPlanAutomation": {"const": "accept"},
+            "apiKeyEnv": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+            "baseUrl": {"type": "string", "pattern": "^https://\\S+$"}
+          }
+        }
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "context": { "type": "integer", "minimum": 1 },
+        "output": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "harness": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "endpointHarness": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$" },
+      "additionalProperties": { "$ref": "#/$defs/endpoint" }
+    },
+    "harnesses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "effort": { "type": "string", "minLength": 1 },
+          "args": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    },
+    "models": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["model"],
+        "properties": {
+          "model": { "type": "string", "minLength": 1 },
+          "harness": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "endpoint": {
+            "oneOf": [
+              { "$ref": "#/$defs/endpoint" },
+              { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$" }
+            ]
+          },
+          "args": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "effort": { "type": "string", "minLength": 1 },
+          "env": { "type": "object", "propertyNames": { "pattern": "^[A-Z_][A-Z0-9_]*$" }, "additionalProperties": { "type": "string" } },
+          "limits": { "$ref": "#/$defs/limits" },
+          "seat": { "enum": ["default-author", "critical", "review", "burst", "throughput", "local", "gateway"] },
+          "workspace": { "enum": ["shared", "isolated", "auto"] },
+          "taskMode": { "enum": ["read", "write"] },
+          "account": { "type": "string", "pattern": "^[A-Za-z0-9-]{1,16}$" },
+          "expiresAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$" },
+          "origin": {
+            "type": "object", "additionalProperties": false,
+            "required": ["kind", "capability", "leaseId", "url"],
+            "properties": {
+              "kind": { "enum": ["pitwall"] },
+              "capability": { "type": "string", "minLength": 1 },
+              "leaseId": {
+                "oneOf": [
+                  { "type": "string", "minLength": 1 },
+                  { "type": "null" }
+                ]
+              },
+              "url": { "type": "string", "pattern": "^https?://\\S+$" },
+              "state": { "enum": ["active", "stopped", "unknown"] }
+            }
+          },
+          "autoServe": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "maxUsdPerHour": { "type": "number", "exclusiveMinimum": 0 },
+              "ttlMinutes": { "type": "integer", "minimum": 1, "maximum": 43200 },
+              "idleTimeoutMinutes": { "type": "integer", "minimum": 5 },
+              "readyTimeoutMinutes": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": { "required": ["autoServe"] },
+            "then": {
+              "required": ["origin"],
+              "properties": { "origin": { "properties": { "kind": { "const": "pitwall" } } } }
+            }
+          }
+        ]
+      }
+    },
+    "pitwall": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "autoRegister": {
+          "type": "object",
+          "propertyNames": { "minLength": 1 },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,63}$"
+          }
+        }
+      }
+    }
+  }
+}

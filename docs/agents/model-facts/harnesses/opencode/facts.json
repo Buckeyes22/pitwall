@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/opencode",
+  "facts": {
+    "headlessFlag": {
+      "value": "run [message..]",
+      "method": "reviewed",
+      "note": "The run subcommand is the non-interactive mode; plain opencode starts the TUI.",
+      "evidence": [
+        {"source": "opencode-cli", "locator": "run, first paragraph"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["default", "json"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "opencode-cli", "locator": "run, Flags, --format row"}
+      ]
+    },
+    "effortFlag": {
+      "value": "--variant",
+      "method": "reviewed",
+      "note": "The variant names are provider-specific reasoning effort levels.",
+      "evidence": [
+        {"source": "opencode-cli", "locator": "run, Flags, --variant row"},
+        {"source": "opencode-models", "locator": "Variants, Built-in variants"}
+      ]
+    },
+    "permissionDefault": {
+      "value": "allow",
+      "method": "reviewed",
+      "note": "Most permissions allow by default; doom_loop and external_directory ask, and .env files are not readable.",
+      "evidence": [
+        {"source": "opencode-permissions", "locator": "Defaults"}
+      ]
+    },
+    "instructionFiles": {
+      "value": ["AGENTS.md", "CLAUDE.md", "~/.config/opencode/AGENTS.md", "~/.claude/CLAUDE.md", "opencode.json instructions"],
+      "method": "reviewed",
+      "note": "CLAUDE.md files are fallbacks used only when no AGENTS.md exists in that category.",
+      "evidence": [
+        {"source": "opencode-rules", "locator": "Claude Code Compatibility; Precedence; Custom Instructions"}
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "note": "Built-in subagents are general, explore, and scout; custom ones come from opencode.json or agents/*.md files.",
+      "evidence": [
+        {"source": "opencode-agents", "locator": "Types, Subagents; Built-in"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "opencode-run-headless",
+      "text": "Use opencode run with a message for scripted work. Pass --format json for raw events, and --attach to a running opencode serve to skip MCP cold starts.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "opencode-cli",
+      "locator": "run, Flags; attach example",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-permissive-defaults",
+      "text": "Permissions start mostly on allow, so a run can edit and execute freely. Add deny rules in the permission config to restrict it; the last matching rule wins.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "opencode-permissions",
+      "locator": "Defaults; Granular Rules",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-auto-flag",
+      "text": "--auto approves every request that would otherwise ask, but explicit deny rules still block. It works with opencode run.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "opencode-permissions",
+      "locator": "Auto mode",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-variant-effort",
+      "text": "Set reasoning effort with --variant. The accepted names are provider-specific, for example high or max for Anthropic and none through xhigh for OpenAI.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "opencode-models",
+      "locator": "Variants, Built-in variants",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-claude-code-fallback",
+      "text": "OpenCode falls back to CLAUDE.md, ~/.claude/CLAUDE.md, and ~/.claude/skills/ when AGENTS.md is absent. Set OPENCODE_DISABLE_CLAUDE_CODE=1 to turn that off.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "opencode-rules",
+      "locator": "Claude Code Compatibility",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-model-format",
+      "text": "Name a model as provider/model with -m; opencode models lists the valid identifiers, and --refresh updates the list from models.dev.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "opencode-cli",
+      "locator": "models; Flags, --model row",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

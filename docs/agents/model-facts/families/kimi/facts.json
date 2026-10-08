@@ -1,0 +1,413 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/kimi",
+  "models": {
+    "kimi-k3": {
+      "status": "current",
+      "displayName": "Kimi K3",
+      "artifact": "moonshotai/Kimi-K3",
+      "routes": [
+        {
+          "harness": "kimi",
+          "model": "kimi-code/k3",
+          "register": true,
+          "effortValues": []
+        },
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/kimi-k3"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k3",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "high",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-reasoning-effort",
+              "locator": "Kimi K3 intro and Fields table"
+            },
+            {
+              "source": "kimi-k3",
+              "locator": "Reasoning effort, note"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "max",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-reasoning-effort",
+              "locator": "Fields table, reasoning_effort row"
+            },
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Choose the right thinking model, kimi-k3 bullet"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-k3",
+              "locator": "FAQ, How do I turn off Kimi K3's chain-of-thought?"
+            },
+            {
+              "source": "kimi-reasoning-effort",
+              "locator": "Kimi K3 intro"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Frequently Asked Questions, Q1"
+            },
+            {
+              "source": "kimi-k3",
+              "locator": "Important limits, last-but-two bullet"
+            }
+          ]
+        },
+        "revision": {
+          "value": "f831ab66814297da540d832a5235f8e904f29d06",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k3",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 2779931837184,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k3",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "kimi-k3",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k3",
+              "locator": "record.json cardData"
+            }
+          ]
+        }
+      }
+    },
+    "kimi-k2.7-code": {
+      "status": "current",
+      "displayName": "Kimi K2.7 Code",
+      "artifact": "moonshotai/Kimi-K2.7-Code",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.7-code",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Choose the right thinking model, thinking.type row"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Preserve thinking across turns, note on kimi-k2.7-code"
+            }
+          ]
+        },
+        "revision": {
+          "value": "74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.7-code",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 1026879376368,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.7-code",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "modified-mit",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.7-code",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.7-code",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Choose the right thinking model, request parameters table, reasoning_effort row (Not supported)"
+            }
+          ]
+        }
+      }
+    },
+    "kimi-k2.6": {
+      "status": "current",
+      "displayName": "Kimi K2.6",
+      "artifact": "moonshotai/Kimi-K2.6",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.6",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Choose the right thinking model, thinking.type row"
+            },
+            {
+              "source": "hf-kimi-k2.6",
+              "locator": "chat_template.jinja line 82 (thinking is false branch)"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Preserve thinking across turns, thinking.keep table"
+            }
+          ],
+          "note": "Earlier-turn reasoning is dropped by default; only a tool-call loop within one task needs it kept."
+        },
+        "revision": {
+          "value": "7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.6",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 1026879376368,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.6",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "modified-mit",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-kimi-k2.6",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "kimi-thinking-models",
+              "locator": "Choose the right thinking model, request parameters table, reasoning_effort row (Not supported)"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "kimi-k3-return-assistant-message",
+      "text": "With Kimi K3, send each assistant message back whole, reasoning_content and tool_calls included. Keeping only the text breaks multi-turn chats and tool loops.",
+      "applies": [
+        "kimi-k3"
+      ],
+      "class": "vendor",
+      "source": "kimi-thinking-models",
+      "locator": "Frequently Asked Questions, Q1",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k3-omit-sampling",
+      "text": "Kimi K3 fixes temperature, top_p, n and both penalties; leave them out of requests instead of setting them.",
+      "applies": [
+        "kimi-k3"
+      ],
+      "class": "vendor",
+      "source": "kimi-k3",
+      "locator": "Important limits",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k3-low-effort-for-latency",
+      "text": "Kimi K3 cannot stop thinking. When its reasoning runs too long, lower reasoning_effort to low rather than looking for an off switch.",
+      "applies": [
+        "kimi-k3"
+      ],
+      "class": "vendor",
+      "source": "kimi-k3",
+      "locator": "FAQ, How do I turn off Kimi K3's chain-of-thought?",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k3-tool-retrieval-first",
+      "text": "With a large tool inventory, declare one search tool, force it on the first turn with tool_choice required, then inject matching tool definitions on demand.",
+      "applies": [
+        "kimi-k3"
+      ],
+      "class": "vendor",
+      "source": "kimi-k3-tool-calling",
+      "locator": "Use tool_choice to force first-turn retrieval",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k2-thinking-max-tokens",
+      "text": "Give Kimi thinking models max_tokens of at least 16000 and stream the reply, so reasoning plus answer is not truncated or timed out.",
+      "applies": [
+        "kimi-k2.7-code",
+        "kimi-k2.6"
+      ],
+      "class": "vendor",
+      "source": "kimi-thinking-models",
+      "locator": "Configure multi-step tool calls",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k2.7-code-always-thinks",
+      "text": "Kimi K2.7 Code always thinks and always keeps earlier reasoning: omit the thinking field, since passing disabled returns an error.",
+      "applies": [
+        "kimi-k2.7-code"
+      ],
+      "class": "vendor",
+      "source": "kimi-thinking-models",
+      "locator": "Choose the right thinking model, thinking.type row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-k2.6-thinking-switch",
+      "text": "Kimi K2.6 thinks by default. Turn it off with thinking.type disabled, or set thinking.keep to all to carry earlier reasoning across turns.",
+      "applies": [
+        "kimi-k2.6"
+      ],
+      "class": "vendor",
+      "source": "kimi-thinking-models",
+      "locator": "Control kimi-k2.6 thinking with the thinking parameter",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

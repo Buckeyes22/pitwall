@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/grok",
+  "promptReference": "prompting/xai-grok-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#xai-grok-47-through-grok-build",
+  "models": {
+    "grok-4.7": {
+      "status": "current",
+      "displayName": "Grok 4.7",
+      "routes": [
+        {
+          "harness": "grok",
+          "model": "grok-4.7",
+          "register": true
+        },
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/grok-4.7"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 500000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-grok-4-7",
+              "locator": "At a glance, Context window"
+            },
+            {
+              "source": "xai-models",
+              "locator": "Text API Pricing, grok-4.7 rows"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-grok-4-7",
+              "locator": "At a glance, Modalities"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "May 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-grok-4-7",
+              "locator": "At a glance, Knowledge cutoff"
+            },
+            {
+              "source": "xai-models",
+              "locator": "Knowledge cut-off note"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.7 row"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.7 row"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.7 row"
+            }
+          ]
+        }
+      }
+    },
+    "grok-4.5": {
+      "status": "current",
+      "displayName": "Grok 4.5",
+      "routes": [
+        {
+          "harness": "grok",
+          "model": "grok-4.5",
+          "register": false
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 500000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-models",
+              "locator": "Text API Pricing, grok-4.5 rows"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.5 row"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "The reasoning_effort parameter"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "xhigh": "high"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Effort levels, tip"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "The reasoning_effort parameter"
+            }
+          ]
+        }
+      }
+    },
+    "grok-4.6": {
+      "status": "current",
+      "displayName": "Grok 4.6",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/grok-4.6"
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.6 row"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.6 row"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "xai-reasoning",
+              "locator": "Summary table, grok-4.6 row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "grok-no-stop-sequences",
+      "text": "Leave out stop sequences and presence or frequency penalties; Grok reasoning models return an error when a request sets them.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "xai-reasoning",
+      "locator": "The reasoning_effort parameter",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-reads-claude-md",
+      "text": "Grok Build reads CLAUDE.md and AGENTS.md from the repository root down to the working directory, whole and uncapped. Keep those files short; it follows short rules more reliably.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "xai-build-rules",
+      "locator": "Discovery",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-4-7-prompt-cache-key",
+      "text": "Set a prompt_cache_key (x-grok-conv-id on Chat Completions) so a conversation's requests reach one server; without it cache hits are unreliable and input is often billed at full price.",
+      "applies": [
+        "grok-4.7"
+      ],
+      "class": "vendor",
+      "source": "xai-grok-4-7",
+      "locator": "Important details",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

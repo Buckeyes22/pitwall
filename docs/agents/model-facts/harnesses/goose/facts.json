@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/goose",
+  "facts": {
+    "headlessFlag": {
+      "value": "run -t",
+      "method": "reviewed",
+      "note": "goose run also takes a file with -i (use - for stdin) and exits when done unless -s is given.",
+      "evidence": [
+        {"source": "goose-cli-commands", "locator": "line 403-414, run, Input Options (-i, -t)"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "json", "stream-json"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "goose-cli-commands", "locator": "line 462-475, run, --output-format"}
+      ]
+    },
+    "effortFlag": {
+      "value": "GOOSE_THINKING_EFFORT",
+      "method": "reviewed",
+      "note": "An environment variable, not a run flag. The page documents it for Meta Muse Spark models only; other providers use their own settings.",
+      "evidence": [
+        {"source": "goose-providers", "locator": "line 2134-2173, Meta Muse Spark Reasoning Effort"}
+      ]
+    },
+    "instructionFiles": {
+      "value": [".goosehints"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "goose-providers", "locator": "line 1689-1692, Context Length"}
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {"source": "goose-providers", "locator": "line 2132-2133, Multi-Model Configuration, Subagents"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "goose-run-headless",
+      "text": "Run goose headless with goose run -t or -i FILE; add --no-session to skip session storage and -q to print only the model reply.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "goose-cli-commands",
+      "locator": "line 403-461, run, Input, Session, and Control Options",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "goose-endpoint-env",
+      "text": "The OpenAI provider reaches any OpenAI-compatible endpoint through OPENAI_HOST and OPENAI_BASE_PATH; GOOSE_MODEL names the model. A 404 usually means a wrong base path.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "goose-providers",
+      "locator": "line 620-636, Pointing at a LiteLLM proxy; line 594-599, GOOSE_MODEL",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "goose-max-turns",
+      "text": "goose run allows 1000 turns without user input by default; lower it with --max-turns, and cap repeated identical tool calls with --max-tool-repetitions.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "goose-cli-commands",
+      "locator": "line 452-455, run, Control Options",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

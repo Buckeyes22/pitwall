@@ -1,0 +1,231 @@
+{
+  "bindings": [
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Plan command forwards exact capability_id once to preview service and prints expected plan identity",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_routing_cli_command.py:139",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/routing.py:_request_args:parser:capability_id",
+      "test_node_id": "tests/cli/test_routing_cli_command.py::test_plan_json_is_stable_and_payload_free",
+      "test_source_sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Explicit provider selector is forwarded exactly once to the fake preview service; command exits0",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_routing_cli_command.py:158",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/routing.py:_request_args:parser:--provider-id",
+      "test_node_id": "tests/cli/test_routing_cli_command.py::test_plan_forwards_explicit_provider_selector",
+      "test_source_sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Plan command forwards parsed messages payload once to preview service while omitting messages from rendered JSON",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_routing_cli_command.py:139",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/routing.py:_request_args:parser:--input-json",
+      "test_node_id": "tests/cli/test_routing_cli_command.py::test_plan_json_is_stable_and_payload_free",
+      "test_source_sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Submit rejects mismatched confirmation before service invocation.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_routing_cli_command.py:168",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/routing.py:_parser:submit:--confirm",
+      "test_node_id": "tests/cli/test_routing_cli_command.py::test_submit_requires_exact_confirmation_before_service_call",
+      "test_source_sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Cancel command preserves workload/plan identity in the response path.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_routing_cli_command.py:182",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/routing.py:_parser:cancel:--confirm",
+      "test_node_id": "tests/cli/test_routing_cli_command.py::test_submit_and_cancel_return_plan_identity",
+      "test_source_sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Pod create dry-run forwards preview intent to fake service; command exits0 and renders dry_run true/changed false",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_runpod_resources.py:139",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/runpod_resources.py:_mutation_flags:parser:--dry-run",
+      "test_node_id": "tests/cli/test_runpod_resources.py::test_dry_run_is_zero_write_preview_without_confirmation",
+      "test_source_sha256": "010a0ecbaca62093b5914d95b8e4822d382c0f66fff97d1f96d225360e21754a"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Wrong confirmation exits2 and leaves fake service pod request list empty",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_runpod_resources.py:197",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/runpod_resources.py:_mutation_flags:parser:--confirm",
+      "test_node_id": "tests/cli/test_runpod_resources.py::test_wrong_confirmation_stops_before_shared_service",
+      "test_source_sha256": "010a0ecbaca62093b5914d95b8e4822d382c0f66fff97d1f96d225360e21754a"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Endpoint update forwards the exact idempotency key into the typed request passed to the fake service",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_runpod_resources.py:261",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/runpod_resources.py:_mutation_flags:parser:--idempotency-key",
+      "test_node_id": "tests/cli/test_runpod_resources.py::test_exact_confirmation_preserves_nested_endpoint_controls",
+      "test_source_sha256": "010a0ecbaca62093b5914d95b8e4822d382c0f66fff97d1f96d225360e21754a"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Catalogue command delegates with refresh parser option.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_runpod_resources.py:117",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/runpod_market.py:_add_runpod_catalogue_arguments:parser:--refresh",
+      "test_node_id": "tests/cli/test_runpod_resources.py::test_catalogue_delegates_to_market_command",
+      "test_source_sha256": "010a0ecbaca62093b5914d95b8e4822d382c0f66fff97d1f96d225360e21754a"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Volume list forwards exact volume and data-center identity to fake store and renders expected object/progress JSON",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_volume_files.py:83",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/volume_files.py:_add_volume_context:parser:volume_id",
+      "test_node_id": "tests/cli/test_volume_files.py::test_cli_list_json_is_the_shared_machine_stable_result",
+      "test_source_sha256": "e2abf4dc92962f11c28c532c90932230546e680b609cc3d4508a7808e73fd4eb"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Upload/delete dry-run render the exact respective object keys with dry_run status and zero fake-store put/delete calls",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_volume_files.py:97",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/volume_files.py:_add_volume_context:parser:object_key",
+      "test_node_id": "tests/cli/test_volume_files.py::test_cli_upload_and_delete_dry_run_have_zero_provider_writes",
+      "test_source_sha256": "e2abf4dc92962f11c28c532c90932230546e680b609cc3d4508a7808e73fd4eb"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Local path is constrained by the local path safety contract.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_volume_files.py:184",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/volume_files.py:_add_local_path:parser:local_path",
+      "test_node_id": "tests/cli/test_volume_files.py::test_cli_help_and_path_validation_are_local_and_safe",
+      "test_source_sha256": "e2abf4dc92962f11c28c532c90932230546e680b609cc3d4508a7808e73fd4eb"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Download ../escape.bin beneath explicit root exits2 and issues no fake-store get request",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_volume_files.py:184",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/volume_files.py:_add_local_path:parser:--root",
+      "test_node_id": "tests/cli/test_volume_files.py::test_cli_help_and_path_validation_are_local_and_safe",
+      "test_source_sha256": "e2abf4dc92962f11c28c532c90932230546e680b609cc3d4508a7808e73fd4eb"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Shared JSON flag defaults false.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_cli_output.py:177",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/output.py:add_json_argument:parser:--json",
+      "test_node_id": "tests/cli/test_cli_output.py::TestAddJsonArgument::test_adds_json_flag_default_false",
+      "test_source_sha256": "3dfd6ed9e11abf7c3631371dcd704b74cc32cdbf797e4e3ccf585a1606fc5f14"
+    },
+    {
+      "framework": "pytest",
+      "limits": "Hermetic fake service/store or isolated parser. Assertions prove only the stated delegation, validation or rendering; no real provider, durable database, billing, or lifecycle proof.",
+      "proof_lane": "hermetic",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "reviewed_oracle": "Shared JSON flag accepts explicit true.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "source": "tests/cli/test_cli_output.py:185",
+      "status": "not_run",
+      "surface_id": "cli:argument:src/pitwall/cli/output.py:add_json_argument:parser:--json",
+      "test_node_id": "tests/cli/test_cli_output.py::TestAddJsonArgument::test_json_flag_explicit_true",
+      "test_source_sha256": "3dfd6ed9e11abf7c3631371dcd704b74cc32cdbf797e4e3ccf585a1606fc5f14"
+    }
+  ],
+  "candidate_id": null,
+  "limits": [
+    "Static source hashes are full-file hashes of the current test files.",
+    "Static node presence was checked with the existing AST test index; runtime pytest collection and execution were not performed.",
+    "No binding proves a provider call, database access, filesystem/S3 mutation, or release readiness.",
+    "Generic factory aliases, non-target files, runtime argparse behavior, and unlisted CLI journeys remain unresolved."
+  ],
+  "schema_version": "reviewed-test-bindings.v1",
+  "scope": "Root-corrected partial CLI test mapping; source and collection review only, allnot_run. Extractor tests excluded from product proof.",
+  "rejected_bindings": [
+    {
+      "surface_id": "cli:parser:src/pitwall/cli/routing.py:_parser:parser",
+      "test_node_id": "tests/release_acceptance/test_cli_arguments.py::test_real_root_rows_kind_and_sorted_unique",
+      "reason": "Extractor regression does not exercise product parser behavior"
+    },
+    {
+      "surface_id": "cli:parser:src/pitwall/cli/runpod_resources.py:build_runpod_resources_parser:parser",
+      "test_node_id": "tests/release_acceptance/test_cli_arguments.py::test_scope_issues_state_unresolved_open_hierarchy",
+      "reason": "Extractor regression does not exercise product parser behavior"
+    },
+    {
+      "surface_id": "cli:parser:src/pitwall/cli/volume_files.py:_parse_volume_files_args:parser",
+      "test_node_id": "tests/release_acceptance/test_cli_arguments.py::test_real_root_rows_kind_and_sorted_unique",
+      "reason": "Extractor regression does not exercise product parser behavior"
+    }
+  ],
+  "collection": {
+    "log_path": "$PITWALL_EVIDENCE_ROOT/release-acceptance/cli-binding-collection-root.log",
+    "log_sha256": "e6db0fb5067f3140559144f8a9c788e570c2726eef04ce10b4459ef96056ccf6",
+    "exit_code": 0,
+    "test_count": 47
+  }
+}

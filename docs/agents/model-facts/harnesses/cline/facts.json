@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/cline",
+  "facts": {
+    "headlessFlag": {
+      "value": "[prompt]",
+      "method": "reviewed",
+      "note": "No headless flag exists; a positional prompt starts a task. The -p flag means plan mode, not print.",
+      "evidence": [
+        {"source": "cline-cli-reference", "locator": "Help Menu, prompt argument; Commands, cline (default)"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "json"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "cline-cli-reference", "locator": "Global Options, --json row; JSON Output Format"}
+      ]
+    },
+    "effortFlag": {
+      "value": "--thinking",
+      "method": "reviewed",
+      "evidence": [
+        {"source": "cline-cli-reference", "locator": "Global Options, --thinking row (none, low, medium, high, xhigh)"}
+      ]
+    },
+    "permissionDefault": {
+      "value": "auto-approve",
+      "method": "reviewed",
+      "note": "In ACP mode the default is false.",
+      "evidence": [
+        {"source": "cline-cli-reference", "locator": "Global Options, --auto-approve row"}
+      ]
+    },
+    "instructionFiles": {
+      "value": [".cline/rules/"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "cline-cli-reference", "locator": "Configuration Files, rules/ entries"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "cline-auto-approve-default",
+      "text": "A plain prompt runs in act mode with every tool auto-approved. Pass --auto-approve false or -p (plan mode) when the run must not change files.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cline-cli-reference",
+      "locator": "Help Menu, prompt argument and --auto-approve",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cline-thinking-levels",
+      "text": "Set reasoning effort per run with --thinking none, low, medium, high, or xhigh; the default is medium.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cline-cli-reference",
+      "locator": "Global Options, --thinking row",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cline-command-permissions",
+      "text": "CLINE_COMMAND_PERMISSIONS takes JSON allow and deny glob lists to restrict shell commands. Deny wins, and redirects stay blocked unless allowRedirects is true.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cline-cli-reference",
+      "locator": "CLINE_COMMAND_PERMISSIONS",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cline-no-timeout-default",
+      "text": "There is no timeout by default (-t 0). Set -t seconds so a stuck headless run ends, and use --json for line-delimited machine-readable messages.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cline-cli-reference",
+      "locator": "Global Options, --timeout and --json rows",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

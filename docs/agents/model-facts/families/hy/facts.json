@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/hy",
+  "promptReference": "prompting/tencent-hy-prompting-reference.md",
+  "models": {
+    "hy3": {
+      "status": "current",
+      "displayName": "Hy3",
+      "artifact": "tencent/Hy3",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/hy3"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "tokenhub-models",
+              "locator": "Language models table, hy3 row, context window"
+            }
+          ]
+        },
+        "maxInput": {
+          "value": 196608,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "tokenhub-models",
+              "locator": "Language models table, hy3 row, max input"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "tokenhub-models",
+              "locator": "Language models table, hy3 row, max output"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "no_think",
+            "low",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "chat_template.jinja line 42 (accepted list)"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "no_think",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "chat_template.jinja line 41 (default)"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "chat_template.jinja lines 42-46 (raise_exception)"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "top_k": -1
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "generation_config.json, temperature, top_p, top_k"
+            }
+          ]
+        },
+        "revision": {
+          "value": "a960ebc3da325ba167f069f76c41eb62c9280d22",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 298786155776,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-hy3",
+              "locator": "record.json cardData"
+            }
+          ]
+        }
+      }
+    },
+    "hy4-preview": {
+      "status": "current",
+      "displayName": "Hy4 preview",
+      "artifact": "tencent/Hy4-preview",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/hy4-preview"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "tokenhub-models",
+              "locator": "Language models table, hy4-preview row, context window"
+            }
+          ]
+        },
+        "maxInput": {
+          "value": 983040,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "tokenhub-models",
+              "locator": "Language models table, hy4-preview row, max input"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 65536,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "tokenhub-models",
+              "locator": "Language models table, hy4-preview row, max output"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "no_think",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "chat_template.jinja line 34 (accepted list)"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "chat_template.jinja line 33 (default)"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "chat_template.jinja lines 34-38 (raise_exception)"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "top_k": -1
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "generation_config.json, temperature, top_p, top_k"
+            }
+          ]
+        },
+        "revision": {
+          "value": "705d81ee51566a186d645b74c974d642ef2828fe",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 779960992733,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-hy4-preview",
+              "locator": "record.json cardData"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "hy4-overthinks-and-oververifies",
+      "text": "Hy4 preview can reason longer than a task needs and tends to over-verify its own work. Expect slow, verbose answers; bound scope and effort for routine edits.",
+      "applies": [
+        "hy4-preview"
+      ],
+      "class": "artifact",
+      "source": "hf-hy4-preview",
+      "locator": "README.md, Known Limitations",
+      "surfaces": [
+        "card",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

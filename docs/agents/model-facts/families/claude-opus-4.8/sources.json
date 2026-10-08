@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-opus-4.8",
+  "sources": [
+    {
+      "id": "anthropic-opus-4-8",
+      "url": "https://platform.claude.com/docs/en/models/opus-4-8/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:dfd6c920c8e9882719e72a9bd912a95bacc4712d757ea58c3dddc23b34c405af",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:dfd6c920c8e9882719e72a9bd912a95bacc4712d757ea58c3dddc23b34c405af",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-effort",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/effort.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-4-8-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-4-8.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:9f67fae4a2a5037da7517cdab7691c61b6c85760dc089146160475579a243b3a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:9f67fae4a2a5037da7517cdab7691c61b6c85760dc089146160475579a243b3a",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-deprecations",
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "cc-model-config",
+      "url": "https://code.claude.com/docs/en/model-config.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-5-5",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:7554fec54a6948dd63a1b1e5b19a2bfb85e5932f14c2b08d6e990b086c3c9805",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:7554fec54a6948dd63a1b1e5b19a2bfb85e5932f14c2b08d6e990b086c3c9805",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-5-5-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:37c6216c30e91cc2238758386e31ed1fba69988363d366438d11a81424f648d5",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:37c6216c30e91cc2238758386e31ed1fba69988363d366438d11a81424f648d5",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-5-5-whats-new",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/whats-new-opus-5-5.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:7f58fdf7cd12deb670c9bed09a0e3fd89ceaef7fc8217f2bcaac1e71dba8c039",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:7f58fdf7cd12deb670c9bed09a0e3fd89ceaef7fc8217f2bcaac1e71dba8c039",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-5-5-migration",
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:ad598cce4d680466abe6cae61a00c38abef9e553a8f55e984740be7f70d3ff0b",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:ad598cce4d680466abe6cae61a00c38abef9e553a8f55e984740be7f70d3ff0b",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-5",
+      "url": "https://platform.claude.com/docs/en/models/opus-5/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:deede24b5e43ade8fbda3b6970f7f2cd7c8cdbfbf8f2df18749518ac79ceb9a8",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:deede24b5e43ade8fbda3b6970f7f2cd7c8cdbfbf8f2df18749518ac79ceb9a8",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-opus-5-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:cb089946ebaa9500565b2326e8411a8a6f6c8d1a11c843155b91cc5743e00e83",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:cb089946ebaa9500565b2326e8411a8a6f6c8d1a11c843155b91cc5743e00e83",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-thinking-models",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:496a354b01b4b0057c26205b2f6f2178f994dd92a2a93e851a78a37d11939525",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:496a354b01b4b0057c26205b2f6f2178f994dd92a2a93e851a78a37d11939525",
+      "reviewedAt": "2026-10-07"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "anthropic-models",
+      "kind": "index",
+      "url": "https://platform.claude.com/llms.txt",
+      "pattern": "models/(opus-[0-9][0-9-]*)/overview\\.md",
+      "ignore": [],
+      "seen": [
+        "opus-4-5",
+        "opus-4-6",
+        "opus-4-7",
+        "opus-4-8",
+        "opus-5",
+        "opus-5-5"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "source": {
+    "observedAt": "2026-08-31",
+    "openapiUrl": "https://api.runpod.io/v2/openapi.json",
+    "openapiVersion": "2.0.0"
+  },
+  "paths": {
+    "networkVolumes": "network-volumes",
+    "podAction": "pods/{id}/action",
+    "pods": "pods",
+    "registries": "registries",
+    "serverless": "serverless",
+    "templates": "templates"
+  },
+  "collectionEnvelopes": {
+    "networkVolumes": "networkVolumes",
+    "pods": "pods",
+    "registries": "registries",
+    "serverless": "endpoints",
+    "templates": "templates"
+  },
+  "allowedWriteFields": {
+    "networkVolumeCreate": [
+      "dataCenter",
+      "name",
+      "size",
+      "type"
+    ],
+    "networkVolumeUpdate": [
+      "name",
+      "size"
+    ],
+    "podAction": [
+      "action"
+    ],
+    "podCreate": [
+      "args",
+      "cloud",
+      "cpu",
+      "dataCenterIds",
+      "disk",
+      "env",
+      "globalNetworking",
+      "gpu",
+      "image",
+      "mounts",
+      "name",
+      "ports",
+      "registry",
+      "startJupyter",
+      "startSsh",
+      "templateId"
+    ],
+    "podUpdate": [
+      "args",
+      "disk",
+      "env",
+      "globalNetworking",
+      "image",
+      "locked",
+      "mounts",
+      "name",
+      "ports",
+      "registry",
+      "templateId"
+    ],
+    "registryCreate": [
+      "name",
+      "password",
+      "username"
+    ],
+    "serverlessCreate": [
+      "args",
+      "cpu",
+      "dataCenterIds",
+      "disk",
+      "env",
+      "flashboot",
+      "gpu",
+      "image",
+      "name",
+      "networkVolumes",
+      "ports",
+      "registry",
+      "scaling",
+      "templateId",
+      "timeout",
+      "type",
+      "workers"
+    ],
+    "templateCreate": [
+      "allowedCudaVersions",
+      "args",
+      "category",
+      "disk",
+      "env",
+      "image",
+      "mounts",
+      "name",
+      "ports",
+      "public",
+      "registry",
+      "serverless",
+      "startJupyter",
+      "startSsh"
+    ],
+    "templateUpdate": [
+      "allowedCudaVersions",
+      "args",
+      "category",
+      "disk",
+      "env",
+      "image",
+      "mounts",
+      "name",
+      "ports",
+      "public",
+      "registry",
+      "serverless",
+      "startJupyter",
+      "startSsh"
+    ]
+  },
+  "podActions": [
+    "restart",
+    "start",
+    "stop",
+    "terminate"
+  ],
+  "v1OnlyPodCreateFields": [
+    "dataCenterPriority",
+    "dockerEntrypoint",
+    "gpuTypePriority",
+    "minRAMPerGPU",
+    "minVCPUPerGPU",
+    "supportPublicIp"
+  ]
+}

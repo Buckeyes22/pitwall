@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-sonnet-5",
+  "sources": [
+    {
+      "id": "anthropic-sonnet-5",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:66050b8820797d2fc9e72dfeeb25634b86bb92d25af4e4d4cd855795bd091276",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:66050b8820797d2fc9e72dfeeb25634b86bb92d25af4e4d4cd855795bd091276",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-effort",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/effort.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-sonnet-5-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:560089d4c75943749b7a81afdf628290c518713e8e82aff88b389c5cc5544c8e",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:560089d4c75943749b7a81afdf628290c518713e8e82aff88b389c5cc5544c8e",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-deprecations",
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "cc-model-config",
+      "url": "https://code.claude.com/docs/en/model-config.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-sonnet-5-5",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:0b56aaa1006e642f6525508b7355f44e34991e4b2c2bdce52b5cebc8d03db5ef",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:0b56aaa1006e642f6525508b7355f44e34991e4b2c2bdce52b5cebc8d03db5ef",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-sonnet-5-5-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5-5.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a5c6fe2de8ab6891003d4470def0a612cebf2667bb5852dea41acab18b54377e",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:a5c6fe2de8ab6891003d4470def0a612cebf2667bb5852dea41acab18b54377e",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-sonnet-5-5-whats-new",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/whats-new-sonnet-5-5.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:d9a5e8a73d032553bf7d6a6e35648e542da0c2080bded854f4224b409088d938",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:d9a5e8a73d032553bf7d6a6e35648e542da0c2080bded854f4224b409088d938",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-sonnet-5-5-migration",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3ce232593b681d09b061b1caeeb91959cf2ab9df4320ba9c2867e004bd2ca799",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:3ce232593b681d09b061b1caeeb91959cf2ab9df4320ba9c2867e004bd2ca799",
+      "reviewedAt": "2026-10-07"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "anthropic-models",
+      "kind": "index",
+      "url": "https://platform.claude.com/llms.txt",
+      "pattern": "models/(sonnet-[0-9][0-9-]*)/overview\\.md",
+      "ignore": [],
+      "seen": [
+        "sonnet-4-5",
+        "sonnet-4-6",
+        "sonnet-5",
+        "sonnet-5-5"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/longcat",
+  "sources": [
+    {
+      "id": "longcat-quick-start",
+      "url": "https://longcat.ai/platform/docs/",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:cd89a0f0e61a8334f234bc56b36577a0f7dc646023f9c29d4a53c97ac7d18e9f",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:cd89a0f0e61a8334f234bc56b36577a0f7dc646023f9c29d4a53c97ac7d18e9f",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "longcat-chat-api",
+      "url": "https://longcat.ai/platform/docs/api/chat",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:73420b06cc056e2d4a636916e9e575f0d7c83a230952f7fc08aa938cfc7ecee9",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:73420b06cc056e2d4a636916e9e575f0d7c83a230952f7fc08aa938cfc7ecee9",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "longcat-faq",
+      "url": "https://longcat.ai/platform/docs/faq",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:5affe86003ac3319c4057d6acd385c3551385b17cdba81bd676a83a546b77269",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:5affe86003ac3319c4057d6acd385c3551385b17cdba81bd676a83a546b77269",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "longcat-change-log",
+      "url": "https://longcat.ai/platform/docs/change-log",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:f068eb5ca70d5700d74755d40b3e4493d6ac8efe402456124b713e642c78a8b9",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:f068eb5ca70d5700d74755d40b3e4493d6ac8efe402456124b713e642c78a8b9",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-longcat-2.0",
+      "url": "https://huggingface.co/meituan-longcat/LongCat-2.0",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "meituan-longcat/LongCat-2.0",
+      "observedHash": "revision:834bf5ffe3047aa9f6cc7a64a9bc068b146b8274",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:834bf5ffe3047aa9f6cc7a64a9bc068b146b8274",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "longcat-pricing",
+      "kind": "index",
+      "url": "https://longcat.ai/platform/docs/",
+      "pattern": "pricing/(longcat-[0-9][0-9a-z.-]*)",
+      "ignore": [],
+      "seen": [
+        "longcat-2.5"
+      ]
+    },
+    {
+      "id": "meituan-longcat",
+      "kind": "huggingface-org",
+      "org": "meituan-longcat",
+      "pattern": "LongCat-[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(FP8|INT8)"
+      ],
+      "seen": []
+    }
+  ]
+}

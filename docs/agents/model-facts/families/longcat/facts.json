@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/longcat",
+  "models": {
+    "longcat-2.0": {
+      "status": "current",
+      "displayName": "LongCat 2.0",
+      "artifact": "meituan-longcat/LongCat-2.0",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/longcat-2.0"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-longcat-2.0",
+              "locator": "config.json"
+            },
+            {
+              "source": "longcat-quick-start",
+              "locator": "Rate Limiting Rules, Single Request Limit, LongCat-2.0 line",
+              "disagrees": true,
+              "states": 1000000
+            }
+          ],
+          "note": "The released config sets 262,144 positions; the vendor quick start advertises a 1M window for its own API. The artifact value is kept; the vendor API may accept more."
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "longcat-quick-start",
+              "locator": "Rate Limiting Rules, Single Request Limit, LongCat-2.0 line"
+            },
+            {
+              "source": "longcat-faq",
+              "locator": "Request Format & Parameters, Q: What's the maximum token limit?"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-longcat-2.0",
+              "locator": "README.md line 292, thinking mode off (enable_thinking=False)"
+            },
+            {
+              "source": "longcat-chat-api",
+              "locator": "Body, thinking parameter"
+            }
+          ]
+        },
+        "revision": {
+          "value": "834bf5ffe3047aa9f6cc7a64a9bc068b146b8274",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-longcat-2.0",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 1775560491136,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-longcat-2.0",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-longcat-2.0",
+              "locator": "record.json cardData"
+            }
+          ]
+        }
+      }
+    },
+    "longcat-2.5-preview": {
+      "status": "current",
+      "displayName": "LongCat 2.5 Preview",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/longcat-2.5-preview-free"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "longcat-quick-start",
+              "locator": "Rate Limiting Rules, Single Request Limit, LongCat-2.5-Preview line"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "longcat-chat-api",
+              "locator": "Body, max_tokens"
+            },
+            {
+              "source": "longcat-quick-start",
+              "locator": "Rate Limiting Rules, Single Request Limit, LongCat-2.5-Preview line"
+            },
+            {
+              "source": "longcat-faq",
+              "locator": "Q: What's the maximum token limit?"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "longcat-change-log",
+              "locator": "2026-09-25 LongCat-2.5-Preview Now Available, Multimodal Understanding"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "longcat-chat-api",
+              "locator": "Body, thinking parameter"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-25",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "longcat-change-log",
+              "locator": "Version: 2026-09-25"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "longcat-context-counts-max-tokens",
+      "text": "A context_length_exceeded error means the input plus max_tokens is over the window. Lower max_tokens or trim messages before retrying.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "longcat-faq",
+      "locator": "Error Handling, Q: What does \"context_length_exceeded\" mean?",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "longcat-retry-on-429",
+      "text": "The API limits requests per key and answers 429 when exceeded. Retry with exponential backoff instead of tight loops.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "longcat-faq",
+      "locator": "Performance, Q: Is there a rate limit?",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "longcat-one-key-both-endpoints",
+      "text": "One platform key works for every LongCat model and for both the OpenAI-style and Anthropic-style endpoints.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "longcat-faq",
+      "locator": "API Keys, Q: Can I use the same API Key for both OpenAI and Anthropic endpoints?",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "longcat-25-preview-image-input",
+      "text": "LongCat-2.5-Preview accepts image input as well as text; LongCat-2.0 stays text only. It is a preview, and OpenCode Go serves it under the -free id.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "longcat-change-log",
+      "locator": "2026-09-25 LongCat-2.5-Preview Now Available",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

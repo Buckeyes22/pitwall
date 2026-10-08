@@ -1,0 +1,109 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/steer-gate.py\"",
+            "timeout": 15,
+            "statusMessage": "orchestrator steering gate"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/launch-guard.py\"",
+            "timeout": 15,
+            "statusMessage": "Pitwall launch guard"
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "matcher": "^/?(?:pitwall:)?(?:dag-routing|subagent-model-routing)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/launch-guard.py\"",
+            "timeout": 5,
+            "statusMessage": "activate Pitwall routing guard"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__pitwall-channel__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/launch-guard.py\"",
+            "timeout": 5,
+            "statusMessage": "release Pitwall routing lease"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "mcp__pitwall-channel__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/launch-guard.py\"",
+            "timeout": 5,
+            "statusMessage": "release failed Pitwall routing lease"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/launch-guard.py\"",
+            "timeout": 5,
+            "statusMessage": "clear Pitwall routing marker"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/launch-guard.py\"",
+            "timeout": 5,
+            "statusMessage": "clear idle Pitwall routing marker"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/dag-tripwire.py\"",
+            "statusMessage": "dag-routing tripwire"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/ledger-tripwire.py\"",
+            "statusMessage": "pitwall ledger tripwire"
+          }
+        ]
+      }
+    ]
+  }
+}

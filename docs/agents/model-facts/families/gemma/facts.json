@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/gemma",
+  "models": {
+    "gemma-4-31b-it": {
+      "status": "current",
+      "displayName": "Gemma 4 31B IT",
+      "artifact": "google/gemma-4-31B-it",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b-it",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemma-4-card",
+              "locator": "Best Practices, Thinking Mode Configuration"
+            }
+          ]
+        },
+        "revision": {
+          "value": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b-it",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 31273088876,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b-it",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b-it",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b-it",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "gemma-4-31b": {
+      "status": "current",
+      "displayName": "Gemma 4 31B",
+      "artifact": "google/gemma-4-31B",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemma-4-card",
+              "locator": "Best Practices, Thinking Mode Configuration"
+            }
+          ]
+        },
+        "revision": {
+          "value": "5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 32682372656,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-31b",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "gemma-4-26b-a4b": {
+      "status": "current",
+      "displayName": "Gemma 4 26B A4B",
+      "artifact": "google/gemma-4-26B-A4B",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-26b-a4b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemma-4-card",
+              "locator": "Best Practices, Thinking Mode Configuration"
+            }
+          ]
+        },
+        "revision": {
+          "value": "24548b62aa021d562695c04aaf7758a1ea47990b",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-26b-a4b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 26544131376,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-26b-a4b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-26b-a4b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-26b-a4b",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "gemma-4-12b": {
+      "status": "current",
+      "displayName": "Gemma 4 12B",
+      "artifact": "google/gemma-4-12B",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-12b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemma-4-card",
+              "locator": "Best Practices, Thinking Mode Configuration"
+            }
+          ]
+        },
+        "revision": {
+          "value": "023679ed352de9bb66cc873c9009ce3482585c08",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-12b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 11959730224,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-12b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-12b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-12b",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "gemma-4-e4b": {
+      "status": "current",
+      "displayName": "Gemma 4 E4B",
+      "artifact": "google/gemma-4-E4B",
+      "facts": {
+        "contextWindow": {
+          "value": 131072,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e4b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemma-4-card",
+              "locator": "Best Practices, Thinking Mode Configuration"
+            }
+          ]
+        },
+        "revision": {
+          "value": "411aa17b749aa952df1359d2dcea73917a544d9a",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e4b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 7996156490,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e4b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e4b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e4b",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "gemma-4-e2b": {
+      "status": "current",
+      "displayName": "Gemma 4 E2B",
+      "artifact": "google/gemma-4-E2B",
+      "facts": {
+        "contextWindow": {
+          "value": 131072,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e2b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemma-4-card",
+              "locator": "Best Practices, Thinking Mode Configuration"
+            }
+          ]
+        },
+        "revision": {
+          "value": "d29ff6b45f081a49ee2733a859c9c9c2d95d1a6f",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e2b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 5123178051,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e2b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e2b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-gemma-4-e2b",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "facts": {
+    "contextWindow": {
+      "value": 262144,
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-gemma-4-31b-it",
+          "locator": "config.json"
+        }
+      ]
+    },
+    "samplingDefaults": {
+      "value": {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "top_k": 64
+      },
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-gemma-4-31b-it",
+          "locator": "generation_config.json"
+        }
+      ]
+    },
+    "license": {
+      "value": {
+        "name": "Apache-2.0",
+        "url": "https://ai.google.dev/gemma/docs/gemma_4_license"
+      },
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-gemma-4-31b-it",
+          "locator": "record.json cardData"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "gemma-thinking-is-on-off",
+      "text": "Gemma 4 thinking is a switch, not levels. Put the think token in the system turn to turn it on; leave it out to turn it off. There is no effort setting.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-gemma-4-card",
+      "locator": "Best Practices, Thinking Mode Configuration",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemma-strip-thoughts",
+      "text": "Remove the model's thought text from earlier turns before sending history back. Keep it only within one turn that makes tool calls.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-gemma-4-formatting",
+      "locator": "Managing Thought Context Between Turns",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemma-empty-thought-when-off",
+      "text": "The 12B, 26B A4B, and 31B models may still open an empty thought block, or a real one, with thinking off; the chat template adds an empty block to steady them.",
+      "applies": [
+        "gemma-4-31b-it",
+        "gemma-4-26b-a4b",
+        "gemma-4-12b"
+      ],
+      "class": "vendor",
+      "source": "google-gemma-thinking",
+      "locator": "A single text inference with Thinking, note",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemma-one-sampling-setting",
+      "text": "Use one sampling setting for every task: temperature 1.0, top_p 0.95, top_k 64.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-gemma-4-card",
+      "locator": "Best Practices, Sampling Parameters",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemma-image-before-text",
+      "text": "With images and text, put the image before the text; put audio after the text.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-gemma-4-card",
+      "locator": "Best Practices, Modality order",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemma-low-thinking-by-instruction",
+      "text": "To spend fewer thinking tokens, ask for brief thinking in the system instruction; the vendor measured about 20 percent fewer, and calls it a proof of concept.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-gemma-4-formatting",
+      "locator": "Tip: Adaptive Thought Efficiency using System Instructions",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

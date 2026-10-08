@@ -1,0 +1,13 @@
+{
+  "name": "pitwall-local",
+  "description": "Pitwall Agent Routing for Claude Code — flat dispatch and dependency-ordered workflow orchestration.",
+  "owner": { "name": "Buckeyes22" },
+  "plugins": [
+    {
+      "name": "pitwall",
+      "version": "0.3.0a1",
+      "source": "./plugins/claude",
+      "description": "Pitwall Agent Routing for Claude Code with flat dispatch, route profiles, and dependency-ordered workflows over local model CLI shims."
+    }
+  ]
+}

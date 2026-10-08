@@ -1,0 +1,7 @@
+{
+  "name": "pitwall",
+  "version": "0.3.0a1",
+  "author": { "name": "Buckeyes22" },
+  "description": "Claude Code package for routing work to non-Claude models: flat one-shot dispatch, route profiles, and dependency-ordered DAGs delegated through managed Pitwall channel dispatches over the repo-installed transport shims",
+  "keywords": ["pitwall","claude","subagents","workflow","dag","codex","kimi","moonshot","opencode","grok","xai","qwen","shim"]
+}

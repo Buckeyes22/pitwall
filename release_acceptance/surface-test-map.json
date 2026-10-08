@@ -1,0 +1,2112 @@
+{
+  "schema_version": "surface-test-map.v1",
+  "scope": "Explicit surface-to-test bindings for the families no fixture rule derives (TUI, Node, Agent Routing contracts, operations, service entry points, docs routes). tools/release_acceptance/bind_surfaces.py merges these with its fixture rules into reviewed-bindings.json.",
+  "bindings": {
+    "cli:entrypoint:pitwall-api": {
+      "test_node_id": "tests/test_service_entry_points.py::test_help_prints_usage_and_exits_zero_without_starting[api-pitwall-api]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall-api --help prints usage and exits 0 before any configuration is read or server starts"
+    },
+    "cli:entrypoint:pitwall-cost-exporter": {
+      "test_node_id": "tests/test_service_entry_points.py::test_help_prints_usage_and_exits_zero_without_starting[cost_exporter-pitwall-cost-exporter]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall-cost-exporter --help prints usage and exits 0 before any configuration is read or server starts"
+    },
+    "cli:entrypoint:pitwall-reconciler": {
+      "test_node_id": "tests/test_service_entry_points.py::test_help_prints_usage_and_exits_zero_without_starting[reconciler-pitwall-reconciler]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall-reconciler --help prints usage and exits 0 before any configuration is read or server starts"
+    },
+    "cli:entrypoint:pitwall-webhook": {
+      "test_node_id": "tests/test_service_entry_points.py::test_help_prints_usage_and_exits_zero_without_starting[webhook-pitwall-webhook]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall-webhook --help prints usage and exits 0 before any configuration is read or server starts"
+    },
+    "cli:pitwall:flag:--help": {
+      "test_node_id": "tests/cli/test_cli_dispatch.py::test_main_help_prints_stdout_and_returns_0[--help]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall --help prints usage to stdout and exits 0"
+    },
+    "cli:pitwall:flag:--version": {
+      "test_node_id": "tests/cli/test_cli_dispatch.py::test_main_version_prints_installed_version[--version]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall --version prints the installed version and exits 0"
+    },
+    "cli:pitwall:flag:-V": {
+      "test_node_id": "tests/cli/test_cli_dispatch.py::test_main_version_prints_installed_version[-V]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall -V prints the installed version and exits 0"
+    },
+    "cli:pitwall:flag:-h": {
+      "test_node_id": "tests/cli/test_cli_dispatch.py::test_main_help_prints_stdout_and_returns_0[-h]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall -h prints usage to stdout and exits 0"
+    },
+    "cli:pitwall:flag:help": {
+      "test_node_id": "tests/cli/test_cli_dispatch.py::test_main_help_prints_stdout_and_returns_0[help]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pitwall help prints usage to stdout and exits 0"
+    },
+    "cli:subcommand:src/pitwall/cli/gateway.py:cmd_gateway:serve:serve": {
+      "test_node_id": "tests/cli/test_gateway_cli.py::test_gateway_serve_passes_port_and_bind_to_the_gateway",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "`pitwall gateway serve --bind B --port P` calls serve(bind=B, port=P), which starts uvicorn on that loopback address"
+    },
+    "gateway:compression-mode:caveman": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_compression_caveman_collapses_repeated_system_lines_and_whitespace",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "compression caveman collapses repeated system lines and whitespace"
+    },
+    "gateway:compression-mode:off": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_compression_off_relays_the_messages_unchanged",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "compression off relays the messages unchanged"
+    },
+    "gateway:compression-mode:rtk": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_compression_rtk_collapses_repeated_system_lines_and_whitespace",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "compression rtk collapses repeated system lines and whitespace"
+    },
+    "gateway:compression-mode:stacked": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_compression_stacked_collapses_repeated_system_lines_and_whitespace",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "compression stacked collapses repeated system lines and whitespace"
+    },
+    "gateway:inbound-shape:claude": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_the_claude_inbound_shape_projects_system_and_text_blocks",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the claude inbound shape projects system and text blocks onto OpenAI messages"
+    },
+    "gateway:inbound-shape:gemini": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_the_gemini_inbound_shape_projects_system_instruction_and_contents",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the gemini inbound shape projects systemInstruction and contents onto messages"
+    },
+    "gateway:inbound-shape:openai": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_the_openai_inbound_shape_is_relayed_as_sent",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the openai inbound shape is relayed as sent"
+    },
+    "gateway:inbound-shape:responses": {
+      "test_node_id": "tests/gateway/test_surfaces.py::test_the_responses_inbound_shape_reaches_the_executor_unchanged",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the responses inbound shape reaches the executor unchanged"
+    },
+    "gateway:route:/health:GET": {
+      "test_node_id": "tests/gateway/test_auth.py::test_get_health_returns_200_with_the_service_identifier",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "GET /health returns 200 with the service identifier"
+    },
+    "gateway:route:/internal/telemetry:GET": {
+      "test_node_id": "tests/gateway/test_auth.py::test_telemetry_returns_the_shim_stats_with_a_valid_token",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "telemetry returns stats to a valid token"
+    },
+    "gateway:route:/v1/chat/completions:POST": {
+      "test_node_id": "tests/gateway/test_app.py::test_post_chat_completions_forwards_to_upstream_with_the_openai_body",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "chat completions forward the OpenAI body upstream"
+    },
+    "gateway:route:/v1/embeddings:POST": {
+      "test_node_id": "tests/gateway/test_auth.py::test_upstream_bearer_credential_is_forwarded_on_embeddings_too",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "embeddings forward with the upstream credential"
+    },
+    "gateway:route:/v1/models:GET": {
+      "test_node_id": "tests/gateway/test_models.py::test_a_genuine_empty_upstream_catalog_is_a_healthy_empty_list",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "GET /v1/models relays the upstream listing"
+    },
+    "install:dockerfile:docker/Dockerfile.api:builder": {
+      "test_node_id": "tests/test_dockerfiles.py::test_builder_installs_the_frozen_lock_and_the_wheel[api]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the builder installs hash-pinned requirements from the frozen lock and the wheel"
+    },
+    "install:dockerfile:docker/Dockerfile.api:runtime": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[api-pitwall.api]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "install:dockerfile:docker/Dockerfile.cost-exporter:builder": {
+      "test_node_id": "tests/test_dockerfiles.py::test_builder_installs_the_frozen_lock_and_the_wheel[cost-exporter]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the builder installs hash-pinned requirements from the frozen lock and the wheel"
+    },
+    "install:dockerfile:docker/Dockerfile.cost-exporter:runtime": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[cost-exporter-pitwall.cost.exporter]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "install:dockerfile:docker/Dockerfile.mcp:builder": {
+      "test_node_id": "tests/test_dockerfiles.py::test_builder_installs_the_frozen_lock_and_the_wheel[mcp]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the builder installs hash-pinned requirements from the frozen lock and the wheel"
+    },
+    "install:dockerfile:docker/Dockerfile.mcp:runtime": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[mcp-pitwall.mcp]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "install:dockerfile:docker/Dockerfile.reconciler:builder": {
+      "test_node_id": "tests/test_dockerfiles.py::test_builder_installs_the_frozen_lock_and_the_wheel[reconciler]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the builder installs hash-pinned requirements from the frozen lock and the wheel"
+    },
+    "install:dockerfile:docker/Dockerfile.reconciler:runtime": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[reconciler-pitwall.reconciler]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "install:dockerfile:docker/Dockerfile.webhook:builder": {
+      "test_node_id": "tests/test_dockerfiles.py::test_builder_installs_the_frozen_lock_and_the_wheel[webhook]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the builder installs hash-pinned requirements from the frozen lock and the wheel"
+    },
+    "install:dockerfile:docker/Dockerfile.webhook:runtime": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[webhook-pitwall.webhook_receiver]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "ops:network:docker-compose.yml:backend": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_the_backend_network_has_no_route_out",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "backend is internal and egress is not"
+    },
+    "ops:network:docker-compose.yml:egress": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_the_backend_network_has_no_route_out",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "backend is internal and egress is not"
+    },
+    "ops:script:scripts/release/inspect_artifacts.py": {
+      "test_node_id": "tests/release/test_artifact_build_contract.py::test_inspect_sdist_rejects_other_docs_paths",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the artifact inspector rejects disallowed sdist paths"
+    },
+    "ops:script:scripts/release/run-alpha-readiness.sh": {
+      "test_node_id": "tests/test_release_scripts.py::test_alpha_readiness_runs_the_journey_harness",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "alpha readiness refuses without DATABASE_URL and runs the release suite before the strict audit"
+    },
+    "ops:script:scripts/release/run-user-journeys.sh": {
+      "test_node_id": "tests/test_release_scripts.py::test_harness_lists_every_journey",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "every hermetic catalogue journey has a harness function called in the full run, and every in-process journey is selectable"
+    },
+    "ops:script:scripts/release/run_bound_tests.py": {
+      "test_node_id": "tests/test_release_scripts.py::test_run_bound_tests_requires_one_new_output_directory",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the bound-test runner needs exactly one output directory and never reuses a results directory; the harness matrix step runs it for every binding"
+    },
+    "ops:script:scripts/release/smoke_artifacts.py": {
+      "test_node_id": "tests/test_release_scripts.py::test_smoke_artifacts_requires_exactly_one_wheel_and_one_sdist[names1]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the artifact smoke refuses a directory without exactly one wheel and one sdist; J44 runs it against both artifacts"
+    },
+    "ops:script:scripts/release/smoke_compose.sh": {
+      "test_node_id": "tests/test_release_scripts.py::test_smoke_compose_brings_up_and_tears_down",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the compose smoke refuses an unsafe project name or missing tag and always tears the stack down"
+    },
+    "ops:script:scripts/release/validate_candidate.py": {
+      "test_node_id": "tests/release/test_release_policy.py::test_release_candidate_requires_versioned_public_notes",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "candidate validation requires versioned public notes"
+    },
+    "ops:script:src/pitwall/ops/backup_drill.py": {
+      "test_node_id": "tests/integration/test_backup_restore_drill.py::test_backup_restore_compares_all_tables_with_reserved_password",
+      "framework": "pytest",
+      "proof_lane": "integration",
+      "reviewed_oracle": "the restore drill compares every table's count and checksum"
+    },
+    "ops:volume:docker-compose.testinfra.yml:pitwall-test-pg": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.testinfra.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the test volume mounts at its data path"
+    },
+    "ops:volume:docker-compose.testinfra.yml:pitwall-test-redis": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.testinfra.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the test volume mounts at its data path"
+    },
+    "ops:volume:docker-compose.yml:postgres-data": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_the_backend_network_has_no_route_out",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the named volumes are declared"
+    },
+    "ops:volume:docker-compose.yml:redis-data": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_the_backend_network_has_no_route_out",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the named volumes are declared"
+    },
+    "ops:volume:docker-compose.yml:retention-archive": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_the_backend_network_has_no_route_out",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the named volumes are declared"
+    },
+    "plugin:manifest:plugins/claude/.claude-plugin/plugin.json": {
+      "test_node_id": "tests/agents/test_plugin_identity.py::PluginIdentityTests::test_plugin_ids_are_pitwall",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "every plugin manifest carries the pitwall identity"
+    },
+    "plugin:manifest:plugins/codex/.codex-plugin/plugin.json": {
+      "test_node_id": "tests/agents/test_plugin_identity.py::PluginIdentityTests::test_plugin_ids_are_pitwall",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "every plugin manifest carries the pitwall identity"
+    },
+    "plugin:manifest:plugins/copilot/plugin.json": {
+      "test_node_id": "tests/agents/test_plugin_identity.py::PluginIdentityTests::test_plugin_ids_are_pitwall",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "every plugin manifest carries the pitwall identity"
+    },
+    "plugin:marketplace:claude:pitwall": {
+      "test_node_id": "tests/agents/test_marketplaces.py::MarketplaceManifestTests::test_claude_marketplace_uses_claude_source_syntax",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the Claude marketplace entry uses Claude's source syntax"
+    },
+    "plugin:marketplace:codex:pitwall-codex": {
+      "test_node_id": "tests/agents/test_marketplaces.py::MarketplaceManifestTests::test_codex_marketplace_uses_codex_local_source_syntax",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the Codex marketplace entry uses Codex's local source syntax"
+    },
+    "plugin:marketplace:copilot:pitwall-copilot": {
+      "test_node_id": "tests/agents/test_marketplaces.py::MarketplaceManifestTests::test_copilot_marketplace_uses_copilot_source_syntax",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the Copilot marketplace entry uses Copilot's source syntax"
+    },
+    "rest:GET:/docs": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/docs]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/docs answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:GET:/docs/oauth2-redirect": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/docs/oauth2-redirect]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/docs/oauth2-redirect answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:GET:/openapi.json": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/openapi.json]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/openapi.json answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:GET:/redoc": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/redoc]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/redoc answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:HEAD:/docs": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/docs]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/docs answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:HEAD:/docs/oauth2-redirect": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/docs/oauth2-redirect]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/docs/oauth2-redirect answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:HEAD:/openapi.json": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/openapi.json]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/openapi.json answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:HEAD:/redoc": {
+      "test_node_id": "tests/api/test_docs_routes.py::test_get_and_head[/redoc]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "/redoc answers GET with its content type and HEAD with the same headers and no body"
+    },
+    "rest:OPTIONS:/v1/openai/{capability}/v1/{path:path}": {
+      "test_node_id": "tests/api/test_openai_proxy_routes.py::TestProxyMethod::test_options_method_passed_to_upstream",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "OPTIONS is relayed to the upstream with its method"
+    },
+    "routing:adapter:agy": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the agy adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:claude": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the claude adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:cline": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the cline adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:codex": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the codex adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:dsh": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the dsh adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:goose": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the goose adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:grok": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the grok adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:hermes": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the hermes adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:kimi": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the kimi adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:muse": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the muse adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:opencode": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the opencode adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:pi": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the pi adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:adapter:qwen": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the qwen adapter hands its harness the pinned argv for model, effort, and prompt delivery"
+    },
+    "routing:host:claude": {
+      "test_node_id": "tests/agents/test_workflow.py::HostAndRouteTests::test_native_claude_harness_rejected_on_claude_host",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the claude host rejects Claude transport tasks"
+    },
+    "routing:host:codex": {
+      "test_node_id": "tests/agents/test_workflow.py::HostAndRouteTests::test_native_codex_harness_rejected_on_codex_host",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the codex host rejects Codex transport tasks"
+    },
+    "routing:host:copilot": {
+      "test_node_id": "tests/agents/test_workflow.py::HostAndRouteTests::test_copilot_permits_all_harnesses",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the copilot host permits every registered transport"
+    },
+    "routing:mcp:orchestrator:answer_and_wait": {
+      "test_node_id": "tests/agents/test_mcp_event_channel.py::ManagedEventChannelTests::test_dispatch_returns_ask_without_inbox_and_answer_returns_terminal",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "answer_and_wait answers the ask and returns the terminal result"
+    },
+    "routing:mcp:orchestrator:answer_ask": {
+      "test_node_id": "tests/agents/test_mcp_orchestrator_tools.py::OrchestratorToolTests::test_inbox_then_answer",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "answer_ask records the answer for the listed ask"
+    },
+    "routing:mcp:orchestrator:dispatch_and_wait": {
+      "test_node_id": "tests/agents/test_mcp_event_channel.py::ManagedEventChannelTests::test_dispatch_returns_ask_without_inbox_and_answer_returns_terminal",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "dispatch_and_wait returns the child's ask without an inbox round trip"
+    },
+    "routing:mcp:orchestrator:inbox": {
+      "test_node_id": "tests/agents/test_mcp_orchestrator_tools.py::OrchestratorToolTests::test_inbox_then_answer",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "inbox lists the waiting ask"
+    },
+    "routing:mcp:orchestrator:steer_and_wait": {
+      "test_node_id": "tests/agents/test_mcp_event_channel.py::ManagedEventChannelTests::test_steer_acknowledgement_is_returned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "steer_and_wait returns the child's steer acknowledgement"
+    },
+    "routing:mcp:orchestrator:wait_dispatch": {
+      "test_node_id": "tests/agents/test_mcp_event_channel.py::ManagedEventChannelTests::test_parent_restart_reattaches_to_an_unanswered_ask",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "wait_dispatch reattaches a restarted parent to the unanswered ask"
+    },
+    "routing:mcp:subagent:ack_steer": {
+      "test_node_id": "tests/agents/test_mcp_subagent_tools.py::SubagentToolTests::test_steering_delivery_and_acknowledgement",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "ack_steer acknowledges delivered steering"
+    },
+    "routing:mcp:subagent:ask_orchestrator": {
+      "test_node_id": "tests/agents/test_mcp_subagent_tools.py::SubagentToolTests::test_ask_blocks_until_the_operator_answers",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "ask_orchestrator blocks until the operator answers"
+    },
+    "routing:mcp:subagent:read_steering": {
+      "test_node_id": "tests/agents/test_mcp_subagent_tools.py::SubagentToolTests::test_steering_delivery_and_acknowledgement",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "read_steering delivers pending steering"
+    },
+    "routing:provider:agy": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the agy registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:claude": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the claude registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:cline": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the cline registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:codex": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the codex registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:dsh": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the dsh registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:goose": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the goose registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:grok": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the grok registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:hermes": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the hermes registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:kimi": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the kimi registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:muse": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the muse registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:opencode": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the opencode registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:pi": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the pi registry entry agrees with its adapter's contract"
+    },
+    "routing:provider:qwen": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the qwen registry entry agrees with its adapter's contract"
+    },
+    "service:compose-include:docker-compose.prod.yml:docker-compose.yml": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_prod_compose_includes_the_canonical_stack_unchanged",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "prod renders exactly the canonical stack"
+    },
+    "service:compose:docker-compose.testinfra.yml:postgres": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.testinfra.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "test postgres renders with its pinned volume"
+    },
+    "service:compose:docker-compose.testinfra.yml:redis": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.testinfra.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "test redis renders with its pinned volume"
+    },
+    "service:compose:docker-compose.yml:api": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "api renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:compose:docker-compose.yml:cost-exporter": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "cost-exporter renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:compose:docker-compose.yml:migrate": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "migrate renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:compose:docker-compose.yml:postgres": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "postgres renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:compose:docker-compose.yml:reconciler": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "reconciler renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:compose:docker-compose.yml:redis": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "redis renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:compose:docker-compose.yml:webhook": {
+      "test_node_id": "tests/release/test_compose_rendered.py::test_services_networks_volumes_and_dependencies[docker-compose.yml]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "webhook renders with its pinned networks, volumes, and dependencies"
+    },
+    "service:entrypoint:docker/Dockerfile.api:runtime:cmd": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[api-pitwall.api]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "service:entrypoint:docker/Dockerfile.cost-exporter:runtime:cmd": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[cost-exporter-pitwall.cost.exporter]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "service:entrypoint:docker/Dockerfile.mcp:runtime:cmd": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[mcp-pitwall.mcp]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "service:entrypoint:docker/Dockerfile.reconciler:runtime:cmd": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[reconciler-pitwall.reconciler]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "service:entrypoint:docker/Dockerfile.webhook:runtime:cmd": {
+      "test_node_id": "tests/test_dockerfiles.py::test_runtime_runs_one_service_unprivileged[webhook-pitwall.webhook_receiver]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the runtime copies only /install, drops pip, runs as uid 10001 with a health check"
+    },
+    "tui:action:CommandScreen:dismiss_command": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_palette_dispatches_named_view_and_escape_restores_focus",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the command palette opens the named view on Enter and Escape restores focus"
+    },
+    "tui:action:ConfirmLaunchModal:cancel": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_cancelled_serve_confirmation_never_launches[escape]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape on the launch confirmation never launches"
+    },
+    "tui:action:ConfirmRoutingJobModal:cancel": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_modal_cancel_and_escape_never_execute",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the submit confirmation's cancel button and Escape never execute"
+    },
+    "tui:action:CostScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[cost-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the cost view reloads its source exactly once"
+    },
+    "tui:action:HardwareFitScreen:cycle_variant": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_variant_shortcut_reloads_selected_variant_and_wraps",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "shift+v reloads the fit for the next variant and wraps"
+    },
+    "tui:action:HardwareFitScreen:refresh": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_refresh_and_cloud_toggle_call_source",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'r' reloads the fit and 'c' reloads it for the other cloud"
+    },
+    "tui:action:HardwareFitScreen:toggle_cloud": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_refresh_and_cloud_toggle_call_source",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'r' reloads the fit and 'c' reloads it for the other cloud"
+    },
+    "tui:action:HardwareFitScreen:toggle_details": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_table_adapts_to_terminal_width[size0-True]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "in the narrow layout 'v' shows the fit details"
+    },
+    "tui:action:HelpScreen:dismiss_help": {
+      "test_node_id": "tests/tui/test_help_overlay.py::test_help_opens_and_closes_on_fit_screen",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "help opens over the fit screen and Escape closes it"
+    },
+    "tui:action:LeasesScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[leases-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the leases view reloads its source exactly once"
+    },
+    "tui:action:LeasesScreen:show_leases": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_current_view_shortcut_refreshes_without_stacking_screens[l-leases]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'l' on the leases view refreshes it without stacking a screen"
+    },
+    "tui:action:LeasesScreen:show_overview": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_app_overview_shortcut_returns_from_other_views[l-leases]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'o' from the leases view returns to the overview without growing the stack"
+    },
+    "tui:action:ModelDetailScreen:show_fit": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_g_opens_fit_and_renders_all_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'g' on a model detail opens hardware fit with a row per GPU class and the price state"
+    },
+    "tui:action:ModelsScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[models-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the models view reloads its source exactly once"
+    },
+    "tui:action:ModelsScreen:show_models": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_current_view_shortcut_refreshes_without_stacking_screens[m-models]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'m' on the models view refreshes it without stacking a screen"
+    },
+    "tui:action:ModelsScreen:show_overview": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_app_overview_shortcut_returns_from_other_views[m-models]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'o' from the models view returns to the overview without growing the stack"
+    },
+    "tui:action:ModelsScreen:toggle_details": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_models_v_toggles_details_in_the_narrow_layout[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'v' toggles the model details pane in the narrow layout"
+    },
+    "tui:action:OperationsScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[operations-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the operations view reloads its source exactly once"
+    },
+    "tui:action:OverviewScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[overview-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the overview view reloads its source exactly once"
+    },
+    "tui:action:OverviewScreen:show_overview": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_current_view_shortcut_refreshes_without_stacking_screens[o-overview]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'o' on the overview refreshes it without stacking a screen"
+    },
+    "tui:action:PitwallApp:show_command": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'?', ':', and '/' open help, the command palette, and search; each acts and Escape dismisses it"
+    },
+    "tui:action:PitwallApp:show_cost": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[cost-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'c' opens the cost view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_help": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'?', ':', and '/' open help, the command palette, and search; each acts and Escape dismisses it"
+    },
+    "tui:action:PitwallApp:show_leases": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[leases-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'l' opens the leases view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_models": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[models-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'m' opens the models view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_operations": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[operations-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'a' opens the operations view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_overview": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[overview-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'o' opens the overview view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_pods": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[pods-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'d' opens the pods view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_providers": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[providers-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'p' opens the providers view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_resources": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[resources-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'e' opens the resources view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_routes": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[routes-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'t' opens the routes view and pressing it again never stacks a copy"
+    },
+    "tui:action:PitwallApp:show_search": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'?', ':', and '/' open help, the command palette, and search; each acts and Escape dismisses it"
+    },
+    "tui:action:PitwallApp:show_serve": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[serve-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'s' opens the serve view and pressing it again never stacks a copy"
+    },
+    "tui:action:PodsScreen:back": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_escape_returns_from_pods_and_routes_to_serve[pods-personal]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "Escape on pods returns to serve"
+    },
+    "tui:action:PodsScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[pods-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the pods view reloads its source exactly once"
+    },
+    "tui:action:ProvidersScreen:availability": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_provider_actions_reach_the_source[v-provider_availability-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'v' reads the provider's availability through the source"
+    },
+    "tui:action:ProvidersScreen:probe": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_provider_actions_reach_the_source[g-probe_provider-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'g' probes the provider id entered, through the source"
+    },
+    "tui:action:ProvidersScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[providers-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the providers view reloads its source exactly once"
+    },
+    "tui:action:ResourceMutationConfirmModal:cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_confirmation_cancel_makes_zero_writes[escape]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape closes the confirmation with zero writes"
+    },
+    "tui:action:ResourceMutationEditorModal:cancel": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_resource_mutation_editor_escape_performs_no_preview_or_write",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape closes the mutation editor with no preview and no write"
+    },
+    "tui:action:ResourceQueryModal:cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_cancel_button_and_escape_make_zero_source_calls",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog's cancel button and Escape close it with zero source calls"
+    },
+    "tui:action:ResourcesScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[resources-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the resources view reloads its source exactly once"
+    },
+    "tui:action:RoutesScreen:back": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_escape_returns_from_pods_and_routes_to_serve[routes-personal]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "Escape on routes returns to serve"
+    },
+    "tui:action:RoutesScreen:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[routes-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the routes view reloads its source exactly once"
+    },
+    "tui:action:SearchScreen:dismiss_search": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_search_filters_active_models_list_and_escape_restores_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "search filters the active list as you type and Escape restores every row"
+    },
+    "tui:action:ServePreviewScreen:confirm": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:action:ServeWizardScreen:back": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_personal_escape_returns_to_documented_view_without_mutation[s-serve-models]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape on serve returns to models without launching or stopping anything"
+    },
+    "tui:app:PitwallApp": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_quit_bindings_end_the_console[q-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the console boots on its start view and exits cleanly on q"
+    },
+    "tui:binding:CommandScreen:escape:dismiss_command": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_palette_dispatches_named_view_and_escape_restores_focus",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the command palette opens the named view on Enter and Escape restores focus"
+    },
+    "tui:binding:ConfirmLaunchModal:escape:cancel": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_cancelled_serve_confirmation_never_launches[escape]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape on the launch confirmation never launches"
+    },
+    "tui:binding:ConfirmRoutingJobModal:escape:cancel": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_modal_cancel_and_escape_never_execute",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the submit confirmation's cancel button and Escape never execute"
+    },
+    "tui:binding:CostScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[cost-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the cost view reloads its source exactly once"
+    },
+    "tui:binding:HardwareFitScreen:c:toggle_cloud": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_refresh_and_cloud_toggle_call_source",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'r' reloads the fit and 'c' reloads it for the other cloud"
+    },
+    "tui:binding:HardwareFitScreen:r:refresh": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_refresh_and_cloud_toggle_call_source",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'r' reloads the fit and 'c' reloads it for the other cloud"
+    },
+    "tui:binding:HardwareFitScreen:shift+v:cycle_variant": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_variant_shortcut_reloads_selected_variant_and_wraps",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "shift+v reloads the fit for the next variant and wraps"
+    },
+    "tui:binding:HardwareFitScreen:v:toggle_details": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_table_adapts_to_terminal_width[size0-True]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "in the narrow layout 'v' shows the fit details"
+    },
+    "tui:binding:HelpScreen:escape:dismiss_help": {
+      "test_node_id": "tests/tui/test_help_overlay.py::test_help_opens_and_closes_on_fit_screen",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "help opens over the fit screen and Escape closes it"
+    },
+    "tui:binding:LeasesScreen:l:show_leases": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_current_view_shortcut_refreshes_without_stacking_screens[l-leases]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'l' on the leases view refreshes it without stacking a screen"
+    },
+    "tui:binding:LeasesScreen:o:show_overview": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_app_overview_shortcut_returns_from_other_views[l-leases]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'o' from the leases view returns to the overview without growing the stack"
+    },
+    "tui:binding:LeasesScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[leases-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the leases view reloads its source exactly once"
+    },
+    "tui:binding:ModelDetailScreen:g:show_fit": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_g_opens_fit_and_renders_all_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'g' on a model detail opens hardware fit with a row per GPU class and the price state"
+    },
+    "tui:binding:ModelsScreen:m:show_models": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_current_view_shortcut_refreshes_without_stacking_screens[m-models]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'m' on the models view refreshes it without stacking a screen"
+    },
+    "tui:binding:ModelsScreen:o:show_overview": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_app_overview_shortcut_returns_from_other_views[m-models]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'o' from the models view returns to the overview without growing the stack"
+    },
+    "tui:binding:ModelsScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[models-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the models view reloads its source exactly once"
+    },
+    "tui:binding:ModelsScreen:v:toggle_details": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_models_v_toggles_details_in_the_narrow_layout[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'v' toggles the model details pane in the narrow layout"
+    },
+    "tui:binding:OperationsScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[operations-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the operations view reloads its source exactly once"
+    },
+    "tui:binding:OverviewScreen:o:show_overview": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_current_view_shortcut_refreshes_without_stacking_screens[o-overview]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'o' on the overview refreshes it without stacking a screen"
+    },
+    "tui:binding:OverviewScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[overview-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the overview view reloads its source exactly once"
+    },
+    "tui:binding:PitwallApp:/:show_search": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'?', ':', and '/' open help, the command palette, and search; each acts and Escape dismisses it"
+    },
+    "tui:binding:PitwallApp:::show_command": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'?', ':', and '/' open help, the command palette, and search; each acts and Escape dismisses it"
+    },
+    "tui:binding:PitwallApp:?:show_help": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss[registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'?', ':', and '/' open help, the command palette, and search; each acts and Escape dismisses it"
+    },
+    "tui:binding:PitwallApp:a:show_operations": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[operations-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'a' opens the operations view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:c:show_cost": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[cost-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'c' opens the cost view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:ctrl+c:quit": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_quit_bindings_end_the_console[ctrl+c-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "ctrl+c ends the console"
+    },
+    "tui:binding:PitwallApp:d:show_pods": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[pods-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'d' opens the pods view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:e:show_resources": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[resources-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'e' opens the resources view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:l:show_leases": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[leases-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'l' opens the leases view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:m:show_models": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[models-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'m' opens the models view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:o:show_overview": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[overview-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'o' opens the overview view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:p:show_providers": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[providers-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'p' opens the providers view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:q:quit": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_quit_bindings_end_the_console[q-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'q' ends the console"
+    },
+    "tui:binding:PitwallApp:s:show_serve": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[serve-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'s' opens the serve view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PitwallApp:t:show_routes": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[routes-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'t' opens the routes view and pressing it again never stacks a copy"
+    },
+    "tui:binding:PodsScreen:escape:back": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_escape_returns_from_pods_and_routes_to_serve[pods-personal]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "Escape on pods returns to serve"
+    },
+    "tui:binding:PodsScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[pods-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the pods view reloads its source exactly once"
+    },
+    "tui:binding:ProvidersScreen:g:probe": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_provider_actions_reach_the_source[g-probe_provider-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'g' probes the provider id entered, through the source"
+    },
+    "tui:binding:ProvidersScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[providers-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the providers view reloads its source exactly once"
+    },
+    "tui:binding:ProvidersScreen:v:availability": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_provider_actions_reach_the_source[v-provider_availability-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'v' reads the provider's availability through the source"
+    },
+    "tui:binding:ResourceMutationConfirmModal:escape:cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_confirmation_cancel_makes_zero_writes[escape]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape closes the confirmation with zero writes"
+    },
+    "tui:binding:ResourceMutationEditorModal:escape:cancel": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_resource_mutation_editor_escape_performs_no_preview_or_write",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape closes the mutation editor with no preview and no write"
+    },
+    "tui:binding:ResourceQueryModal:escape:cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_cancel_button_and_escape_make_zero_source_calls",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog's cancel button and Escape close it with zero source calls"
+    },
+    "tui:binding:ResourcesScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[resources-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the resources view reloads its source exactly once"
+    },
+    "tui:binding:RoutesScreen:escape:back": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_escape_returns_from_pods_and_routes_to_serve[routes-personal]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "Escape on routes returns to serve"
+    },
+    "tui:binding:RoutesScreen:r:refresh": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source[routes-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'r' on the routes view reloads its source exactly once"
+    },
+    "tui:binding:SearchScreen:escape:dismiss_search": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_search_filters_active_models_list_and_escape_restores_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "search filters the active list as you type and Escape restores every row"
+    },
+    "tui:binding:ServePreviewScreen:enter:confirm": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:binding:ServeWizardScreen:escape:back": {
+      "test_node_id": "tests/tui/test_action_navigation_acceptance.py::test_personal_escape_returns_to_documented_view_without_mutation[s-serve-models]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Escape on serve returns to models without launching or stopping anything"
+    },
+    "tui:button:ConfirmLaunchModal:confirm-cancel": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_cancelled_serve_confirmation_never_launches[button]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the launch confirmation's cancel button never launches"
+    },
+    "tui:button:ConfirmLaunchModal:confirm-launch": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_exact_confirmation_launches_and_renders_success",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the launch confirmation launches only after the exact typed text and renders success"
+    },
+    "tui:button:ConfirmOnboardingModal:onboarding-confirm-apply": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:button:ConfirmOnboardingModal:onboarding-confirm-cancel": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_wrong_confirmation_and_modal_cancel_are_zero_write",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a wrong confirmation and the modal's cancel write nothing"
+    },
+    "tui:button:ConfirmRoutingJobModal:routing-confirm-apply": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_and_cancel_require_exact_typed_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "submit and cancel run only after the exact typed confirmation"
+    },
+    "tui:button:ConfirmRoutingJobModal:routing-confirm-cancel": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_modal_cancel_and_escape_never_execute",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the submit confirmation's cancel button and Escape never execute"
+    },
+    "tui:button:ConfirmVolumeFileModal:volume-files-confirm-apply": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_apply_after_exact_confirmation_invokes_the_same_source_once",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "apply runs the previewed operation once, after the exact object key is typed"
+    },
+    "tui:button:ConfirmVolumeFileModal:volume-files-confirm-cancel": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_confirmation_cancel_button_dismisses_without_writing",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the confirmation's cancel button dismisses it without writing"
+    },
+    "tui:button:OperationsScreen:guardrail-preview-button": {
+      "test_node_id": "tests/tui/test_operations_screen.py::test_operations_guardrail_preview_is_non_persisting_and_non_disclosing",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the guardrail preview button previews without persisting or disclosing the payload"
+    },
+    "tui:button:PodsScreen:pods-confirm-stop": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_pods_view_lists_leases_with_remaining_time_and_stops_with_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pods lists each lease with its remaining time; stop asks for confirmation and stops only that pod"
+    },
+    "tui:button:PodsScreen:pods-stop": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_pods_view_lists_leases_with_remaining_time_and_stops_with_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pods lists each lease with its remaining time; stop asks for confirmation and stops only that pod"
+    },
+    "tui:button:ResourceMutationConfirmModal:resource-confirm-apply": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:button:ResourceMutationConfirmModal:resource-confirm-cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_confirmation_cancel_makes_zero_writes[button]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the confirmation's cancel button closes it with zero writes"
+    },
+    "tui:button:ResourceMutationEditorModal:resource-mutation-cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_mutation_editor_cancel_performs_zero_writes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the mutation editor's cancel button closes it with zero writes"
+    },
+    "tui:button:ResourceMutationEditorModal:resource-mutation-preview": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:button:ResourceQueryModal:resource-query-cancel": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_cancel_button_and_escape_make_zero_source_calls",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog's cancel button and Escape close it with zero source calls"
+    },
+    "tui:button:ResourceQueryModal:resource-query-run": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_dialog_lookup_roundtrip_renders_result",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog looks a resource up through the source and renders the result"
+    },
+    "tui:button:ResourcesScreen:resources-mutate": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:button:ResourcesScreen:resources-query": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_dialog_lookup_roundtrip_renders_result",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog looks a resource up through the source and renders the result"
+    },
+    "tui:button:RoutingJobsPanel:routing-cancel": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_and_cancel_require_exact_typed_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "submit and cancel run only after the exact typed confirmation"
+    },
+    "tui:button:RoutingJobsPanel:routing-follow": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_status_result_and_follow_render_bounded_lifecycle",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, result, and follow render the bounded job lifecycle"
+    },
+    "tui:button:RoutingJobsPanel:routing-history": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_renders_plan_score_components_and_bounded_history",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan renders its score components and history is bounded"
+    },
+    "tui:button:RoutingJobsPanel:routing-plan": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_renders_plan_score_components_and_bounded_history",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan renders its score components and history is bounded"
+    },
+    "tui:button:RoutingJobsPanel:routing-result": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_status_result_and_follow_render_bounded_lifecycle",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, result, and follow render the bounded job lifecycle"
+    },
+    "tui:button:RoutingJobsPanel:routing-status": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_status_result_and_follow_render_bounded_lifecycle",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, result, and follow render the bounded job lifecycle"
+    },
+    "tui:button:RoutingJobsPanel:routing-stop": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_stop_wait_cancels_blocked_job_and_remains_usable",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "stop cancels a blocked wait and the panel stays usable"
+    },
+    "tui:button:RoutingJobsPanel:routing-submit": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_and_cancel_require_exact_typed_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "submit and cancel run only after the exact typed confirmation"
+    },
+    "tui:button:RunPodOnboardingPanel:onboarding-apply": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:button:RunPodOnboardingPanel:onboarding-cancel": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_active_cancel_and_error_are_safe_and_non_disclosing",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "cancel stops the active action and errors stay safe and non-disclosing"
+    },
+    "tui:button:RunPodOnboardingPanel:onboarding-plan": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:button:RunPodOnboardingPanel:onboarding-resume": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_status_resume_and_rollback_use_shared_actions",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, resume, and rollback call the shared onboarding actions"
+    },
+    "tui:button:RunPodOnboardingPanel:onboarding-rollback": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_status_resume_and_rollback_use_shared_actions",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, resume, and rollback call the shared onboarding actions"
+    },
+    "tui:button:RunPodOnboardingPanel:onboarding-status": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_status_resume_and_rollback_use_shared_actions",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, resume, and rollback call the shared onboarding actions"
+    },
+    "tui:button:ServeWizardScreen:serve-launch": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:button:ServeWizardScreen:serve-preview": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-apply": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_apply_after_exact_confirmation_invokes_the_same_source_once",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "apply runs the previewed operation once, after the exact object key is typed"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-cancel": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_in_flight_mutation_cancel_warns_that_completion_is_ambiguous",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "cancelling an in-flight mutation warns that completion is ambiguous"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-list": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_loading_and_read_results_are_usable_and_source_backed",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "list and logs render usable results from the source"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-logs": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_loading_and_read_results_are_usable_and_source_backed",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "list and logs render usable results from the source"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-preview-delete": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_apply_after_exact_confirmation_invokes_the_same_source_once",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "apply runs the previewed operation once, after the exact object key is typed"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-preview-download": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_download_previews_then_downloads_once_after_exact_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "download previews, then downloads once after the exact confirmation"
+    },
+    "tui:button:VolumeFilesOperationsPanel:volume-files-preview-upload": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_upload_preview_and_apply_preserve_the_explicit_overwrite_choice[create-only]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "upload preview and apply carry the explicit overwrite choice"
+    },
+    "tui:event:CommandScreen:on_input_submitted": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_palette_dispatches_named_view_and_escape_restores_focus",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the command palette opens the named view on Enter and Escape restores focus"
+    },
+    "tui:event:CommandScreen:on_mount": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_palette_dispatches_named_view_and_escape_restores_focus",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the command palette opens the named view on Enter and Escape restores focus"
+    },
+    "tui:event:ConfirmLaunchModal:cancel_button": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_cancelled_serve_confirmation_never_launches[button]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the launch confirmation's cancel button never launches"
+    },
+    "tui:event:ConfirmLaunchModal:confirm_button": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_exact_confirmation_launches_and_renders_success",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the launch confirmation launches only after the exact typed text and renders success"
+    },
+    "tui:event:ConfirmLaunchModal:enable_exact_confirmation": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_exact_confirmation_launches_and_renders_success",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the launch confirmation launches only after the exact typed text and renders success"
+    },
+    "tui:event:ConfirmOnboardingModal:on_button_pressed": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:event:ConfirmOnboardingModal:on_input_changed": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:event:ConfirmRoutingJobModal:on_button_pressed": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_modal_cancel_and_escape_never_execute",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the submit confirmation's cancel button and Escape never execute"
+    },
+    "tui:event:ConfirmRoutingJobModal:on_input_changed": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_modal_cancel_and_escape_never_execute",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the submit confirmation's cancel button and Escape never execute"
+    },
+    "tui:event:ConfirmVolumeFileModal:on_button_pressed": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_apply_after_exact_confirmation_invokes_the_same_source_once",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "apply runs the previewed operation once, after the exact object key is typed"
+    },
+    "tui:event:ConfirmVolumeFileModal:on_input_changed": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_apply_after_exact_confirmation_invokes_the_same_source_once",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "apply runs the previewed operation once, after the exact object key is typed"
+    },
+    "tui:event:CostScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-cost-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the cost view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:HardwareFitScreen:on_data_table_row_highlighted": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_moving_the_highlight_shows_that_rows_details_in_the_narrow_layout",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "moving the highlight shows that GPU class's VRAM in the details pane"
+    },
+    "tui:event:HardwareFitScreen:on_data_table_row_selected": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_fit_row_selection_opens_preview_without_launching",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Enter on a fit row opens the launch preview without launching"
+    },
+    "tui:event:HardwareFitScreen:on_mount": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_g_opens_fit_and_renders_all_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'g' on a model detail opens hardware fit with a row per GPU class and the price state"
+    },
+    "tui:event:HardwareFitScreen:on_resize": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_failed_fit_refresh_does_not_restore_stale_rows_on_resize",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a resize after a failed refresh never restores stale rows"
+    },
+    "tui:event:LeasesScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-leases-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the leases view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:ModelsScreen:on_data_table_row_highlighted": {
+      "test_node_id": "tests/tui/test_models_screen.py::test_moving_the_highlight_shows_that_rows_details_in_the_narrow_layout",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "moving the highlight shows that row's variants, family, and chat in the details pane"
+    },
+    "tui:event:ModelsScreen:on_data_table_row_selected": {
+      "test_node_id": "tests/tui/test_models_screen.py::test_enter_opens_markdown_detail_with_body_and_variants",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Enter on a model opens its dossier as Markdown with the body and the variants table"
+    },
+    "tui:event:ModelsScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-models-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the models view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:ModelsScreen:on_resize": {
+      "test_node_id": "tests/tui/test_models_screen.py::test_models_resize_rebuilds_columns_and_preserves_loaded_row",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a resize rebuilds the columns and keeps the loaded row"
+    },
+    "tui:event:OperationsScreen:on_button_pressed": {
+      "test_node_id": "tests/tui/test_operations_screen.py::test_operations_guardrail_preview_is_non_persisting_and_non_disclosing",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the guardrail preview button previews without persisting or disclosing the payload"
+    },
+    "tui:event:OperationsScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-operations-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the operations view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:OverviewScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-overview-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the overview view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:PitwallApp:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-overview-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the overview view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:PitwallApp:on_unmount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_quit_bindings_end_the_console[q-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the console boots on its start view and exits cleanly on q"
+    },
+    "tui:event:PodsScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-pods-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the pods view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:PodsScreen:open_stop_confirmation": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_pods_view_lists_leases_with_remaining_time_and_stops_with_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pods lists each lease with its remaining time; stop asks for confirmation and stops only that pod"
+    },
+    "tui:event:PodsScreen:select_pod": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_pods_view_lists_leases_with_remaining_time_and_stops_with_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pods lists each lease with its remaining time; stop asks for confirmation and stops only that pod"
+    },
+    "tui:event:PodsScreen:stop_pod": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_pods_view_lists_leases_with_remaining_time_and_stops_with_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "pods lists each lease with its remaining time; stop asks for confirmation and stops only that pod"
+    },
+    "tui:event:ProvidersScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-providers-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the providers view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:ResourceMutationConfirmModal:apply_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:event:ResourceMutationConfirmModal:cancel_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_confirmation_cancel_makes_zero_writes[button]",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the confirmation's cancel button closes it with zero writes"
+    },
+    "tui:event:ResourceMutationConfirmModal:enable_exact_confirmation": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:event:ResourceMutationEditorModal:cancel_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_mutation_editor_cancel_performs_zero_writes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the mutation editor's cancel button closes it with zero writes"
+    },
+    "tui:event:ResourceMutationEditorModal:preview_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:event:ResourceQueryModal:cancel_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_cancel_button_and_escape_make_zero_source_calls",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog's cancel button and Escape close it with zero source calls"
+    },
+    "tui:event:ResourceQueryModal:query_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_dialog_lookup_roundtrip_renders_result",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog looks a resource up through the source and renders the result"
+    },
+    "tui:event:ResourcesScreen:mutation_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:event:ResourcesScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-resources-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the resources view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:ResourcesScreen:query_button": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_dialog_lookup_roundtrip_renders_result",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog looks a resource up through the source and renders the result"
+    },
+    "tui:event:RoutesScreen:on_mount": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-routes-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the routes view renders its loaded rows and summary with no traceback"
+    },
+    "tui:event:RoutesScreen:select_route": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_routes_view_shows_probe_and_shim_line_and_key_warning",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "selecting a route shows its probe result, the route-shim line, and any key warning"
+    },
+    "tui:event:RoutingJobsPanel:on_button_pressed": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_and_cancel_require_exact_typed_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "submit and cancel run only after the exact typed confirmation"
+    },
+    "tui:event:RoutingJobsPanel:on_unmount": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_status_result_and_follow_render_bounded_lifecycle",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "status, result, and follow render the bounded job lifecycle"
+    },
+    "tui:event:RunPodOnboardingPanel:on_button_pressed": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:event:RunPodOnboardingPanel:on_input_changed": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_editing_request_after_plan_disables_stale_apply_and_resume",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "editing the request after a plan disables the stale apply and resume"
+    },
+    "tui:event:RunpodMarketPanel:on_mount": {
+      "test_node_id": "tests/tui/test_runpod_market_panel.py::test_panel_renders_populated_and_forced_refresh_states",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the market panel renders populated rows and a forced refresh"
+    },
+    "tui:event:SearchScreen:on_input_changed": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_search_filters_active_models_list_and_escape_restores_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "search filters the active list as you type and Escape restores every row"
+    },
+    "tui:event:SearchScreen:on_input_submitted": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_search_enter_keeps_filter_and_announces_it_on_list_screen",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Enter in search keeps the filter and announces it on the list screen"
+    },
+    "tui:event:SearchScreen:on_mount": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_search_filters_active_models_list_and_escape_restores_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "search filters the active list as you type and Escape restores every row"
+    },
+    "tui:event:ServePreviewScreen:on_mount": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:event:ServeWizardScreen:launch_request": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:event:ServeWizardScreen:preview_request": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:event:VolumeFilesOperationsPanel:on_button_pressed": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_apply_after_exact_confirmation_invokes_the_same_source_once",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "apply runs the previewed operation once, after the exact object key is typed"
+    },
+    "tui:registration:cost": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[cost-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'c' opens the cost view and pressing it again never stacks a copy"
+    },
+    "tui:registration:leases": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[leases-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'l' opens the leases view and pressing it again never stacks a copy"
+    },
+    "tui:registration:models": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[models-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'m' opens the models view and pressing it again never stacks a copy"
+    },
+    "tui:registration:operations": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[operations-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'a' opens the operations view and pressing it again never stacks a copy"
+    },
+    "tui:registration:overview": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[overview-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'o' opens the overview view and pressing it again never stacks a copy"
+    },
+    "tui:registration:pods": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[pods-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'d' opens the pods view and pressing it again never stacks a copy"
+    },
+    "tui:registration:providers": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[providers-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'p' opens the providers view and pressing it again never stacks a copy"
+    },
+    "tui:registration:resources": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[resources-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'e' opens the resources view and pressing it again never stacks a copy"
+    },
+    "tui:registration:routes": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[routes-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'t' opens the routes view and pressing it again never stacks a copy"
+    },
+    "tui:registration:serve": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_every_view_key_switches_views[serve-registry]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "'s' opens the serve view and pressing it again never stacks a copy"
+    },
+    "tui:view:ConfirmLaunchModal": {
+      "test_node_id": "tests/tui/test_serve_screen.py::test_exact_confirmation_launches_and_renders_success",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the launch confirmation launches only after the exact typed text and renders success"
+    },
+    "tui:view:ConfirmOnboardingModal": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:view:ConfirmRoutingJobModal": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_and_cancel_require_exact_typed_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "submit and cancel run only after the exact typed confirmation"
+    },
+    "tui:view:ConfirmVolumeFileModal": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_confirmation_names_target_effect_provider_ceiling_and_consequence",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the confirmation names the target, effect, provider ceiling, and consequence"
+    },
+    "tui:view:DossierMarkdownViewer": {
+      "test_node_id": "tests/tui/test_models_screen.py::test_enter_opens_markdown_detail_with_body_and_variants",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Enter on a model opens its dossier as Markdown with the body and the variants table"
+    },
+    "tui:view:HelpScreen": {
+      "test_node_id": "tests/tui/test_help_overlay.py::test_help_opens_and_closes_on_fit_screen",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "help opens over the fit screen and Escape closes it"
+    },
+    "tui:view:ResourceMutationConfirmModal": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:view:ResourceMutationEditorModal": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_exact_confirmation_applies_then_refreshes",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "a mutation previews, applies only after the exact typed confirmation, then refreshes"
+    },
+    "tui:view:ResourceQueryModal": {
+      "test_node_id": "tests/tui/test_resources_screen.py::test_resources_query_dialog_lookup_roundtrip_renders_result",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the query dialog looks a resource up through the source and renders the result"
+    },
+    "tui:view:console-command": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_palette_dispatches_named_view_and_escape_restores_focus",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the command palette opens the named view on Enter and Escape restores focus"
+    },
+    "tui:view:console-search": {
+      "test_node_id": "tests/tui/test_console_palette.py::test_search_filters_active_models_list_and_escape_restores_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "search filters the active list as you type and Escape restores every row"
+    },
+    "tui:view:cost": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-cost-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the cost view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:hardware-fit": {
+      "test_node_id": "tests/tui/test_hardware_fit_screen.py::test_g_opens_fit_and_renders_all_rows",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "'g' on a model detail opens hardware fit with a row per GPU class and the price state"
+    },
+    "tui:view:leases": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-leases-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the leases view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:model-detail": {
+      "test_node_id": "tests/tui/test_models_screen.py::test_enter_opens_markdown_detail_with_body_and_variants",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Enter on a model opens its dossier as Markdown with the body and the variants table"
+    },
+    "tui:view:models": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-models-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the models view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:operations": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-operations-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the operations view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:overview": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-overview-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the overview view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:pods": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-pods-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the pods view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:providers": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-providers-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the providers view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:resources": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-resources-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the resources view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:routes": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-routes-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the routes view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:serve": {
+      "test_node_id": "tests/release/test_console_views_journey.py::test_view_in_state[registry-serve-loaded-160x45]",
+      "framework": "pytest",
+      "proof_lane": "release",
+      "reviewed_oracle": "the serve view renders its loaded rows and summary with no traceback"
+    },
+    "tui:view:serve-preview": {
+      "test_node_id": "tests/tui/test_personal_screens.py::test_wizard_previews_before_confirm_and_requires_typed_route",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the serve wizard previews first and launches only after the typed route name"
+    },
+    "tui:widget:RoutingJobsPanel": {
+      "test_node_id": "tests/tui/test_routing_jobs_panel.py::test_panel_submit_and_cancel_require_exact_typed_confirmation",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "submit and cancel run only after the exact typed confirmation"
+    },
+    "tui:widget:RunPodOnboardingPanel": {
+      "test_node_id": "tests/tui/test_onboarding_panel.py::test_panel_plan_then_exact_confirmation_applies_shared_plan",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "plan then the exact typed confirmation applies the shared onboarding plan"
+    },
+    "tui:widget:RunpodMarketPanel": {
+      "test_node_id": "tests/tui/test_runpod_market_panel.py::test_panel_renders_populated_and_forced_refresh_states",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "the market panel renders populated rows and a forced refresh"
+    },
+    "tui:widget:VolumeFilesOperationsPanel": {
+      "test_node_id": "tests/tui/test_volume_files_panel.py::test_panel_loading_and_read_results_are_usable_and_source_backed",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "list and logs render usable results from the source"
+    },
+    "tui:widget:_DossierMarkdown": {
+      "test_node_id": "tests/tui/test_models_screen.py::test_enter_opens_markdown_detail_with_body_and_variants",
+      "framework": "pytest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "Enter on a model opens its dossier as Markdown with the body and the variants table"
+    },
+    "routing:adapter:zcode": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "ZCode receives the saved selection, dispatch workspace, explicit permission mode and headless prompt; unsupported effort is refused and child failure propagates"
+    },
+    "routing:provider:zcode": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "The ZCode registry entry agrees with its adapter contract and saved-selection references"
+    }
+  }
+}

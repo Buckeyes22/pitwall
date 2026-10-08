@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/codex",
+  "sources": [
+    {
+      "id": "codex-non-interactive",
+      "url": "https://learn.chatgpt.com/docs/non-interactive-mode.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:c1eabe05a50b88d451f5038395493136d366ea1e3ee25ac368c2fad2a0193e52",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:c1eabe05a50b88d451f5038395493136d366ea1e3ee25ac368c2fad2a0193e52",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-sandboxing",
+      "url": "https://learn.chatgpt.com/docs/sandboxing.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:7fd27967d477b9c35bfaa2c124dadcabf1fea0bc11ff63dbcaec2b623f54d861",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:7fd27967d477b9c35bfaa2c124dadcabf1fea0bc11ff63dbcaec2b623f54d861",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-permissions",
+      "url": "https://learn.chatgpt.com/docs/permission-modes.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b00be83fd78027ca4e5f282fd520bb996393a7ffbc5ce1273386be081109d1dc",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:b00be83fd78027ca4e5f282fd520bb996393a7ffbc5ce1273386be081109d1dc",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-agents-md",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/agents-md.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4a81af9eeb7597184d295ff7f142478855b0b09100d8b75c2ae1058b3dd3203f",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:4a81af9eeb7597184d295ff7f142478855b0b09100d8b75c2ae1058b3dd3203f",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-subagents",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:7bbb91894ca412c5023f33094975e7399789980e7a86a13943140e41fd120bf0",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:7bbb91894ca412c5023f33094975e7399789980e7a86a13943140e41fd120bf0",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-config-reference",
+      "url": "https://learn.chatgpt.com/docs/config-file/config-reference.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:acfab53b453567f90f707f964afd94a23a9166e03aa4d588efec8f16585ceca9",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:acfab53b453567f90f707f964afd94a23a9166e03aa4d588efec8f16585ceca9",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://developers.openai.com/codex/llms.txt; only the Codex Security plugin has a change log"
+    }
+  ],
+  "watch": []
+}

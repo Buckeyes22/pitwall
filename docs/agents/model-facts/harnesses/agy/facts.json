@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/agy",
+  "facts": {
+    "headlessFlag": {
+      "value": "-p",
+      "method": "reviewed",
+      "evidence": [
+        {"source": "agy-headless", "locator": "Run a single prompt; Flag reference, -p row"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "json", "stream-json"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "agy-headless", "locator": "Output formats table"}
+      ]
+    },
+    "effortFlag": {
+      "value": "--effort",
+      "method": "reviewed",
+      "evidence": [
+        {"source": "agy-headless", "locator": "Flag reference, --effort row (low, medium, high)"}
+      ]
+    },
+    "permissionDefault": {
+      "value": "request-review",
+      "method": "reviewed",
+      "evidence": [
+        {"source": "agy-reference", "locator": "Configuration keys, toolPermission row"},
+        {"source": "agy-headless", "locator": "Permissions in headless mode"}
+      ]
+    },
+    "sandboxDefault": {
+      "value": "off",
+      "method": "reviewed",
+      "note": "The CLI setting enableTerminalSandbox defaults to false; the desktop app's Default preset turns the sandbox on, which the CLI does not follow.",
+      "evidence": [
+        {"source": "agy-reference", "locator": "Configuration keys, enableTerminalSandbox row"},
+        {"source": "agy-sandbox", "locator": "CLI configuration, enableTerminalSandbox"},
+        {
+          "source": "agy-sandbox",
+          "locator": "macOS & Linux, Configuration table, Default row",
+          "disagrees": true,
+          "states": "on"
+        }
+      ]
+    },
+    "instructionFiles": {
+      "value": ["GEMINI.md", "AGENTS.md"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "agy-rules", "locator": "Directory-scoped rules"},
+        {"source": "agy-best-practices", "locator": "Write a codebase rule file"}
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {"source": "agy-subagents", "locator": "Invoking Subagents"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "agy-headless-soft-denies",
+      "text": "In headless mode a tool needing approval is denied without failing the run (exit 0, notice on stderr). Shell commands ask by default, so grant them with permissions.allow or the skip flag.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "agy-headless",
+      "locator": "Permissions in headless mode",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-unknown-model-errors",
+      "text": "A pinned --model slug that agy does not recognise exits non-zero with an ERROR status instead of falling back, so a wrong slug fails loudly. List valid slugs with agy models.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "agy-headless",
+      "locator": "Select a model, effort, or agent",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-print-timeout",
+      "text": "A headless run waits at most five minutes for a response by default; raise --print-timeout for long tasks.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "agy-headless",
+      "locator": "Flag reference, --print-timeout row",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-unauthenticated-headless",
+      "text": "Headless runs use cached credentials. Sign in once with an interactive agy session; an unauthenticated run without a terminal exits with an authentication required error.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "agy-headless",
+      "locator": "Run a single prompt, Note",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-rules-files-cumulative",
+      "text": "agy loads GEMINI.md and AGENTS.md from each directory up to the workspace root, plus global copies under ~/.gemini. Rules combine rather than replace, and neither file takes frontmatter.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "agy-rules",
+      "locator": "Where rules are stored; YAML frontmatter and activation modes",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-subagent-tool-names",
+      "text": "A custom subagent whose tools list has a misspelled or unknown tool name can hang. Check names such as view_file and run_command exactly.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "agy-subagents",
+      "locator": "Frontmatter Configuration, Known Issue",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

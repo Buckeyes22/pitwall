@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/grok",
+  "facts": {
+    "headlessFlag": {
+      "value": "grok -p <prompt>",
+      "method": "reviewed",
+      "note": "--single is the long form of -p.",
+      "evidence": [
+        {
+          "source": "grok-headless",
+          "locator": "Headless mode, line 10 and flag table row -p"
+        }
+      ]
+    },
+    "outputFormats": {
+      "value": [
+        "plain",
+        "json",
+        "streaming-json"
+      ],
+      "method": "reviewed",
+      "note": "Chosen with --output-format; json prints one object at the end, streaming-json prints newline-delimited events.",
+      "evidence": [
+        {
+          "source": "grok-headless",
+          "locator": "Output formats, lines 33-35"
+        }
+      ]
+    },
+    "effortFlag": {
+      "value": "--effort <LEVEL>",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "grok-cli-reference",
+          "locator": "Common flags table, --effort row, line 45"
+        }
+      ]
+    },
+    "permissionDefault": {
+      "value": "ask: prompts for any tool call not already allowed; --always-approve auto-approves",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "grok-permissions",
+          "locator": "Modes table, Ask (default) row"
+        },
+        {
+          "source": "grok-cli-reference",
+          "locator": "Common flags table, --always-approve row"
+        }
+      ]
+    },
+    "sandboxDefault": {
+      "value": "off: no filesystem or network limits unless --sandbox, GROK_SANDBOX, or config selects a profile",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "grok-sandbox",
+          "locator": "Opening paragraph, line 5 (Off by default)"
+        },
+        {
+          "source": "grok-sandbox",
+          "locator": "Profiles table, off row; Enable a profile table"
+        }
+      ]
+    },
+    "instructionFiles": {
+      "value": [
+        "AGENTS.md",
+        "Agents.md",
+        "AGENT.md",
+        "CLAUDE.md",
+        "Claude.md",
+        "CLAUDE.local.md",
+        ".grok/rules/*.md",
+        "~/.grok/"
+      ],
+      "method": "reviewed",
+      "note": "Read per directory from the repo root down to the working directory; .claude/rules and .cursor/rules are also read; files ignored by .gitignore are skipped.",
+      "evidence": [
+        {
+          "source": "grok-project-rules",
+          "locator": "Discovery, lines 9-14"
+        }
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "note": "Enabled when the setting is unset; --no-subagents turns them off for a session.",
+      "evidence": [
+        {
+          "source": "grok-subagents",
+          "locator": "Opening paragraph, line 5"
+        },
+        {
+          "source": "grok-cli-reference",
+          "locator": "Common flags table, --no-subagents row, line 53"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "grok-sandbox-off-by-default",
+      "text": "Grok Build runs with no sandbox unless you pass --sandbox <profile> (workspace, read-only, strict). Set one for untrusted repositories or review-only runs.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "grok-sandbox",
+      "locator": "Profiles table and Enable a profile",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-reads-claude-md-files",
+      "text": "Grok Build loads CLAUDE.md, AGENTS.md, and .grok/rules/*.md from the repo root down to the working directory, so a dispatched run inherits those instructions.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "grok-project-rules",
+      "locator": "Discovery",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-no-auto-update-in-scripts",
+      "text": "Pass --no-auto-update on scripted or CI runs of grok -p or grok agent stdio so background update checks do not run.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "grok-headless",
+      "locator": "Suppressing updates in xai-grok-shell",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

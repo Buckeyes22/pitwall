@@ -1,0 +1,1733 @@
+{
+  "pitwall_audit_log": {
+    "valid": {
+      "limit": 5
+    },
+    "invalid": {
+      "limit": "many"
+    },
+    "expect_keys": [
+      "entries"
+    ]
+  },
+  "pitwall_budget_set": {
+    "valid": {
+      "monthly_budget_usd": "50",
+      "reason": "release journey raise"
+    },
+    "invalid": {
+      "monthly_budget_usd": "50"
+    },
+    "expect_keys": [
+      "limits",
+      "status"
+    ]
+  },
+  "pitwall_budget_status": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_keys": [
+      "budget_remaining_usd",
+      "mtd_spend_usd",
+      "monthly_budget_usd",
+      "per_request_max_usd",
+      "source"
+    ]
+  },
+  "pitwall_burn_rate": {
+    "valid": {
+      "window_days": 7
+    },
+    "invalid": {
+      "window_days": "week"
+    },
+    "expect_keys": [
+      "already_breached",
+      "at_budget",
+      "budget_usd",
+      "confidence",
+      "daily_rate_usd",
+      "data_sufficiency",
+      "forecast_total_usd",
+      "last_rollup_day",
+      "now",
+      "observation_window",
+      "percent_consumed",
+      "projected_breach_at",
+      "projected_breach_eta_days",
+      "projection_overflow",
+      "remaining_budget_usd",
+      "spend_to_date_usd",
+      "stale",
+      "trend"
+    ]
+  },
+  "pitwall_cancel_job": {
+    "valid": {
+      "workload_id": "wl_missing"
+    },
+    "invalid": {
+      "workload_id": 7
+    },
+    "expect_error": "workload_not_found"
+  },
+  "pitwall_copilot_propose": {
+    "valid": {
+      "intent": "disable provider prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "intent": 7
+    },
+    "expect_keys": [
+      "applied",
+      "desired_state",
+      "diff",
+      "intent",
+      "plan",
+      "proposal_only",
+      "rationale",
+      "recommendations"
+    ]
+  },
+  "pitwall_cost_summary": {
+    "valid": {},
+    "invalid": {
+      "since": 7
+    },
+    "expect_keys": [
+      "entries",
+      "total_usd"
+    ]
+  },
+  "pitwall_create_capability": {
+    "valid": {
+      "name": "j34.cap",
+      "version": "1.0.0",
+      "capability_class": "llm",
+      "cost_mode": "zero"
+    },
+    "invalid": {
+      "name": 7,
+      "version": "1.0.0",
+      "capability_class": "llm",
+      "cost_mode": "zero"
+    },
+    "expect_keys": [
+      "class",
+      "cost_mode",
+      "created_at",
+      "defaults",
+      "description",
+      "enabled",
+      "hints_supported",
+      "id",
+      "input_schema",
+      "last_applied_yaml_hash",
+      "name",
+      "output_schema",
+      "source",
+      "updated_at",
+      "version"
+    ]
+  },
+  "pitwall_create_provider": {
+    "valid": {
+      "capability_id": "cap_embedding_demo",
+      "name": "j34-prov",
+      "provider_type": "serverless_lb",
+      "runpod_endpoint_id": "ep_j34"
+    },
+    "invalid": {
+      "capability_id": 7,
+      "name": "j34-prov",
+      "provider_type": "serverless_lb"
+    },
+    "expect_keys": [
+      "adapter_id",
+      "capability_id",
+      "cloud_type",
+      "cold_start_p50_ms",
+      "cold_start_p95_ms",
+      "config",
+      "consecutive_failures",
+      "cooldown_trips",
+      "cooldown_until",
+      "credential_ref",
+      "enabled",
+      "health_status",
+      "id",
+      "last_applied_yaml_hash",
+      "name",
+      "priority",
+      "provider_type",
+      "recent_error_rate",
+      "region",
+      "runpod_endpoint_id",
+      "runpod_template_id",
+      "source",
+      "updated_at"
+    ]
+  },
+  "pitwall_describe_capability": {
+    "valid": {
+      "name": "embedding.demo"
+    },
+    "invalid": {
+      "name": 7
+    },
+    "expect_keys": [
+      "class",
+      "cost_mode",
+      "created_at",
+      "defaults",
+      "description",
+      "enabled",
+      "hints_supported",
+      "id",
+      "input_schema",
+      "last_applied_yaml_hash",
+      "name",
+      "output_schema",
+      "source",
+      "updated_at",
+      "version"
+    ]
+  },
+  "pitwall_disable_provider": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "provider_id": 7
+    },
+    "expect_keys": [
+      "adapter_id",
+      "capability_id",
+      "cloud_type",
+      "cold_start_p50_ms",
+      "cold_start_p95_ms",
+      "config",
+      "consecutive_failures",
+      "cooldown_trips",
+      "cooldown_until",
+      "credential_ref",
+      "enabled",
+      "health_status",
+      "id",
+      "last_applied_yaml_hash",
+      "name",
+      "priority",
+      "provider_type",
+      "recent_error_rate",
+      "region",
+      "runpod_endpoint_id",
+      "runpod_template_id",
+      "source",
+      "updated_at"
+    ]
+  },
+  "pitwall_doctor": {
+    "valid": {},
+    "invalid": {
+      "canary": 7
+    },
+    "expect_keys": [
+      "checks",
+      "mode",
+      "schema_version",
+      "status",
+      "summary",
+      "version"
+    ]
+  },
+  "pitwall_gateway_catalog_read": {
+    "valid": {},
+    "invalid": {
+      "routable_only": "maybe"
+    },
+    "expect_keys": [
+      "avoid_list",
+      "curated_at",
+      "providers",
+      "source",
+      "totals"
+    ]
+  },
+  "pitwall_get_job_events": {
+    "valid": {
+      "workload_id": "wl_missing"
+    },
+    "invalid": {
+      "workload_id": 7
+    },
+    "expect_error": "workload_not_found"
+  },
+  "pitwall_get_job_result": {
+    "valid": {
+      "workload_id": "wl_missing"
+    },
+    "invalid": {
+      "workload_id": 7
+    },
+    "expect_error": "workload_not_found"
+  },
+  "pitwall_get_job_status": {
+    "valid": {
+      "workload_id": "wl_missing"
+    },
+    "invalid": {
+      "workload_id": 7
+    },
+    "expect_error": "workload_not_found"
+  },
+  "pitwall_get_lease": {
+    "valid": {
+      "lease_id": "lease_missing"
+    },
+    "invalid": {
+      "lease_id": 7
+    },
+    "expect_error": "lease_not_found"
+  },
+  "pitwall_get_provider_health": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "provider_id": 7
+    },
+    "expect_keys": [
+      "consecutive_failures",
+      "cooldown_trips",
+      "cooldown_until",
+      "health_status",
+      "id",
+      "name",
+      "recent_error_rate",
+      "updated_at"
+    ]
+  },
+  "pitwall_guardrail_preview": {
+    "valid": {
+      "payload": {
+        "capability": "embedding.demo",
+        "texts": [
+          "hi"
+        ]
+      }
+    },
+    "invalid": {},
+    "expect_keys": [
+      "blocked",
+      "decision",
+      "elapsed_ms",
+      "findings",
+      "inspected_bytes",
+      "limit_reason",
+      "limited",
+      "mode",
+      "redacted_payload"
+    ]
+  },
+  "pitwall_guardrail_status": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_keys": [
+      "counters",
+      "last_decision",
+      "limits",
+      "mode",
+      "rules"
+    ]
+  },
+  "pitwall_health": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_keys": [
+      "database",
+      "ok",
+      "provider_registry",
+      "redis"
+    ]
+  },
+  "pitwall_hibernate_provider": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "provider_id": 7
+    },
+    "expect_keys": [
+      "cooldown_until",
+      "enabled",
+      "health_status",
+      "id",
+      "name"
+    ]
+  },
+  "pitwall_lease_pod": {
+    "valid": {
+      "capability_id": "cap_embedding_demo",
+      "dry_run": true
+    },
+    "invalid": {
+      "capability_id": 7,
+      "dry_run": true
+    },
+    "expect_error": "no_providers_available"
+  },
+  "pitwall_list_capabilities": {
+    "valid": {},
+    "invalid": {
+      "enabled": "sometimes"
+    },
+    "expect_keys": [
+      "capabilities"
+    ]
+  },
+  "pitwall_list_providers": {
+    "valid": {
+      "capability_id": "cap_embedding_demo"
+    },
+    "invalid": {
+      "enabled": "sometimes"
+    },
+    "expect_keys": [
+      "providers"
+    ]
+  },
+  "pitwall_models_fit": {
+    "valid": {
+      "model": "ornith-ai/Ornith-1.5-35B-A3B-GGUF"
+    },
+    "invalid": {
+      "model": 7
+    },
+    "expect_keys": [
+      "confidence",
+      "model_id",
+      "options",
+      "price_age_seconds",
+      "price_checked_at",
+      "price_source",
+      "price_stale",
+      "variant"
+    ]
+  },
+  "pitwall_models_list": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_keys": [
+      "models"
+    ]
+  },
+  "pitwall_pod_logs": {
+    "valid": {
+      "pod_id": "pod_missing"
+    },
+    "invalid": {
+      "pod_id": 7
+    },
+    "expect_error": "volume_file_provider_error"
+  },
+  "pitwall_preview_route": {
+    "valid": {
+      "capability_id": "cap_embedding_demo",
+      "payload": {
+        "texts": [
+          "hi"
+        ]
+      }
+    },
+    "invalid": {
+      "capability_id": 7
+    },
+    "expect_keys": [
+      "attempts",
+      "capability_id",
+      "capability_name",
+      "eliminated",
+      "fallback_chain",
+      "mode",
+      "observed_at",
+      "operation",
+      "payload_sha256",
+      "plan_id",
+      "provider_constraint",
+      "ranked_candidates",
+      "selected_provider_id",
+      "signal_policy",
+      "weights"
+    ]
+  },
+  "pitwall_provider_ops_availability": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "provider_id": 7
+    },
+    "expect_keys": [
+      "error_code",
+      "items",
+      "observed_at",
+      "provider_id",
+      "source_contract",
+      "status"
+    ]
+  },
+  "pitwall_provider_ops_describe": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "provider_id": 7
+    },
+    "expect_keys": [
+      "adapter_id",
+      "capabilities",
+      "config",
+      "credential_configured",
+      "credential_ref",
+      "enabled",
+      "name",
+      "persisted_health",
+      "pricing_kind",
+      "provider_id",
+      "provider_type"
+    ]
+  },
+  "pitwall_provider_ops_health": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb"
+    },
+    "invalid": {
+      "provider_id": 7
+    },
+    "expect_keys": [
+      "availability_count",
+      "error_code",
+      "live_status",
+      "observed_at",
+      "persisted_health",
+      "provider_id"
+    ]
+  },
+  "pitwall_provider_ops_list_descriptors": {
+    "valid": {
+      "capability_id": "cap_embedding_demo"
+    },
+    "invalid": {
+      "limit": "many"
+    },
+    "expect_keys": [
+      "items",
+      "total"
+    ]
+  },
+  "pitwall_quota_list": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_keys": [
+      "quotas"
+    ]
+  },
+  "pitwall_recent_workloads": {
+    "valid": {
+      "limit": 5
+    },
+    "invalid": {
+      "limit": "many"
+    },
+    "expect_keys": [
+      "workloads"
+    ]
+  },
+  "pitwall_renew_lease": {
+    "valid": {
+      "lease_id": "lease_missing",
+      "extends_minutes": 10
+    },
+    "invalid": {
+      "lease_id": 7
+    },
+    "expect_error": "lease_not_found"
+  },
+  "pitwall_runpod_action_pod": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "pod_j34",
+        "action": "stop"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7,
+        "action": "stop"
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_catalogue": {
+    "valid": {},
+    "invalid": {
+      "force_refresh": "often"
+    },
+    "expect_keys": [
+      "age_seconds",
+      "availability",
+      "balance",
+      "billing_categories",
+      "cache_expires_at",
+      "cache_hit",
+      "components",
+      "datacenters",
+      "forced_refresh",
+      "gpus",
+      "provider",
+      "refresh_attempted_at",
+      "stale",
+      "state",
+      "unavailable"
+    ]
+  },
+  "pitwall_runpod_create_endpoint": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-ep",
+        "image": "docker.io/example/worker:sha-abc",
+        "gpu": {
+          "pools": [
+            "ADA_24"
+          ]
+        }
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": 7,
+        "gpu": {
+          "pools": [
+            "ADA_24"
+          ]
+        }
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_create_pod": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-pod",
+        "image": "docker.io/example/worker:sha-abc",
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "ttl_minutes": 15
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-pod",
+        "image": "x",
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "ttl_minutes": "soon"
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_create_registry_auth": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-auth",
+        "username": "j34",
+        "password_env": "J34_REGISTRY_PASSWORD"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-auth",
+        "username": 7,
+        "password_env": "J34_REGISTRY_PASSWORD"
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_create_template": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-tpl",
+        "image": "docker.io/example/worker:sha-abc"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-tpl",
+        "image": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_create_volume": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-vol",
+        "size_gb": 10,
+        "data_center_id": "US-KS-2"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "name": "j34-vol",
+        "size_gb": "big",
+        "data_center_id": "US-KS-2"
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_delete_endpoint": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "ep_j34"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_delete_registry_auth": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "ra_j34"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_delete_template": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "tpl_j34"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_delete_volume": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "vol_j34"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_get_endpoint": {
+    "valid": {
+      "resource_id": "ep_j34"
+    },
+    "invalid": {
+      "resource_id": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_get_hub_template": {
+    "valid": {
+      "resource_id": "hub_j34"
+    },
+    "invalid": {
+      "resource_id": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_get_pod": {
+    "valid": {
+      "resource_id": "pod_j34"
+    },
+    "invalid": {
+      "resource_id": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_get_registry_auth": {
+    "valid": {
+      "resource_id": "ra_j34"
+    },
+    "invalid": {
+      "resource_id": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_get_template": {
+    "valid": {
+      "resource_id": "tpl_j34"
+    },
+    "invalid": {
+      "resource_id": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_get_volume": {
+    "valid": {
+      "resource_id": "vol_j34"
+    },
+    "invalid": {
+      "resource_id": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_grow_volume": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "vol_j34",
+        "size_gb": 20
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "vol_j34",
+        "size_gb": "bigger"
+      }
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_list_endpoints": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_list_hub_templates": {
+    "valid": {
+      "limit": 5
+    },
+    "invalid": {
+      "limit": "many"
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_list_pods": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_list_registry_auths": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_list_templates": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_list_volumes": {
+    "valid": {},
+    "invalid": {
+      "unexpected_argument": 1
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_onboarding_apply": {
+    "valid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      },
+      "confirmed_plan_id": "runpod_onboard_000000000000000000000000"
+    },
+    "invalid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      },
+      "confirmed_plan_id": 7
+    },
+    "expect_error": "discovery_unavailable"
+  },
+  "pitwall_runpod_onboarding_plan": {
+    "valid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      }
+    },
+    "invalid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": "NVIDIA L4",
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      }
+    },
+    "expect_error": "discovery_unavailable"
+  },
+  "pitwall_runpod_onboarding_resume": {
+    "valid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      },
+      "confirmed_plan_id": "runpod_onboard_000000000000000000000000"
+    },
+    "invalid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      },
+      "confirmed_plan_id": 7
+    },
+    "expect_error": "discovery_unavailable"
+  },
+  "pitwall_runpod_onboarding_rollback": {
+    "valid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      }
+    },
+    "invalid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": "NVIDIA L4",
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      }
+    },
+    "expect_error": "discovery_unavailable"
+  },
+  "pitwall_runpod_onboarding_status": {
+    "valid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": [
+          "NVIDIA L4"
+        ],
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      }
+    },
+    "invalid": {
+      "request": {
+        "name": "j34-onboarding",
+        "capability_name": "embedding.demo",
+        "capability_class": "embedding",
+        "provider_name": "j34-runpod",
+        "image": "docker.io/example/worker:sha-abc",
+        "public_image": true,
+        "gpu_type_ids": "NVIDIA L4",
+        "rate_per_hour_usd": "0.50",
+        "template": {
+          "mode": "create",
+          "name": "j34-template"
+        },
+        "endpoint": {
+          "mode": "create",
+          "name": "j34-endpoint"
+        },
+        "probe_payload": {
+          "texts": [
+            "hello"
+          ]
+        }
+      }
+    },
+    "expect_error": "discovery_unavailable"
+  },
+  "pitwall_runpod_replace_registry_auth": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "ra_j34",
+        "name": "j34-auth",
+        "username": "j34",
+        "password_env": "J34_REGISTRY_PASSWORD"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7,
+        "name": "j34-auth",
+        "username": "j34",
+        "password_env": "J34_REGISTRY_PASSWORD"
+      }
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_search_hub_templates": {
+    "valid": {
+      "query": "vllm",
+      "limit": 3
+    },
+    "invalid": {
+      "query": 7
+    },
+    "expect_error": "provider_error"
+  },
+  "pitwall_runpod_terminate_pod": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "pod_j34"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_update_endpoint": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "ep_j34",
+        "workers": {
+          "minimum": 0,
+          "maximum": 2
+        },
+        "scaling": {
+          "type": "QUEUE_DELAY",
+          "value": 4
+        }
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "ep_j34",
+        "workers": "many",
+        "scaling": {}
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_update_pod": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "pod_j34",
+        "ports": [
+          "8000/http"
+        ]
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": 7
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_runpod_update_template": {
+    "valid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "tpl_j34",
+        "image": "docker.io/example/worker:sha-def"
+      }
+    },
+    "invalid": {
+      "request": {
+        "intent": "preview",
+        "idempotency_key": "j34-key-0001",
+        "resource_id": "tpl_j34",
+        "disk_gb": "large"
+      }
+    },
+    "expect_keys": [
+      "already_absent",
+      "changed",
+      "dry_run",
+      "effect",
+      "estimated_ceiling",
+      "idempotency_key",
+      "irreversible",
+      "operation",
+      "provider",
+      "resource",
+      "resource_id",
+      "resource_type"
+    ]
+  },
+  "pitwall_serve_model": {
+    "valid": {
+      "capability": "coding.chat",
+      "model": "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+      "gpu_class": "NVIDIA GeForce RTX 3090",
+      "ttl_minutes": 35,
+      "dry_run": true,
+      "rate_per_second": 0.0001
+    },
+    "invalid": {
+      "capability": 7,
+      "dry_run": true
+    },
+    "expect_keys": [
+      "capability",
+      "cost_estimate_usd",
+      "created",
+      "dry_run",
+      "engine",
+      "expires_at",
+      "gpu_count",
+      "lease_id",
+      "model_id",
+      "price_age_seconds",
+      "price_source",
+      "price_stale",
+      "provider_id",
+      "provider_kind",
+      "proxy_base_url",
+      "template_id",
+      "variant",
+      "workload_id"
+    ]
+  },
+  "pitwall_stop_lease": {
+    "valid": {
+      "lease_id": "lease_missing"
+    },
+    "invalid": {
+      "lease_id": 7
+    },
+    "expect_error": "lease_not_found"
+  },
+  "pitwall_submit_inference": {
+    "valid": {
+      "capability_id": "cap_embedding_demo",
+      "payload": {
+        "texts": [
+          "hello"
+        ]
+      },
+      "dry_run": true
+    },
+    "invalid": {
+      "capability_id": 7,
+      "dry_run": true
+    },
+    "expect_keys": [
+      "cost",
+      "external_job_id",
+      "plan",
+      "plan_id",
+      "provider_id",
+      "result",
+      "state",
+      "trace_id",
+      "workload_id"
+    ]
+  },
+  "pitwall_submit_job": {
+    "valid": {
+      "capability_id": "cap_embedding_demo",
+      "input": {
+        "texts": [
+          "hello"
+        ]
+      },
+      "dry_run": true
+    },
+    "invalid": {
+      "capability_id": "cap_embedding_demo",
+      "input": "text",
+      "dry_run": true
+    },
+    "expect_keys": [
+      "cost",
+      "external_job_id",
+      "plan",
+      "plan_id",
+      "provider_id",
+      "result",
+      "state",
+      "trace_id",
+      "workload_id"
+    ]
+  },
+  "pitwall_update_capability": {
+    "valid": {
+      "capability_id": "cap_embedding_demo",
+      "description": "J34 updated"
+    },
+    "invalid": {
+      "capability_id": "cap_embedding_demo",
+      "enabled": "sometimes"
+    },
+    "expect_keys": [
+      "class",
+      "cost_mode",
+      "created_at",
+      "defaults",
+      "description",
+      "enabled",
+      "hints_supported",
+      "id",
+      "input_schema",
+      "last_applied_yaml_hash",
+      "name",
+      "output_schema",
+      "source",
+      "updated_at",
+      "version"
+    ]
+  },
+  "pitwall_update_provider": {
+    "valid": {
+      "provider_id": "prov_demo_runpod_lb",
+      "priority": 60
+    },
+    "invalid": {
+      "provider_id": "prov_demo_runpod_lb",
+      "priority": "high"
+    },
+    "expect_keys": [
+      "adapter_id",
+      "capability_id",
+      "cloud_type",
+      "cold_start_p50_ms",
+      "cold_start_p95_ms",
+      "config",
+      "consecutive_failures",
+      "cooldown_trips",
+      "cooldown_until",
+      "credential_ref",
+      "enabled",
+      "health_status",
+      "id",
+      "last_applied_yaml_hash",
+      "name",
+      "priority",
+      "provider_type",
+      "recent_error_rate",
+      "region",
+      "runpod_endpoint_id",
+      "runpod_template_id",
+      "source",
+      "updated_at"
+    ]
+  },
+  "pitwall_volume_delete_object": {
+    "valid": {
+      "volume_id": "vol_j34",
+      "data_center_id": "US-KS-2",
+      "object_key": "j34/a.txt",
+      "intent": "delete",
+      "idempotency_key": "j34-key-0001",
+      "dry_run": true,
+      "confirm_delete": true
+    },
+    "invalid": {
+      "volume_id": 7,
+      "data_center_id": "US-KS-2",
+      "object_key": "j34/a.txt",
+      "intent": "delete",
+      "idempotency_key": "j34-key-0001"
+    },
+    "expect_keys": [
+      "bytes_transferred",
+      "checksum_sha256",
+      "consequences",
+      "content_base64",
+      "data_center_id",
+      "effect",
+      "estimated_ceiling",
+      "irreversible",
+      "logs",
+      "object_key",
+      "objects",
+      "operation",
+      "pod_id",
+      "progress",
+      "provider",
+      "replayed",
+      "status",
+      "target",
+      "truncated",
+      "volume_id"
+    ]
+  },
+  "pitwall_volume_list_objects": {
+    "valid": {
+      "volume_id": "vol_j34",
+      "data_center_id": "US-KS-2"
+    },
+    "invalid": {
+      "volume_id": 7,
+      "data_center_id": "US-KS-2"
+    },
+    "expect_error": "volume_file_provider_error"
+  },
+  "pitwall_volume_read_chunk": {
+    "valid": {
+      "volume_id": "vol_j34",
+      "data_center_id": "US-KS-2",
+      "object_key": "j34/a.txt"
+    },
+    "invalid": {
+      "volume_id": "vol_j34",
+      "data_center_id": "US-KS-2",
+      "object_key": "j34/a.txt",
+      "offset": "start"
+    },
+    "expect_error": "volume_file_provider_error"
+  },
+  "pitwall_volume_upload_object": {
+    "valid": {
+      "volume_id": "vol_j34",
+      "data_center_id": "US-KS-2",
+      "object_key": "j34/a.txt",
+      "content_base64": "aGVsbG8=",
+      "intent": "upload",
+      "idempotency_key": "j34-key-0001",
+      "dry_run": true
+    },
+    "invalid": {
+      "volume_id": "vol_j34",
+      "data_center_id": "US-KS-2",
+      "object_key": "j34/a.txt",
+      "content_base64": 7,
+      "intent": "upload",
+      "idempotency_key": "j34-key-0001"
+    },
+    "expect_error": "volume_file_provider_error"
+  }
+}

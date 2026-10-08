@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "profiles": {
+    "local-coder": {
+      "provider": "local-openai",
+      "modelId": "SET_FROM_SERVER_DISCOVERY",
+      "endpoint": "http://127.0.0.1:8000/v1",
+      "api": "openai-completions",
+      "apiKeyEnv": "LOCAL_OPENAI_API_KEY",
+      "servedContextTokens": 131072,
+      "maxCompletionTokens": 16384,
+      "inputModalities": ["text"],
+      "compat": {
+        "thinkingFormat": "chat-template",
+        "chatTemplateKwargs": {
+          "enable_thinking": { "$var": "thinking.enabled" },
+          "preserve_thinking": { "$var": "thinking.enabled" }
+        }
+      },
+      "reasoningLevel": "high",
+      "resourceGroup": "local-primary-inference",
+      "allowProviderFallback": false
+    }
+  }
+}

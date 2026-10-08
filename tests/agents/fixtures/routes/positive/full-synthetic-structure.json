@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "defaults": {
+    "harness": "opencode",
+    "endpointHarness": "qwen"
+  },
+  "endpoints": {
+    "example-shared": {
+      "baseUrl": "https://shared.example.invalid/v1",
+      "apiKeyEnv": "EXAMPLE_SHARED_API_KEY"
+    }
+  },
+  "harnesses": {
+    "opencode": {
+      "effort": "example-variant",
+      "args": ["--example-harness-flag"]
+    }
+  },
+  "models": {
+    "shared-example": {
+      "model": "example/shared-model",
+      "harness": "opencode",
+      "endpoint": "example-shared",
+      "args": ["--example-route-flag"],
+      "effort": "example-variant",
+      "env": {
+        "EXAMPLE_MODE": "fixture"
+      },
+      "limits": {
+        "context": 32768,
+        "output": 4096
+      },
+      "seat": "local",
+      "workspace": "isolated",
+      "taskMode": "read"
+    },
+    "pitwall-example": {
+      "model": "example/pitwall-model",
+      "endpoint": {
+        "baseUrl": "https://pitwall.example.invalid/v1/openai/llm.example/v1",
+        "apiKeyEnv": "EXAMPLE_PITWALL_API_TOKEN"
+      },
+      "args": [],
+      "env": {},
+      "limits": {
+        "context": 16384,
+        "output": 2048
+      },
+      "seat": "burst",
+      "workspace": "auto",
+      "taskMode": "write",
+      "expiresAt": "2026-09-01T12:00:00Z",
+      "origin": {
+        "kind": "pitwall",
+        "capability": "llm.example",
+        "leaseId": "lease_example_1",
+        "url": "https://pitwall.example.invalid",
+        "state": "active"
+      },
+      "autoServe": {
+        "maxUsdPerHour": 1.25,
+        "ttlMinutes": 60,
+        "idleTimeoutMinutes": 20,
+        "readyTimeoutMinutes": 15
+      }
+    }
+  },
+  "pitwall": {
+    "autoRegister": {
+      "llm.example": "pitwall-example"
+    }
+  }
+}

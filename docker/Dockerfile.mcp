@@ -1,0 +1,35 @@
+FROM python:3.14.7-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2 AS builder
+
+ARG UV_VERSION=0.11.19
+WORKDIR /build
+
+COPY pyproject.toml uv.lock README.md LICENSE NOTICE ./
+COPY db/migrations/ db/migrations/
+COPY docs/models/ docs/models/
+COPY config/gateway-catalog.json config/gateway-catalog.lock.json config/gateway-routes.json config/
+COPY seed/gateway-providers.yaml seed/gateway-capabilities.yaml seed/
+COPY plugins/ plugins/
+COPY src/ src/
+
+RUN python -m pip install --no-cache-dir "uv==$UV_VERSION" && uv export --frozen --no-dev --no-emit-project --format requirements-txt --output-file /tmp/requirements.txt && python -m pip install --no-cache-dir --require-hashes --prefix=/install -r /tmp/requirements.txt && uv build --wheel --out-dir /tmp/dist && python -m pip install --no-cache-dir --no-deps --prefix=/install /tmp/dist/*.whl
+
+FROM python:3.14.7-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2 AS runtime
+
+LABEL org.opencontainers.image.title="Pitwall MCP" org.opencontainers.image.description="Local MCP interface for Pitwall" org.opencontainers.image.licenses="Apache-2.0"
+
+# Apply Debian security updates published after the pinned base image was built,
+# so the scheduled Trivy scan never ships a fixed OS-package CVE.
+RUN apt-get update && apt-get upgrade --yes --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# Runtime images are immutable services, not package installation environments.
+RUN python -m pip uninstall --yes pip && rm -rf /usr/local/lib/python3.14/ensurepip
+
+RUN groupadd --system --gid 10001 pitwall && useradd --system --uid 10001 --gid pitwall --home-dir /app --create-home pitwall
+WORKDIR /app
+COPY --from=builder /install /usr/local
+
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PITWALL_MCP_TRANSPORT=stdio
+
+USER 10001:10001
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD ["python", "-c", "import os; os.kill(1, 0)"]
+CMD ["python", "-m", "pitwall.mcp"]

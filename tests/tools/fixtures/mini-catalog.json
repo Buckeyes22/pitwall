@@ -1,0 +1,21 @@
+{
+  "curatedAt": "2026-09-03",
+  "budgets": [
+    {"provider": "alpha", "modelId": "alpha/a1", "displayName": "A1", "monthlyTokens": 5000000, "creditTokens": 0, "freeType": "recurring-monthly", "poolKey": "alpha-pool", "tos": "ok", "hardStopGuaranteed": true},
+    {"provider": "alpha", "modelId": "alpha/a2", "displayName": "A2", "monthlyTokens": 5000000, "creditTokens": 0, "freeType": "recurring-monthly", "poolKey": "alpha-pool", "tos": "ok", "hardStopGuaranteed": true},
+    {"provider": "beta",  "modelId": "beta/b1",  "displayName": "B1", "monthlyTokens": 0, "creditTokens": 0, "freeType": "keyless", "poolKey": null, "tos": "caution", "trainsOnPrompts": true},
+    {"provider": "gamma", "modelId": "gamma/g1", "displayName": "G1", "monthlyTokens": 6000000, "creditTokens": 0, "freeType": "recurring-monthly", "poolKey": "gamma", "tos": "ok", "eligibilityGate": "regional-identity"},
+    {"provider": "delta", "modelId": "delta/d1", "displayName": "D1", "monthlyTokens": 0, "creditTokens": 0, "freeType": "recurring-uncapped", "poolKey": null, "tos": "avoid"},
+    {"provider": "epsilon", "modelId": "epsilon/e1", "displayName": "E1", "monthlyTokens": 0, "creditTokens": 0, "freeType": "recurring-credit", "poolKey": null, "tos": "caution"},
+    {"provider": "zeta", "modelId": "zeta/z1", "displayName": "Z1", "monthlyTokens": 0, "creditTokens": 0, "freeType": "recurring-credit", "poolKey": null, "tos": "caution"},
+    {"provider": "eta", "modelId": "eta/n1", "displayName": "N1", "monthlyTokens": 0, "creditTokens": 0, "freeType": "recurring-credit", "poolKey": null, "tos": "caution"},
+    {"provider": "agy", "modelId": "agy/a1", "displayName": "Agy", "monthlyTokens": 0, "creditTokens": 0, "freeType": "recurring-credit", "poolKey": null, "tos": "caution"}
+  ],
+  "endpoints": {"alpha": "https://alpha.example/v1/chat/completions", "beta": "https://beta.example/v1/chat/completions", "gamma": "https://gamma.example/v1", "delta": "https://delta.example/v1/chat/completions"},
+  "registry": {
+    "epsilon": {"baseUrl": "https://epsilon.example/v1/responses", "format": "openai-responses", "executor": "default", "authType": "apikey"},
+    "zeta":    {"baseUrl": "https://zeta.example/v1",             "format": "openai",            "executor": "default", "authType": "apikey"},
+    "eta":     {"baseUrl": "https://eta.example/v1",              "format": "openai",            "executor": "cheaperinference", "authType": "apikey"},
+    "agy":     {"baseUrl": "",                                    "format": "antigravity",       "executor": "antigravity", "authType": "oauth"}
+  }
+}

@@ -1,0 +1,1032 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/codex",
+  "promptReference": "prompting/openai-codex-gpt-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+  "models": {
+    "gpt-6-astra": {
+      "status": "current",
+      "displayName": "GPT-6 Astra",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-6-astra",
+          "register": true
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-astra",
+              "locator": "Opening paragraph, reasoning.effort supports"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-6-guide",
+              "locator": "Limitations, first bullet (Astra and 6.1 Sol do not support none)"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning effort, GPT-6 Astra does not support none, returns HTTP 400"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-astra",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxInput": {
+          "value": 922000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-astra",
+              "locator": "Model details, Maximum input tokens"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-astra",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-astra",
+              "locator": "Model details, Input modalities"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Apr 30, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-astra",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-03",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-changelog",
+              "locator": "Sep 3, Released GPT-6 Astra"
+            }
+          ]
+        }
+      }
+    },
+    "gpt-6.1-sol": {
+      "status": "current",
+      "displayName": "GPT-6.1 Sol",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-6.1-sol",
+          "register": true
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Opening paragraphs, reasoning.effort supports"
+            },
+            {
+              "source": "openai-gpt-6-guide",
+              "locator": "GPT-6.1 Sol section, reasoning.effort values"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Opening paragraphs, medium (default)"
+            },
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning effort callout and Reasoning mode, GPT-6.1 Sol defaults to medium"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Opening paragraphs, none and minimal are not supported"
+            },
+            {
+              "source": "openai-gpt-6-guide",
+              "locator": "Limitations, none reasoning effort"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxInput": {
+          "value": 922000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Model details, Maximum input tokens"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Model details, Input modalities"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Apr 30, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-1-sol",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-29",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-changelog",
+              "locator": "Sep 29, Released GPT-6.1 Sol"
+            }
+          ]
+        }
+      }
+    },
+    "gpt-6-sol": {
+      "status": "current",
+      "displayName": "GPT-6 Sol",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-6-sol",
+          "register": false
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Opening paragraph, reasoning.effort supports"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Opening paragraph, medium (default)"
+            },
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning mode, GPT-6.1 Sol, GPT-6 Sol, and GPT-6 Luna also default to medium"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-6-guide",
+              "locator": "Limitations, first bullet (GPT-6 Sol and GPT-6 Luna support none)"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxInput": {
+          "value": 922000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Model details, Maximum input tokens"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Model details, Input modalities"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Apr 20, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-sol",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-22",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-changelog",
+              "locator": "Sep 22, Released GPT-6 Sol and GPT-6 Luna"
+            }
+          ]
+        }
+      }
+    },
+    "gpt-6-luna": {
+      "status": "current",
+      "displayName": "GPT-6 Luna",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-6-luna",
+          "register": true
+        },
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/gpt-6-luna"
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Opening paragraph, reasoning.effort supports"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Opening paragraph, medium (default)"
+            },
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning mode, GPT-6.1 Sol, GPT-6 Sol, and GPT-6 Luna also default to medium"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-6-guide",
+              "locator": "Limitations, first bullet (GPT-6 Sol and GPT-6 Luna support none)"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxInput": {
+          "value": 922000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Model details, Maximum input tokens"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Model details, Input modalities"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "May 18, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-6-luna",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-22",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-changelog",
+              "locator": "Sep 22, Released GPT-6 Sol and GPT-6 Luna"
+            }
+          ]
+        }
+      }
+    },
+    "gpt-5.6-sol": {
+      "status": "current",
+      "displayName": "GPT-5.6 Sol",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-5.6-sol",
+          "register": true
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-5-6-guide",
+              "locator": "Migration quickstart, Update API and model parameters, reasoning.effort bullet"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning mode, GPT-5.6 defaults to medium"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-5-6-guide",
+              "locator": "Migration quickstart, Update API and model parameters, none effort bullet"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-sol",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-sol",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Feb 16, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-sol",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        }
+      }
+    },
+    "gpt-5.6-terra": {
+      "status": "current",
+      "displayName": "GPT-5.6 Terra",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-5.6-terra",
+          "register": true
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-5-6-guide",
+              "locator": "Migration quickstart, Update API and model parameters, reasoning.effort bullet"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning mode, GPT-5.6 defaults to medium"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-5-6-guide",
+              "locator": "Migration quickstart, Update API and model parameters, none effort bullet"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-terra",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-terra",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Feb 16, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-terra",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        }
+      }
+    },
+    "gpt-5.6-luna": {
+      "status": "current",
+      "displayName": "GPT-5.6 Luna",
+      "routes": [
+        {
+          "harness": "codex",
+          "model": "gpt-5.6-luna",
+          "register": true
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-5-6-guide",
+              "locator": "Migration quickstart, Update API and model parameters, reasoning.effort bullet"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-reasoning",
+              "locator": "Reasoning mode, GPT-5.6 defaults to medium"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-gpt-5-6-guide",
+              "locator": "Migration quickstart, Update API and model parameters, none effort bullet"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1050000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-luna",
+              "locator": "Model details, 1,050,000 context window"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-luna",
+              "locator": "Model details, 128,000 max output tokens"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Feb 16, 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "openai-model-gpt-5-6-luna",
+              "locator": "Model details, knowledge cutoff"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "gpt-5-6-outcome-first",
+      "text": "Describe the outcome, constraints, evidence, and completion bar, then let the model pick the path. Reserve ALWAYS and NEVER for true invariants.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Outcome-first prompts and stopping conditions",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-lean-prompts",
+      "text": "Trim repeated rules, redundant examples, and unrelated tools. Cut one group at a time and rerun the evals; leaner prompts scored and cost better in OpenAI's sample.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Simplify prompts first",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-autonomy-boundaries",
+      "text": "State once what a request authorizes: inspect and report for questions, edit and validate locally for changes, confirm before external writes, destructive steps, or scope growth.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Define autonomy and approval boundaries",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-effort-baseline",
+      "text": "Start from the prior effort, test it and one level lower, and use medium as the default. Use high or xhigh only when evals gain; keep max for the hardest work.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Reasoning effort",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-brevity",
+      "text": "GPT-5.6 answers more briefly than GPT-5.5 by default. Recheck broad 'be concise' rules, and set text.verbosity and required content instead.",
+      "applies": [
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-5.6-luna"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Personality, collaboration, and response length",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-verify-work",
+      "text": "Give the model tools to validate its output and say which checks matter, such as targeted tests, type checks, builds, or a rendered screenshot.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Check work before finishing",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-prompt-first-effort",
+      "text": "Before raising reasoning effort, look for a missing success criterion, dependency rule, tool-routing rule, or verification loop in the prompt.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-prompting",
+      "locator": "Reasoning effort",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-5-6-pro-mode",
+      "text": "Pro mode is set with reasoning.mode pro on the same model slug, independent of effort. Use it when quality outweighs latency and tokens; do not ask for it in the prompt.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-5-6-guide",
+      "locator": "Pro mode",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-6-astra-follow-through",
+      "text": "GPT-6 Astra asks a focused question when the answer could change the outcome. Say what a request authorizes and to proceed on reasonable assumptions, or it may stop where you expect it to continue.",
+      "applies": [
+        "gpt-6-astra"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "Prompting best practices, Initiative and follow-through",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-6-astra-instruction-files",
+      "text": "GPT-6 Astra weighs skills and AGENTS.md closely, and conflicting text can make it pause. Audit those files and state that the user's instructions outrank a skill's.",
+      "applies": [
+        "gpt-6-astra"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "Prompting best practices, Instruction following",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-6-astra-delegation",
+      "text": "GPT-6 Astra may delegate to subagents less often than a workflow wants. Say when and how much to split work for parallel subagents.",
+      "applies": [
+        "gpt-6-astra"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "Prompting best practices, Subagent delegation",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-6-no-sampling-params",
+      "text": "With effort above none, omit temperature, top_p and top_logprobs (plus logprobs in Chat Completions, or its include entry in Responses). Tools need Responses; Sol and Luna allow Chat Completions tools only at none.",
+      "applies": [
+        "gpt-6-astra",
+        "gpt-6.1-sol",
+        "gpt-6-sol",
+        "gpt-6-luna"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "Migration quickstart, Update API and model parameters, Reasoning effort, Tool calling, Unsupported parameters bullets",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gpt-6-sol-61-choice",
+      "text": "GPT-6.1 Sol aims for near-Astra results at lower cost; compare it with Astra on your own tasks. It has no none or minimal effort (use low in their place), and tool calls need the Responses API.",
+      "applies": [
+        "gpt-6.1-sol"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "GPT-6.1 Sol section; Migration quickstart, Reasoning effort bullet",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-configuration-update",
+      "text": "To change effort between turns, add a configuration_update item before the next user message and keep request-level reasoning.effort fixed, which preserves the cached prefix. Single-agent only; no adjacent updates.",
+      "applies": [
+        "gpt-6-astra",
+        "gpt-6.1-sol",
+        "gpt-6-sol",
+        "gpt-6-luna"
+      ],
+      "class": "vendor",
+      "source": "openai-reasoning",
+      "locator": "Change reasoning mid-conversation",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-async-tools",
+      "text": "Set async: true on a function or custom tool and the model keeps working while your app runs it; return the result on the original call_id. Your app runs and tracks the jobs; hosted tools are excluded. Astra and later.",
+      "applies": [
+        "gpt-6-astra",
+        "gpt-6.1-sol"
+      ],
+      "class": "vendor",
+      "source": "openai-async-tool-calling",
+      "locator": "How async tools work; Compatibility",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-mid-turn-steering",
+      "text": "A user can add instructions to a running response over the Responses WebSocket with response.steer. The input is queued, then continues in a new response; sent output and started tools are not undone.",
+      "applies": [
+        "gpt-6-astra",
+        "gpt-6.1-sol",
+        "gpt-6-sol",
+        "gpt-6-luna"
+      ],
+      "class": "vendor",
+      "source": "openai-steering",
+      "locator": "Send a steering message",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-cache-ttl",
+      "text": "From GPT-5.6 on, prompt_cache_options.ttl (only 30m) replaces prompt_cache_retention. Cache writes cost 1.25x input and reads 0.1x (0.05x on GPT-6.1 Sol), and an explicit mode places breakpoints.",
+      "applies": [
+        "gpt-6-astra",
+        "gpt-6.1-sol",
+        "gpt-6-sol",
+        "gpt-6-luna"
+      ],
+      "class": "vendor",
+      "source": "openai-prompt-caching",
+      "locator": "Cache lifetime; Summary of model differences",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-prompt-objects-shutdown",
+      "text": "Reusable prompt objects are deprecated and v1/prompts shuts down on 2026-11-30. Keep prompts in application code and pass instructions and input straight to Responses.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "openai-deprecations",
+      "locator": "2026-06-03 Reusable prompts table",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-astra-writing-style",
+      "text": "Astra leans toward lists, tables, and Markdown, and repeats stock phrases across sessions. State the prose and format your product needs, and ban the specific filler phrases you see, rather than relying on defaults.",
+      "applies": [
+        "gpt-6-astra"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "Prompting best practices, Personality and writing style",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "gpt-6-astra-testing",
+      "text": "Astra tests thoroughly, which can be more than a small change needs. Say which checks fit the change, and to broaden or repeat them only when something new or failing justifies it.",
+      "applies": [
+        "gpt-6-astra"
+      ],
+      "class": "vendor",
+      "source": "openai-gpt-6-guide",
+      "locator": "Prompting best practices, Testing and verification",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    }
+  ]
+}

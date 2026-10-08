@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/cline",
+  "sources": [
+    {
+      "id": "cline-overview",
+      "url": "https://docs.cline.bot/cline-overview.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:8c3f68406d06a03baa4fbf2140245f26cb992677f9a700da93bbc430ab167fc8",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:8c3f68406d06a03baa4fbf2140245f26cb992677f9a700da93bbc430ab167fc8",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cline-cli-reference",
+      "url": "https://docs.cline.bot/cli/cli-reference.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:e28da5a6e875a01ab9bf4ed5923f7f7e41942893a1413e107c542d56bd77e174",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:e28da5a6e875a01ab9bf4ed5923f7f7e41942893a1413e107c542d56bd77e174",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://docs.cline.bot/llms.txt; no change log page"
+    }
+  ],
+  "watch": []
+}

@@ -1,0 +1,49 @@
+batches:
+  - date: "2026-08-27"
+    source_model_dossiers: 13
+    shipped_upstream_dossiers: 11
+    shipped_variants: 15
+    folded:
+      unsloth/Muse-Glimmer-30B-GGUF: meta-models/Muse-Glimmer-30B
+      unsloth/Qwen3.8-27B-GGUF: Qwen/Qwen3.8-27B
+      unsloth/Qwen3.8-Flash-Next-GGUF: Qwen/Qwen3.8-Flash-Next
+      unsloth/gemma-4-31B-it-GGUF: google/gemma-4-31B-it
+    excluded:
+      MiniMaxAI/MiniMax-Music3: unsupported engine sglang; catalogue engines are vllm and llama.cpp
+  - date: "2026-09-07"
+    source: opencode-go open-weight model research (HF cards, vLLM/SGLang recipes)
+    shipped_upstream_dossiers: 12
+    shipped_variants: 16
+    added:
+      - zai-org/GLM-5.3
+      - zai-org/GLM-5.1
+      - moonshotai/Kimi-K2.7-Code
+      - moonshotai/Kimi-K2.6
+      - meituan-longcat/LongCat-2.0
+      - XiaomiMiMo/MiMo-V2.5
+      - XiaomiMiMo/MiMo-V2.5-Pro
+      - MiniMaxAI/MiniMax-M3
+      - MiniMaxAI/MiniMax-M2.7
+      - deepseek-ai/DeepSeek-V4-Flash-Vision-Exp
+      - tencent/Hy4-preview
+      - tencent/Hy3
+    notes: >-
+      First shipped sglang-engine dossier (LongCat-2.0, SGLang main/nightly only).
+      Introduced the int4 variant format for the native INT4 Kimi K2.x checkpoints.
+  - date: "2026-10-07"
+    source: Hugging Face XiaomiMiMo MiMo-V2.6 releases (HF cards and files, vLLM recipes)
+    shipped_upstream_dossiers: 5
+    shipped_variants: 5
+    added:
+      - XiaomiMiMo/MiMo-V2.6-Pro-RL
+      - XiaomiMiMo/MiMo-V2.6-Flash-RL
+      - XiaomiMiMo/MiMo-V2.6-Pro-MOPD
+      - XiaomiMiMo/MiMo-V2.6-Flash-MOPD
+      - XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B
+    notes: >-
+      Five separate checkpoints, so five dossiers: the Pro and Flash RL and MOPD
+      checkpoints have different weights and the Distill is a Qwen3.5-9B SFT. The
+      ggml-org GGUF re-publications are recorded in each dossier but no llama.cpp
+      variant ships, because none publishes llama-server flags or a VRAM floor.
+      The MOPD dossiers reuse the RL vLLM recipe by inference (confidence low).
+      The Distill dossier has unverified VRAM, disk, and startup.

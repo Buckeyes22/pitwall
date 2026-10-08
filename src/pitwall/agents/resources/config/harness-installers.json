@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 1,
+  "sourceVerifiedOn": "2026-09-29",
+  "harnesses": {
+    "codex": {
+      "documentationUrl": "https://github.com/openai/codex",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://chatgpt.com/codex/install.sh",
+          "interpreter": [
+            "sh"
+          ],
+          "sha256": "1154e9daf713aacd1534efca8042bfd6665ad24bc1d1dfd86b8f439fe60a7a5d"
+        },
+        "linux": {
+          "installerUrl": "https://chatgpt.com/codex/install.sh",
+          "interpreter": [
+            "sh"
+          ],
+          "sha256": "1154e9daf713aacd1534efca8042bfd6665ad24bc1d1dfd86b8f439fe60a7a5d"
+        }
+      },
+      "allowedRedirectHosts": [
+        "chatgpt.com",
+        "github.com",
+        "release-assets.githubusercontent.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "login"
+      ]
+    },
+    "claude": {
+      "documentationUrl": "https://code.claude.com/docs/en/getting-started",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://claude.ai/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "b3f79015b54c751440a6488f07b1b64f9088742b9052bc1bd356d13108320d2a"
+        },
+        "linux": {
+          "installerUrl": "https://claude.ai/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "b3f79015b54c751440a6488f07b1b64f9088742b9052bc1bd356d13108320d2a"
+        }
+      },
+      "allowedRedirectHosts": [
+        "claude.ai",
+        "downloads.claude.ai"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "auth",
+        "login"
+      ]
+    },
+    "grok": {
+      "documentationUrl": "https://docs.x.ai/build/overview",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://x.ai/cli/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "0465d810453bbf18608ccae310fa79f4c59ae4a0538bd8a3a374ebce749be952"
+        },
+        "linux": {
+          "installerUrl": "https://x.ai/cli/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "0465d810453bbf18608ccae310fa79f4c59ae4a0538bd8a3a374ebce749be952"
+        }
+      },
+      "allowedRedirectHosts": [
+        "x.ai"
+      ],
+      "verifyArgs": [
+        "version"
+      ],
+      "authArgs": [
+        "login"
+      ]
+    },
+    "kimi": {
+      "documentationUrl": "https://moonshotai.github.io/kimi-code/en/guides/getting-started.html",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://code.kimi.com/kimi-code/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "270a86f2d2304529b6d8a3783fca9534874ebaeecb6cfcc1aebcdb6ce20ae1d7"
+        },
+        "linux": {
+          "installerUrl": "https://code.kimi.com/kimi-code/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "270a86f2d2304529b6d8a3783fca9534874ebaeecb6cfcc1aebcdb6ce20ae1d7"
+        }
+      },
+      "allowedRedirectHosts": [
+        "code.kimi.com",
+        "cdn.kimi.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "login"
+      ]
+    },
+    "opencode": {
+      "documentationUrl": "https://opencode.ai/docs/",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://opencode.ai/install",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "fc3c1b2123f49b6df545a7622e5127d21cd794b15134fc3b66e1ca49f7fb297e"
+        },
+        "linux": {
+          "installerUrl": "https://opencode.ai/install",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "fc3c1b2123f49b6df545a7622e5127d21cd794b15134fc3b66e1ca49f7fb297e"
+        }
+      },
+      "allowedRedirectHosts": [
+        "opencode.ai",
+        "raw.githubusercontent.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "auth",
+        "login"
+      ]
+    },
+    "qwen": {
+      "documentationUrl": "https://github.com/QwenLM/qwen-code",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "0c6b44f4f43cf9632479dbd55ef29030f3ebf27106ff980d351343fae9ceef39"
+        },
+        "linux": {
+          "installerUrl": "https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "0c6b44f4f43cf9632479dbd55ef29030f3ebf27106ff980d351343fae9ceef39"
+        }
+      },
+      "allowedRedirectHosts": [
+        "qwen-code-assets.oss-cn-hangzhou.aliyuncs.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "auth"
+      ]
+    },
+    "hermes": {
+      "documentationUrl": "https://github.com/NousResearch/hermes-agent",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://hermes-agent.nousresearch.com/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "c0380bc1f78d3d662a77663ce20cc17e14cbc4bec35e61ab7a33bac5f3afed2d"
+        },
+        "linux": {
+          "installerUrl": "https://hermes-agent.nousresearch.com/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "c0380bc1f78d3d662a77663ce20cc17e14cbc4bec35e61ab7a33bac5f3afed2d"
+        }
+      },
+      "allowedRedirectHosts": [
+        "hermes-agent.nousresearch.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "setup"
+      ]
+    },
+    "pi": {
+      "documentationUrl": "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md",
+      "platforms": {
+        "darwin": {
+          "kind": "npm",
+          "package": "@earendil-works/pi-coding-agent",
+          "version": "0.84.4",
+          "extraPackages": [
+            {
+              "package": "@tintinweb/pi-subagents",
+              "version": "0.19.0"
+            }
+          ]
+        },
+        "linux": {
+          "kind": "npm",
+          "package": "@earendil-works/pi-coding-agent",
+          "version": "0.84.4",
+          "extraPackages": [
+            {
+              "package": "@tintinweb/pi-subagents",
+              "version": "0.19.0"
+            }
+          ]
+        }
+      },
+      "allowedRedirectHosts": [
+        "registry.npmjs.org"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "--list-models"
+      ]
+    },
+    "muse": {
+      "documentationUrl": "https://developer.meta.com/ai/products/muse-code/",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://dev.meta.ai/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "5196d820127a241211c96cf38f0b2e30cff8506a82e9da9508cd5f826632a0ca"
+        },
+        "linux": {
+          "installerUrl": "https://dev.meta.ai/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "5196d820127a241211c96cf38f0b2e30cff8506a82e9da9508cd5f826632a0ca"
+        }
+      },
+      "allowedRedirectHosts": [
+        "dev.meta.ai"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "auth",
+        "login"
+      ]
+    },
+    "goose": {
+      "documentationUrl": "https://goose-docs.ai/docs/getting-started/installation/",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "710f208cf0225ac330f71cc1540d36b10a6be7a850334b5ec4770fe96fbc57c4",
+          "env": {
+            "CONFIGURE": "false"
+          }
+        },
+        "linux": {
+          "installerUrl": "https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "710f208cf0225ac330f71cc1540d36b10a6be7a850334b5ec4770fe96fbc57c4",
+          "env": {
+            "CONFIGURE": "false"
+          }
+        }
+      },
+      "allowedRedirectHosts": [
+        "github.com",
+        "release-assets.githubusercontent.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "configure"
+      ]
+    },
+    "cline": {
+      "documentationUrl": "https://docs.cline.bot/cli/cli-reference",
+      "platforms": {
+        "darwin": {
+          "kind": "npm",
+          "package": "cline",
+          "version": "3.0.60"
+        },
+        "linux": {
+          "kind": "npm",
+          "package": "cline",
+          "version": "3.0.60"
+        }
+      },
+      "allowedRedirectHosts": [
+        "registry.npmjs.org"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "auth"
+      ]
+    },
+    "dsh": {
+      "documentationUrl": "https://github.com/deepseek-ai/deepseek-harness",
+      "platforms": {
+        "darwin": {
+          "kind": "npm",
+          "package": "@deepseek-ai/dsh",
+          "version": "0.1.1-rc.2"
+        },
+        "linux": {
+          "kind": "npm",
+          "package": "@deepseek-ai/dsh",
+          "version": "0.1.1-rc.2"
+        }
+      },
+      "allowedRedirectHosts": [
+        "registry.npmjs.org"
+      ],
+      "verifyArgs": [
+        "--help"
+      ],
+      "authArgs": [
+        "--help"
+      ]
+    },
+    "agy": {
+      "documentationUrl": "https://antigravity.google/docs/cli/install/",
+      "platforms": {
+        "darwin": {
+          "installerUrl": "https://antigravity.google/cli/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "ee1ea43ce4e9e56356c4ab6dad907ef357ae4bdfcaadb682735909fb57c9c640"
+        },
+        "linux": {
+          "installerUrl": "https://antigravity.google/cli/install.sh",
+          "interpreter": [
+            "bash"
+          ],
+          "sha256": "ee1ea43ce4e9e56356c4ab6dad907ef357ae4bdfcaadb682735909fb57c9c640"
+        }
+      },
+      "allowedRedirectHosts": [
+        "antigravity.google",
+        "antigravity-cli-auto-updater-974169037036.us-central1.run.app",
+        "storage.googleapis.com"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": []
+    },
+    "zcode": {
+      "documentationUrl": "https://github.com/zai-org/ZCode/blob/main/README.md",
+      "platforms": {
+        "darwin": {
+          "kind": "manual"
+        },
+        "linux": {
+          "kind": "manual"
+        }
+      },
+      "allowedRedirectHosts": [],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "login",
+        "zai"
+      ]
+    }
+  }
+}

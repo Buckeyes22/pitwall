@@ -1,0 +1,741 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/deepseek",
+  "promptReference": "prompting/deepseek-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#deepseek-v4",
+  "models": {
+    "deepseek-v4.1-flash": {
+      "status": "current",
+      "displayName": "DeepSeek V4.1 Flash",
+      "artifact": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/deepseek-v4.1-flash"
+        }
+      ],
+      "facts": {
+        "revision": {
+          "value": "dba1be0a40aa45a94ad051997016db3960a90277",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4.1-flash",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 763205315794,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4.1-flash",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4.1-flash",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4.1-flash",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4.1-flash",
+              "locator": "README.md, Minimal Inference, recommended sampling parameters"
+            }
+          ],
+          "note": "The release has no generation_config.json; the README recommends temperature 1.0 and top_p 0.95 or 1.0, and 0.95 is recorded."
+        },
+        "maxOutput": {
+          "value": 384000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-pricing",
+              "locator": "Model Details, MAX OUTPUT row, MAXIMUM 384K"
+            }
+          ],
+          "note": "The page writes 384K without saying whether K is 1000 or 1024; 384000 is recorded."
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-pricing",
+              "locator": "Model Details, Vision row"
+            },
+            {
+              "source": "hf-deepseek-v4.1-flash",
+              "locator": "record.json pipeline_tag image-text-to-text"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "high",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control, effort parameter values low/high/max"
+            }
+          ],
+          "note": "The API takes these three. The open weights also encode a numeric reasoning effort from 1 to 100 (README, Evaluation), which the API does not expose."
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control, note 1"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "minimal": "low",
+              "medium": "high",
+              "xhigh": "high",
+              "ultra": "max"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control, note 2, mapping table"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-pricing",
+              "locator": "Model Details, THINKING MODE row"
+            },
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-10",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-updates",
+              "locator": "Date: 2026-09-10, DeepSeek-V4.1-Flash Release"
+            }
+          ]
+        }
+      }
+    },
+    "deepseek-v4-flash": {
+      "status": "retired",
+      "displayName": "DeepSeek V4 Flash",
+      "artifact": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "facts": {
+        "revision": {
+          "value": "7872f01b1d1fe23eabc4c98b48bffcef5a386062",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 304180418494,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 1.0
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "generation_config.json"
+            },
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "README.md, How to Run Locally, sampling recommendation",
+              "disagrees": true,
+              "states": {
+                "temperature": 1.0,
+                "top_p": 0.95
+              }
+            }
+          ],
+          "note": "The model files set top_p 1.0; the same README recommends 0.95 for agentic use, and the registry family carried 0.95. The artifact default is kept."
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "minimal": "low",
+              "medium": "high",
+              "xhigh": "high"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control, note 2, mapping table"
+            }
+          ],
+          "note": "The page also maps ultra to max; low, high, and max pass through unchanged."
+        },
+        "maxOutput": {
+          "value": 384000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-pricing",
+              "locator": "Model Details, MAX OUTPUT row, MAXIMUM 384K"
+            },
+            {
+              "source": "hf-deepseek-v4-flash-0731",
+              "locator": "README.md, How to Run Locally, 384K maximum output length"
+            }
+          ],
+          "note": "The page writes 384K without saying whether K is 1000 or 1024; 384000 is recorded."
+        },
+        "retires": {
+          "value": "2026-09-10",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-updates",
+              "locator": "Date: 2026-09-10, DeepSeek-V4.1-Flash Release, API changes"
+            }
+          ],
+          "note": "The change log entry dated 2026-09-10 announces the retirement; the page gives no separate cut-off date, and the old names are still accepted."
+        },
+        "successor": {
+          "value": "deepseek-flash",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-updates",
+              "locator": "Date: 2026-09-10, DeepSeek-V4.1-Flash Release, API changes"
+            },
+            {
+              "source": "deepseek-pricing",
+              "locator": "Footnote (1)"
+            }
+          ],
+          "note": "The API name of DeepSeek-V4.1-Flash; the retired names are temporarily routed to it."
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "status": "current",
+      "displayName": "DeepSeek V4 Pro",
+      "artifact": "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "facts": {
+        "revision": {
+          "value": "72e1d3230f6c080a530b0a1d46f8eb4602340597",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 1650497936906,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 1.0
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "generation_config.json"
+            },
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "README.md, How to Run Locally, sampling recommendation",
+              "disagrees": true,
+              "states": {
+                "temperature": 1.0,
+                "top_p": 0.95
+              }
+            }
+          ],
+          "note": "The model files set top_p 1.0; the same README recommends 0.95 for agentic use, and the registry family carried 0.95. The artifact default is kept."
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "minimal": "low",
+              "medium": "high",
+              "xhigh": "high"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control, note 2, mapping table"
+            }
+          ],
+          "note": "The page also maps ultra to max; low, high, and max pass through unchanged."
+        },
+        "maxOutput": {
+          "value": 384000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-pricing",
+              "locator": "Model Details, MAX OUTPUT row, MAXIMUM 384K"
+            },
+            {
+              "source": "hf-deepseek-v4-pro-0813",
+              "locator": "README.md, How to Run Locally, 384K maximum output length"
+            }
+          ],
+          "note": "The page writes 384K without saying whether K is 1000 or 1024; 384000 is recorded."
+        }
+      }
+    },
+    "deepseek-v4-flash-vision-exp": {
+      "status": "retired",
+      "displayName": "DeepSeek V4 Flash Vision Exp",
+      "artifact": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "facts": {
+        "revision": {
+          "value": "6821d6ad3681a4b137b066b76094fa82ebd0a380",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-vision-exp",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 304646824126,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-vision-exp",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-vision-exp",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-vision-exp",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 1.0
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-deepseek-v4-flash-vision-exp",
+              "locator": "generation_config.json"
+            },
+            {
+              "source": "hf-deepseek-v4-flash-vision-exp",
+              "locator": "README.md, How to Run Locally, sampling recommendation",
+              "disagrees": true,
+              "states": {
+                "temperature": 1.0,
+                "top_p": 0.95
+              }
+            }
+          ],
+          "note": "The model files set top_p 1.0; the same README recommends 0.95 for agentic use, and the registry family carried 0.95. The artifact default is kept."
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "minimal": "low",
+              "medium": "high",
+              "xhigh": "high"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-thinking",
+              "locator": "Thinking Mode Toggle and Effort Control, note 2, mapping table"
+            }
+          ],
+          "note": "The page also maps ultra to max; low, high, and max pass through unchanged."
+        },
+        "retires": {
+          "value": "2026-09-10",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-updates",
+              "locator": "Date: 2026-09-10, DeepSeek-V4.1-Flash Release, API changes"
+            }
+          ],
+          "note": "The change log entry dated 2026-09-10 announces the retirement; the page gives no separate cut-off date, and the old names are still accepted."
+        },
+        "successor": {
+          "value": "deepseek-flash",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "deepseek-updates",
+              "locator": "Date: 2026-09-10, DeepSeek-V4.1-Flash Release, API changes"
+            },
+            {
+              "source": "deepseek-pricing",
+              "locator": "Footnote (1)"
+            }
+          ],
+          "note": "The API name of DeepSeek-V4.1-Flash; the retired names are temporarily routed to it."
+        }
+      }
+    }
+  },
+  "facts": {
+    "contextWindow": {
+      "value": 1048576,
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-deepseek-v4-flash-0731",
+          "locator": "config.json"
+        }
+      ]
+    },
+    "samplingDefaults": {
+      "value": {
+        "temperature": 1.0,
+        "top_p": 1.0
+      },
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-deepseek-v4-flash-0731",
+          "locator": "generation_config.json"
+        },
+        {
+          "source": "hf-deepseek-v4-flash-0731",
+          "locator": "README.md, How to Run Locally, sampling recommendation",
+          "disagrees": true,
+          "states": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          }
+        }
+      ],
+      "note": "The model files set top_p 1.0; the same README recommends 0.95 for agentic use, and the registry family carried 0.95. The artifact default is kept."
+    },
+    "license": {
+      "value": {
+        "name": "MIT",
+        "url": null
+      },
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-deepseek-v4-flash-0731",
+          "locator": "record.json cardData"
+        }
+      ]
+    },
+    "effortValues": {
+      "value": [
+        "low",
+        "high",
+        "max"
+      ],
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "deepseek-thinking",
+          "locator": "Thinking Mode Toggle and Effort Control, effort parameter values low/high/max"
+        },
+        {
+          "source": "hf-deepseek-v4-pro-0813",
+          "locator": "README.md, Chat Template, reasoning_effort levels"
+        }
+      ]
+    },
+    "effortDefault": {
+      "value": "high",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "deepseek-thinking",
+          "locator": "Thinking Mode Toggle and Effort Control, note 1"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "deepseek-thinking-sampling",
+      "text": "In thinking mode, temperature and the two penalties are accepted but ignored. top_p below 0.95 is raised to 0.95; in non-thinking mode top_p is fixed at 1.0.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "deepseek-thinking",
+      "locator": "Input and Output Parameters",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-reasoning-content",
+      "text": "When a request carries tools, send earlier turns' reasoning_content back with them; without tools the API ignores it and drops it from the context.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "deepseek-thinking",
+      "locator": "Input and Output Parameters, reasoning_content",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-retired-flash-names",
+      "text": "The API names deepseek-v4-flash and deepseek-v4-flash-vision-exp are retired models: requests are served by V4.1 Flash and billed at its price. Use deepseek-flash.",
+      "applies": [
+        "deepseek-v4-flash",
+        "deepseek-v4-flash-vision-exp"
+      ],
+      "class": "vendor",
+      "source": "deepseek-pricing",
+      "locator": "Model Details, footnote 1",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-agentic-top-p",
+      "text": "For agentic work the model files recommend temperature 1.0 with top_p 0.95, and top_p 1.0 otherwise. Give high and max effort up to 384K output tokens.",
+      "applies": [
+        "*"
+      ],
+      "class": "artifact",
+      "source": "hf-deepseek-v4-pro-0813",
+      "locator": "README.md, How to Run Locally",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-pro-no-vision",
+      "text": "V4 Pro takes no image input on the API; use V4.1 Flash, or the open Vision Exp weights, when images are part of the task.",
+      "applies": [
+        "deepseek-v4-pro"
+      ],
+      "class": "vendor",
+      "source": "deepseek-pricing",
+      "locator": "Model Details, Vision row",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-fim-non-thinking",
+      "text": "FIM and chat prefix completion are beta features; FIM works only with thinking turned off.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "deepseek-pricing",
+      "locator": "Model Details, Features table",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-flash-api-name",
+      "text": "Call DeepSeek V4.1 Flash on the API as deepseek-flash; it takes image input, unlike V4 Pro, and thinking is on by default at high effort.",
+      "applies": [
+        "deepseek-v4.1-flash"
+      ],
+      "class": "vendor",
+      "source": "deepseek-pricing",
+      "locator": "Model Details, MODEL and Vision rows",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-flash-effort-api",
+      "text": "The API accepts low, high, and max effort; the open weights also take a numeric effort from 1 to 100, which hosted routes do not expose.",
+      "applies": [
+        "deepseek-v4.1-flash"
+      ],
+      "class": "artifact",
+      "source": "hf-deepseek-v4.1-flash",
+      "locator": "README.md, Evaluation, reasoning effort",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-flash-long-output",
+      "text": "Give V4.1 Flash at least 256K max_tokens for agentic work; the model card recommends that floor, with temperature 1.0 and top_p 0.95.",
+      "applies": [
+        "deepseek-v4.1-flash"
+      ],
+      "class": "artifact",
+      "source": "hf-deepseek-v4.1-flash",
+      "locator": "README.md, Minimal Inference, recommended sampling parameters",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

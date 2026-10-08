@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "unit": "hosts/model-studio",
+  "models": {
+    "kimi-k3": {
+      "status": "current",
+      "displayName": "Kimi K3 on Model Studio",
+      "of": "families/kimi#kimi-k3",
+      "facts": {
+        "maxInput": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-kimi-k3",
+              "locator": "Context Limits, Max Input Length"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-kimi-k3",
+              "locator": "Model Capabilities, Input Modality row"
+            }
+          ]
+        },
+        "webSearch": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-kimi-k3",
+              "locator": "Model Capabilities, Web Search row"
+            }
+          ]
+        },
+        "batch": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-kimi-k3",
+              "locator": "Model Capabilities, Batch Inference row"
+            }
+          ]
+        }
+      }
+    },
+    "glm-5.3": {
+      "status": "current",
+      "displayName": "GLM-5.3 on Model Studio",
+      "of": "families/glm#glm-5.3",
+      "facts": {
+        "maxInput": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-glm-5-3",
+              "locator": "Context Limits, Max Input Length"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-glm-5-3",
+              "locator": "Model Capabilities, Input Modality row"
+            }
+          ]
+        },
+        "webSearch": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-glm-5-3",
+              "locator": "Model Capabilities, Web Search row"
+            }
+          ]
+        },
+        "batch": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "model-studio-glm-5-3",
+              "locator": "Model Capabilities, Batch Inference row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "model-studio-kimi-k3-no-search-or-batch",
+      "text": "On Model Studio, kimi-k3 has no web search and no batch inference; use another route when a task needs either.",
+      "applies": [
+        "kimi-k3"
+      ],
+      "class": "host",
+      "source": "model-studio-kimi-k3",
+      "locator": "Model Capabilities, Web Search and Batch Inference rows",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "model-studio-glm-5-3-no-search-or-batch",
+      "text": "On Model Studio, glm-5.3 accepts text only and has no web search or batch inference; use another route when a task needs either.",
+      "applies": [
+        "glm-5.3"
+      ],
+      "class": "host",
+      "source": "model-studio-glm-5-3",
+      "locator": "Model Capabilities, Web Search and Batch Inference rows",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

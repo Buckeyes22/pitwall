@@ -1,0 +1,133 @@
+{
+  "source": {
+    "capturedAt": "2026-09-01T12:00:00Z",
+    "graphql": "existing typed RunPod GraphQL contract fixture",
+    "catalogue": "https://api.runpod.io/v2/catalog/gpus",
+    "podBilling": "https://docs.runpod.io/api-reference/billing/GET/billing/pods",
+    "endpointBilling": "https://docs.runpod.io/api-reference/billing/GET/billing/endpoints",
+    "networkVolumeBilling": "https://docs.runpod.io/api-reference/billing/GET/billing/networkvolumes"
+  },
+  "graphqlGpuTypes": {
+    "data": {
+      "gpuTypes": [
+        {
+          "id": "NVIDIA L4",
+          "displayName": "NVIDIA L4",
+          "manufacturer": "NVIDIA",
+          "memoryInGb": 24,
+          "cudaCores": 7424,
+          "secureCloud": true,
+          "communityCloud": true,
+          "securePrice": 0.440000000000000001,
+          "communityPrice": 0.340000000000000001,
+          "secureSpotPrice": 0.270000000000000001,
+          "communitySpotPrice": 0.180000000000000001,
+          "maxGpuCount": 8,
+          "lowestPrice": {
+            "gpuTypeId": "NVIDIA L4",
+            "minimumBidPrice": 0.190000000000000001,
+            "uninterruptablePrice": 0.440000000000000001,
+            "stockStatus": "High",
+            "availableGpuCounts": [4, 1, 2]
+          },
+          "nodeGroupDatacenters": [
+            {"id": "US-KS-2"},
+            {"id": "EU-SE-1"}
+          ]
+        },
+        {
+          "id": "NVIDIA A100 80GB PCIe",
+          "displayName": "NVIDIA A100 80GB PCIe",
+          "manufacturer": "NVIDIA",
+          "memoryInGb": 80,
+          "secureCloud": true,
+          "communityCloud": false,
+          "securePrice": 1.890000000000000001,
+          "lowestPrice": null,
+          "nodeGroupDatacenters": []
+        }
+      ]
+    }
+  },
+  "graphqlDatacenters": {
+    "data": {
+      "myself": {
+        "datacenters": [
+          {
+            "id": "US-KS-2",
+            "name": "Kansas",
+            "location": "United States",
+            "globalNetwork": false,
+            "storageSupport": true,
+            "listed": true,
+            "compliance": [],
+            "gpuAvailability": [
+              {"gpuTypeId": "NVIDIA L4", "available": true, "stockStatus": "Available"}
+            ]
+          },
+          {
+            "id": "EU-SE-1",
+            "name": "Sweden",
+            "location": "Sweden",
+            "globalNetwork": true,
+            "storageSupport": true,
+            "listed": true,
+            "compliance": ["GDPR"],
+            "gpuAvailability": [
+              {"gpuTypeId": "NVIDIA L4", "available": false, "stockStatus": "Out of Stock"}
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "graphqlBalance": {
+    "data": {
+      "myself": {
+        "id": "account-not-for-public-output",
+        "clientBalance": 42.250000000000000001,
+        "currentSpendPerHr": 1.125000000000000001,
+        "spendLimit": 100.000000000000000001,
+        "minBalance": 5.000000000000000001,
+        "underBalance": false
+      }
+    }
+  },
+  "restV2Catalogue": {
+    "gpus": [
+      {
+        "id": "NVIDIA L4",
+        "memory": 24,
+        "pool": "ADA_24",
+        "cudaVersions": [
+          {"version": "12.8", "available": true},
+          {"version": "12.4", "available": false}
+        ]
+      },
+      {
+        "id": "NVIDIA GeForce RTX 4090",
+        "memory": 24,
+        "pool": "ADA_24",
+        "cudaVersions": [{"version": "12.8", "available": true}]
+      }
+    ]
+  },
+  "podBilling": [
+    {
+      "amount": 0.123456789012345678,
+      "diskSpaceBilledGb": 20,
+      "gpuTypeId": "NVIDIA L4",
+      "podId": "pod-exact-1",
+      "time": "2026-08-30T00:00:00Z",
+      "timeBilledMs": 3600000
+    },
+    {
+      "amount": 0.200000000000000001,
+      "diskSpaceBilledGb": 20,
+      "gpuTypeId": "NVIDIA L4",
+      "podId": "pod-exact-1",
+      "time": "2026-08-31T00:00:00Z",
+      "timeBilledMs": 1800000
+    }
+  ]
+}

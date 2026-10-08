@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/mimo",
+  "promptReference": "prompting/xiaomi-mimo-prompting-reference.md",
+  "models": {
+    "mimo-v2.5": {
+      "status": "retiring",
+      "displayName": "MiMo V2.5",
+      "artifact": "XiaomiMiMo/MiMo-V2.5",
+      "routes": [],
+      "facts": {
+        "retires": {
+          "value": "2026-10-21",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model, deprecation notice"
+            },
+            {
+              "source": "mimo-deprecations",
+              "locator": "Deprecated model on 2026.10.21 table"
+            }
+          ]
+        },
+        "successor": {
+          "value": "mimo-v2.6-flash, mimo-v2.6-pro",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model, deprecation notice; Quick Selection Guide"
+            },
+            {
+              "source": "mimo-deprecations",
+              "locator": "Deprecated model on 2026.10.21 table, Note column"
+            }
+          ],
+          "note": "The models page recommends moving to mimo-v2.6-flash or mimo-v2.6-pro, but the deprecations page says no system replacement exists, so requests fail after the date instead of switching over."
+        },
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Context Window: 1M"
+            },
+            {
+              "source": "hf-mimo-v2.5",
+              "locator": "config.json, max_position_embeddings"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Maximum Output: 128K"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Request Parameters, thinking.type"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Multi-turn Conversation Pass-through Requirements"
+            }
+          ]
+        },
+        "revision": {
+          "value": "63651580ca774f8504f676040460aed3e1244ac1",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 310775040000,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "mimo-v2.5-pro": {
+      "status": "retiring",
+      "displayName": "MiMo V2.5 Pro",
+      "artifact": "XiaomiMiMo/MiMo-V2.5-Pro",
+      "routes": [],
+      "facts": {
+        "retires": {
+          "value": "2026-10-21",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model, deprecation notice"
+            },
+            {
+              "source": "mimo-deprecations",
+              "locator": "Deprecated model on 2026.10.21 table"
+            }
+          ]
+        },
+        "successor": {
+          "value": "mimo-v2.6-flash, mimo-v2.6-pro",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model, deprecation notice; Quick Selection Guide"
+            },
+            {
+              "source": "mimo-deprecations",
+              "locator": "Deprecated model on 2026.10.21 table, Note column"
+            }
+          ],
+          "note": "The models page recommends moving to mimo-v2.6-flash or mimo-v2.6-pro, but the deprecations page says no system replacement exists, so requests fail after the date instead of switching over."
+        },
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Context Window: 1M"
+            },
+            {
+              "source": "hf-mimo-v2.5-pro",
+              "locator": "config.json, max_position_embeddings"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Maximum Output: 128K"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Request Parameters, thinking.type"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Multi-turn Conversation Pass-through Requirements"
+            }
+          ]
+        },
+        "revision": {
+          "value": "21d1ecfecd7bd70f31be25ca49d7edd21f003659",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5-pro",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 1023182841600,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5-pro",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-mimo-v2.5-pro",
+              "locator": "record.json cardData"
+            }
+          ]
+        }
+      }
+    },
+    "mimo-v2.6-pro": {
+      "status": "current",
+      "displayName": "MiMo V2.6 Pro",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/mimo-v2.6-pro"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Context Window: 1M"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Maximum Output: 128K"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Request Parameters, thinking.type; Default Status"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Multi-turn Conversation Pass-through Requirements"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-22",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-model-updates",
+              "locator": "2026-09-22 MiMo-V2.6 Series Release"
+            }
+          ]
+        }
+      }
+    },
+    "mimo-v2.6-flash": {
+      "status": "current",
+      "displayName": "MiMo V2.6 Flash",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/mimo-v2.6-flash"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Context Window: 1M"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Maximum Output: 128K"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Request Parameters, thinking.type; Default Status"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Multi-turn Conversation Pass-through Requirements"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-22",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-model-updates",
+              "locator": "2026-09-22 MiMo-V2.6 Series Release"
+            }
+          ]
+        }
+      }
+    },
+    "mimo-v2.6-pro-ultraspeed": {
+      "status": "current",
+      "displayName": "MiMo V2.6 Pro Ultraspeed",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Context Window: 1M"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-models",
+              "locator": "Text Generation Model table, Maximum Output: 128K"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Request Parameters, thinking.type; Default Status"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Parameter Limitations"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-deep-thinking",
+              "locator": "Important Notes, Multi-turn Conversation Pass-through Requirements"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-09-22",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "mimo-model-updates",
+              "locator": "2026-09-22 MiMo-V2.6 Series Release"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "mimo-keep-reasoning-content",
+      "text": "On turns with tool calls, send reasoning content back unchanged. Dropping it lowers instruction following and raises hallucination; OpenCode and Goose are named as affected tools.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "mimo-deep-thinking",
+      "locator": "Important Notes, Multi-turn Conversation Pass-through Requirements",
+      "surfaces": [
+        "card",
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "mimo-v26-current",
+      "text": "MiMo V2.6 (pro, flash) replaces V2.5, which retires on 2026-10-21. Use V2.6 for new work; ultraspeed is a contact-sales tier with no Pitwall route.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "mimo-models",
+      "locator": "Text Generation Model, deprecation notice; Quick Selection Guide",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

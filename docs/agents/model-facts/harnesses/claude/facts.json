@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/claude",
+  "facts": {
+    "headlessFlag": {
+      "value": "-p",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "cc-headless",
+          "locator": "Basic usage, first paragraph (-p or --print)"
+        }
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "json", "stream-json"],
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "cc-headless",
+          "locator": "Get structured output, --output-format list"
+        }
+      ]
+    },
+    "effortFlag": {
+      "value": "--effort",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "cc-cli-reference",
+          "locator": "CLI flags table, --effort row"
+        }
+      ]
+    },
+    "permissionDefault": {
+      "value": "default (Manual): asks before shell commands, file edits, and web access",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "cc-permissions",
+          "locator": "Permission modes table, default row"
+        },
+        {
+          "source": "cc-headless",
+          "locator": "Auto-approve tools, built-in starting permission mode for -p is Manual"
+        }
+      ]
+    },
+    "sandboxDefault": {
+      "value": "off; enabled per project through the /sandbox panel or sandbox.enabled in settings",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "cc-sandboxing",
+          "locator": "Get started, step describing sandbox.enabled in user settings"
+        }
+      ]
+    },
+    "instructionFiles": {
+      "value": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", "AGENTS.md"],
+      "method": "reviewed",
+      "note": "AGENTS.md is read only when no CLAUDE.md file exists in the working directory or above it.",
+      "evidence": [
+        {
+          "source": "cc-memory",
+          "locator": "How CLAUDE.md files load"
+        },
+        {
+          "source": "cc-memory",
+          "locator": "AGENTS.md, table of what Claude reads"
+        }
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "cc-sub-agents",
+          "locator": "Built-in subagents"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "claude-headless-bare",
+      "text": "Run scripted calls as claude -p with --bare. Without it, -p loads hooks, MCP servers, and CLAUDE.md from the working directory, even in a folder you never trusted.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cc-headless",
+      "locator": "Start faster with bare mode",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "claude-headless-permission-mode",
+      "text": "A -p run starts in Manual permission mode, so name the mode or the allowed tools up front. Unattended runs stall or deny otherwise.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cc-headless",
+      "locator": "Auto-approve tools",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "claude-md-discovery",
+      "text": "Claude Code loads CLAUDE.md and CLAUDE.local.md from the working directory and every directory above it, root first. AGENTS.md is read only when no CLAUDE.md exists.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "cc-memory",
+      "locator": "How CLAUDE.md files load",
+      "surfaces": ["reference", "ledger"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "pitwall-local",
+  "interface": {
+    "displayName": "Pitwall Agent Routing"
+  },
+  "plugins": [
+    {
+      "name": "pitwall-codex",
+      "version": "0.3.0a1",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

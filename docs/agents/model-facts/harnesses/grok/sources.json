@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/grok",
+  "sources": [
+    {
+      "id": "grok-headless",
+      "url": "https://docs.x.ai/build/cli/headless-scripting.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a4f39daf25f81aba5dba79265d12d0e4ec444e6b28dcbe3c2335c05401052097",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:a4f39daf25f81aba5dba79265d12d0e4ec444e6b28dcbe3c2335c05401052097",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-cli-reference",
+      "url": "https://docs.x.ai/build/cli/reference.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:d6c944c885ac72a4f4d6036c1796537b795f805bff512c8a31a5f5f10932ee6e",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:d6c944c885ac72a4f4d6036c1796537b795f805bff512c8a31a5f5f10932ee6e",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-permissions",
+      "url": "https://docs.x.ai/build/features/permissions.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:c5bad5c416aa9aa1178ba178de33d36a1c45739ad5b727bdf28332eca5eb4791",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:c5bad5c416aa9aa1178ba178de33d36a1c45739ad5b727bdf28332eca5eb4791",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-sandbox",
+      "url": "https://docs.x.ai/build/features/sandbox.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6795d7dde08430ad2db159803a8b5e5763e2530ea423637b871334326de52d06",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6795d7dde08430ad2db159803a8b5e5763e2530ea423637b871334326de52d06",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-project-rules",
+      "url": "https://docs.x.ai/build/features/project-rules.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1077d4bf3497f8c2a9022d82c251876e091f621e98f85e0b1c4eb1d5fceab383",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1077d4bf3497f8c2a9022d82c251876e091f621e98f85e0b1c4eb1d5fceab383",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "grok-subagents",
+      "url": "https://docs.x.ai/build/features/subagents.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:42511685ebf61b0e7fb1e188d2e97b08d33afe033f4cc7135a68da5c0bdb8d0b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:42511685ebf61b0e7fb1e188d2e97b08d33afe033f4cc7135a68da5c0bdb8d0b",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://docs.x.ai/llms.txt Grok Build section; no change log page"
+    }
+  ],
+  "watch": []
+}

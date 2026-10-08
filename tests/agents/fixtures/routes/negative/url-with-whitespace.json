@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "models": {
+    "bad-url": {
+      "model": "example/model",
+      "endpoint": {
+        "baseUrl": "https://example.invalid/v1 trailing"
+      }
+    }
+  }
+}

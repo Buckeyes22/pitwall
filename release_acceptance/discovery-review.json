@@ -1,0 +1,888 @@
+{
+  "schema_version": "discovery-review.v2",
+  "scope": "One reviewed entry per open discovery issue: what the dynamic construct produces, or which journey covers the unresolved scope, and the tests that prove it. tests/release_acceptance/test_discovery_review.py keeps it exact and current.",
+  "entries": [
+    {
+      "issue_code": "deferred-scope",
+      "domain": "cli",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The CLI inventory is J36's: every command path and argument surface through the entry points.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_command_path_has_a_fixture",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "aliased_constructors",
+      "domain": "cli_arguments",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "J36's explorer instruments argparse.ArgumentParser at runtime, so parsers built through aliases or factories register every command and argument at its source line.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "dynamic_command_name",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/routing.py:59",
+      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "reviewer": "root",
+      "interpretation": "The loop names exactly `jobs status`, `jobs result`, and `jobs follow`; follow alone adds --max-polls and --interval.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_command_path_has_a_fixture",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "dynamic_command_name",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/runpod_resources.py:178",
+      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "reviewer": "root",
+      "interpretation": "_payload_mutation is called with the literal name \"create\" for pods, endpoints, templates, volumes, and registry.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_command_path_has_a_fixture",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "dynamic_command_name",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/runpod_resources.py:192",
+      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "reviewer": "root",
+      "interpretation": "_identified_payload_mutation is called with the literal names \"update\" (pods, endpoints, templates), \"grow\" (volumes), and \"replace\" (registry).",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_command_path_has_a_fixture",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "helper_added_arguments",
+      "domain": "cli_arguments",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Options added through helper functions are attributed at runtime by J36 to the command that owns each parser; the helper sites carry their own unresolved_parser_binding entries.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "non_target_files",
+      "domain": "cli_arguments",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "J36 walks every command path from both entry points, so surfaces defined outside the listed target files are registered and exercised.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "runtime_behavior",
+      "domain": "cli_arguments",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "J36 runs every command path through the installed entry points and pins its exit code and JSON keys; J44 does the same for the installed wheel and sdist.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command",
+        "scripts/release/smoke_artifacts.py::_smoke_offline"
+      ]
+    },
+    {
+      "issue_code": "scope",
+      "domain": "cli_arguments",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The static unit reads literal argparse only; J36 is the exhaustive runtime inventory (442 argument surfaces).",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/output.py:138",
+      "source_sha256": "07f808a5fa18caf3470e6022e946aa8a787116b892089b73410ae7a2861c1289",
+      "reviewer": "root",
+      "interpretation": "add_json_argument adds --json (store_true) to each parser it is given; every command that calls it owns its own --json surface.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/routing.py:74",
+      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "reviewer": "root",
+      "interpretation": "_request_args adds the capability_id positional to `jobs plan` and `jobs submit`.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/routing.py:75",
+      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "reviewer": "root",
+      "interpretation": "_request_args adds --provider-id to `jobs plan` and `jobs submit`.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/routing.py:76",
+      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "reviewer": "root",
+      "interpretation": "_request_args adds --input-json (default \"{}\") to `jobs plan` and `jobs submit`.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/runpod_market.py:34",
+      "source_sha256": "e57c4ff488ef8fa7c88693416cd33ceaf0d36eed8524d67a78a24e4c16db7dc2",
+      "reviewer": "root",
+      "interpretation": "_add_runpod_catalogue_arguments adds --refresh to both `runpod catalogue` parsers (the subcommand and the standalone prog).",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/runpod_resources.py:209",
+      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "reviewer": "root",
+      "interpretation": "_mutation_flags adds the required --idempotency-key to every create, update, grow, replace, and delete resource command.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/runpod_resources.py:210",
+      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "reviewer": "root",
+      "interpretation": "_mutation_flags adds --dry-run (store_true) to every create, update, grow, replace, and delete resource command.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/runpod_resources.py:215",
+      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "reviewer": "root",
+      "interpretation": "_mutation_flags adds --confirm to every create, update, grow, replace, and delete resource command.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/volume_files.py:100",
+      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "reviewer": "root",
+      "interpretation": "_add_volume_context adds the volume_id positional to volume-files list, upload, download, and delete.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/volume_files.py:101",
+      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "reviewer": "root",
+      "interpretation": "_add_volume_context adds the data_center_id positional to volume-files list, upload, download, and delete.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/volume_files.py:103",
+      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "reviewer": "root",
+      "interpretation": "_add_volume_context(object_key=True) adds the object_key positional to volume-files upload, download, and delete.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/volume_files.py:107",
+      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "reviewer": "root",
+      "interpretation": "_add_local_path adds the local_path positional to volume-files upload and download.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "unresolved_parser_binding",
+      "domain": "cli_arguments",
+      "source": "src/pitwall/cli/volume_files.py:108",
+      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "reviewer": "root",
+      "interpretation": "_add_local_path adds --root (default \".\") to volume-files upload and download.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "confirmation",
+      "domain": "cli_dispatch",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "CLI confirmation is a typed --confirm flag: a wrong value stops before any service or pool is opened, an exact value proceeds, and --dry-run previews without writing.",
+      "evidence": [
+        "tests/cli/test_runpod_resources.py::test_wrong_confirmation_stops_before_shared_service",
+        "tests/cli/test_runpod_resources.py::test_exact_confirmation_preserves_nested_endpoint_controls",
+        "tests/cli/test_runpod_resources.py::test_dry_run_is_zero_write_preview_without_confirmation",
+        "tests/cli/test_volume_files.py::test_cli_requires_explicit_overwrite_confirmation_and_redacts_provider_failures",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "options",
+      "domain": "cli_dispatch",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Per-command options are registered and documented by J36 at runtime.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "output_modes",
+      "domain": "cli_dispatch",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "J36 pins each command's --json keys; the human mode is exercised by the same command runs.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "scope",
+      "domain": "cli_dispatch",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The static unit reads root commands and literal entry points; J36 walks the full command tree and tests/test_service_entry_points.py covers the service entry points.",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_command_path_has_a_fixture",
+        "tests/release/test_cli_all_commands_journey.py::test_command",
+        "tests/test_service_entry_points.py::test_help_prints_usage_and_exits_zero_without_starting"
+      ]
+    },
+    {
+      "issue_code": "subcommands",
+      "domain": "cli_dispatch",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "J36 enumerates nested subcommands by walking the live parser tree and requires a fixture for every command path (145).",
+      "evidence": [
+        "tests/release/test_cli_all_commands_journey.py::test_every_command_path_has_a_fixture",
+        "tests/release/test_cli_all_commands_journey.py::test_command"
+      ]
+    },
+    {
+      "issue_code": "config_files",
+      "domain": "config",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "pitwall.toml (./pitwall.toml or PITWALL_CONFIG_FILE) applies every settings field and the environment overrides it.",
+      "evidence": [
+        "tests/release/test_config_keys_journey.py::test_setting_field"
+      ]
+    },
+    {
+      "issue_code": "deferred-scope",
+      "domain": "config",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The configuration inventory is J37's.",
+      "evidence": [
+        "tests/release/test_config_keys_journey.py::test_every_config_surface_has_a_fixture"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:226",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "PitwallSettings.r2_temp_credential_ttl_s defaults to DEFAULT_R2_TEMP_CREDENTIAL_TTL_S = 21600; the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_settings_default",
+        "tests/release/test_config_keys_journey.py::test_setting_field"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:230",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "PitwallSettings.r2_temp_credential_permission defaults to DEFAULT_R2_TEMP_CREDENTIAL_PERMISSION = \"object-read-write\"; the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_settings_default",
+        "tests/release/test_config_keys_journey.py::test_setting_field"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:302",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "PitwallSettings.pitwall_routing_weights defaults to default_factory=dict -> {}; the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_settings_default",
+        "tests/release/test_config_keys_journey.py::test_routing_weight"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:323",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "PitwallSettings.pitwall_monthly_budget_usd defaults to Decimal(\"50.0\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_settings_default",
+        "tests/release/test_config_keys_journey.py::test_setting_field"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:327",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "PitwallSettings.pitwall_per_request_max_usd defaults to Decimal(\"10.0\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_settings_default",
+        "tests/release/test_config_keys_journey.py::test_setting_field"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:343",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "PitwallSettings.pitwall_budget_breach_kill_headroom_floor_usd defaults to Decimal(\"0.0\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_settings_default",
+        "tests/release/test_config_keys_journey.py::test_setting_field"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:486",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "AgentProfilesSettings.defaults defaults to default_factory=AgentProfileDefaults -> an empty defaults table; pitwall.toml [agents.profiles.defaults] overrides it.",
+      "evidence": [
+        "tests/config/test_agents_table.py::test_agents_table_validated",
+        "tests/config/test_agents_table.py::test_agents_table_optional"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:487",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "AgentProfilesSettings.endpoints defaults to default_factory=dict -> {}; pitwall.toml [agents.profiles.endpoints] overrides it.",
+      "evidence": [
+        "tests/config/test_agents_table.py::test_agents_table_validated",
+        "tests/config/test_agents_table.py::test_agents_table_optional"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:488",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "AgentProfilesSettings.harnesses defaults to default_factory=dict -> {}; pitwall.toml [agents.profiles.harnesses] overrides it.",
+      "evidence": [
+        "tests/config/test_agents_table.py::test_agents_table_validated",
+        "tests/config/test_agents_table.py::test_agents_table_optional"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:489",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "AgentProfilesSettings.models defaults to default_factory=dict -> {}; pitwall.toml [agents.profiles.models] overrides it.",
+      "evidence": [
+        "tests/config/test_agents_table.py::test_agents_table_validated",
+        "tests/config/test_agents_table.py::test_agents_table_optional"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:496",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "AgentsSettings.profiles defaults to default_factory=AgentProfilesSettings -> an empty profiles table; pitwall.toml [agents.profiles] overrides it.",
+      "evidence": [
+        "tests/config/test_agents_table.py::test_agents_table_validated",
+        "tests/config/test_agents_table.py::test_agents_table_optional"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:62",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "RoutingWeights.cost defaults to Decimal(\"1\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_routing_weight_default",
+        "tests/release/test_config_keys_journey.py::test_routing_weight"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:63",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "RoutingWeights.latency defaults to Decimal(\"0.001\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_routing_weight_default",
+        "tests/release/test_config_keys_journey.py::test_routing_weight"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:64",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "RoutingWeights.w_quota defaults to Decimal(\"10\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_routing_weight_default",
+        "tests/release/test_config_keys_journey.py::test_routing_weight"
+      ]
+    },
+    {
+      "issue_code": "dynamic_default",
+      "domain": "config",
+      "source": "src/pitwall/config.py:65",
+      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "reviewer": "root",
+      "interpretation": "RoutingWeights.w_reset defaults to Decimal(\"2.5\"); the environment and pitwall.toml override it.",
+      "evidence": [
+        "tests/config/test_dynamic_defaults.py::test_routing_weight_default",
+        "tests/release/test_config_keys_journey.py::test_routing_weight"
+      ]
+    },
+    {
+      "issue_code": "other_projects",
+      "domain": "config",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Agent Routing's configuration is routes.json, driven end to end by J39 (add, list, probe, doctor, replace, remove).",
+      "evidence": [
+        "tests/agents/test_journeys.py::test_route_lifecycle",
+        "tests/agents/test_routes.py::test_add_replaces_and_remove_deletes"
+      ]
+    },
+    {
+      "issue_code": "runtime_env_binding",
+      "domain": "config",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Environment binding, TOML precedence, and validation are J37's; keys services read directly are validated by name before start.",
+      "evidence": [
+        "tests/release/test_config_keys_journey.py::test_setting_field",
+        "tests/release/test_config_keys_journey.py::test_env_example_key_reaches_its_consumer",
+        "tests/config/test_consumer_env.py::test_config_check_names_an_invalid_service_key_without_echoing_it"
+      ]
+    },
+    {
+      "issue_code": "scope",
+      "domain": "config",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The static unit reads annotated settings fields and .env.example names; J37 binds all 186 configuration surfaces.",
+      "evidence": [
+        "tests/release/test_config_keys_journey.py::test_every_config_surface_has_a_fixture"
+      ]
+    },
+    {
+      "issue_code": "deferred-scope",
+      "domain": "gateway",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The Python gateway (pitwall gateway serve) and its provider routes are exercised by J32 (supervised gateway, per-route upstreams, typed quota signals) and J33 (the Messages route), and by tests/gateway.",
+      "evidence": [
+        "tests/release/test_gateway_journey.py::test_j32_routes_reach_their_upstream_and_quota_signals_are_typed",
+        "tests/release/test_messages_journey.py::test_j33_tool_use_round_trip_through_the_messages_route",
+        "tests/gateway/test_app.py"
+      ]
+    },
+    {
+      "issue_code": "compose_include",
+      "domain": "ops",
+      "source": "docker-compose.prod.yml:3",
+      "source_sha256": "1454f6927550d013d4aedaec504a9492d3d3e991eecbcdf835139273d66724ef",
+      "reviewer": "root",
+      "interpretation": "docker-compose.prod.yml only includes docker-compose.yml and renders to the identical service set.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_prod_compose_includes_the_canonical_stack_unchanged"
+      ]
+    },
+    {
+      "issue_code": "deferred-scope",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Operations are J42 (restore drill), J43 (upgrade from the last release), and J44 (installed artifacts).",
+      "evidence": [
+        "tests/integration/test_backup_restore_drill.py::test_backup_restore_compares_all_tables_with_reserved_password",
+        "tests/integration/test_upgrade_from_release.py::test_last_release_database_upgrades_in_place",
+        "scripts/release/smoke_artifacts.py::_smoke_mcp"
+      ]
+    },
+    {
+      "issue_code": "docs_runbooks",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The backup and restore runbook procedure is the drill J42 runs; retention archive and purge are covered by the retention suite.",
+      "evidence": [
+        "tests/integration/test_backup_restore_drill.py::test_backup_restore_compares_all_tables_with_reserved_password",
+        "tests/retention/test_archive_protects_audit_tables.py",
+        "tests/retention/test_cli.py"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.testinfra.yml:10",
+      "source_sha256": "9997fda35fa5c0598c6c53ecd846847c9635fc5bafc167f294db70348768bbb6",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.testinfra.yml:27",
+      "source_sha256": "9997fda35fa5c0598c6c53ecd846847c9635fc5bafc167f294db70348768bbb6",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:109",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:146",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:15",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:176",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:33",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:53",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "dynamic_compose_expression",
+      "domain": "ops",
+      "source": "docker-compose.yml:69",
+      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "reviewer": "root",
+      "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/release/test_compose_rendered.py::test_every_published_port_binds_loopback"
+      ]
+    },
+    {
+      "issue_code": "other_inventories",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Every other inventory unit carries its own entries in this file; operations here cover Compose, images, migrations, and release scripts.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py",
+        "tests/integration/test_upgrade_from_release.py::test_last_release_database_upgrades_in_place"
+      ]
+    },
+    {
+      "issue_code": "runtime_execution",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Images run `python -m pitwall.<service>`; the service entry points answer --help and refuse unknown arguments before starting, and J44 runs the installed services (API, MCP) from the wheel and sdist.",
+      "evidence": [
+        "tests/test_service_entry_points.py::test_an_unknown_argument_is_refused_before_starting",
+        "scripts/release/smoke_artifacts.py::_smoke_api",
+        "scripts/release/smoke_artifacts.py::_smoke_mcp"
+      ]
+    },
+    {
+      "issue_code": "runtime_substitution",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Compose substitution is evaluated by `docker compose config` in the canonical environment and every flagged expression is pinned.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value"
+      ]
+    },
+    {
+      "issue_code": "scope",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The static unit reads Dockerfiles, Compose, migrations, and release scripts literally; their rendered and executed behavior is pinned by the Compose render test, J43, and J44.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value",
+        "tests/integration/test_upgrade_from_release.py::test_last_release_database_upgrades_in_place",
+        "scripts/release/smoke_artifacts.py::_smoke_offline"
+      ]
+    },
+    {
+      "issue_code": "secret_values",
+      "domain": "ops",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Secrets are required Compose variables with no default (${VAR:?}); rendering with distinct placeholders proves each reaches exactly the services that read it and the connection URLs that embed it.",
+      "evidence": [
+        "tests/release/test_compose_rendered.py::test_flagged_expression_renders_to_its_pinned_value"
+      ]
+    },
+    {
+      "issue_code": "deferred-scope",
+      "domain": "routing",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Routing policy is the production planner: deterministic plans, explicit constraints, weighted objectives, and fallback order.",
+      "evidence": [
+        "tests/routing/test_production_routing.py::test_same_snapshots_and_now_produce_byte_stable_plan_without_payload",
+        "tests/routing/test_production_routing.py::test_weighted_objective_and_priority_compatibility_are_explicit",
+        "tests/routing/test_production_routing.py::test_openai_explicit_fallback_keeps_weighted_order_for_remaining_attempts"
+      ]
+    },
+    {
+      "issue_code": "unresolved-adapter-class-contracts",
+      "domain": "routing",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Each adapter's argv contract is pinned by the adapter suite and, through every shim, by J40.",
+      "evidence": [
+        "tests/agents/test_provider_adapters.py::ProviderAdapterTests",
+        "tests/agents/test_journeys.py::test_every_harness_shim"
+      ]
+    },
+    {
+      "issue_code": "unresolved-channel-routing-mcp-tools",
+      "domain": "routing",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The channel MCP tools (dispatch, inbox, answer, steer) are covered by the orchestrator and subagent tool suites and J41's scripted exits.",
+      "evidence": [
+        "tests/agents/test_mcp_orchestrator_tools.py::test_inbox_then_answer",
+        "tests/agents/test_mcp_subagent_tools.py::SubagentToolTests",
+        "tests/agents/test_journeys.py::test_inbox_answer_steer_and_stop_move_the_mailbox"
+      ]
+    },
+    {
+      "issue_code": "unresolved-plugin-manifests-and-marketplaces",
+      "domain": "routing",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Plugin manifests and marketplace entries are pinned by the marketplace and plugin identity suites.",
+      "evidence": [
+        "tests/agents/test_marketplaces.py::MarketplaceManifestTests",
+        "tests/agents/test_plugin_identity.py::test_only_one_plugin_script"
+      ]
+    },
+    {
+      "issue_code": "deferred-scope",
+      "domain": "tui",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The console inventory is J38's: every view in every source state at two sizes, and every app and view binding.",
+      "evidence": [
+        "tests/release/test_console_views_journey.py::test_view_in_state",
+        "tests/release/test_console_views_journey.py::test_every_view_key_switches_views"
+      ]
+    },
+    {
+      "issue_code": "unresolved-handler-behaviour",
+      "domain": "tui",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Handler effects are asserted behaviorally: J38 presses every binding and checks the view change, the source reload, or the action reaching its source.",
+      "evidence": [
+        "tests/release/test_console_views_journey.py::test_r_reloads_the_view_source",
+        "tests/release/test_console_views_journey.py::test_provider_actions_reach_the_source",
+        "tests/release/test_console_views_journey.py::test_help_command_and_search_overlays_open_act_and_dismiss"
+      ]
+    },
+    {
+      "issue_code": "unresolved-runtime-construction",
+      "domain": "tui",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "Runtime-built widgets are observed in the running app: J38 asserts each view's rows and text in every source state.",
+      "evidence": [
+        "tests/release/test_console_views_journey.py::test_view_in_state"
+      ]
+    },
+    {
+      "issue_code": "unresolved-textual-base-bindings",
+      "domain": "tui",
+      "source": null,
+      "source_sha256": null,
+      "reviewer": "root",
+      "interpretation": "The inherited Textual App bindings that matter to an operator (q and ctrl+c quit) are pressed by J38; the help overlay lists and dismisses the rest.",
+      "evidence": [
+        "tests/release/test_console_views_journey.py::test_quit_bindings_end_the_console",
+        "tests/tui/test_help_overlay.py::test_help_opens_and_closes_on_top_level_screens"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/src/pitwall/agents/resources/schemas/harness-registry.schema.json",
+  "title": "Pitwall agents harness registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "hosts", "harnesses"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "hosts": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z0-9-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/host" }
+    },
+    "harnesses": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z0-9-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/harness" }
+    },
+    "modelFamilies": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/modelFamily" }
+    }
+  },
+  "$defs": {
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "packagePath", "nativeHarnesses"],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "packagePath": { "type": "string", "minLength": 1 },
+        "nativeHarnesses": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "displayName", "shim", "binaryCandidates", "nativeHosts", "promptDelivery", "harnessKind", "endpointDelivery",
+        "allowUnknownModels", "defaultModel", "modelSelectors", "effort", "capabilities",
+        "models", "routeFamilies"
+      ],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "shim": { "type": "string", "pattern": "^[a-z0-9-]+-shim\\.sh$" },
+        "binaryCandidates": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "binaryOverrideEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+        "nativeHosts": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "promptDelivery": { "enum": ["stdin", "argv", "file"] },
+        "harnessKind": { "enum": ["model-bound", "model-agnostic"] },
+        "endpointDelivery": { "enum": ["none", "env", "config-sync"] },
+        "endpointEnv": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["baseUrl", "apiKey", "model"],
+          "properties": {
+            "baseUrl": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+            "apiKey": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+            "model": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" }
+          }
+        },
+        "configSync": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "properties": { "path": { "type": "string", "minLength": 1 } }
+        },
+        "allowUnknownModels": { "type": "boolean" },
+        "defaultModel": { "$ref": "#/$defs/defaultModel" },
+        "modelSelectors": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "effort": { "$ref": "#/$defs/effort" },
+        "capabilities": { "$ref": "#/$defs/capabilities" },
+        "models": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$" },
+          "additionalProperties": { "$ref": "#/$defs/model" }
+        },
+        "routeFamilies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/routeFamily" }
+        }
+      }
+    },
+    "defaultModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "fallback"],
+      "properties": {
+        "source": { "enum": ["registry", "codex-config", "kimi-config", "qwen-config", "pi-config", "hermes-config", "cline-config", "goose-config", "dsh-config", "positional"] },
+        "fallback": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "source": { "const": "positional" } }, "required": ["source"] },
+          "then": { "properties": { "fallback": { "type": "null" } } }
+        }
+      ]
+    },
+    "effort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "key", "values"],
+      "properties": {
+        "kind": { "enum": ["config", "harness-flag", "none"] },
+        "key": { "type": ["string", "null"], "minLength": 1 },
+        "values": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "none" } }, "required": ["kind"] },
+          "then": {
+            "properties": {
+              "key": { "type": "null" },
+              "values": { "maxItems": 0 }
+            }
+          },
+          "else": { "properties": { "key": { "type": "string", "minLength": 1 } } }
+        }
+      ]
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authProbe", "configProbe", "worktreeDispatch", "structuredOutput"],
+      "properties": {
+        "authProbe": { "type": "boolean" },
+        "configProbe": { "type": "boolean" },
+        "worktreeDispatch": { "type": "boolean" },
+        "structuredOutput": { "type": "boolean" }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "displayName", "aliases", "effortValues", "promptReference", "runtimeReference",
+        "capabilityCard", "provenance"
+      ],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "effortValues": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "promptReference": { "type": "string", "minLength": 1 },
+        "runtimeReference": { "type": "string", "minLength": 1 },
+        "capabilityCard": { "type": "string", "minLength": 1 },
+        "provenance": { "type": "string", "minLength": 1 }
+      }
+    },
+    "routeFamily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "displayName", "patterns", "example", "promptReference", "runtimeReference",
+        "capabilityCard"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "displayName": { "type": "string", "minLength": 1 },
+        "patterns": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+        "example": { "type": "string", "minLength": 1 },
+        "promptReference": { "type": "string", "minLength": 1 },
+        "runtimeReference": { "type": "string", "minLength": 1 },
+        "capabilityCard": { "type": "string", "minLength": 1 }
+      }
+    },
+    "modelFamily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "vendor", "patterns", "models", "license", "contextWindow", "reasoningControl", "modelCardUrl", "promptReference", "runtimeReference", "capabilityCard", "provenance"],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "vendor": { "type": "string", "minLength": 1 },
+        "patterns": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+        "models": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+        "license": { "type": "string", "minLength": 1 },
+        "contextWindow": { "type": "integer", "minimum": 1 },
+        "reasoningControl": {
+          "type": "object", "additionalProperties": false, "required": ["kind", "detail"],
+          "properties": {
+            "kind": { "enum": ["system-prompt-line", "request-parameter", "chat-template", "system-prompt-token", "none"] },
+            "detail": { "type": "string", "minLength": 1 }
+          }
+        },
+        "samplingDefaults": { "type": "object" },
+        "servingHint": { "type": "string", "minLength": 1 },
+        "modelCardUrl": { "type": "string", "pattern": "^https://" },
+        "promptReference": { "type": "string", "minLength": 1 },
+        "runtimeReference": { "type": "string", "minLength": 1 },
+        "capabilityCard": { "type": "string", "minLength": 1 },
+        "provenance": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

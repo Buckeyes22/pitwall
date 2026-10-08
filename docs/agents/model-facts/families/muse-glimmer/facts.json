@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/muse-glimmer",
+  "models": {
+    "muse-glimmer-30b": {
+      "status": "current",
+      "displayName": "Muse Glimmer 30B",
+      "artifact": "meta-models/Muse-Glimmer-30B",
+      "facts": {
+        "revision": {
+          "value": "a4e59da52a7bc87ae7251dd5545c0dd437c44b68",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-muse-glimmer-30b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 29776626688,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-muse-glimmer-30b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-muse-glimmer-30b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "contextWindow": {
+          "value": 131072,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-muse-glimmer-30b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 64
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-muse-glimmer-30b",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "facts": {
+    "contextWindow": {
+      "value": 131072,
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-muse-glimmer-30b",
+          "locator": "config.json"
+        }
+      ]
+    },
+    "samplingDefaults": {
+      "value": {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "top_k": 64
+      },
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-muse-glimmer-30b",
+          "locator": "generation_config.json"
+        }
+      ]
+    },
+    "license": {
+      "value": {
+        "name": "Apache-2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "method": "extracted",
+      "evidence": [
+        {
+          "source": "hf-muse-glimmer-30b",
+          "locator": "record.json cardData"
+        }
+      ]
+    },
+    "effortValues": {
+      "value": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "meta-muse-glimmer-prompting",
+          "locator": "Reasoning and chain-of-thought, line 93"
+        },
+        {
+          "source": "hf-muse-glimmer-30b",
+          "locator": "README.md line 131, Reasoning Strength"
+        }
+      ]
+    },
+    "effortDefault": {
+      "value": "high",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "hf-muse-glimmer-30b",
+          "locator": "chat_template.jinja line 84"
+        },
+        {
+          "source": "meta-muse-glimmer-prompting",
+          "locator": "Reasoning and chain-of-thought, line 93"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "muse-glimmer-reasoning-strength",
+      "text": "Set effort with the reasoning_strength template argument or a 'Reasoning strength: <level>' system line; use high or xhigh for coding and agentic work.",
+      "applies": [
+        "*"
+      ],
+      "class": "artifact",
+      "source": "hf-muse-glimmer-30b",
+      "locator": "README.md line 131, Reasoning Strength",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-glimmer-stream-long-reasoning",
+      "text": "Reasoning chains often run to thousands of tokens; request streaming when serving so long generations do not hit request timeouts.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "meta-muse-glimmer-prompting",
+      "locator": "Reasoning and chain-of-thought, note on long traces",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

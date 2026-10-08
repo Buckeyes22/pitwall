@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-haiku-5",
+  "sources": [
+    {
+      "id": "anthropic-haiku-5-5",
+      "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:246522283d2f92e5b402bcbcc3588218c9027523c9984a7819f6c22dd2be0a5d",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:246522283d2f92e5b402bcbcc3588218c9027523c9984a7819f6c22dd2be0a5d",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-models-overview",
+      "url": "https://platform.claude.com/docs/en/models/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a509d966cf13c2e11009bde35c1dd279c6694bc7b26a0f19ab9395c00b04f1fb",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:a509d966cf13c2e11009bde35c1dd279c6694bc7b26a0f19ab9395c00b04f1fb",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-effort",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/effort.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-thinking-models",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:496a354b01b4b0057c26205b2f6f2178f994dd92a2a93e851a78a37d11939525",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:496a354b01b4b0057c26205b2f6f2178f994dd92a2a93e851a78a37d11939525",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-haiku-5-5-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-haiku-5-5.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:db7f37e24566aaacafdb46fbe7f9ec1065454a2f2612ad48bc19459b14795918",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:db7f37e24566aaacafdb46fbe7f9ec1065454a2f2612ad48bc19459b14795918",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-haiku-5-5-whats-new",
+      "url": "https://platform.claude.com/docs/en/models/haiku-5-5/whats-new-haiku-5-5.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a163623f8a831d66b71ce59d225c2befd42abc6863c21692af7b23187f13db07",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:a163623f8a831d66b71ce59d225c2befd42abc6863c21692af7b23187f13db07",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-haiku-5-5-migration",
+      "url": "https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:cf5a7bf0c79182e5292da912cc798a3aa1b49b3d4415f1f1c2f9ae588fc8a1a7",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:cf5a7bf0c79182e5292da912cc798a3aa1b49b3d4415f1f1c2f9ae588fc8a1a7",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-deprecations",
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-release-notes",
+      "url": "https://platform.claude.com/docs/en/release-notes/overview.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:087db9568b7f8e5e4dc9b879745f06bad3b0487413a58c1a02c818648ca23be2",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:087db9568b7f8e5e4dc9b879745f06bad3b0487413a58c1a02c818648ca23be2",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "cc-model-config",
+      "url": "https://code.claude.com/docs/en/model-config.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "reviewedAt": "2026-10-07"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "model",
+      "kind": "artifact",
+      "searchedAt": "2026-10-07",
+      "searched": "Hugging Face model API for author anthropic (no models listed) and Anthropic docs for released Claude Haiku 5.5 weights; none are published"
+    }
+  ],
+  "watch": [
+    {
+      "id": "anthropic-models",
+      "kind": "index",
+      "url": "https://platform.claude.com/llms.txt",
+      "pattern": "models/(haiku-[0-9][0-9-]*)/overview\\.md",
+      "ignore": [],
+      "seen": [
+        "haiku-4-5",
+        "haiku-5-5"
+      ]
+    }
+  ]
+}

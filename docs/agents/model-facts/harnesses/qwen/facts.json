@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/qwen",
+  "facts": {
+    "headlessFlag": {
+      "value": "-p",
+      "method": "reviewed",
+      "note": "qwen -p PROMPT (or --prompt) runs one prompt without the UI; stdin is also accepted as the prompt.",
+      "evidence": [
+        {"source": "qwen-code-headless", "locator": "line 300-301, Basic Usage, Direct Prompts; line 774, --prompt"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "json", "stream-json"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "qwen-code-headless", "locator": "line 779-783, --output-format, -o"}
+      ]
+    },
+    "effortFlag": {
+      "value": "capabilities.reasoning in the model entry",
+      "method": "reviewed",
+      "note": "The headless flag list has no effort flag. Effort tiers and the default are set per model entry through capabilities.reasoning (efforts, defaultEffort).",
+      "evidence": [
+        {"source": "qwen-code-providers", "locator": "line 583-593, Override reasoning capabilities"},
+        {"source": "qwen-code-headless", "locator": "line 778-930, CLI option list (no effort flag)"}
+      ]
+    },
+    "permissionDefault": {
+      "value": "auto (classifier approves safe actions, blocks risky ones)",
+      "method": "reviewed",
+      "evidence": [
+        {"source": "qwen-code-approval", "locator": "line 347-348, Quick Reference Guide, Auto Mode (default)"}
+      ]
+    },
+    "sandboxDefault": {
+      "value": "off; enabled with -s/--sandbox or QWEN_SANDBOX",
+      "method": "reviewed",
+      "note": "--yolo does not enable a sandbox, and headless runs warn when yolo has no sandbox configured.",
+      "evidence": [
+        {"source": "qwen-code-sandbox", "locator": "line 455-465, Enable sandboxing with command flag; line 503-513, precedence"},
+        {"source": "qwen-code-headless", "locator": "line 891-894, Safety in unattended runs"}
+      ]
+    },
+    "instructionFiles": {
+      "value": ["QWEN.md"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "qwen-code-headless", "locator": "line 479-480, --system-prompt note, QWEN.md"}
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {"source": "qwen-code-sub-agents", "locator": "line 286-299, Subagents, What are Subagents?"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "qwen-headless-yolo-no-sandbox",
+      "text": "qwen -p with --yolo approves every tool call and does not turn on a sandbox; pair it with -s or QWEN_SANDBOX, or the tools run with the host's privileges.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "qwen-code-headless",
+      "locator": "line 889-894, Safety in unattended runs",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-headless-run-budgets",
+      "text": "Unattended runs can be bounded with --max-session-turns, --max-wall-time, and --max-tool-calls; each is unlimited by default, so set one for delegated work.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "qwen-code-headless",
+      "locator": "line 858-875, --max-* options; line 896-899, Run-level budgets",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-approval-mode-values",
+      "text": "--approval-mode takes plan, default, auto-edit, auto, or yolo. The out-of-the-box mode is auto, while the value named default means ask for each edit and command.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "qwen-code-approval",
+      "locator": "line 336-348, Default and Quick Reference Guide; qwen-code-headless line 839-851",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-effort-is-model-config",
+      "text": "Qwen Code has no per-run effort flag. Reasoning tiers and the default come from capabilities.reasoning on the model entry in settings, so set them when defining a custom route.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "qwen-code-providers",
+      "locator": "line 583-593, Override reasoning capabilities",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

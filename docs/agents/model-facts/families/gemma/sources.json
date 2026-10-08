@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/gemma",
+  "sources": [
+    {
+      "id": "google-gemma-4-card",
+      "url": "https://ai.google.dev/gemma/docs/core/model_card_4.md.txt",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1d733304f4447461a60cc0ce156181c7b08d802c369d2fddf9d455cdaea11cf5",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1d733304f4447461a60cc0ce156181c7b08d802c369d2fddf9d455cdaea11cf5",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "google-gemma-thinking",
+      "url": "https://ai.google.dev/gemma/docs/capabilities/thinking.md.txt",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1f6d0dec3381ceeda6cf832d9c56eee6dd1ff3f037eb08737ac7cc56e86bda8c",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1f6d0dec3381ceeda6cf832d9c56eee6dd1ff3f037eb08737ac7cc56e86bda8c",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "google-gemma-4-formatting",
+      "url": "https://ai.google.dev/gemma/docs/core/prompt-formatting-gemma4.md.txt",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1462dfad886c6dba5399547444c30ef37ce5c3b1427ef0a446c1a099e37d21cb",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1462dfad886c6dba5399547444c30ef37ce5c3b1427ef0a446c1a099e37d21cb",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-gemma-4-31b-it",
+      "url": "https://huggingface.co/google/gemma-4-31B-it",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "google/gemma-4-31B-it",
+      "observedHash": "revision:842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-gemma-4-31b",
+      "url": "https://huggingface.co/google/gemma-4-31B",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "google/gemma-4-31B",
+      "observedHash": "revision:5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:5bbc2fb1c1b2c611d06e3d9f23c170ba21659d89",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-gemma-4-26b-a4b",
+      "url": "https://huggingface.co/google/gemma-4-26B-A4B",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "google/gemma-4-26B-A4B",
+      "observedHash": "revision:24548b62aa021d562695c04aaf7758a1ea47990b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:24548b62aa021d562695c04aaf7758a1ea47990b",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-gemma-4-12b",
+      "url": "https://huggingface.co/google/gemma-4-12B",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "google/gemma-4-12B",
+      "observedHash": "revision:023679ed352de9bb66cc873c9009ce3482585c08",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:023679ed352de9bb66cc873c9009ce3482585c08",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-gemma-4-e4b",
+      "url": "https://huggingface.co/google/gemma-4-E4B",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "google/gemma-4-E4B",
+      "observedHash": "revision:411aa17b749aa952df1359d2dcea73917a544d9a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:411aa17b749aa952df1359d2dcea73917a544d9a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-gemma-4-e2b",
+      "url": "https://huggingface.co/google/gemma-4-E2B",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "google/gemma-4-E2B",
+      "observedHash": "revision:d29ff6b45f081a49ee2733a859c9c9c2d95d1a6f",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:d29ff6b45f081a49ee2733a859c9c9c2d95d1a6f",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "https://ai.google.dev/gemma/docs/llms.txt; no release notes page for Gemma 4"
+    }
+  ],
+  "watch": [
+    {
+      "id": "google-gemma",
+      "kind": "huggingface-org",
+      "org": "google",
+      "pattern": "gemma-[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(GGUF|gguf|qat|QAT).*"
+      ],
+      "seen": [
+        "gemma-3-270m",
+        "gemma-3-270m-it",
+        "gemma-4-12B-it",
+        "gemma-4-12B-it-assistant",
+        "gemma-4-26B-A4B-it",
+        "gemma-4-26B-A4B-it-assistant",
+        "gemma-4-31B-it-assistant",
+        "gemma-4-E2B-it",
+        "gemma-4-E2B-it-assistant",
+        "gemma-4-E4B-it",
+        "gemma-4-E4B-it-assistant"
+      ]
+    }
+  ]
+}

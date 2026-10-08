@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "endpoints": {
+    "model-studio": {"kind": "model-studio", "plan": "token-plan-personal", "tier": "pro", "apiKeyEnv": "MODEL_STUDIO_API_KEY", "renewsOn": "2026-09-12"}
+  },
+  "models": {
+    "qwen-flash": {"model": "qwen3.8-flash", "endpoint": "model-studio", "harness": "opencode", "limits": {"context": 991808, "output": 131072}}
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/glm",
+  "sources": [
+    {
+      "id": "zai-glm-5-3",
+      "url": "https://docs.z.ai/guides/llm/glm-5.3.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:8463b31d9c5c0edf4f283b39d0e145a64159636cbd41cceee251f75a1006e20a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:8463b31d9c5c0edf4f283b39d0e145a64159636cbd41cceee251f75a1006e20a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "zai-glm-5-2",
+      "url": "https://docs.z.ai/guides/llm/glm-5.2.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:eeca971119068b0619137ce9c9d3c9362131baf16fdab0c067eefe5802919023",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:eeca971119068b0619137ce9c9d3c9362131baf16fdab0c067eefe5802919023",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "zai-glm-5-3-flash",
+      "url": "https://docs.z.ai/guides/vlm/glm-5.3-flash.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6abc795542c1eaa546704754b4dcba2160eadec3bdf715875b07105b90e027e9",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6abc795542c1eaa546704754b4dcba2160eadec3bdf715875b07105b90e027e9",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "zai-thinking-mode",
+      "url": "https://docs.z.ai/guides/capabilities/thinking-mode.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:ce29adde77f3936425663cd346879354eccf9c242b00c72b50d08f21c8bca5d8",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:ce29adde77f3936425663cd346879354eccf9c242b00c72b50d08f21c8bca5d8",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "zai-coding-best-practice",
+      "url": "https://docs.z.ai/devpack/resources/best-practice.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:526831b468497b1aed7a6639a5be4809d183ad75f840a7338cda69ce5ff431e2",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:526831b468497b1aed7a6639a5be4809d183ad75f840a7338cda69ce5ff431e2",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "zai-migrate",
+      "url": "https://docs.z.ai/guides/overview/migrate-to-glm-new.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:40e42f63b9e4c6632550b86daaef43f6c2419052474893e14861cb3ffa559b12",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:40e42f63b9e4c6632550b86daaef43f6c2419052474893e14861cb3ffa559b12",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "zai-release-notes",
+      "url": "https://docs.z.ai/release-notes/new-released.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b008a4791b34a6c2910a2c1d937a74c28e051e259b25d5efc91205a334c3bb9b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:b008a4791b34a6c2910a2c1d937a74c28e051e259b25d5efc91205a334c3bb9b",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-glm-5.3",
+      "url": "https://huggingface.co/zai-org/GLM-5.3",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "zai-org/GLM-5.3",
+      "observedHash": "revision:aca966e4e02791568aa6a4ced368624b3d897f42",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:aca966e4e02791568aa6a4ced368624b3d897f42",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-glm-5.3-flash",
+      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "zai-org/GLM-5.3-Flash",
+      "observedHash": "revision:eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-glm-5.2",
+      "url": "https://huggingface.co/zai-org/GLM-5.2",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "zai-org/GLM-5.2",
+      "observedHash": "revision:cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-glm-5.1",
+      "url": "https://huggingface.co/zai-org/GLM-5.1",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "zai-org/GLM-5.1",
+      "observedHash": "revision:26e1bd6e011feb778d25ae34b09b07074139d92d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:26e1bd6e011feb778d25ae34b09b07074139d92d",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "zai-models",
+      "kind": "index",
+      "url": "https://docs.z.ai/llms.txt",
+      "pattern": "guides/(?:llm|vlm)/(glm-[0-9][0-9a-z.-]*)\\.md",
+      "ignore": [],
+      "seen": []
+    },
+    {
+      "id": "zai-org",
+      "kind": "huggingface-org",
+      "org": "zai-org",
+      "pattern": "GLM-[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(FP8|BF16|AWQ|GGUF)"
+      ],
+      "seen": [
+        "GLM-4-32B-0414",
+        "GLM-4-32B-Base-0414",
+        "GLM-4-9B-0414",
+        "GLM-4.1V-9B-Base",
+        "GLM-4.1V-9B-Thinking",
+        "GLM-4.5",
+        "GLM-4.5-Air",
+        "GLM-4.5-Air-Base",
+        "GLM-4.5-Base",
+        "GLM-4.5V",
+        "GLM-4.6",
+        "GLM-4.6V",
+        "GLM-4.6V-Flash",
+        "GLM-4.7",
+        "GLM-4.7-Flash",
+        "GLM-5"
+      ]
+    }
+  ]
+}

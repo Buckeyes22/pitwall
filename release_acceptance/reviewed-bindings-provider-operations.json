@@ -1,0 +1,549 @@
+{
+  "schema_version": "reviewed-test-bindings.v1",
+  "scope": "Source-reviewed provider operations, production routing planning/job submission, serve metadata, and OpenAI-compatible relay bindings. All rows remain not_run; collection is not execution or provider evidence.",
+  "inventory": {
+    "source": "tests/api/test_route_inventory.py:12-135",
+    "sha256": "a86968f1e25d2cde9004e224ce3d81d839ff864d35c5aae0ea8860ac710d2727",
+    "surface_ids_reviewed": [
+      "rest:GET:/v1/capabilities",
+      "rest:GET:/v1/capabilities/{name}",
+      "rest:GET:/v1/provider-ops/descriptors",
+      "rest:GET:/v1/provider-ops/descriptors/{provider_id}",
+      "rest:GET:/v1/provider-ops/{provider_id}/availability",
+      "rest:GET:/v1/provider-ops/{provider_id}/health",
+      "rest:POST:/v1/serve",
+      "rest:POST:/v1/routing/preview",
+      "rest:POST:/v1/jobs",
+      "rest:GET:/v1/jobs/{workload_id}/events",
+      "rest:GET:/v1/openai/{capability}/v1/{path:path}",
+      "rest:POST:/v1/openai/{capability}/v1/{path:path}"
+    ]
+  },
+  "supporting_sources": [
+    {
+      "path": "tests/providers/_provider_operations.py",
+      "lines": "1-114",
+      "sha256": "1abb8ecc24a3057c9e7efa01fb9e232fb2bf3b16e7d99806dacc07fe8857e76c",
+      "role": "provider operations shared descriptor, availability, health models and no-egress recording stub"
+    },
+    {
+      "path": "src/pitwall/api/routes/provider_operations.py",
+      "lines": "1-118",
+      "sha256": "29c18396759ff44d766d1d0b60b29331778ab9826e0f051e0a8b914c7076d0e6",
+      "role": "provider operations REST route registration and bounds"
+    },
+    {
+      "path": "src/pitwall/api/routes/routing.py",
+      "lines": "1-167",
+      "sha256": "6714a688b1b789cf66c23469d2873cac115dfbd40ff10ec0a24ffee759685a54",
+      "role": "routing preview, job submission, and bounded job events route registration"
+    },
+    {
+      "path": "src/pitwall/api/routes/openai.py",
+      "lines": "1011-1016",
+      "sha256": "5e393c5de157ec4abd4612ffcbfb930411ac4f42e698cf279c0ac5b73f24a325",
+      "role": "OpenAI-compatible proxy method inventory"
+    }
+  ],
+  "bindings": [
+    {
+      "surface_id": "rest:GET:/v1/provider-ops/descriptors",
+      "framework": "pytest",
+      "source": "tests/api/test_provider_operations_route.py:34",
+      "test_source_sha256": "5b36ef4d3cb4032ec673c1cdade3db4686d65e306fd91c31e9072a47f040f790",
+      "reviewed_oracle": "descriptor listing preserves capability/enabled/limit query forwarding and shared descriptor serialization",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with StubProviderOperationsService and model fixtures from tests/providers/_provider_operations.py; no durable provider repository, live provider egress, or billing evidence.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_provider_operations_route.py::test_provider_operations_routes_return_the_shared_model_serialization"
+    },
+    {
+      "surface_id": "rest:GET:/v1/provider-ops/descriptors/{provider_id}",
+      "framework": "pytest",
+      "source": "tests/api/test_provider_operations_route.py:34",
+      "test_source_sha256": "5b36ef4d3cb4032ec673c1cdade3db4686d65e306fd91c31e9072a47f040f790",
+      "reviewed_oracle": "descriptor detail returns the shared provider descriptor model",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with StubProviderOperationsService and model fixtures from tests/providers/_provider_operations.py; no durable provider repository, live provider egress, or billing evidence.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_provider_operations_route.py::test_provider_operations_routes_return_the_shared_model_serialization"
+    },
+    {
+      "surface_id": "rest:GET:/v1/provider-ops/{provider_id}/availability",
+      "framework": "pytest",
+      "source": "tests/api/test_provider_operations_route.py:34",
+      "test_source_sha256": "5b36ef4d3cb4032ec673c1cdade3db4686d65e306fd91c31e9072a47f040f790",
+      "reviewed_oracle": "availability endpoint returns the shared bounded availability model and forwards limit",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with StubProviderOperationsService and model fixtures from tests/providers/_provider_operations.py; no durable provider repository, live provider egress, or billing evidence.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_provider_operations_route.py::test_provider_operations_routes_return_the_shared_model_serialization"
+    },
+    {
+      "surface_id": "rest:GET:/v1/provider-ops/{provider_id}/health",
+      "framework": "pytest",
+      "source": "tests/api/test_provider_operations_route.py:34",
+      "test_source_sha256": "5b36ef4d3cb4032ec673c1cdade3db4686d65e306fd91c31e9072a47f040f790",
+      "reviewed_oracle": "health endpoint distinguishes persisted health (probe omitted) from an explicit bounded probe (probe=true) in separate live_status fields",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with StubProviderOperationsService and model fixtures from tests/providers/_provider_operations.py; no durable provider repository, live provider egress, or billing evidence.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_provider_operations_route.py::test_provider_operations_routes_return_the_shared_model_serialization"
+    },
+    {
+      "surface_id": "rest:GET:/v1/provider-ops/{provider_id}/availability",
+      "framework": "pytest",
+      "source": "tests/api/test_provider_operations_route.py:63",
+      "test_source_sha256": "5b36ef4d3cb4032ec673c1cdade3db4686d65e306fd91c31e9072a47f040f790",
+      "reviewed_oracle": "Availability limit101 returns HTTP422 and no availability service call is recorded",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with StubProviderOperationsService and model fixtures from tests/providers/_provider_operations.py; no durable provider repository, live provider egress, or billing evidence.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_provider_operations_route.py::test_provider_operations_routes_are_bounded_and_safe_for_unknown_provider"
+    },
+    {
+      "surface_id": "rest:GET:/v1/provider-ops/{provider_id}/health",
+      "framework": "pytest",
+      "source": "tests/api/test_provider_operations_route.py:63",
+      "test_source_sha256": "5b36ef4d3cb4032ec673c1cdade3db4686d65e306fd91c31e9072a47f040f790",
+      "reviewed_oracle": "unknown provider health returns HTTP 404 with provider_not_found and preserves the requested provider id",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with StubProviderOperationsService and model fixtures from tests/providers/_provider_operations.py; no durable provider repository, live provider egress, or billing evidence.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_provider_operations_route.py::test_provider_operations_routes_are_bounded_and_safe_for_unknown_provider"
+    },
+    {
+      "surface_id": "rest:POST:/v1/routing/preview",
+      "framework": "pytest",
+      "source": "tests/api/test_production_routing_routes.py:172",
+      "test_source_sha256": "fbb6b6673fa31f142990d43fbc37896cd5d94f34dacf86d0671a963b5a5d14dc",
+      "reviewed_oracle": "Preview returns HTTP200 with exact fake plan ID and forwards the request payload to the fake planner",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a fake ProductionRoutingService and deterministic Workload/RoutePlan objects; no durable Postgres/Redis, worker transition, scheduler, provider call, or actual spend.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_production_routing_routes.py::test_preview_route_returns_payload_free_plan"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs",
+      "framework": "pytest",
+      "source": "tests/api/test_production_routing_routes.py:189",
+      "test_source_sha256": "fbb6b6673fa31f142990d43fbc37896cd5d94f34dacf86d0671a963b5a5d14dc",
+      "reviewed_oracle": "Dry-run/submitted responses return HTTP200 with equal plan identity and cost assumptions; non-dry submission forwards exact payload and Idempotency-Key",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a fake ProductionRoutingService and deterministic Workload/RoutePlan objects; no durable Postgres/Redis, worker transition, scheduler, provider call, or actual spend.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_production_routing_routes.py::test_job_submit_and_dry_run_share_plan_shape"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/events",
+      "framework": "pytest",
+      "source": "tests/api/test_production_routing_routes.py:213",
+      "test_source_sha256": "fbb6b6673fa31f142990d43fbc37896cd5d94f34dacf86d0671a963b5a5d14dc",
+      "reviewed_oracle": "Events limit3 is forwarded to fake service; HTTP200 explicitly reports streaming_supported false and provider_event_stream_unavailable",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a fake ProductionRoutingService and deterministic Workload/RoutePlan objects; no durable Postgres/Redis, worker transition, scheduler, provider call, or actual spend.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_production_routing_routes.py::test_job_events_are_bounded_and_explicitly_non_streaming"
+    },
+    {
+      "surface_id": "rest:POST:/v1/routing/preview",
+      "framework": "pytest",
+      "source": "tests/api/test_production_routing_routes.py:222",
+      "test_source_sha256": "fbb6b6673fa31f142990d43fbc37896cd5d94f34dacf86d0671a963b5a5d14dc",
+      "reviewed_oracle": "unknown request fields are rejected with HTTP 422",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a fake ProductionRoutingService and deterministic Workload/RoutePlan objects; no durable Postgres/Redis, worker transition, scheduler, provider call, or actual spend.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_production_routing_routes.py::test_route_preview_rejects_unknown_fields"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs",
+      "framework": "pytest",
+      "source": "tests/api/test_production_routing_routes.py:232",
+      "test_source_sha256": "fbb6b6673fa31f142990d43fbc37896cd5d94f34dacf86d0671a963b5a5d14dc",
+      "reviewed_oracle": "budget rejection from the shared service remains the canonical HTTP 402 budget_rejected envelope",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a fake ProductionRoutingService and deterministic Workload/RoutePlan objects; no durable Postgres/Redis, worker transition, scheduler, provider call, or actual spend.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_production_routing_routes.py::test_job_submit_preserves_canonical_budget_error"
+    },
+    {
+      "surface_id": "rest:POST:/v1/routing/preview",
+      "framework": "pytest",
+      "source": "tests/api/test_production_routing_routes.py:243",
+      "test_source_sha256": "fbb6b6673fa31f142990d43fbc37896cd5d94f34dacf86d0671a963b5a5d14dc",
+      "reviewed_oracle": "budget rejection from preview remains the canonical HTTP 402 budget_rejected envelope",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a fake ProductionRoutingService and deterministic Workload/RoutePlan objects; no durable Postgres/Redis, worker transition, scheduler, provider call, or actual spend.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_production_routing_routes.py::test_route_preview_preserves_canonical_budget_error"
+    },
+    {
+      "surface_id": "rest:POST:/v1/serve",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:291",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "cap_exceeded refusal is normalized to the top-level HTTP 422 error contract",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Serve refusal and replay cases monkeypatch serve_model.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_post_serve_refusals_are_top_level_422_contracts[cap_exceeded-expected0]"
+    },
+    {
+      "surface_id": "rest:POST:/v1/serve",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:291",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "price_unknown refusal is normalized to the top-level HTTP 422 error contract",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Serve refusal and replay cases monkeypatch serve_model.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_post_serve_refusals_are_top_level_422_contracts[price_unknown-expected1]"
+    },
+    {
+      "surface_id": "rest:POST:/v1/serve",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:291",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "budget_exhausted refusal is normalized to the top-level HTTP 422 error contract",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Serve refusal and replay cases monkeypatch serve_model.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_post_serve_refusals_are_top_level_422_contracts[budget_exhausted-expected2]"
+    },
+    {
+      "surface_id": "rest:POST:/v1/serve",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:291",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "kill_switch_engaged refusal is normalized to the top-level HTTP 422 error contract",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Serve refusal and replay cases monkeypatch serve_model.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_post_serve_refusals_are_top_level_422_contracts[kill_switch_engaged-expected3]"
+    },
+    {
+      "surface_id": "rest:POST:/v1/serve",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:291",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "no_serve_history refusal is normalized to the top-level HTTP 422 error contract",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Serve refusal and replay cases monkeypatch serve_model.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_post_serve_refusals_are_top_level_422_contracts[no_serve_history-expected4]"
+    },
+    {
+      "surface_id": "rest:POST:/v1/serve",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:346",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Single capability-only serve request preserves selected validated fields and serializes created=false from the patched service result",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Serve refusal and replay cases monkeypatch serve_model. One request against a patched return value; no replay/idempotency or resource reuse proof.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_capability_only_serve_request_and_idempotent_created_are_pinned"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:569",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "capability detail returns served model, active lease, expiry, renewal, traffic, and cost metadata; unknown capability is HTTP 404",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_routing_metadata_contract_round_trips_safe_name_and_404"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:603",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "capability detail explicitly returns null model/lease metadata when no model or active lease is available",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_routing_metadata_contract_allows_absent_model_and_lease"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:726",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Capability cold-start is null with both seeded measurements null, then returns exact p50/p95 when both seeded values are present",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks. Does not test either one-measurement-missing combination.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_partial_cold_start_is_null_until_both_measurements_exist"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:682",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "non-self-hosted capability detail leaves self-hosted metadata fields null",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_non_self_hosted_metadata_is_null_on_list_and_detail"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:682",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "non-self-hosted capability listing leaves self-hosted metadata fields null",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_non_self_hosted_metadata_is_null_on_list_and_detail"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:700",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "self-hosted capability detail reports profile and observed readiness, residency, cold-start, slot, context, and tool-calling fields",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_self_hosted_metadata_comes_from_profile_and_observed_state"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:700",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "self-hosted capability listing reports the same profile and observed metadata",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_self_hosted_metadata_comes_from_profile_and_observed_state"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:758",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Detail selects the expected context-length from tied-priority self-hosted providers in ordinary-first order",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_metadata_selects_highest_priority_self_hosted_provider_independent_of_order[ordinary-first]"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:758",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Listing selects the expected context-length from tied-priority self-hosted providers in ordinary-first order",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_metadata_selects_highest_priority_self_hosted_provider_independent_of_order[ordinary-first]"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:758",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Detail selects the same expected context-length after reversing the provider list",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_metadata_selects_highest_priority_self_hosted_provider_independent_of_order[self-hosted-first]"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:758",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Listing selects the same expected context-length after reversing the provider list",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. Capability and provider repositories are AsyncMocks.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_metadata_selects_highest_priority_self_hosted_provider_independent_of_order[self-hosted-first]"
+    },
+    {
+      "surface_id": "rest:GET:/v1/openai/{capability}/v1/{path:path}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:808",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Models proxy returns HTTP200 with exact upstream model-list JSON; toggling fake provider armed=false yields HTTP503",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. The upstream is a respx fake RunPod-style HTTP endpoint; this is relay behavior, not provider inference. Fake armed-state transition, not real teardown or removal of a persisted active lease.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_routing_proxy_contract_passes_model_id_and_returns_503_after_teardown"
+    },
+    {
+      "surface_id": "rest:GET:/v1/openai/{capability}/v1/{path:path}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:871",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Successful models proxy calls traffic stamping once with the expected Redis object, lease ID, and UTC timestamp",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. The upstream is a respx fake RunPod-style HTTP endpoint; this is relay behavior, not provider inference. Does not assert ordering relative to upstream send.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_proxy_stamps_active_lease_after_upstream_send"
+    },
+    {
+      "surface_id": "rest:POST:/v1/openai/{capability}/v1/{path:path}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:833",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Chunk-preserving ASGI transport receives the exact four seeded SSE chunks including terminal DONE, with event-stream content type",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. The upstream is a respx fake RunPod-style HTTP endpoint; this is relay behavior, not provider inference. Chunk-boundary proof only; no timing, latency, TCP, or slow-consumer/backpressure assertion.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_proxy_streams_sse_chunks_unbuffered"
+    },
+    {
+      "surface_id": "rest:POST:/v1/openai/{capability}/v1/{path:path}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:902",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Failing fake upstream stream relays the initial chunk followed by the exact terminal SSE error event",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. The upstream is a respx fake RunPod-style HTTP endpoint; this is relay behavior, not provider inference.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_proxy_sse_mid_stream_failure_emits_terminal_error_event"
+    },
+    {
+      "surface_id": "rest:GET:/v1/capabilities/{name}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:934",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "scoped read+spend token can read capability metadata while the route remains present",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. The upstream is a respx fake RunPod-style HTTP endpoint; this is relay behavior, not provider inference. Auth scope assertions use test environment tokens and mocked repositories.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_routing_flow_requires_one_token_with_read_and_spend_scopes"
+    },
+    {
+      "surface_id": "rest:GET:/v1/openai/{capability}/v1/{path:path}",
+      "framework": "pytest",
+      "source": "tests/api/test_routing_consumer_contract.py:934",
+      "test_source_sha256": "fe6ef840a5f9515eff58292b18cb85f50c79022695c953f5a19ad6bb565e3b6e",
+      "reviewed_oracle": "Read-only bearer receives HTTP403 required_scope=spend; read+spend bearer reaches unavailable-provider HTTP503 path",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with mocked repositories/services and deterministic in-memory models; no durable database state, provider deployment, external billing, or real inference. The upstream is a respx fake RunPod-style HTTP endpoint; this is relay behavior, not provider inference. Auth scope assertions use test environment tokens and mocked repositories.",
+      "reviewer": "Luna source review corrected by root assertion review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_routing_consumer_contract.py::test_routing_flow_requires_one_token_with_read_and_spend_scopes"
+    }
+  ],
+  "rejected_inferences": [
+    {
+      "source": "tests/api/test_routing_consumer_contract.py:41",
+      "reason": "Lease webhook dispatch is exercised through a monkeypatched HTTP sender, not through a REST route in the checked inventory; it is not mapped as provider-operations REST coverage."
+    },
+    {
+      "source": "tests/api/test_routing_consumer_contract.py:465",
+      "reason": "serve_model ready-replay service call is not an HTTP invocation; it supports service behavior only and is not treated as POST /v1/serve execution evidence."
+    },
+    {
+      "source": "tests/providers/_provider_operations.py:67-105",
+      "reason": "The subtype records route calls and returns deterministic models; it deliberately performs no provider egress and cannot prove live availability, health, scheduling, billing, or durable persistence."
+    },
+    {
+      "source": "tests/api/test_routing_consumer_contract.py:798-920",
+      "reason": "respx upstream responses prove relay/status/SSE handling only; they do not prove a deployed pod, provider inference, external model availability, or actual cost."
+    },
+    {
+      "source": "tests/api/test_production_routing_routes.py:79-167",
+      "reason": "Fake ProductionRoutingService and deterministic workload models prove route serialization and delegation only; they do not prove planner persistence, worker execution, or provider billing."
+    },
+    {
+      "source": "tests/api/test_provider_operations_route.py::test_provider_operations_openapi_labels_read_only_contracts",
+      "reason": "Schema-generation-only assertion is not an invocation of the bound REST route; excluded from this route-invocation mapping"
+    },
+    {
+      "source": "tests/api/test_provider_operations_route.py::test_provider_operations_openapi_labels_read_only_contracts",
+      "reason": "Schema-generation-only assertion is not an invocation of the bound REST route; excluded from this route-invocation mapping"
+    }
+  ],
+  "collection": {
+    "log_sha256": "bcd8aa6db7051159777ad8f0b49d66dbdaf4ffbb8cb2f29f755e13059db019be",
+    "command": [
+      "~/git/pitwall-release-acceptance/.venv/bin/pytest",
+      "--collect-only",
+      "-q",
+      "tests/api/test_provider_operations_route.py",
+      "tests/api/test_production_routing_routes.py",
+      "tests/api/test_routing_consumer_contract.py"
+    ],
+    "exit_code": 0,
+    "test_count": 29,
+    "scope": "Collection only; no test execution or acceptance outcome was recorded. Private retained log: $PITWALL_EVIDENCE_ROOT/release-acceptance/provider-operations-bindings-20260920Tslxnrma1/pytest-collect.log"
+  }
+}

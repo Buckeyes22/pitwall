@@ -1,0 +1,24 @@
+# Example agent profiles: the [agents.profiles] tables of pitwall.toml.
+[agents.profiles.defaults]
+endpointHarness = "qwen"
+harness = "opencode"
+
+[agents.profiles.harnesses.codex]
+effort = "high"
+
+[agents.profiles.models.glimmer]
+model = "meta-models/Muse-Glimmer-30B"
+seat = "local"
+
+[agents.profiles.models.glimmer.endpoint]
+apiKeyEnv = "GLIMMER_API_KEY"
+baseUrl = "http://gpu-1:8000/v1"
+
+[agents.profiles.models.glm]
+harness = "opencode"
+model = "zai-coding-plan/glm-5.3"
+seat = "default-author"
+
+[agents.profiles.models.sol]
+model = "gpt-6.1-sol"
+seat = "critical"

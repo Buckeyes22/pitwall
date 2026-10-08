@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/docs/agents/model-facts/schemas/sources.schema.json",
+  "title": "Model facts source list",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "unit", "sources", "notPublished", "watch"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "unit": { "$ref": "#/$defs/unit" },
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } },
+    "notPublished": { "type": "array", "items": { "$ref": "#/$defs/notPublished" } },
+    "watch": { "type": "array", "items": { "$ref": "#/$defs/watch" } }
+  },
+  "$defs": {
+    "unit": { "type": "string", "pattern": "^(families|harnesses|hosts)/[a-z0-9][a-z0-9.-]*$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "hash": { "type": "string", "pattern": "^(sha256:[0-9a-f]{64}|revision:[0-9a-f]{40})$" },
+    "kind": { "enum": ["vendor", "harness", "host", "artifact"] },
+    "pageType": { "enum": ["model", "effort", "harness", "guidance", "changes"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "kind", "pageType", "fetch", "format"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "url": { "type": "string", "pattern": "^https://" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "pageType": { "$ref": "#/$defs/pageType" },
+        "fetch": { "enum": ["http", "huggingface", "manual"] },
+        "format": { "enum": ["markdown", "html", "json", "text"] },
+        "repo": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "volatile": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "unordered": { "type": "boolean" },
+        "reviewedAt": { "$ref": "#/$defs/date" },
+        "reviewedHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/date" },
+        "observedHash": { "$ref": "#/$defs/hash" }
+      },
+      "if": { "properties": { "fetch": { "const": "huggingface" } } },
+      "then": { "required": ["repo"] }
+    },
+    "notPublished": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pageType", "kind", "searchedAt", "searched"],
+      "properties": {
+        "pageType": { "$ref": "#/$defs/pageType" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "searchedAt": { "$ref": "#/$defs/date" },
+        "searched": { "type": "string", "minLength": 10 }
+      }
+    },
+    "watch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "pattern", "ignore"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["index", "huggingface-org"] },
+        "url": { "type": "string", "pattern": "^https://" },
+        "org": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$" },
+        "pattern": { "type": "string", "minLength": 1 },
+        "ignore": { "type": "array", "items": { "type": "string" } },
+        "seen": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+      },
+      "oneOf": [
+        { "properties": { "kind": { "const": "index" } }, "required": ["url"] },
+        { "properties": { "kind": { "const": "huggingface-org" } }, "required": ["org"] }
+      ]
+    }
+  }
+}

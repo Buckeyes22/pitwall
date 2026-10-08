@@ -1,0 +1,303 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  readiness:
+    # Requires a successful ci.yml run for this commit, then builds, inspects, and smoke-tests
+    # the one wheel and one sdist and runs the release journeys.
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/release-readiness.yml
+
+  package:
+    # Publishes the exact bytes readiness built, inspected, and smoke-tested; it does not rebuild.
+    needs: readiness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081 # v5
+        with:
+          version: "0.11.19"
+      - run: uv python install 3.14.7
+      - run: uv sync --frozen --extra dev
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: python-distributions
+          path: dist
+      - name: Generate checksums
+        # Basenames, so `sha256sum -c SHA256SUMS` works beside downloaded release assets.
+        run: |
+          mkdir -p artifacts/package
+          (cd dist && sha256sum -- *) > artifacts/package/SHA256SUMS
+      - name: Generate installed-environment SBOM
+        run: |
+          uv venv artifacts/sbom-env
+          uv pip install --offline --python artifacts/sbom-env/bin/python dist/*.whl
+      - uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+        with:
+          path: artifacts/sbom-env
+          format: spdx-json
+          output-file: artifacts/package/pitwall-${{ github.ref_name }}.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: package-evidence
+          path: artifacts/package/
+          if-no-files-found: error
+          retention-days: 14
+
+  package-provenance:
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: package-evidence
+          path: evidence
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-checksums: evidence/SHA256SUMS
+
+  image:
+    needs: readiness
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: api
+            dockerfile: docker/Dockerfile.api
+          - service: reconciler
+            dockerfile: docker/Dockerfile.reconciler
+          - service: webhook
+            dockerfile: docker/Dockerfile.webhook
+          - service: cost-exporter
+            dockerfile: docker/Dockerfile.cost-exporter
+          - service: mcp
+            dockerfile: docker/Dockerfile.mcp
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Build immutable linux/amd64 candidate once
+        run: |
+          mkdir -p artifacts/image
+          docker build --platform linux/amd64 \
+            --label org.opencontainers.image.revision=${{ github.sha }} \
+            --label org.opencontainers.image.version=${{ github.ref_name }} \
+            --label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" \
+            --tag pitwall/${{ matrix.service }}:${{ github.sha }} \
+            --file "${{ matrix.dockerfile }}" .
+          docker save pitwall/${{ matrix.service }}:${{ github.sha }} \
+            --output artifacts/image/${{ matrix.service }}.tar
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: pitwall/${{ matrix.service }}:${{ github.sha }}
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+      - uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+        with:
+          image: pitwall/${{ matrix.service }}:${{ github.sha }}
+          format: spdx-json
+          output-file: artifacts/image/${{ matrix.service }}.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+      - name: Record candidate digest
+        run: |
+          docker image inspect --format='{{index .RepoDigests 0}}' \
+            pitwall/${{ matrix.service }}:${{ github.sha }} 2>/dev/null \
+            > artifacts/image/${{ matrix.service }}.digest || \
+          docker image inspect --format='{{.Id}}' \
+            pitwall/${{ matrix.service }}:${{ github.sha }} \
+            > artifacts/image/${{ matrix.service }}.digest
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: image-${{ matrix.service }}
+          path: artifacts/image/
+          if-no-files-found: error
+          retention-days: 14
+
+  image-smoke:
+    needs: image
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_PROJECT_NAME: pitwall-image-smoke-${{ github.run_id }}-${{ github.run_attempt }}
+      PITWALL_IMAGE_TAG: ${{ github.sha }}
+      PITWALL_SMOKE_ARTIFACT_DIR: artifacts/compose-smoke
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: image-*
+          path: artifacts/images
+          merge-multiple: true
+      - name: Load exact scanned candidate images
+        run: |
+          for archive in artifacts/images/*.tar; do
+            docker load --input "$archive"
+          done
+      - name: Run canonical Compose and hardened-image smoke
+        run: scripts/release/smoke_compose.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: compose-smoke-evidence
+          path: artifacts/compose-smoke/
+          if-no-files-found: warn
+          retention-days: 14
+
+  stage-image:
+    if: vars.PITWALL_RELEASE_ENABLED == 'true'
+    needs: image-smoke
+    runs-on: ubuntu-latest
+    environment: ghcr-staging
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [api, reconciler, webhook, cost-exporter, mcp]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: image-${{ matrix.service }}
+          path: artifacts/image
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push and pull the exact candidate through the staging namespace
+        run: |
+          STAGING_IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/pitwall-staging/${{ matrix.service }}"
+          docker load --input artifacts/image/${{ matrix.service }}.tar
+          docker tag pitwall/${{ matrix.service }}:${{ github.sha }} \
+            "$STAGING_IMAGE:candidate-${GITHUB_SHA}"
+          docker push "$STAGING_IMAGE:candidate-${GITHUB_SHA}"
+          digest=$(docker image inspect --format='{{index .RepoDigests 0}}' \
+            "$STAGING_IMAGE:candidate-${GITHUB_SHA}")
+          docker image rm "$STAGING_IMAGE:candidate-${GITHUB_SHA}"
+          docker pull "$digest"
+          test "$(docker run --rm "$digest" pitwall --version)" = "${GITHUB_REF_NAME#v}"
+          printf '%s\n' "$digest" > artifacts/image/${{ matrix.service }}.staging-digest
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: staged-image-${{ matrix.service }}
+          path: artifacts/image/${{ matrix.service }}.staging-digest
+          if-no-files-found: error
+          retention-days: 14
+
+  publish-image:
+    if: vars.PITWALL_RELEASE_ENABLED == 'true'
+    needs: [image, image-smoke, stage-image]
+    runs-on: ubuntu-latest
+    environment: ghcr
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [api, reconciler, webhook, cost-exporter, mcp]
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: image-${{ matrix.service }}
+          path: artifacts/image
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Load and publish the verified bytes
+        id: push
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/pitwall/${{ matrix.service }}"
+          docker load --input artifacts/image/${{ matrix.service }}.tar
+          docker tag pitwall/${{ matrix.service }}:${{ github.sha }} "$IMAGE:$VERSION"
+          docker tag pitwall/${{ matrix.service }}:${{ github.sha }} "$IMAGE:sha-${GITHUB_SHA}"
+          docker push "$IMAGE:$VERSION"
+          docker push "$IMAGE:sha-${GITHUB_SHA}"
+          digest=$(docker image inspect --format='{{index .RepoDigests 0}}' "$IMAGE:$VERSION")
+          echo "name=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "digest=${digest#*@}" >> "$GITHUB_OUTPUT"
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-name: ${{ steps.push.outputs.name }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: staged-image-${{ matrix.service }}
+          path: artifacts/staged
+      - name: Collect public image evidence
+        run: |
+          mkdir -p artifacts/evidence
+          cp artifacts/image/${{ matrix.service }}.spdx.json artifacts/evidence/
+          printf '%s@%s\n' "${{ steps.push.outputs.name }}" "${{ steps.push.outputs.digest }}" \
+            > artifacts/evidence/${{ matrix.service }}.digest
+          cp artifacts/staged/${{ matrix.service }}.staging-digest artifacts/evidence/
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: image-evidence-${{ matrix.service }}
+          path: artifacts/evidence/
+          if-no-files-found: error
+          retention-days: 14
+
+  github-release:
+    if: vars.PITWALL_RELEASE_ENABLED == 'true'
+    needs: [package, package-provenance, publish-image]
+    runs-on: ubuntu-latest
+    environment: github-release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: python-distributions
+          path: release-artifacts
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: package-evidence
+          path: release-artifacts
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: image-evidence-*
+          path: release-artifacts
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: compose-smoke-evidence
+          path: release-artifacts/compose-smoke
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          body_path: docs/releases/${{ github.ref_name }}.md
+          draft: false
+          prerelease: true
+          generate_release_notes: false
+          files: release-artifacts/**

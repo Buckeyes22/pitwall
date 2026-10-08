@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/dsh",
+  "facts": {
+    "permissionDefault": {
+      "value": "ask: each action goes to the answerer chain, and with no answerer the request resolves unavailable and the caller denies it; policy never rejects everything without asking",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "dsh-approval",
+          "locator": "Per-session policy, ApprovalPolicy type"
+        },
+        {
+          "source": "dsh-permission-presets",
+          "locator": "The preset table"
+        }
+      ],
+      "note": "Shipped presets: workspace-write with ask, and danger-full-access with never."
+    },
+    "sandboxDefault": {
+      "value": "workspace-write in the shipped preset table (paired with ask): writes only under the workspace root; danger-full-access bypasses confinement",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "dsh-permission-presets",
+          "locator": "The preset table"
+        },
+        {
+          "source": "dsh-sandbox",
+          "locator": "Modes and enforcement"
+        }
+      ],
+      "note": "The pages do not name one deployment default mode. Per call, an approved mode beats the session's last sandbox/mode event, which beats the deployment default. Modes govern filesystem effects only, not network."
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "dsh-subagent",
+          "locator": "Opening paragraphs"
+        },
+        {
+          "source": "dsh-subagent",
+          "locator": "In-process backends: permission, depth, and seed"
+        }
+      ],
+      "note": "An optional capability whose providers coexist by name: spawn, fork, ACP, Codex, Claude Code, and DSH SDK. Children run one level deeper. Read Only and Workspace Write parents pass their sandbox to children with approval never."
+    }
+  },
+  "guidance": [
+    {
+      "id": "dsh-developer-preview",
+      "text": "dsh is a developer preview and its maintainers expect compatibility-breaking changes; recheck flags and config after each upgrade.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "dsh-readme",
+      "locator": "Developer preview",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-effort-menu-needs-levels",
+      "text": "A model added by hand offers no effort control until its reasoning levels are declared in the profile's cordis.patch.yml.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "dsh-providers",
+      "locator": "Reasoning effort",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-gateway-request-shape",
+      "text": "Behind an OpenAI-compatible gateway, dsh may need compat switches such as supportsDeveloperRole false and maxTokensField max_tokens, or the gateway refuses requests.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "dsh-providers",
+      "locator": "Request compatibility",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-declare-image-input",
+      "text": "Custom-provider models are text-only unless their input list names image; declaring it does not verify the endpoint serves images.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "dsh-providers",
+      "locator": "Image input",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-model-discovery-optional",
+      "text": "Model discovery calls GET /models and can fail on some gateways; add model ids by hand when it returns nothing.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "dsh-providers",
+      "locator": "Troubleshooting, fetching available models",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

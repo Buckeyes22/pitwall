@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/hy",
+  "sources": [
+    {
+      "id": "tokenhub-models",
+      "url": "https://cloud.tencent.com/document/product/1823/130051",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "manual",
+      "format": "html",
+      "observedHash": "sha256:431ad2835d23249f1a0abcc8f89b6397c8d42657bf188a8f736f415d48856280",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:431ad2835d23249f1a0abcc8f89b6397c8d42657bf188a8f736f415d48856280",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "tokenhub-text-generation",
+      "url": "https://cloud.tencent.com/document/product/1823/130079",
+      "kind": "host",
+      "pageType": "effort",
+      "fetch": "manual",
+      "format": "html",
+      "observedHash": "sha256:6c3d5870f930c3f292aee9b87e1412c94b814e59311a0d944f36d4763d874f7c",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6c3d5870f930c3f292aee9b87e1412c94b814e59311a0d944f36d4763d874f7c",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-hy4-preview",
+      "url": "https://huggingface.co/tencent/Hy4-preview",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "tencent/Hy4-preview",
+      "observedHash": "revision:705d81ee51566a186d645b74c974d642ef2828fe",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:705d81ee51566a186d645b74c974d642ef2828fe",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-hy3",
+      "url": "https://huggingface.co/tencent/Hy3",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "tencent/Hy3",
+      "observedHash": "revision:a960ebc3da325ba167f069f76c41eb62c9280d22",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:a960ebc3da325ba167f069f76c41eb62c9280d22",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "model",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "https://aistudio.tencent.com/ does not respond from the survey network; older https://cloud.tencent.com/document/product/1729 lists only hunyuan-* models"
+    },
+    {
+      "pageType": "guidance",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "TokenHub and the older Hunyuan documentation; the Hugging Face card Known Limitations section is the only behaviour note, recorded under the artifact source"
+    },
+    {
+      "pageType": "changes",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "TokenHub documentation index https://cloud.tencent.com/document/product/1823"
+    }
+  ],
+  "watch": [
+    {
+      "id": "tencent",
+      "kind": "huggingface-org",
+      "org": "tencent",
+      "pattern": "Hy[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(FP8|INT4|GGUF)"
+      ],
+      "seen": [
+        "Hy3-preview",
+        "Hy3-preview-Base"
+      ]
+    }
+  ]
+}

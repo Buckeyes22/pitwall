@@ -1,0 +1,542 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-sonnet-5",
+  "runtimeReference": "references/model-prompting.md#claude-sonnet-55",
+  "promptReference": "prompting/anthropic-claude-sonnet-5-prompting-reference.md",
+  "models": {
+    "claude-sonnet-5": {
+      "status": "current",
+      "displayName": "Claude Sonnet 5",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Capabilities table, Context window row"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Capabilities table, Max output row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Capabilities table, Input to output row"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Jan 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Capabilities table, Reliable knowledge cutoff row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-effort",
+              "locator": "Effort levels table, availability column (max and xhigh list Claude Sonnet 5)"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Capabilities table, Default effort row"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-prompting",
+              "locator": "Calibrating effort and thinking depth (pass thinking type disabled to turn thinking off)"
+            },
+            {
+              "source": "anthropic-sonnet-5-5-migration",
+              "locator": "Thinking runs by default, support table, Claude Sonnet 5 row"
+            }
+          ]
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Good to know, temperature/top_p/top_k bullet"
+            },
+            {
+              "source": "anthropic-deprecations",
+              "locator": "API parameter deprecations table, temperature/top_p/top_k row"
+            }
+          ],
+          "note": "Non-default temperature, top_p or top_k returns a 400 error."
+        },
+        "released": {
+          "value": "2026-06-30",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5",
+              "locator": "Availability table, Released row"
+            }
+          ]
+        }
+      }
+    },
+    "claude-sonnet-5.5": {
+      "status": "current",
+      "displayName": "Claude Sonnet 5.5",
+      "routes": [
+        {
+          "harness": "claude",
+          "model": "sonnet",
+          "register": true
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Capabilities table, Context window row"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Capabilities table, Max output row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Capabilities table, Input to output row"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Jun 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Capabilities table, Reliable knowledge cutoff row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-effort",
+              "locator": "Recommended effort levels for Claude Sonnet 5.5 (supports all five levels); Effort levels table, availability column"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Capabilities table, Default effort row"
+            },
+            {
+              "source": "anthropic-effort",
+              "locator": "Recommended effort levels for Claude Sonnet 5.5"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5-whats-new",
+              "locator": "Turn off up-front thinking with between_tools"
+            }
+          ],
+          "note": "thinking type disabled returns a 400 error. between_tools removes up-front thinking at high effort or below, but the model still thinks between tool calls."
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Good to know, temperature/top_p/top_k bullet"
+            },
+            {
+              "source": "anthropic-deprecations",
+              "locator": "API parameter deprecations table, temperature/top_p/top_k row"
+            }
+          ],
+          "note": "Non-default temperature, top_p or top_k returns a 400 error."
+        },
+        "released": {
+          "value": "2026-09-28",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-sonnet-5-5",
+              "locator": "Availability table, Released row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "sonnet-5-effort-high-default",
+      "text": "Effort defaults to high. Raise it to xhigh for the hardest coding and agentic work. Shallow reasoning on hard tasks is better fixed by more effort than by prompting around it.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "Calibrating effort and thinking depth",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-literal-effort",
+      "text": "At low and medium effort it does only what was asked and follows instructions literally. State the scope explicitly if a rule must apply to every item.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "More literal instruction following",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-thinking-on",
+      "text": "Adaptive thinking is on by default and can be turned off. Manual budget_tokens thinking and non-default sampling parameters both return a 400 error.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "Calibrating effort and thinking depth; Tone and writing style",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "sonnet-5-max-tokens-headroom",
+      "text": "At high effort or above, leave max_tokens headroom for thinking and tool calls. The new tokenizer yields about 30 percent more tokens than Sonnet 4.6, so old limits can truncate.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "Calibrating effort and thinking depth, note",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-tool-use",
+      "text": "It uses tools and self-verification loops more readily than Sonnet 4.6, but with thinking off it reaches for tools less; add an explicit nudge if you rely on them.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "Tool use triggering",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-review-recall",
+      "text": "Review prompts saying only report important issues make it drop findings it judged minor. Ask for every finding with confidence and severity, and filter in a later step.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "Code review harnesses",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-progress-updates",
+      "text": "It gives regular progress updates on long agentic runs without prompting. Remove scaffolding that forces interim status messages, or describe the desired format.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "User-facing progress updates",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-design-variety",
+      "text": "Without temperature, get varied design directions by specifying a concrete alternative or by asking it to propose options before building; generic bans only swap one fixed palette for another.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-prompting",
+      "locator": "Design and frontend defaults",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-refusal-scope",
+      "text": "Sonnet 5 declines in fewer categories than Sonnet 5.5, and it is the model that server-side fallback retries Sonnet 5.5's cyber and frontier_llm declines on. A refusal is a normal response with stop reason refusal.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-migration",
+      "locator": "Safety classifiers and fallback",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "sonnet-5-legacy",
+      "text": "Sonnet 5 is a legacy model; Sonnet 5.5 is the current Sonnet. Its effort levels are calibrated differently, so re-run effort sweeps rather than carrying settings across.",
+      "applies": [
+        "claude-sonnet-5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5",
+      "locator": "Legacy notice, top of page",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-alias-reaches-5-5",
+      "text": "In Claude Code the sonnet alias reaches Sonnet 5.5 on the Anthropic API; on Platform on AWS it reaches Sonnet 4.6, and on Bedrock, Agent Platform and Foundry Sonnet 4.5. Pin claude-sonnet-5 by name for Sonnet 5.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "harness",
+      "source": "cc-model-config",
+      "locator": "Model aliases, provider table",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-effort-start",
+      "text": "Effort defaults to high. Start at medium for well-specified agentic coding, high for harder work, low or medium for chat. Levels are recalibrated from Sonnet 5, so re-run the sweep.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-prompting",
+      "locator": "Calibrate effort",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-between-tools",
+      "text": "To skip up-front thinking send thinking type between_tools, at high effort or below. Disabled and budget_tokens return 400, as does between_tools at xhigh or max.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-whats-new",
+      "locator": "Turn off up-front thinking with between_tools",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-no-forced-tools",
+      "text": "Forced tool use is rejected: tool_choice any or a named tool returns a 400. Non-default temperature, top_p or top_k also return 400.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-whats-new",
+      "locator": "Forced tool use is not supported",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-progress-blocks",
+      "text": "Notes longer than a sentence between tool calls arrive as thinking blocks, empty by default, so a client showing only text looks silent. Use between_tools or display updates.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-whats-new",
+      "locator": "Behavior differences, text between tool calls",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-low-effort-checkin",
+      "text": "At low and medium effort on long agentic work it may stop to check in. Raise effort or add a line to keep working until done and report only when finished.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-prompting",
+      "locator": "Steer initiative and scope",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-verify-at-low",
+      "text": "At low effort it can report a change done without running a check. Ask for a real test, type-check or build run before it reports done.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-prompting",
+      "locator": "Verification on coding tasks",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-append-only-history",
+      "text": "Thinking blocks are bound to the model and conversation. Editing earlier turns or the system prompt can make replayed blocks fail with a 400, so keep history append-only.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-whats-new",
+      "locator": "Thinking blocks are tied to the model and the conversation",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "sonnet-5-5-safeguards",
+      "text": "Safety classifiers can decline cyber, bio, frontier_llm, reasoning_extraction and general_harms requests with stop reason refusal in a normal response. Server-side fallback retries only cyber and frontier_llm declines.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-sonnet-5-5-prompting",
+      "locator": "Safeguard refusals",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "sonnet-5-5-claude-code-fallback",
+      "text": "Claude Code re-runs a cyber-flagged Sonnet 5.5 request on Sonnet 5. A bio-flagged one ends with a refusal, because Sonnet 5.5 has no biology fallback model.",
+      "applies": [
+        "claude-sonnet-5.5"
+      ],
+      "class": "harness",
+      "source": "cc-model-config",
+      "locator": "Automatic model fallback",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    }
+  ]
+}

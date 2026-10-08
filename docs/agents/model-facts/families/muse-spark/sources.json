@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/muse-spark",
+  "sources": [
+    {
+      "id": "meta-models",
+      "url": "https://dev.meta.ai/docs/models.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:0579514685fff0bea40e30a34119fda8c32850417257db725439c2088509db63",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:0579514685fff0bea40e30a34119fda8c32850417257db725439c2088509db63",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "meta-reasoning",
+      "url": "https://dev.meta.ai/docs/reasoning.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:c923d50e70d0374e355b6d28b392cca8488c815fdcda1b261fbd89d2915c8042",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:c923d50e70d0374e355b6d28b392cca8488c815fdcda1b261fbd89d2915c8042",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "meta-coding-agents",
+      "url": "https://dev.meta.ai/docs/coding-agents.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1f33be7eab421742916d9707c9f9aa116c1f8c6ea8d8735d1cf0bb6283250cfd",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1f33be7eab421742916d9707c9f9aa116c1f8c6ea8d8735d1cf0bb6283250cfd",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-changelog",
+      "url": "https://dev.meta.ai/docs/muse-code/changelog.md",
+      "kind": "harness",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-configuration",
+      "url": "https://dev.meta.ai/docs/muse-code/configuration.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "meta-models",
+      "kind": "index",
+      "url": "https://dev.meta.ai/docs/models.md",
+      "pattern": "`(muse-spark-[0-9][0-9.]*)`",
+      "ignore": [],
+      "seen": [
+        "muse-spark-1.1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/muse-spark",
+  "promptReference": "prompting/meta-muse-code-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#muse-code",
+  "models": {
+    "muse-spark-1.2": {
+      "status": "current",
+      "displayName": "Muse Spark 1.2",
+      "routes": [
+        {
+          "harness": "muse",
+          "model": "muse-spark-1.2",
+          "register": true,
+          "effortValues": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "ultra"
+          ]
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-models",
+              "locator": "Available Muse Spark models table, muse-spark-1.2 row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-models",
+              "locator": "Available Muse Spark models table, muse-spark-1.2 row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-reasoning",
+              "locator": "How it works, effort table (max is Standard-tier 1.3 only)"
+            }
+          ],
+          "note": "none is rejected and max is limited to Standard-tier muse-spark-1.3, so neither is listed."
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-reasoning",
+              "locator": "How it works, effort table, none row"
+            }
+          ]
+        }
+      }
+    },
+    "muse-spark-1.3": {
+      "status": "current",
+      "displayName": "Muse Spark 1.3",
+      "routes": [
+        {
+          "harness": "muse",
+          "model": "muse-spark-1.3",
+          "register": true,
+          "effortValues": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/muse-spark-1.3-contributor"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-models",
+              "locator": "Available Muse Spark models table, muse-spark-1.3-contributor row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-models",
+              "locator": "Available Muse Spark models table, muse-spark-1.3-contributor row"
+            }
+          ],
+          "note": "The vendor marks audio understanding in 1.3 as not fully supported; quality may be degraded."
+        },
+        "effortValues": {
+          "value": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-reasoning",
+              "locator": "How it works, effort table (max is Standard-tier 1.3 only)"
+            },
+            {
+              "source": "muse-code-configuration",
+              "locator": "Set reasoning effort, Premium reasoning tiers note"
+            }
+          ],
+          "note": "The Contributor variant is the recorded host route, so max (Standard-tier only) is not listed here; none is rejected. The muse route serves the Standard tier and adds max and ultra (Muse Code's client-side level)."
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-reasoning",
+              "locator": "How it works, effort table, none row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "muse-spark-none-effort-400",
+      "text": "Never send reasoning effort none to Muse Spark; the API answers HTTP 400. Use low for direct-answer work.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "meta-reasoning",
+      "locator": "How it works, effort table, none row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-spark-max-standard-only",
+      "text": "The max effort exists only on Standard-tier muse-spark-1.3; Contributor variants do not offer it, so cap those at xhigh.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "meta-reasoning",
+      "locator": "How it works, Max reasoning note",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-spark-no-logprobs",
+      "text": "Leave logprobs off; Muse Spark is a reasoning model and a request that asks for log probabilities fails with HTTP 400.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "meta-reasoning",
+      "locator": "Log probabilities",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-spark-1-3-audio",
+      "text": "For audio input prefer muse-spark-1.2; audio handling in 1.3 is not fully supported and answer quality may drop.",
+      "applies": [
+        "muse-spark-1.3"
+      ],
+      "class": "vendor",
+      "source": "meta-models",
+      "locator": "Available Muse Spark models, footnote on audio",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-spark-contributor-trains",
+      "text": "Contributor-tier routes are cheaper because the vendor may train on prompts and completions; keep sensitive material off them.",
+      "applies": [
+        "muse-spark-1.3"
+      ],
+      "class": "vendor",
+      "source": "meta-models",
+      "locator": "Tiers",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-reminders-below-max",
+      "text": "Muse Code turns on its todo, memory, and goal reminders only for 1.2 and 1.3 sessions below max effort.",
+      "applies": [
+        "muse-spark-1.2"
+      ],
+      "class": "harness",
+      "source": "muse-code-changelog",
+      "locator": "1.4.0, Changed, reminders line 64",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-ultra-effort",
+      "text": "Muse Code's ultra effort is a client-side level that maps to the provider's highest supported tier and may delegate more; where the provider lacks it, the request runs at xhigh. none is rejected.",
+      "applies": [
+        "muse-spark-1.2"
+      ],
+      "class": "harness",
+      "source": "muse-code-configuration",
+      "locator": "Set reasoning effort, Premium reasoning tiers note",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-code-13-needs-model-flag",
+      "text": "Muse Code defaults to muse-spark-1.2; pass --model muse-spark-1.3 to reach the current model. Its max effort works on both tiers there.",
+      "applies": [
+        "muse-spark-1.3"
+      ],
+      "class": "harness",
+      "source": "muse-code-configuration",
+      "locator": "Select a model; Set reasoning effort, Premium reasoning tiers note",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

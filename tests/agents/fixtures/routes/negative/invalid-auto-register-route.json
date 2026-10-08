@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "models": {},
+  "pitwall": {
+    "autoRegister": {
+      "llm.example": "bad route name"
+    }
+  }
+}

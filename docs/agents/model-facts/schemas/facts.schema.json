@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/docs/agents/model-facts/schemas/facts.schema.json",
+  "title": "Model facts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "unit", "guidance"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "unit": { "type": "string", "pattern": "^(families|harnesses|hosts)/[a-z0-9][a-z0-9.-]*$" },
+    "promptReference": { "type": "string", "pattern": "^prompting/[a-z0-9.-]+\\.md$" },
+    "runtimeReference": { "type": "string", "pattern": "^references/model-prompting\\.md#[a-z0-9-]+$" },
+    "models": { "type": "object", "additionalProperties": { "$ref": "#/$defs/model" } },
+    "facts": { "$ref": "#/$defs/facts" },
+    "guidance": { "type": "array", "items": { "$ref": "#/$defs/guidance" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "facts": { "type": "object", "additionalProperties": { "$ref": "#/$defs/fact" } },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["facts"],
+      "properties": {
+        "status": { "enum": ["current", "retiring", "retired"] },
+        "displayName": { "type": "string", "minLength": 1 },
+        "artifact": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "of": { "type": "string", "pattern": "^families/[a-z0-9][a-z0-9.-]*#.+$" },
+        "routes": { "type": "array", "items": { "$ref": "#/$defs/route" } },
+        "facts": { "$ref": "#/$defs/facts" }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["harness", "model"],
+      "properties": {
+        "harness": { "$ref": "#/$defs/id" },
+        "host": { "$ref": "#/$defs/id" },
+        "model": { "type": "string", "minLength": 1 },
+        "register": { "type": "boolean" },
+        "effortValues": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "method", "evidence"],
+      "properties": {
+        "value": {},
+        "method": { "enum": ["reviewed", "extracted"] },
+        "note": { "type": "string", "minLength": 10 },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/evidence" } }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "locator"],
+      "properties": {
+        "source": { "$ref": "#/$defs/id" },
+        "locator": { "type": "string", "minLength": 1 },
+        "quote": { "type": "string", "minLength": 1 },
+        "states": {},
+        "disagrees": { "const": true }
+      },
+      "dependentRequired": { "disagrees": ["states"] }
+    },
+    "guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "applies", "class", "source", "locator", "surfaces", "reviewedAt"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "text": { "type": "string", "minLength": 10 },
+        "applies": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "class": { "enum": ["vendor", "harness", "host", "artifact"] },
+        "source": { "$ref": "#/$defs/id" },
+        "locator": { "type": "string", "minLength": 1 },
+        "quote": { "type": "string", "minLength": 1 },
+        "surfaces": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["card", "reference", "ledger"] }
+        },
+        "reviewedAt": { "$ref": "#/$defs/date" }
+      }
+    }
+  }
+}

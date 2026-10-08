@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/deepseek",
+  "sources": [
+    {
+      "id": "deepseek-pricing",
+      "url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:366a90e0bee23b5f7ff7157d1df95c7a77cb072add76f0f57be6c7a20680a63d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:366a90e0bee23b5f7ff7157d1df95c7a77cb072add76f0f57be6c7a20680a63d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-thinking",
+      "url": "https://api-docs.deepseek.com/guides/thinking_mode",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:2b9b4cafc28cf4b8617146f9adc1c6a867f358ee5001eb2bdd4ea058d7e8283c",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:2b9b4cafc28cf4b8617146f9adc1c6a867f358ee5001eb2bdd4ea058d7e8283c",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "deepseek-updates",
+      "url": "https://api-docs.deepseek.com/updates",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:d4eeb4d74e55d984a4f270ba00fcfabc8942f26c1b765fc1c7929985554dc51b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:d4eeb4d74e55d984a4f270ba00fcfabc8942f26c1b765fc1c7929985554dc51b",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-deepseek-v4.1-flash",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "observedHash": "revision:dba1be0a40aa45a94ad051997016db3960a90277",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:dba1be0a40aa45a94ad051997016db3960a90277",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-deepseek-v4-flash-0731",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "observedHash": "revision:7872f01b1d1fe23eabc4c98b48bffcef5a386062",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:7872f01b1d1fe23eabc4c98b48bffcef5a386062",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-deepseek-v4-pro-0813",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "observedHash": "revision:72e1d3230f6c080a530b0a1d46f8eb4602340597",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:72e1d3230f6c080a530b0a1d46f8eb4602340597",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-deepseek-v4-flash-vision-exp",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "observedHash": "revision:6821d6ad3681a4b137b066b76094fa82ebd0a380",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:6821d6ad3681a4b137b066b76094fa82ebd0a380",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "guidance",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "https://api-docs.deepseek.com/sitemap.xml; 52 pages, none about prompting"
+    }
+  ],
+  "watch": [
+    {
+      "id": "deepseek-ai",
+      "kind": "huggingface-org",
+      "org": "deepseek-ai",
+      "pattern": "DeepSeek-V[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(Base|FP8)"
+      ],
+      "seen": [
+        "DeepSeek-V2",
+        "DeepSeek-V2-Chat",
+        "DeepSeek-V2-Chat-0628",
+        "DeepSeek-V2-Lite",
+        "DeepSeek-V2-Lite-Chat",
+        "DeepSeek-V2.5",
+        "DeepSeek-V2.5-1210",
+        "DeepSeek-V3",
+        "DeepSeek-V3-0324",
+        "DeepSeek-V3.1",
+        "DeepSeek-V3.1-Terminus",
+        "DeepSeek-V3.2",
+        "DeepSeek-V3.2-Exp",
+        "DeepSeek-V3.2-Speciale",
+        "DeepSeek-V4-Flash-DSpark",
+        "DeepSeek-V4-Pro-DSpark"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/qwen",
+  "sources": [
+    {
+      "id": "qwen-code-headless",
+      "url": "https://qwenlm.github.io/qwen-code-docs/en/users/features/headless/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:2702c408be751c7fcaf3fe321c7cbc7c5da7c68dd6e26f1ed50edaa8e501657b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:2702c408be751c7fcaf3fe321c7cbc7c5da7c68dd6e26f1ed50edaa8e501657b",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-code-approval",
+      "url": "https://qwenlm.github.io/qwen-code-docs/en/users/features/approval-mode/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:c8a9914884e54a55555f29030afbfbf7fc39dd6e966d38eeaa1ed11cf5feca31",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:c8a9914884e54a55555f29030afbfbf7fc39dd6e966d38eeaa1ed11cf5feca31",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-code-sandbox",
+      "url": "https://qwenlm.github.io/qwen-code-docs/en/users/features/sandbox/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:7bb0ddce650f8d051c819efa6cf3c9b32225977800ddb47b3d54dea3e17c590d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:7bb0ddce650f8d051c819efa6cf3c9b32225977800ddb47b3d54dea3e17c590d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-code-sub-agents",
+      "url": "https://qwenlm.github.io/qwen-code-docs/en/users/features/sub-agents/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:79a33e36c70a7deaa3d3ca0187bf6d4b22897d0b2b215b76a9da3e0ae9c368be",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:79a33e36c70a7deaa3d3ca0187bf6d4b22897d0b2b215b76a9da3e0ae9c368be",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-code-providers",
+      "url": "https://qwenlm.github.io/qwen-code-docs/en/users/configuration/model-providers/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:389d3f0634d88e51f84484ca798dba78aa0ed43aec4aa7c6480d5f1e5bbc3a3b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:389d3f0634d88e51f84484ca798dba78aa0ed43aec4aa7c6480d5f1e5bbc3a3b",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://qwenlm.github.io/qwen-code-docs/llms.txt; release notes are blog posts"
+    }
+  ],
+  "watch": []
+}

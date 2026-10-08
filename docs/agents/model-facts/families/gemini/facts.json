@@ -1,0 +1,433 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/gemini",
+  "promptReference": "prompting/google-gemini-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+  "models": {
+    "gemini-3.8-flash": {
+      "status": "current",
+      "displayName": "Gemini 3.8 Flash",
+      "routes": [
+        {
+          "harness": "agy",
+          "model": "gemini-3.8-flash",
+          "register": true
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-8-flash",
+              "locator": "Token limits, input token limit"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 65536,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-8-flash",
+              "locator": "Token limits, output token limit"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.8-flash row"
+            },
+            {
+              "source": "google-gemini-3-8-flash",
+              "locator": "Capabilities, Thinking"
+            },
+            {
+              "source": "antigravity-models",
+              "locator": "Model selector list, Gemini 3.8 Flash row"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.8-flash row"
+            },
+            {
+              "source": "antigravity-models",
+              "locator": "Model selector list, Gemini 3.8 Flash row"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-8-flash",
+              "locator": "Capabilities, Thinking, note on minimal"
+            }
+          ]
+        }
+      }
+    },
+    "gemini-3.7-flash": {
+      "status": "current",
+      "displayName": "Gemini 3.7 Flash",
+      "routes": [
+        {
+          "harness": "agy",
+          "model": "gemini-3.7-flash",
+          "register": true
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-7-flash",
+              "locator": "Token limits, input token limit"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 65536,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-7-flash",
+              "locator": "Token limits, output token limit"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.7-flash row"
+            },
+            {
+              "source": "google-gemini-3-7-flash",
+              "locator": "Capabilities, Thinking"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.7-flash row"
+            },
+            {
+              "source": "antigravity-models",
+              "locator": "Model selector list, Gemini 3.7 Flash row"
+            }
+          ]
+        }
+      }
+    },
+    "gemini-3.6-flash": {
+      "status": "current",
+      "displayName": "Gemini 3.6 Flash",
+      "routes": [
+        {
+          "harness": "agy",
+          "model": "gemini-3.6-flash",
+          "register": true,
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      ],
+      "facts": {
+        "effortValues": {
+          "value": [
+            "minimal",
+            "low",
+            "medium",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.6-flash row"
+            }
+          ],
+          "note": "The Antigravity harness offers only low, medium, and high for this model, so its route overrides the vendor list."
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.6-flash row"
+            },
+            {
+              "source": "antigravity-models",
+              "locator": "Model selector list, Gemini 3.6 Flash row"
+            }
+          ]
+        }
+      }
+    },
+    "gemini-3.5-flash": {
+      "status": "current",
+      "displayName": "Gemini 3.5 Flash",
+      "routes": [
+        {
+          "harness": "agy",
+          "model": "gemini-3.5-flash",
+          "register": true,
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-5-flash",
+              "locator": "Token limits, input token limit"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 65536,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-5-flash",
+              "locator": "Token limits, output token limit"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "minimal",
+            "low",
+            "medium",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.5-flash row"
+            }
+          ],
+          "note": "The Antigravity harness offers only low, medium, and high for this model, so its route overrides the vendor list."
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.5-flash row"
+            }
+          ]
+        }
+      }
+    },
+    "gemini-3.1-pro": {
+      "status": "current",
+      "displayName": "Gemini 3.1 Pro",
+      "routes": [
+        {
+          "harness": "agy",
+          "model": "gemini-3.1-pro",
+          "register": true,
+          "effortValues": [
+            "low",
+            "high"
+          ]
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-1-pro",
+              "locator": "Token limits, input token limit"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 65536,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-gemini-3-1-pro",
+              "locator": "Token limits, output token limit"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.1-pro-preview row"
+            },
+            {
+              "source": "antigravity-models",
+              "locator": "Model selector list, Gemini 3.1 Pro row",
+              "disagrees": true,
+              "states": [
+                "low",
+                "high"
+              ]
+            }
+          ],
+          "note": "Antigravity offers only low and high for 3.1 Pro, so its route overrides the vendor list."
+        },
+        "effortDefault": {
+          "value": "high",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "google-thinking",
+              "locator": "Controlling thinking, table, gemini-3.1-pro-preview row"
+            },
+            {
+              "source": "antigravity-models",
+              "locator": "Model selector list, Gemini 3.1 Pro row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "gemini-drop-sampling-params",
+      "text": "Leave temperature, top_p, and top_k out of Gemini requests; Google deprecated all three in July 2026.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-changelog",
+      "locator": "July 21, 2026, Deprecated parameters",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemini-minimal-not-on-3-7",
+      "text": "Do not ask Gemini 3.7 Flash for minimal thinking; the API rejects it. Use low, medium, or high.",
+      "applies": [
+        "gemini-3.7-flash"
+      ],
+      "class": "vendor",
+      "source": "google-gemini-3-7-flash",
+      "locator": "Capabilities, Thinking",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemini-agy-effort-range",
+      "text": "Antigravity's picker offers low, medium, and high for the Flash models but only low and high for 3.1 Pro.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "antigravity-models",
+      "locator": "Model selector list",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemini-thinking-dynamic",
+      "text": "Gemini models think dynamically by default and scale effort to the request; set thinking_level only to cap cost or force depth.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "google-thinking",
+      "locator": "Controlling thinking",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemini-3-8-token-use",
+      "text": "Gemini 3.8 Flash spends more tokens on long agentic tasks by design; lower thinking_level to low for everyday work to cut cost.",
+      "applies": [
+        "gemini-3.8-flash"
+      ],
+      "class": "vendor",
+      "source": "google-latest-model",
+      "locator": "What's new in Gemini 3.8 Flash",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "gemini-minimal-not-on-3-8",
+      "text": "Do not ask Gemini 3.8 Flash for minimal thinking; the API returns an error. Use low, medium, or high.",
+      "applies": [
+        "gemini-3.8-flash"
+      ],
+      "class": "vendor",
+      "source": "google-gemini-3-8-flash",
+      "locator": "Capabilities, Thinking",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

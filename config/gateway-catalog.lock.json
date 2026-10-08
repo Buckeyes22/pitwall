@@ -1,0 +1,31 @@
+{
+  "avoid_list": [
+    "ai21",
+    "blackbox",
+    "coze",
+    "duckduckgo-web",
+    "felo-web",
+    "fireworks",
+    "friendliai",
+    "iflytek",
+    "kiro",
+    "muse-spark-web",
+    "nlpcloud",
+    "opencode",
+    "t3-web"
+  ],
+  "extractor_sha256": "4f335b9072bd112a5c451c83a907bfa8dfa334aa0e6f9b586c655dee40ade86c",
+  "known_unreachable": [
+    "agy",
+    "arcee-ai",
+    "glm-cn",
+    "opencode-zen",
+    "qwen-web"
+  ],
+  "pool_count": 74,
+  "registry_covered": 74,
+  "row_count": 432,
+  "steady_monthly": 1323425000,
+  "tarball_sha256": "738c58af1faae8c57eb643a939d1191f8d7e083d9295ef61687d2bff04878c29",
+  "upstream_version": "3.8.50"
+}

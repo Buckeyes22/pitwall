@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/mimo",
+  "sources": [
+    {
+      "id": "mimo-models",
+      "url": "https://mimo.mi.com/docs/en-US/quick-start/summary/model",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "manual",
+      "format": "html",
+      "observedHash": "sha256:b3c166be268895275f44b3a87d630fd5d25fb161fff4911b96355eb3d3ea6504",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:b3c166be268895275f44b3a87d630fd5d25fb161fff4911b96355eb3d3ea6504",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "mimo-deep-thinking",
+      "url": "https://mimo.mi.com/docs/en-US/quick-start/usage-guide/text-generation/deep-thinking",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "manual",
+      "format": "html",
+      "observedHash": "sha256:34474e01aff1d2c17569973f92463f9885314f1d6e977c32872ffabf94560af1",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:34474e01aff1d2c17569973f92463f9885314f1d6e977c32872ffabf94560af1",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "mimo-model-updates",
+      "url": "https://mimo.mi.com/docs/en-US/updates/model",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "manual",
+      "format": "html",
+      "observedHash": "sha256:18786da585f2d97fc10bad3ad86a9804b895298141fa11b7bc237ac5f919623d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:18786da585f2d97fc10bad3ad86a9804b895298141fa11b7bc237ac5f919623d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "mimo-deprecations",
+      "url": "https://mimo.mi.com/docs/en-US/updates/deprecate",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "manual",
+      "format": "html",
+      "observedHash": "sha256:28afdca9c86baeb03c87249cc96f24abc5a479e128d7e44a24100530fd9f8e55",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:28afdca9c86baeb03c87249cc96f24abc5a479e128d7e44a24100530fd9f8e55",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-mimo-v2.5",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "XiaomiMiMo/MiMo-V2.5",
+      "observedHash": "revision:63651580ca774f8504f676040460aed3e1244ac1",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:63651580ca774f8504f676040460aed3e1244ac1",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-mimo-v2.5-pro",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "XiaomiMiMo/MiMo-V2.5-Pro",
+      "observedHash": "revision:21d1ecfecd7bd70f31be25ca49d7edd21f003659",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:21d1ecfecd7bd70f31be25ca49d7edd21f003659",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "guidance",
+      "kind": "vendor",
+      "searchedAt": "2026-09-28",
+      "searched": "https://mimo.mi.com/docs/en-US/ navigation; the deep thinking page has the only behaviour notes, recorded under that source"
+    }
+  ],
+  "watch": [
+    {
+      "id": "xiaomimimo",
+      "kind": "huggingface-org",
+      "org": "XiaomiMiMo",
+      "pattern": "MiMo-V[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(RL|MOPD|DFlash|Base|ASR|TTS.*)",
+        ".*-Distill-.*"
+      ],
+      "seen": [
+        "MiMo-V2-Flash"
+      ]
+    }
+  ]
+}

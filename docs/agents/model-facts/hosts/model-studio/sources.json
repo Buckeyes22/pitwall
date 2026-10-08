@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "unit": "hosts/model-studio",
+  "sources": [
+    {
+      "id": "model-studio-models",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/models.md",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:28afc15d062d5e61b2e13ef048e217b58dbd022241e2ee015ab08f7cf099bc4f",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:28afc15d062d5e61b2e13ef048e217b58dbd022241e2ee015ab08f7cf099bc4f",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "model-studio-kimi-k3",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/kimi-k3.md",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6c9a7d4b67c1c93b48f5e2e479433d92f36d9db5c04968d50ea25ce8f53de282",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6c9a7d4b67c1c93b48f5e2e479433d92f36d9db5c04968d50ea25ce8f53de282",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "model-studio-glm-5-3",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/glm-5-3.md",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:270b98d3c5fcb61f333f3e89e101f19ad8b7d5ba75336918e4a596d91d474c1a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:270b98d3c5fcb61f333f3e89e101f19ad8b7d5ba75336918e4a596d91d474c1a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "model-studio-deepseek-v4-1-flash",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/deepseek-v4-1-flash.md",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6436bea1a7e3fd160ec117b23d16010fef1f090e4253c07302057de8ead5e8e7",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6436bea1a7e3fd160ec117b23d16010fef1f090e4253c07302057de8ead5e8e7",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "model-studio-minimax",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/minimax-api.md",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:022ebf860209411066d80be3ae647cd16929b484d30579419325a6c010e4b2b2",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:022ebf860209411066d80be3ae647cd16929b484d30579419325a6c010e4b2b2",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "model-studio-release-notes",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/release-notes.md",
+      "kind": "host",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:38ee47c96cd6e18ba798839b2c82b47553bdc9ae0f2f9f6a24480743bba0fae0",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:38ee47c96cd6e18ba798839b2c82b47553bdc9ae0f2f9f6a24480743bba0fae0",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": []
+}

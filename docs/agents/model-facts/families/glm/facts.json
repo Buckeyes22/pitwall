@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/glm",
+  "models": {
+    "glm-5.3": {
+      "status": "current",
+      "displayName": "GLM-5.3",
+      "artifact": "zai-org/GLM-5.3",
+      "routes": [
+        {
+          "harness": "opencode",
+          "model": "zai-coding-plan/glm-5.3"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-glm-5-3",
+              "locator": "Feature Changes, line 27"
+            },
+            {
+              "source": "zai-migrate",
+              "locator": "line 11"
+            }
+          ],
+          "note": "Vendor states 128K maximum output; recorded as 131072 tokens."
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "high",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "chat_template.jinja line 2"
+            },
+            {
+              "source": "zai-glm-5-3",
+              "locator": "Feature Changes, reasoning table, line 33"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "max",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "chat_template.jinja line 2"
+            },
+            {
+              "source": "zai-glm-5-3",
+              "locator": "Feature Changes, reasoning table, line 33"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "*": "max"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "chat_template.jinja line 2"
+            },
+            {
+              "source": "hf-glm-5.3",
+              "locator": "README.md line 55"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-glm-5-3",
+              "locator": "Feature Changes, line 28"
+            },
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Default Thinking Behaviour, line 13"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Interleaved thinking, Tip, line 26"
+            }
+          ],
+          "note": "The vendor says thinking blocks should be returned with tool results, so a tool loop keeps them."
+        },
+        "revision": {
+          "value": "aca966e4e02791568aa6a4ced368624b3d897f42",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 753329940480,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "glm-5.3",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "glm-5.3-flash": {
+      "status": "current",
+      "displayName": "GLM-5.3-Flash",
+      "artifact": "zai-org/GLM-5.3-Flash",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-glm-5-3-flash",
+              "locator": "Capability cards, Maximum Output Tokens, line 45"
+            }
+          ],
+          "note": "Vendor states 128K maximum output; recorded as 131072 tokens."
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "high",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "chat_template.jinja line 2"
+            },
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "README.md line 44"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "max",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "chat_template.jinja line 2"
+            },
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "README.md line 44"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "*": "max"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "chat_template.jinja line 2"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-glm-5-3-flash",
+              "locator": "Model Overview, line 57"
+            },
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Default Thinking Behaviour, line 13"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Interleaved thinking, Tip, line 26"
+            }
+          ],
+          "note": "The vendor says thinking blocks should be returned with tool results, so a tool loop keeps them."
+        },
+        "revision": {
+          "value": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 321323031390,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.3-flash",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "glm-5.2": {
+      "status": "current",
+      "displayName": "GLM-5.2",
+      "artifact": "zai-org/GLM-5.2",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 131072,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-glm-5-2",
+              "locator": "Overview cards, Maximum Output Tokens, line 29"
+            }
+          ],
+          "note": "Vendor states 128K maximum output; recorded as 131072 tokens."
+        },
+        "effortValues": {
+          "value": [
+            "high",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "chat_template.jinja line 2"
+            }
+          ],
+          "note": "The template offers high and max; the vendor page only shows max."
+        },
+        "effortDefault": {
+          "value": "max",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "chat_template.jinja line 2"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "coerced",
+            "map": {
+              "*": "max"
+            }
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "chat_template.jinja line 2"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "chat_template.jinja line 3"
+            },
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Default Thinking Behaviour, lines 13-19"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Interleaved thinking, Tip, line 26"
+            }
+          ],
+          "note": "The vendor says thinking blocks should be returned with tool results, so a tool loop keeps them."
+        },
+        "revision": {
+          "value": "cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 753329940480,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.2",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    },
+    "glm-5.1": {
+      "status": "current",
+      "displayName": "GLM-5.1",
+      "artifact": "zai-org/GLM-5.1",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 202752,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.1",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-glm-5.1",
+              "locator": "chat_template.jinja line 118"
+            },
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Default Thinking Behaviour, lines 13-19"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "zai-thinking-mode",
+              "locator": "Interleaved thinking, Tip, line 26"
+            }
+          ],
+          "note": "The vendor says thinking blocks should be returned with tool results, so a tool loop keeps them."
+        },
+        "revision": {
+          "value": "26e1bd6e011feb778d25ae34b09b07074139d92d",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.1",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 753864139008,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.1",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "MIT",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.1",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-glm-5.1",
+              "locator": "generation_config.json"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "glm-53-effort",
+      "text": "GLM-5.3 and GLM-5.3-Flash take low, high, or max. Anything else, or nothing, becomes max, the default. Pass low or high explicitly to spend fewer tokens.",
+      "applies": [
+        "glm-5.3",
+        "glm-5.3-flash"
+      ],
+      "class": "artifact",
+      "source": "hf-glm-5.3",
+      "locator": "README.md line 55",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "glm-53-clear-thinking",
+      "text": "The GLM-5.3 chat template keeps earlier reasoning unless told otherwise (clear_thinking defaults to false). For plain chat, pass clear_thinking true.",
+      "applies": [
+        "glm-5.3",
+        "glm-5.3-flash"
+      ],
+      "class": "artifact",
+      "source": "hf-glm-5.3",
+      "locator": "README.md line 56",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "glm-53-no-off-switch",
+      "text": "GLM-5.3 always reasons and rejects thinking disabled. Where a caller used to switch thinking off, set reasoning_effort to low instead.",
+      "applies": [
+        "glm-5.3"
+      ],
+      "class": "vendor",
+      "source": "zai-glm-5-3",
+      "locator": "Feature Changes, migration note, line 36",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "glm-52-effort-two-levels",
+      "text": "GLM-5.2 has only high and max. A low request is treated as max, so it does not save tokens.",
+      "applies": [
+        "glm-5.2"
+      ],
+      "class": "artifact",
+      "source": "hf-glm-5.2",
+      "locator": "chat_template.jinja line 2",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "glm-return-reasoning",
+      "text": "In a tool loop, send each assistant turn back with its reasoning_content unedited and in order. Dropping it lowers quality and cache hits.",
+      "applies": [
+        "glm-5.3",
+        "glm-5.3-flash",
+        "glm-5.2",
+        "glm-5.1"
+      ],
+      "class": "vendor",
+      "source": "zai-thinking-mode",
+      "locator": "Interleaved thinking, Tip; Preserved thinking, Check",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "glm-flash-settings",
+      "text": "For GLM-5.3-Flash the vendor suggests temperature 1, top_p 0.95, effort max, clear_thinking false, and tool_stream on for streamed requests.",
+      "applies": [
+        "glm-5.3-flash"
+      ],
+      "class": "vendor",
+      "source": "zai-glm-5-3-flash",
+      "locator": "Model Overview, Recommended Settings, line 57",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "glm-flash-vision",
+      "text": "GLM-5.3-Flash accepts images, video, and files as well as text; GLM-5.3, GLM-5.2, and GLM-5.1 take text only.",
+      "applies": [
+        "glm-5.3-flash",
+        "glm-5.3",
+        "glm-5.2"
+      ],
+      "class": "vendor",
+      "source": "zai-glm-5-3-flash",
+      "locator": "Capability cards, Input Modality",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

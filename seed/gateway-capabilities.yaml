@@ -1,0 +1,10 @@
+capabilities:
+  - name: coding.chat
+    version: 1.0.0
+    class: llm
+    description: Free-tier gateway chat capability (ADR 0007).
+    cost_mode: zero
+    input_schema:
+      type: object
+    output_schema:
+      type: object

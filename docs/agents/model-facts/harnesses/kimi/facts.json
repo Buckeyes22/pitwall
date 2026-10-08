@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/kimi",
+  "facts": {
+    "headlessFlag": {
+      "value": "-p",
+      "method": "reviewed",
+      "note": "kimi -p PROMPT runs one prompt without the TUI; assistant text goes to stdout and thinking and tool progress go to stderr.",
+      "evidence": [
+        {"source": "kimi-code-command", "locator": "line 24, Main Command Options, --prompt; line 121, Non-Interactive Execution"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "stream-json"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "kimi-code-command", "locator": "line 25, Main Command Options, --output-format"}
+      ]
+    },
+    "effortFlag": {
+      "value": "[thinking] effort in config.toml",
+      "method": "reviewed",
+      "note": "The main command has no effort flag. Effort is a config setting (low, medium, high, xhigh, max) that falls back to the model default when the model does not list it.",
+      "evidence": [
+        {"source": "kimi-code-config", "locator": "line 303-310, thinking, effort"},
+        {"source": "kimi-code-command", "locator": "line 15-32, Main Command Options (no effort flag)"}
+      ]
+    },
+    "permissionDefault": {
+      "value": "manual interactively; auto under -p",
+      "method": "reviewed",
+      "evidence": [
+        {"source": "kimi-code-config", "locator": "line 102, default_permission_mode"},
+        {"source": "kimi-code-command", "locator": "line 46, Flag Conflict Rules; line 121, Non-Interactive Execution"}
+      ]
+    },
+    "instructionFiles": {
+      "value": ["AGENTS.md", ".kimi-code/AGENTS.md", "~/.kimi-code/AGENTS.md", "~/.agents/AGENTS.md"],
+      "method": "reviewed",
+      "evidence": [
+        {"source": "kimi-code-agents", "locator": "line 200-202, Instruction Files"}
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {"source": "kimi-code-agents", "locator": "line 10-14, Built-in Sub-Agents"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "kimi-prompt-flag-conflicts",
+      "text": "kimi -p cannot be combined with --yolo, --auto, or --plan; startup rejects it. Headless runs already use the auto permission policy, with static deny rules still enforced.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "kimi-code-command",
+      "locator": "line 40-47, Flag Conflict Rules; line 121, Non-Interactive Execution",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-stream-json-needs-prompt",
+      "text": "Use --output-format stream-json with -p to get one JSON object per stdout line; thinking is left out of the stream and progress notices go to stderr.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "kimi-code-command",
+      "locator": "line 129-135, Non-Interactive Execution, stream-json",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-subagents-inherit-model",
+      "text": "Sub-agents (coder, explore, plan) run in their own context and inherit the caller's model unless [secondary_model] sets a pool; built-in ones cannot spawn further sub-agents.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "kimi-code-agents",
+      "locator": "line 10-24, Built-in Sub-Agents; kimi-code-config line 196-200, secondary_model",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-agent-flags-new-session",
+      "text": "--agent and --agent-file pick the main agent, work with -p, and only apply to a new session; they cannot be combined with --session or --continue.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "kimi-code-command",
+      "locator": "line 102-111, Custom Agents",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/steer-gate.py\"",
+            "timeout": 15,
+            "statusMessage": "orchestrator steering gate"
+          }
+        ]
+      }
+    ]
+  }
+}

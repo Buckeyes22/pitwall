@@ -1,0 +1,816 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/qwen",
+  "models": {
+    "qwen3.8-flash": {
+      "status": "current",
+      "displayName": "Qwen3.8 Flash",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/qwen3.8-flash"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "alibaba-text-models",
+              "locator": "Model comparison table, qwen3.8-flash row, Context: 1M"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "alibaba-deep-thinking",
+              "locator": "Supported Models, Qwen3.8 Flash series (hybrid thinking mode); enable_thinking switch"
+            }
+          ]
+        }
+      }
+    },
+    "qwen3.8-flash-next": {
+      "status": "current",
+      "displayName": "Qwen3.8 Flash Next",
+      "artifact": "Qwen/Qwen3.8-Flash-Next",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 20
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "de4b8e4d43b917e7706784d8bb445c9af86a3540",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 179999981459,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "qwen-community-1.0",
+            "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "xhigh",
+            "medium",
+            "low"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "chat_template.jinja lines 46-50, supported reasoning effort check"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "xhigh",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "chat_template.jinja line 47, reasoning_effort|default('xhigh')"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "chat_template.jinja lines 48-50 (raise_exception)"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-flash-next",
+              "locator": "chat_template.jinja line 165, enable_thinking false"
+            }
+          ]
+        }
+      }
+    },
+    "qwen3.8-27b": {
+      "status": "current",
+      "displayName": "Qwen3.8 27B",
+      "artifact": "Qwen/Qwen3.8-27B",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 20
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 27781427952,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": null
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "xhigh",
+            "medium",
+            "low"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "chat_template.jinja lines 46-50, supported reasoning effort check"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "xhigh",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "chat_template.jinja line 47, reasoning_effort|default('xhigh')"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "chat_template.jinja lines 48-50 (raise_exception)"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-27b",
+              "locator": "chat_template.jinja line 165, enable_thinking false"
+            }
+          ]
+        }
+      }
+    },
+    "qwen3.6-27b": {
+      "status": "current",
+      "displayName": "Qwen3.6 27B",
+      "artifact": "Qwen/Qwen3.6-27B",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 20
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 27781427952,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://huggingface.co/Qwen/Qwen3.6-27B/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "chat_template.jinja line 149, enable_thinking false"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-27b",
+              "locator": "chat_template.jinja, no reasoning_effort check"
+            }
+          ],
+          "note": "The chat template has no reasoning_effort variable; Qwen3.8 templates do."
+        }
+      }
+    },
+    "qwen3.6-35b-a3b": {
+      "status": "current",
+      "displayName": "Qwen3.6 35B A3B",
+      "artifact": "Qwen/Qwen3.6-35B-A3B",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 20
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "995ad96eacd98c81ed38be0c5b274b04031597b0",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 35951822704,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "chat_template.jinja line 149, enable_thinking false"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.6-35b-a3b",
+              "locator": "chat_template.jinja, no reasoning_effort check"
+            }
+          ],
+          "note": "The chat template has no reasoning_effort variable; Qwen3.8 templates do."
+        }
+      }
+    },
+    "qwen3-coder-next": {
+      "status": "current",
+      "displayName": "Qwen3 Coder Next",
+      "artifact": "Qwen/Qwen3-Coder-Next",
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3-coder-next",
+              "locator": "config.json"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 40
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3-coder-next",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "a7fbcb5c0e12d62a448eaa0e260346bf5dcc0feb",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3-coder-next",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 79674391296,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3-coder-next",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "Apache-2.0",
+            "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3-coder-next",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3-coder-next",
+              "locator": "chat_template.jinja, no reasoning_effort check; README, Model Overview note"
+            }
+          ],
+          "note": "The chat template has no reasoning_effort variable, and the README says the model supports only non-thinking mode."
+        }
+      }
+    },
+    "qwen3.8-max": {
+      "status": "current",
+      "displayName": "Qwen3.8 Max",
+      "routes": [
+        {
+          "harness": "opencode",
+          "host": "opencode-go",
+          "model": "opencode-go/qwen3.8-max"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "alibaba-text-models",
+              "locator": "Model comparison table, qwen3.8-max row, Context: 1M"
+            },
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "README.md, Qwen3.8-Max description: 1M context length by default"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "README.md, Qwen3.8-Max description: vision input"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "alibaba-deep-thinking",
+              "locator": "Supported Models, Qwen3.8 Max series (hybrid thinking mode); enable_thinking switch"
+            }
+          ]
+        }
+      }
+    },
+    "qwen3.8-2.4t-a95b": {
+      "status": "current",
+      "displayName": "Qwen3.8 2.4T-A95B",
+      "artifact": "Qwen/Qwen3.8-2.4T-A95B",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 262144,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "config.json, max_position_embeddings"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 20
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 2446182725504,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "qwen3.8-max",
+            "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "xhigh",
+            "medium",
+            "low"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "chat_template.jinja lines 25-27, supported reasoning effort check"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "xhigh",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "chat_template.jinja line 25, reasoning_effort|default('xhigh')"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "chat_template.jinja lines 26-27 (raise_exception)"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-qwen3.8-2.4t-a95b",
+              "locator": "chat_template.jinja lines 21-23, enable_thinking false raises"
+            },
+            {
+              "source": "alibaba-deep-thinking",
+              "locator": "Supported Models, Qwen3.8 open-source series (thinking mode only): qwen3.8-2.4t-a95b"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "qwen38-effort-three-levels",
+      "text": "Qwen3.8 open models take reasoning_effort xhigh (default), medium, or low. Any other value, including high, makes the chat template raise an error.",
+      "applies": [
+        "qwen3.8-27b",
+        "qwen3.8-flash-next"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3.8-27b",
+      "locator": "chat_template.jinja lines 46-50; README, API Usage",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen38-low-effort-can-cost-more",
+      "text": "In multi-turn agent work, low effort answers faster per turn but can cause failures and retries, so total time and tokens may rise. Keep the default for agent tasks.",
+      "applies": [
+        "qwen3.8-27b",
+        "qwen3.8-flash-next"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3.8-27b",
+      "locator": "README, API Usage, tip after reasoning_effort levels",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-sampling-thinking-versus-instruct",
+      "text": "Sample with temperature 1.0 and top_p 0.95 while thinking; for non-thinking calls use temperature 0.7, top_p 0.8, and presence penalty 1.5. top_k is 20 in both.",
+      "applies": [
+        "qwen3.8-27b",
+        "qwen3.8-flash-next"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3.8-27b",
+      "locator": "README, Best Practices, Sampling Parameters",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen38-give-output-room",
+      "text": "For agent tasks, set the reasoning output limit to 262,144 tokens and the final answer limit to 131,072 tokens, inside the 1M window the hosted versions offer.",
+      "applies": [
+        "qwen3.8-27b",
+        "qwen3.8-flash-next",
+        "qwen3.8-flash"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3.8-27b",
+      "locator": "README, Best Practices, Adequate Output Length",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-thinking-on-by-default",
+      "text": "Qwen3.6 and 3.8 models think unless a request turns thinking off with enable_thinking false. Turn it off for simple chat or extraction to save time and tokens.",
+      "applies": [
+        "qwen3.8-flash",
+        "qwen3.8-27b",
+        "qwen3.6-27b",
+        "qwen3.6-35b-a3b"
+      ],
+      "class": "vendor",
+      "source": "alibaba-deep-thinking",
+      "locator": "Supported Models, Qwen3.8 tab; enable_thinking usage note",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-preserve-thinking-needs-reasoning-back",
+      "text": "On qwen3.8-flash, preserve_thinking is on by default; the client must send earlier reasoning_content back in assistant messages for it to take effect.",
+      "applies": [
+        "qwen3.8-flash"
+      ],
+      "class": "vendor",
+      "source": "alibaba-deep-thinking",
+      "locator": "Pass Thinking Process",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen3-coder-next-no-thinking",
+      "text": "Qwen3-Coder-Next never emits think blocks and needs no enable_thinking setting. The vendor suggests temperature 1.0, top_p 0.95, top_k 40.",
+      "applies": [
+        "qwen3-coder-next"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3-coder-next",
+      "locator": "README, Model Overview note; Best Practices",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen-context-native-versus-hosted",
+      "text": "Open Qwen3.6 and 3.8 models run 262,144 tokens natively and stretch to about 1M with scaling. Hosted qwen3.8-flash offers 1M by default.",
+      "applies": [
+        "qwen3.8-27b",
+        "qwen3.8-flash-next",
+        "qwen3.6-27b",
+        "qwen3.6-35b-a3b",
+        "qwen3.8-flash"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3.8-27b",
+      "locator": "README, Model Overview, Context Length; note about the hosted version",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "qwen38-max-is-2.4t-base",
+      "text": "qwen3.8-max is the hosted release of the open Qwen3.8-2.4T-A95B, adding vision input, non-thinking mode, a 1M window, and built-in tools. The open weights are thinking-only with a 262,144 window.",
+      "applies": [
+        "*"
+      ],
+      "class": "artifact",
+      "source": "hf-qwen3.8-2.4t-a95b",
+      "locator": "README.md, Qwen3.8-Max description",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

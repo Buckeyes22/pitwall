@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "unit": "hosts/opencode-go",
+  "sources": [
+    {
+      "id": "opencode-go-docs",
+      "url": "https://opencode.ai/docs/go/",
+      "kind": "host",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:421f6793181339a3df51d17f0095a80034007789dc230089e9cb77da2c2f8625",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:421f6793181339a3df51d17f0095a80034007789dc230089e9cb77da2c2f8625",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-models",
+      "url": "https://opencode.ai/zen/go/v1/models",
+      "kind": "host",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "json",
+      "observedHash": "sha256:00e1e3f38f2d52ad996a01630cc6a55b00252b706859b487e2a09ee4af5423ca",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:00e1e3f38f2d52ad996a01630cc6a55b00252b706859b487e2a09ee4af5423ca",
+      "reviewedAt": "2026-09-28",
+      "volatile": [
+        "created"
+      ]
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "opencode-go-models",
+      "kind": "index",
+      "url": "https://opencode.ai/zen/go/v1/models",
+      "pattern": "\"id\":\\s*\"([a-z0-9][a-z0-9.-]*)\"",
+      "ignore": [],
+      "seen": [
+        "deepseek-flash",
+        "glm-5",
+        "hy3-preview",
+        "kimi-k2.5",
+        "mimo-v2-omni",
+        "mimo-v2-pro",
+        "minimax-m2.5",
+        "muse-spark-1.2-contributor",
+        "omen-alpha",
+        "qwen3.5-plus",
+        "qwen3.6-plus",
+        "qwen3.7-max",
+        "qwen3.7-plus",
+        "space-bunny-free"
+      ]
+    }
+  ]
+}

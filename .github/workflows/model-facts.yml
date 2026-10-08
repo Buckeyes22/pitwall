@@ -1,0 +1,95 @@
+name: Model facts
+
+on:
+  schedule:
+    - cron: "41 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: model-facts
+  cancel-in-progress: false
+
+env:
+  BRANCH: automation/model-facts
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.14.7"
+      - uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081 # v5
+        with:
+          version: "0.11.19"
+          enable-cache: true
+      - name: Start from the open pull request, or from main
+        run: |
+          open="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')"
+          echo "OPEN_PR=$open" >> "$GITHUB_ENV"
+          if [ -n "$open" ]; then
+            git fetch origin "$BRANCH"
+            git switch -C "$BRANCH" "origin/$BRANCH"
+          else
+            git switch -C "$BRANCH"
+          fi
+          uv sync --frozen --extra dev --python 3.14.7
+      - name: Check sources and regenerate
+        run: |
+          set +e
+          uv run --frozen python tools/agents/model_sources.py check --write --json > "$RUNNER_TEMP/report.json"
+          status=$?
+          set -e
+          test "$status" -le 1
+          echo "CHECK_STATUS=$status" >> "$GITHUB_ENV"
+          uv run --frozen python tools/agents/sync_model_facts.py
+          uv run --frozen python tools/agents/sync_routes.py
+          uv run --frozen python tools/agents/validate_model_facts.py
+      - name: Open or update the pull request
+        run: |
+          uv run --frozen python - "$RUNNER_TEMP/report.json" > "$RUNNER_TEMP/body.md" <<'PY'
+          import json, sys
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          print("Weekly model facts check. Run `/pitwall:model-facts <family>` for each family with pending sources. The models listed under New models to adopt must be adopted with `/pitwall:model-facts`.\n")
+          sections = [
+              ("Pending sources", "pending", lambda i: f"{i['unit']} `{i['source']}` <{i['url']}>"),
+              ("Unreachable", "unreachable", lambda i: f"{i['unit']} `{i['source']}`: {i['reason']}"),
+              ("New models to adopt", "newModels", lambda i: f"{i['unit']} `{i['name']}`"),
+              ("Retiring", "retiring", lambda i: f"{i['unit']} `{i['model']}` on {i['retires']}"),
+              ("Stale manual sources", "stale", lambda i: f"{i['unit']} `{i['source']}`, reviewed {i['reviewedAt']}"),
+          ]
+          for title, key, line in sections:
+              print(f"## {title}\n")
+              print("\n".join(f"- {line(item)}" for item in report[key]) or "None.")
+              print()
+          PY
+          if git diff --quiet; then
+            if [ -n "$OPEN_PR" ]; then
+              gh pr edit "$OPEN_PR" --body-file "$RUNNER_TEMP/body.md"
+            elif [ "$CHECK_STATUS" = "1" ]; then
+              cat "$RUNNER_TEMP/body.md"
+              echo "::error::The check still reports items that no open pull request tracks. Run /pitwall:model-facts for them."
+              exit 1
+            fi
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -s -m "chore(model-facts): record what the weekly source check saw"
+          if [ -n "$OPEN_PR" ]; then
+            git push origin "$BRANCH"
+            gh pr edit "$OPEN_PR" --body-file "$RUNNER_TEMP/body.md"
+          else
+            git push --force origin "$BRANCH"
+            gh pr create --base main --head "$BRANCH" --title "Model facts: weekly source check" --body-file "$RUNNER_TEMP/body.md"
+          fi

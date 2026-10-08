@@ -1,0 +1,17 @@
+{
+  "adapter": "vast",
+  "capability_cost_mode": "per_request",
+  "provider_config": {
+    "cost": {
+      "kind": "per_unit",
+      "unit": "output",
+      "rate_per_unit": "0.025"
+    }
+  },
+  "payload": {
+    "unit_count": "4",
+    "max_unit_count": "6"
+  },
+  "expected_estimate": "0.100000",
+  "expected_ceiling": "0.150000"
+}

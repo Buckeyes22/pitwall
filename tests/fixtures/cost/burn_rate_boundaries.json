@@ -1,0 +1,177 @@
+{
+  "forecast_vectors": [
+    {
+      "name": "utc_month_boundary",
+      "input": {
+        "now": "2026-03-01T00:30:00Z",
+        "budget_usd": "100",
+        "window_days": 3,
+        "rows": [
+          {"day": "2026-02-28", "cost_usd": "5"},
+          {"day": "2026-03-01", "cost_usd": "10"}
+        ],
+        "mtd_spend": "10",
+        "last_rollup_day": "2026-03-01"
+      },
+      "expected": {
+        "now": "2026-03-01T00:30:00Z",
+        "observation_window": {
+          "start": "2026-02-27",
+          "end": "2026-03-01",
+          "days": 3,
+          "observed_days": 2
+        },
+        "spend_to_date_usd": "10.000000",
+        "daily_rate_usd": "7.500000",
+        "forecast_total_usd": "242.343750",
+        "budget_usd": "100.000000",
+        "remaining_budget_usd": "90.000000",
+        "percent_consumed": "10.0000",
+        "projected_breach_at": "2026-03-13T00:30:00Z",
+        "projected_breach_eta_days": "12.000000",
+        "trend": "increasing",
+        "confidence": "0.356348",
+        "data_sufficiency": "sparse",
+        "stale": false,
+        "last_rollup_day": "2026-03-01",
+        "already_breached": false,
+        "at_budget": false,
+        "projection_overflow": false
+      }
+    },
+    {
+      "name": "delayed_rollup",
+      "input": {
+        "now": "2026-06-10T12:00:00Z",
+        "budget_usd": "100",
+        "window_days": 30,
+        "rows": [
+          {"day": "2026-06-08", "cost_usd": "10"}
+        ],
+        "mtd_spend": "10",
+        "last_rollup_day": "2026-06-08",
+        "last_workload_day": "2026-06-09"
+      },
+      "expected": {
+        "now": "2026-06-10T12:00:00Z",
+        "observation_window": {
+          "start": "2026-05-12",
+          "end": "2026-06-10",
+          "days": 30,
+          "observed_days": 1
+        },
+        "spend_to_date_usd": "10.000000",
+        "daily_rate_usd": "10.000000",
+        "forecast_total_usd": "215.000000",
+        "budget_usd": "100.000000",
+        "remaining_budget_usd": "90.000000",
+        "percent_consumed": "10.0000",
+        "projected_breach_at": "2026-06-19T12:00:00Z",
+        "projected_breach_eta_days": "9.000000",
+        "trend": "insufficient_data",
+        "confidence": "0.000000",
+        "data_sufficiency": "sparse",
+        "stale": true,
+        "last_rollup_day": "2026-06-08",
+        "already_breached": false,
+        "at_budget": false,
+        "projection_overflow": false
+      }
+    },
+    {
+      "name": "projection_overflow",
+      "input": {
+        "now": "9999-12-31T23:59:00Z",
+        "budget_usd": "100",
+        "window_days": 30,
+        "rows": [
+          {"day": "9999-12-31", "cost_usd": "1"}
+        ],
+        "mtd_spend": "1",
+        "last_rollup_day": "9999-12-31"
+      },
+      "expected": {
+        "now": "9999-12-31T23:59:00Z",
+        "observation_window": {
+          "start": "9999-12-02",
+          "end": "9999-12-31",
+          "days": 30,
+          "observed_days": 1
+        },
+        "spend_to_date_usd": "1.000000",
+        "daily_rate_usd": "1.000000",
+        "forecast_total_usd": null,
+        "budget_usd": "100.000000",
+        "remaining_budget_usd": "99.000000",
+        "percent_consumed": "1.0000",
+        "projected_breach_at": null,
+        "projected_breach_eta_days": "99.000000",
+        "trend": "insufficient_data",
+        "confidence": "0.000000",
+        "data_sufficiency": "sparse",
+        "stale": false,
+        "last_rollup_day": "9999-12-31",
+        "already_breached": false,
+        "at_budget": false,
+        "projection_overflow": true
+      }
+    }
+  ],
+  "alert_repeat_recovery": {
+    "forecast_totals": ["110", "110", "89", "110"],
+    "expected_results": [
+      {
+        "crossed": true,
+        "sent": true,
+        "skipped_duplicate": false,
+        "rearmed": false,
+        "forecast_pct": "110.0",
+        "reason": null,
+        "notification": {
+          "threshold_pct": null,
+          "email_id": "forecast_email_123",
+          "error": null,
+          "ok": true
+        }
+      },
+      {
+        "crossed": true,
+        "sent": false,
+        "skipped_duplicate": true,
+        "rearmed": false,
+        "forecast_pct": "110.0",
+        "reason": null,
+        "notification": null
+      },
+      {
+        "crossed": false,
+        "sent": false,
+        "skipped_duplicate": false,
+        "rearmed": true,
+        "forecast_pct": "89.0",
+        "reason": "recovered",
+        "notification": null
+      },
+      {
+        "crossed": true,
+        "sent": true,
+        "skipped_duplicate": false,
+        "rearmed": false,
+        "forecast_pct": "110.0",
+        "reason": null,
+        "notification": {
+          "threshold_pct": null,
+          "email_id": "forecast_email_123",
+          "error": null,
+          "ok": true
+        }
+      }
+    ],
+    "expected_notification_count": 2,
+    "expected_dedup": {
+      "key": "pitwall:forecast-alert:2026-06:100",
+      "value": "sent:forecast_email_123",
+      "ttl_seconds": 3888000
+    }
+  }
+}

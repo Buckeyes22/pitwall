@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/claude",
+  "sources": [
+    {
+      "id": "cc-headless",
+      "url": "https://code.claude.com/docs/en/headless.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:f2d9f93dfe887cf817912816bcb6fa39483834e42bca9fd10a0c2ec9d7e4d691",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:f2d9f93dfe887cf817912816bcb6fa39483834e42bca9fd10a0c2ec9d7e4d691",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-cli-reference",
+      "url": "https://code.claude.com/docs/en/cli-reference.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b718d70af6040f0f4fc5767b7c99ba3a27114272102249939733a40baed0fbe6",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:b718d70af6040f0f4fc5767b7c99ba3a27114272102249939733a40baed0fbe6",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-permissions",
+      "url": "https://code.claude.com/docs/en/permissions.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:afc31ff3fe6f839f8be75abeb1e28e35cb956e5a7dc167629d74efcb3046d616",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:afc31ff3fe6f839f8be75abeb1e28e35cb956e5a7dc167629d74efcb3046d616",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-sandboxing",
+      "url": "https://code.claude.com/docs/en/sandboxing.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:1675facdd79a1d857b5e3e9761fe202596e3cc97fbfa43d46ef8f2812c1ef9d7",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1675facdd79a1d857b5e3e9761fe202596e3cc97fbfa43d46ef8f2812c1ef9d7",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-memory",
+      "url": "https://code.claude.com/docs/en/memory.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:9d8467cc6e428774496abbe0ecfaae2880ead5052a2f05e6d5093c8d9ddefa8d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:9d8467cc6e428774496abbe0ecfaae2880ead5052a2f05e6d5093c8d9ddefa8d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-sub-agents",
+      "url": "https://code.claude.com/docs/en/sub-agents.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:036366d0fd1ac1ac7429406024ecf0cbc301a26675f0d66042d0bbc6ab1df426",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:036366d0fd1ac1ac7429406024ecf0cbc301a26675f0d66042d0bbc6ab1df426",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-model-config",
+      "url": "https://code.claude.com/docs/en/model-config.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a1aab046d11b4edf8e60319bcb4e99b911efef15e2b5eb6a2f7a2362381d16fd",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:a1aab046d11b4edf8e60319bcb4e99b911efef15e2b5eb6a2f7a2362381d16fd",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "cc-changelog",
+      "url": "https://code.claude.com/docs/en/changelog.md",
+      "kind": "harness",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:d4c6aac849a9304916bbc6d129a4d0e9b3bd5c189b058900e59399bb6c9f87e2",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:d4c6aac849a9304916bbc6d129a4d0e9b3bd5c189b058900e59399bb6c9f87e2",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": []
+}

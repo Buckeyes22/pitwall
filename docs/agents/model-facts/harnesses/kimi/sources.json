@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/kimi",
+  "sources": [
+    {
+      "id": "kimi-code-command",
+      "url": "https://moonshotai.github.io/kimi-code/en/reference/kimi-command.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3eaf5f4b77605149f36083fc17fa2ab1bbf7075c71f673b11d2fe7b72aa08ba9",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:3eaf5f4b77605149f36083fc17fa2ab1bbf7075c71f673b11d2fe7b72aa08ba9",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-code-agents",
+      "url": "https://moonshotai.github.io/kimi-code/en/customization/agents.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b8550cf6442fa4551777e2792382d02b690c5d8887fe3c026a66b4fb309a2ff7",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:b8550cf6442fa4551777e2792382d02b690c5d8887fe3c026a66b4fb309a2ff7",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-code-config",
+      "url": "https://moonshotai.github.io/kimi-code/en/configuration/config-files.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3296cb04c4f37eaa9fc944aec303d630b4b45657c331e31af8ef4744183370ba",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:3296cb04c4f37eaa9fc944aec303d630b4b45657c331e31af8ef4744183370ba",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-code-providers",
+      "url": "https://moonshotai.github.io/kimi-code/en/configuration/providers.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:c87eb11a6cd62a89a85bf12ed4fde9156d1d1eea571bede8f583f5ca843bf47f",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:c87eb11a6cd62a89a85bf12ed4fde9156d1d1eea571bede8f583f5ca843bf47f",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "kimi-code-changelog",
+      "url": "https://moonshotai.github.io/kimi-code/en/release-notes/changelog.md",
+      "kind": "harness",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4712bc0bfde4beddfb3d3bd2dfc8310070a1f9982878e3e34709c9192c9db03d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:4712bc0bfde4beddfb3d3bd2dfc8310070a1f9982878e3e34709c9192c9db03d",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": []
+}

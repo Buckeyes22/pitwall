@@ -1,0 +1,475 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/minimax",
+  "models": {
+    "minimax-m3": {
+      "status": "current",
+      "displayName": "MiniMax M3",
+      "artifact": "MiniMaxAI/MiniMax-M3",
+      "routes": [
+        {
+          "harness": "opencode",
+          "model": "minimax/MiniMax-M3"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-minimax-m3",
+              "locator": "config.json, max_position_embeddings"
+            },
+            {
+              "source": "minimax-models",
+              "locator": "Model Invocation page, Supported Models table, MiniMax-M3 row",
+              "disagrees": true,
+              "states": 1000000
+            }
+          ],
+          "note": "The model files set 1,048,576 positions; the vendor table rounds this to 1,000,000. The artifact value is kept."
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Control table, MiniMax-M3 row"
+            },
+            {
+              "source": "hf-minimax-m3",
+              "locator": "README.md, How to Use, reasoning modes"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Control, preserve thinking blocks unchanged"
+            },
+            {
+              "source": "minimax-m3-tool-use",
+              "locator": "Tool Use and Interleaved Thinking, return the full response"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m3",
+              "locator": "generation_config.json"
+            }
+          ]
+        },
+        "revision": {
+          "value": "f0e1c1e04d40177e4673a22097036854f536e9c0",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m3",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 427040140160,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m3",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "minimax-community",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m3",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Depth Control (MiniMax-M3.1-Flash-Preview only); Request parameters, output_config.effort row"
+            }
+          ],
+          "note": "The page documents effort only for MiniMax-M3.1-Flash-Preview; M3 and M2.x have no effort control."
+        }
+      }
+    },
+    "minimax-m2.7": {
+      "status": "current",
+      "displayName": "MiniMax M2.7",
+      "artifact": "MiniMaxAI/MiniMax-M2.7",
+      "routes": [],
+      "facts": {
+        "contextWindow": {
+          "value": 204800,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-minimax-m2.7",
+              "locator": "config.json, max_position_embeddings"
+            },
+            {
+              "source": "minimax-invocation",
+              "locator": "Supported Models table, MiniMax-M2.7 row"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Control table, M2.x row"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Control, preserve thinking blocks unchanged"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 40
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "hf-minimax-m2.7",
+              "locator": "generation_config.json"
+            },
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Parameter table, top_p row",
+              "disagrees": true,
+              "states": {
+                "temperature": 1.0,
+                "top_p": 0.9
+              }
+            }
+          ],
+          "note": "The model files set top_p 0.95 with top_k 40; the vendor API table gives 0.9 for M2.x. The artifact default is kept."
+        },
+        "revision": {
+          "value": "d494266a4affc0d2995ba1fa35c8481cbd84294b",
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m2.7",
+              "locator": "record.json sha"
+            }
+          ]
+        },
+        "parameters": {
+          "value": 228689764864,
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m2.7",
+              "locator": "record.json safetensors.total"
+            }
+          ]
+        },
+        "license": {
+          "value": {
+            "name": "other",
+            "url": "https://github.com/MiniMax-AI/MiniMax-M2.7/blob/main/LICENSE"
+          },
+          "method": "extracted",
+          "evidence": [
+            {
+              "source": "hf-minimax-m2.7",
+              "locator": "record.json cardData"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Depth Control (MiniMax-M3.1-Flash-Preview only); Request parameters, output_config.effort row"
+            }
+          ],
+          "note": "The page documents effort only for MiniMax-M3.1-Flash-Preview; M3 and M2.x have no effort control."
+        }
+      }
+    },
+    "minimax-m3.1-flash-preview": {
+      "status": "current",
+      "displayName": "MiniMax M3.1 Flash Preview",
+      "routes": [
+        {
+          "harness": "opencode",
+          "model": "minimax/MiniMax-M3.1-Flash-Preview"
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-invocation",
+              "locator": "Supported Models table, MiniMax-M3.1-Flash-Preview row"
+            },
+            {
+              "source": "minimax-models",
+              "locator": "Text models table, MiniMax-M3.1-Flash-Preview row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image",
+            "video"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Multimodal input, image and video blocks: M3.1-Flash-Preview / M3 only"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-invocation",
+              "locator": "Thinking, Thinking depth (effort)"
+            },
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Request parameters, output_config.effort row"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "max",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-invocation",
+              "locator": "Thinking, Thinking depth (effort)"
+            },
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Request parameters, output_config.effort row"
+            }
+          ]
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-invocation",
+              "locator": "Thinking, Limitations"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": false,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Control table, MiniMax-M3.1-Flash-Preview row"
+            },
+            {
+              "source": "minimax-invocation",
+              "locator": "Thinking, Limitations"
+            }
+          ]
+        },
+        "mustReturnReasoning": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Thinking Control, preserve thinking blocks unchanged"
+            }
+          ]
+        },
+        "samplingDefaults": {
+          "value": {
+            "top_p": 0.95
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "minimax-anthropic-api",
+              "locator": "Request parameters, top_p row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "minimax-m3-thinking-off",
+      "text": "M3 starts with thinking off. Send thinking type adaptive to turn it on; type disabled keeps it off.",
+      "applies": [
+        "minimax-m3"
+      ],
+      "class": "vendor",
+      "source": "minimax-anthropic-api",
+      "locator": "Thinking Control table, MiniMax-M3 row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-m2-thinking-always",
+      "text": "M2.x always thinks. A request that disables thinking is accepted and ignored.",
+      "applies": [
+        "minimax-m2.7"
+      ],
+      "class": "vendor",
+      "source": "minimax-anthropic-api",
+      "locator": "Thinking Control table, M2.x row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-effort-none-400",
+      "text": "Effort is documented only for MiniMax-M3.1-Flash-Preview, and none returns HTTP 400 there. M3 and M2.x have no effort control, so do not send one.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "minimax-anthropic-api",
+      "locator": "Thinking Depth Control (MiniMax-M3.1-Flash-Preview only)",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-keep-thinking-blocks",
+      "text": "In multi-turn and tool-use work, send the model's full previous reply back, thinking blocks included, or its reasoning chain breaks.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "minimax-m3-tool-use",
+      "locator": "Tool Use and Interleaved Thinking, multi-turn section",
+      "surfaces": [
+        "card",
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-max-tokens-includes-thinking",
+      "text": "Thinking tokens count against max_tokens. Set it high enough, or the reply can end with no text at all.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "minimax-anthropic-api",
+      "locator": "Parameter table, max_tokens row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-ignored-parameters",
+      "text": "top_k and stop_sequences are ignored by the MiniMax API, so do not rely on them to shape output.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "minimax-anthropic-api",
+      "locator": "Parameter table, top_k and stop_sequences rows",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-m31-token-plan-only",
+      "text": "MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now, so no Pitwall route reaches it yet. The public API and OpenCode Go serve M3.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "minimax-invocation",
+      "locator": "Note at top of page; Supported Models",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-m31-effort-not-off",
+      "text": "M3.1-Flash-Preview always thinks. Lower effort to cut latency; disabling thinking or sending effort none returns HTTP 400. Omitting effort means max.",
+      "applies": [
+        "minimax-m3.1-flash-preview"
+      ],
+      "class": "vendor",
+      "source": "minimax-invocation",
+      "locator": "Thinking, Limitations",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

@@ -1,0 +1,1115 @@
+{
+  "schema_version": "declarations.v1",
+  "generated_from": "static source review of checked-in prose and package metadata; no provider call, credential use, build, artifact, or live verification was performed for this file",
+  "authority": {
+    "support_authority": "docs/support-matrix.md remains the human-authored support authority for the public alpha.",
+    "canonical_input": "release_acceptance/declarations.json is an extraction of that support authority into the declarations.v1 schema. It is the machine-readable input a future evidence report would consume; it does not supersede or generate the public support matrix.",
+    "matrix_output": "The generated artifact this input is shaped for is an external draft acceptance-matrix.md evidence report, not docs/support-matrix.md. tools/release_acceptance/matrix.py assembles it with canonical JSON and JSONL inputs; rows remain not_run, unresolved gaps remain explicit, and no acceptance or release claim is made.",
+    "no_implicit_approval": "This file contains no approval, exception, countersign, credential, spend, or resource-authorization record. Absence of such a record is deliberate and must not be read as a granted approval.",
+    "no_marketing_downgrade": "Each declaration status normalizes the quoted source wording into the declarations.v1 vocabulary; source_wording preserves the exact published phrase and must not be rewritten to soften or strengthen it."
+  },
+  "vocabulary": {
+    "status": ["supported", "hermetic", "limited", "pending", "deferred", "unsupported"],
+    "proof_lanes": ["hermetic", "integration", "release", "manual", "live"],
+    "verification_state": [
+      "static_declaration_only",
+      "no_live_verification_yet",
+      "provider_capability_absent",
+      "capability_deferred_no_artifact"
+    ],
+    "selector_status": "provisional",
+    "selector_note": "scope.patterns are selector hints only. They do not imply tested coverage, completeness, or that a matching artifact was executed. Inventory units for CLI, TUI, gateway, routing, config, and ops remain separate and this file does not claim exhaustive all-interface mapping."
+  },
+  "declarations": [
+    {
+      "declaration_id": "matrix-01-rest-api",
+      "component": "REST API on loopback or authenticated non-loopback",
+      "status": "supported",
+      "source_wording": "Supported",
+      "source": "docs/support-matrix.md:10",
+      "scope": {"patterns": ["rest:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Single-operator deployment; scoped bearer authorization and admin-secret controls", "source": "docs/support-matrix.md:10"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration"],
+      "stated_limitations": ["Single-operator deployment; scoped bearer authorization and admin-secret controls"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-02-mcp-local-stdio",
+      "component": "MCP over local stdio",
+      "status": "supported",
+      "source_wording": "Supported",
+      "source": "docs/support-matrix.md:11",
+      "scope": {"patterns": ["mcp:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "81 statically registered tools; network MCP remains unavailable", "source": "docs/support-matrix.md:11"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration"],
+      "stated_limitations": [
+        "81 statically registered tools; network MCP remains unavailable",
+        "Local stdio only; no network listener or new identity subsystem"
+      ],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": ["docs/support-matrix.md:41"]
+    },
+    {
+      "declaration_id": "matrix-03-operational-cli-and-migrations",
+      "component": "Operational CLI and database migrations",
+      "status": "supported",
+      "source_wording": "Supported",
+      "source": "docs/support-matrix.md:12",
+      "scope": {"patterns": ["cli:*", "migrations:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [{"text": "Managed Python 3.14.7", "source": "docs/support-matrix.md:12"}],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "stable human/JSON output; explicit confirmations for human-operated spend/destruction", "source": "docs/support-matrix.md:12"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration"],
+      "stated_limitations": ["Managed Python 3.14.7; stable human/JSON output; explicit confirmations for human-operated spend/destruction"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": ["docs/support-matrix.md:34"]
+    },
+    {
+      "declaration_id": "matrix-04-textual-dashboard",
+      "component": "Textual dashboard",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:13",
+      "scope": {"patterns": ["tui:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Overview, Providers, Leases, Models, Serve, Pods, Routes, Cost, Resources, and Operations; injectable sources and Pilot coverage", "source": "docs/support-matrix.md:13"}]
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["Supported hermetically means executable contracts, fixtures, security tests, and CI exist", "Overview, Providers, Leases, Models, Serve, Pods, Routes, Cost, Resources, and Operations; injectable sources and Pilot coverage"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": ["docs/support-matrix.md:3-6"]
+    },
+    {
+      "declaration_id": "matrix-05-postgres-redis-reconciler-webhook-cost-exporter",
+      "component": "Postgres, Redis, reconciler, inbound webhook, and cost exporter",
+      "status": "supported",
+      "source_wording": "Supported",
+      "source": "docs/support-matrix.md:14",
+      "scope": {"patterns": ["db:*", "redis:*", "reconciler:*", "webhook:inbound", "cost-exporter:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [{"text": "Canonical Compose topology; loopback host bindings by default", "source": "docs/support-matrix.md:14"}],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Canonical Compose topology; loopback host bindings by default", "source": "docs/support-matrix.md:14"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration"],
+      "stated_limitations": ["Canonical Compose topology; loopback host bindings by default"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-06-provider-neutral-runtime",
+      "component": "Provider-neutral runtime and persisted external identifiers",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:15",
+      "scope": {"patterns": ["provider-runtime:*", "adapter:builtin"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Static built-in adapters; credential references only; RunPod compatibility identifiers retained", "source": "docs/support-matrix.md:15"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["Static built-in adapters; credential references only; RunPod compatibility identifiers retained"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-07-production-routing",
+      "component": "Production routing",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:16",
+      "scope": {"patterns": ["routing:plan", "routing:execute"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Deterministic priority/weighted plans, hard constraints, conservative budget admission, persisted plan identity, bounded job events", "source": "docs/support-matrix.md:16"}]
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["Deterministic priority/weighted plans, hard constraints, conservative budget admission, persisted plan identity, bounded job events"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-08-structured-pricing-and-cost-truth-up",
+      "component": "Structured pricing and cost truth-up",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:17",
+      "scope": {"patterns": ["cost:pricing", "cost:truth-up"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "zero, gpu_hour, per_request, per_second, per_token, per_vm_second, active_idle, and per_unit; USD values are Decimal-authoritative", "source": "docs/support-matrix.md:17"}]
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["zero, gpu_hour, per_request, per_second, per_token, per_vm_second, active_idle, and per_unit; USD values are Decimal-authoritative"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-09-pre-spend-guardrails",
+      "component": "Pre-spend guardrails",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:18",
+      "scope": {"patterns": ["guardrail:preview", "guardrail:enforce"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "High-confidence secrets block; supported PII may redact; bounded/opaque content follows configured policy; preview does not persist", "source": "docs/support-matrix.md:18"}]
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["High-confidence secrets block; supported PII may redact; bounded/opaque content follows configured policy; preview does not persist"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-10-runpod-serverless-and-openai-compatible-endpoints",
+      "component": "RunPod serverless queue/LB and public OpenAI-compatible endpoints",
+      "status": "supported",
+      "source_wording": "Existing supported path",
+      "source": "docs/support-matrix.md:19",
+      "scope": {"patterns": ["provider:runpod:serverless", "provider:openai-compatible"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Operator supplies credentials and endpoint configuration; no live call was made for this candidate", "source": "docs/support-matrix.md:19"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Operator supplies credentials and endpoint configuration; no live call was made for this candidate",
+        "Real-provider verification requires the named provider credential reference, an explicit operation allow-list, resource/token/byte and spend caps, cleanup policy, and TTL"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:54-58"]
+    },
+    {
+      "declaration_id": "matrix-11-runpod-market-catalogue-and-billing-reads",
+      "component": "RunPod market/catalogue and supported billing reads",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:20",
+      "scope": {"patterns": ["provider:runpod:market", "provider:runpod:billing"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Cached GPU/DC/availability/rate/bid/balance snapshot; billing categories remain explicitly unavailable when the captured contract cannot attribute an actual", "source": "docs/support-matrix.md:20"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Cached GPU/DC/availability/rate/bid/balance snapshot; billing categories remain explicitly unavailable when the captured contract cannot attribute an actual",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate",
+        "RunPod actual-cost reads additionally require an exact persisted workload-to-Pod mapping and a bounded authoritative billing window; endpoint, network-volume, aggregate, empty, and lagging billing results remain unavailable and cannot write the ledger"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6", "docs/support-matrix.md:58-60"]
+    },
+    {
+      "declaration_id": "matrix-12-runpod-resource-control",
+      "component": "RunPod resource control",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:21",
+      "scope": {"patterns": ["provider:runpod:resource-control", "provider:runpod:hub:read"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Pods, serverless endpoints, templates, volumes, registry auth, and read-only Hub browse/search/get; Hub deploy/publish is unavailable", "source": "docs/support-matrix.md:21"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Pods, serverless endpoints, templates, volumes, registry auth, and read-only Hub browse/search/get; Hub deploy/publish is unavailable",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6"]
+    },
+    {
+      "declaration_id": "matrix-13-runpod-volume-objects-and-bounded-pod-logs",
+      "component": "RunPod volume objects and bounded pod logs",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:22",
+      "scope": {"patterns": ["provider:runpod:volume-objects", "provider:runpod:pod-logs"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Separate S3 credentials, path/checksum/byte/time limits, explicit overwrite/delete confirmation; no remote exec", "source": "docs/support-matrix.md:22"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Separate S3 credentials, path/checksum/byte/time limits, explicit overwrite/delete confirmation; no remote exec",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6"]
+    },
+    {
+      "declaration_id": "matrix-14-runpod-onboarding",
+      "component": "RunPod onboarding",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:23",
+      "scope": {"patterns": ["provider:runpod:onboarding"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Plan-first, resumable and idempotent; exact plan confirmation for apply/resume; separately authorized bounded inference probe only", "source": "docs/support-matrix.md:23"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Plan-first, resumable and idempotent; exact plan confirmation for apply/resume; separately authorized bounded inference probe only",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6"]
+    },
+    {
+      "declaration_id": "matrix-15-vast-ai",
+      "component": "Vast.ai",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:24",
+      "scope": {"patterns": ["provider:vastai"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Compute and availability only; no fake inference or actual-cost capability", "source": "docs/support-matrix.md:24"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Compute and availability only; no fake inference or actual-cost capability",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6", "docs/support-matrix.md:49"]
+    },
+    {
+      "declaration_id": "matrix-16-together",
+      "component": "Together",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:25",
+      "scope": {"patterns": ["provider:together"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Synchronous inference and availability; bounded token pricing required before admission", "source": "docs/support-matrix.md:25"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Synchronous inference and availability; bounded token pricing required before admission",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6", "docs/support-matrix.md:50"]
+    },
+    {
+      "declaration_id": "matrix-17-lambda-cloud",
+      "component": "Lambda Cloud",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:26",
+      "scope": {"patterns": ["provider:lambda-cloud"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Compute and availability only; no fake inference or actual-cost capability", "source": "docs/support-matrix.md:26"}],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": [
+        "Compute and availability only; no fake inference or actual-cost capability",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": ["docs/support-matrix.md:4-6", "docs/support-matrix.md:51"]
+    },
+    {
+      "declaration_id": "matrix-18-self-hosted-openai-compatible-endpoints",
+      "component": "Self-hosted OpenAI-compatible endpoints",
+      "status": "limited",
+      "source_wording": "Alpha/limited",
+      "source": "docs/support-matrix.md:28",
+      "scope": {"patterns": ["provider:self-hosted-openai-compatible"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Authenticated, budgeted, probed/cooled down, capacity-aware, and fit-aware; no host orchestration or host telemetry", "source": "docs/support-matrix.md:28"}],
+        "backend": [{"text": "no host orchestration or host telemetry", "source": "docs/support-matrix.md:28"}],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": ["Authenticated, budgeted, probed/cooled down, capacity-aware, and fit-aware; no host orchestration or host telemetry"],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-19-runpod-pod-leases-and-serve",
+      "component": "RunPod pod leases and serve",
+      "status": "limited",
+      "source_wording": "Alpha/limited",
+      "source": "docs/support-matrix.md:29",
+      "scope": {"patterns": ["provider:runpod:pod-lease", "provider:runpod:serve"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "vLLM, llama.cpp, and SGLang; operator remains responsible for model/image provenance, access, and capacity fit", "source": "docs/support-matrix.md:29"}],
+        "backend": [{"text": "vLLM, llama.cpp, and SGLang", "source": "docs/support-matrix.md:29"}],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": ["vLLM, llama.cpp, and SGLang; operator remains responsible for model/image provenance, access, and capacity fit"],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-20-model-catalogue-and-guarded-console-launch",
+      "component": "Model catalogue and guarded console launch",
+      "status": "limited",
+      "source_wording": "Alpha/limited",
+      "source": "docs/support-matrix.md:30",
+      "scope": {"patterns": ["model-catalogue:*", "console-launch:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Dossier arithmetic is advisory; launch remains behind serve budget, guardrail, and kill-switch gates", "source": "docs/support-matrix.md:30"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration"],
+      "stated_limitations": ["Dossier arithmetic is advisory; launch remains behind serve budget, guardrail, and kill-switch gates"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-21-outbound-signed-webhooks",
+      "component": "Outbound signed webhooks",
+      "status": "supported",
+      "source_wording": "Supported",
+      "source": "docs/support-matrix.md:31",
+      "scope": {"patterns": ["webhook:outbound"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Public HTTPS:443 destinations only; version 1 envelope", "source": "docs/support-matrix.md:31"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration", "live"],
+      "stated_limitations": ["Public HTTPS:443 destinations only; version 1 envelope"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-22-agent-routing-wheel-sdist-and-cli",
+      "component": "Pitwall Agent Routing wheel/sdist and CLI",
+      "status": "supported",
+      "source_wording": "Supported component",
+      "source": "docs/support-matrix.md:32",
+      "scope": {"patterns": ["agent-routing:cli", "agent-routing:artifact:wheel", "agent-routing:artifact:sdist"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [{"text": "Python 3.14", "source": "docs/agents/routing-readme.md:26"}],
+        "install": [{"text": "Part of the one pitwall package and lock (Python 3.14); pitwall agents; pitwall agents migrate moves a standalone install", "source": "docs/support-matrix.md:32"}],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "release"],
+      "stated_limitations": [
+        "Part of the one pitwall package and lock (Python 3.14); pitwall agents; pitwall agents migrate moves a standalone install",
+        "Build component artifacts from the component project root. Never build them from a copied tree, plugin cache, installed payload, dirty worktree, or unreviewed standalone checkout"
+      ],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": ["docs/agents/releasing.md:3-14"]
+    },
+    {
+      "declaration_id": "matrix-23-agent-routing-source-plugins-and-shims",
+      "component": "Agent Routing source plugins and shims",
+      "status": "supported",
+      "source_wording": "Supported component",
+      "source": "docs/support-matrix.md:33",
+      "scope": {"patterns": ["agent-routing:plugin:*", "agent-routing:shim:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [{"text": "pitwall agents install writes the shims and the Claude Code, Codex, and GitHub Copilot CLI plugins from package data; no clone required", "source": "docs/support-matrix.md:33"}],
+        "provider": [],
+        "backend": [],
+        "harness": [{"text": "the Claude Code, Codex, and GitHub Copilot CLI plugins from package data", "source": "docs/support-matrix.md:33"}],
+        "transport": []
+      },
+      "required_proof_lanes": ["hermetic", "release"],
+      "stated_limitations": [
+        "pitwall agents install writes the shims and the Claude Code, Codex, and GitHub Copilot CLI plugins from package data; no clone required",
+        "The shims default to bypassing the child CLI's sandbox or interactive approval prompts where that CLI supports a compatible flag",
+        "A Git worktree separates files from the caller's checkout but is not a container or permission boundary"
+      ],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": ["docs/agents/routing-readme.md:34", "docs/agents/routing-readme.md:508"]
+    },
+    {
+      "declaration_id": "matrix-24-agent-routing-on-macos",
+      "component": "Agent Routing on macOS",
+      "status": "limited",
+      "source_wording": "Hosted portable lane",
+      "source": "docs/support-matrix.md:34",
+      "scope": {"patterns": ["agent-routing:platform:macos"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [{"text": "Managed Python 3.14.7 Agent Routing smoke; broker images and Compose remain Linux-only", "source": "docs/support-matrix.md:34"}],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": ["release"],
+      "stated_limitations": [
+        "Hosted portable lane is a component smoke, not a broker or image lane",
+        "Managed Python 3.14.7 Agent Routing smoke; broker images and Compose remain Linux-only"
+      ],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-25-free-tier-gateway-catalog-sync-and-drift-gate",
+      "component": "Free-tier gateway catalog sync and drift gate",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:35",
+      "scope": {"patterns": ["gateway:catalog-sync", "gateway:catalog-drift-gate"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Pinned upstream release with SHA-256 provenance, regenerated seeds, and a catalog drift gate; upstream is data only", "source": "docs/support-matrix.md:35"}]
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["Pinned upstream release with SHA-256 provenance, regenerated seeds, and a catalog drift gate; upstream is data only"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-26-free-tier-gateway-fork-and-loopback-supervisor",
+      "component": "Free-tier gateway fork and loopback supervisor",
+      "status": "supported",
+      "source_wording": "Supported component",
+      "source": "docs/support-matrix.md:36",
+      "scope": {"patterns": ["gateway:loopback-supervisor", "gateway:fork"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [{"text": "Python gateway (pitwall gateway serve) in the one pitwall package; loopback-only sidecar supervised with bearer PITWALL_GATEWAY_TOKEN", "source": "docs/support-matrix.md:36"}],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "loopback-only sidecar supervised with bearer PITWALL_GATEWAY_TOKEN", "source": "docs/support-matrix.md:36"}, {"text": "The gateway refuses to boot unless PITWALL_GATEWAY_TOKEN is set, --bind is a loopback address", "source": "src/pitwall/gateway/config.py:3-4"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration", "release"],
+      "stated_limitations": [
+        "Python gateway (pitwall gateway serve) in the one pitwall package; loopback-only sidecar supervised with bearer PITWALL_GATEWAY_TOKEN",
+        "PITWALL_GATEWAY_TOKEN is required at boot; the shim refuses to start without it",
+        "The shim serves exactly five HTTP routes on --bind 127.0.0.1 --port 20130"
+      ],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": ["src/pitwall/gateway/app.py:1", "src/pitwall/gateway/config.py:3"]
+    },
+    {
+      "declaration_id": "matrix-27-pi-workbench",
+      "component": "Pi Workbench",
+      "status": "limited",
+      "source_wording": "Limited component",
+      "source": "docs/support-matrix.md:37",
+      "scope": {
+        "patterns": [
+          "cli:pitwall:workbench"
+        ],
+        "selector_status": "provisional",
+        "implies_tested_coverage": false
+      },
+      "boundaries": {
+        "platform": [
+          {
+            "text": "Node 22.22.1 or later, Linux, and flock (util-linux)",
+            "source": "docs/support-matrix.md:37"
+          },
+          {
+            "text": "optional Bubblewrap restricted mode requires permitted user namespaces and util-linux 2.41 or later for setpriv --seccomp-filter",
+            "source": "docs/support-matrix.md:37"
+          }
+        ],
+        "install": [
+          {
+            "text": "pitwall workbench in the one pitwall package",
+            "source": "docs/support-matrix.md:37"
+          },
+          {
+            "text": "pinned Pi installed by pitwall agents setup pi",
+            "source": "docs/support-matrix.md:37"
+          }
+        ],
+        "provider": [
+          {
+            "text": "no network allowlist",
+            "source": "docs/support-matrix.md:37"
+          },
+          {
+            "text": "no per-child credential sandbox",
+            "source": "docs/support-matrix.md:37"
+          }
+        ],
+        "backend": [
+          {
+            "text": "no unfinished native-child resume",
+            "source": "docs/support-matrix.md:37"
+          }
+        ],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": [
+        "hermetic",
+        "release"
+      ],
+      "stated_limitations": [
+        "Node 22.22.1 or later, Linux, and flock (util-linux)",
+        "optional Bubblewrap restricted mode requires permitted user namespaces and util-linux 2.41 or later for setpriv --seccomp-filter",
+        "no unfinished native-child resume, no network allowlist, and no per-child credential sandbox"
+      ],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-28-free-pool-quota-state-lockouts-and-zero-cost-routing",
+      "component": "Free-pool quota state, lockouts, and zero-cost routing",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:38",
+      "scope": {"patterns": ["routing:free-pool", "quota:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Quota windows, per-model lockouts, strict zero-cost filter, and burn-down persistence; free routing stays behind the existing budget gate, guardrails, and kill switch", "source": "docs/support-matrix.md:38"}]
+      },
+      "required_proof_lanes": ["hermetic"],
+      "stated_limitations": ["Quota windows, per-model lockouts, strict zero-cost filter, and burn-down persistence; free routing stays behind the existing budget gate, guardrails, and kill switch"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-29-openai-gateway-provider-adapter",
+      "component": "openai_gateway provider adapter",
+      "status": "hermetic",
+      "source_wording": "Supported hermetically",
+      "source": "docs/support-matrix.md:39",
+      "scope": {"patterns": ["adapter:openai_gateway"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [{"text": "Keyless or optional PITWALL_GATEWAY_API_KEY credential reference; availability from catalog evidence with no egress; typed 429 quota signals; no compute, async, or actual-cost capability", "source": "docs/support-matrix.md:39"}],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "availability from catalog evidence with no egress", "source": "docs/support-matrix.md:39"}]
+      },
+      "required_proof_lanes": ["hermetic", "integration"],
+      "stated_limitations": [
+        "Keyless or optional PITWALL_GATEWAY_API_KEY credential reference; availability from catalog evidence with no egress; typed 429 quota signals; no compute, async, or actual-cost capability",
+        "no compute, async, or actual-cost capability"
+      ],
+      "verification_state": "provider_capability_absent",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-30-in-repository-gpu-worker-image",
+      "component": "In-repository GPU worker image",
+      "status": "deferred",
+      "source_wording": "Deferred/unavailable",
+      "source": "docs/support-matrix.md:40",
+      "scope": {"patterns": ["image:gpu-worker"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [{"text": "No image, workflow, default deployment, or successful worker entry point", "source": "docs/support-matrix.md:40"}],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": [],
+      "stated_limitations": ["No image, workflow, default deployment, or successful worker entry point"],
+      "verification_state": "capability_deferred_no_artifact",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-31-mcp-network-transport",
+      "component": "MCP network transport",
+      "status": "deferred",
+      "source_wording": "Deferred/unavailable",
+      "source": "docs/support-matrix.md:41",
+      "scope": {"patterns": ["mcp:network"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Local stdio only; no network listener or new identity subsystem", "source": "docs/support-matrix.md:41"}]
+      },
+      "required_proof_lanes": [],
+      "stated_limitations": ["Local stdio only; no network listener or new identity subsystem", "81 statically registered tools; network MCP remains unavailable"],
+      "verification_state": "capability_deferred_no_artifact",
+      "secondary_sources": ["docs/support-matrix.md:11"]
+    },
+    {
+      "declaration_id": "matrix-32-hosted-control-plane-telemetry-service-or-saas",
+      "component": "Hosted control plane, telemetry service, or SaaS",
+      "status": "unsupported",
+      "source_wording": "Not provided",
+      "source": "docs/support-matrix.md:42",
+      "scope": {"patterns": ["hosted-service:*"], "selector_status": "provisional", "implies_tested_coverage": false},
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [],
+        "backend": [],
+        "harness": [],
+        "transport": [{"text": "Self-hosted software; Langfuse is opt-in", "source": "docs/support-matrix.md:42"}]
+      },
+      "required_proof_lanes": [],
+      "stated_limitations": ["Self-hosted software; Langfuse is opt-in"],
+      "verification_state": "static_declaration_only",
+      "secondary_sources": []
+    },
+    {
+      "declaration_id": "matrix-33-alibaba-cloud-model-studio",
+      "component": "Alibaba Cloud Model Studio",
+      "status": "pending",
+      "source_wording": "Code-complete; countersign pending",
+      "source": "docs/support-matrix.md:27",
+      "scope": {
+        "patterns": [
+          "provider:model_studio"
+        ],
+        "selector_status": "provisional",
+        "implies_tested_coverage": false
+      },
+      "boundaries": {
+        "platform": [],
+        "install": [],
+        "provider": [
+          {
+            "text": "Synchronous inference and availability in both halves from one committed catalog; Token Plan automation is gated behind an explicit acceptance; no live call was made for this candidate",
+            "source": "docs/support-matrix.md:27"
+          }
+        ],
+        "backend": [],
+        "harness": [],
+        "transport": []
+      },
+      "required_proof_lanes": [
+        "hermetic",
+        "integration",
+        "live"
+      ],
+      "stated_limitations": [
+        "Synchronous inference and availability in both halves from one committed catalog; Token Plan automation is gated behind an explicit acceptance; no live call was made for this candidate",
+        "Countersign pending means no provider credential, spend, or resource authorization was supplied for this release candidate"
+      ],
+      "verification_state": "no_live_verification_yet",
+      "secondary_sources": [
+        "docs/support-matrix.md:4-6",
+        "docs/support-matrix.md:54"
+      ]
+    }
+  ],
+  "provider_capability_tuples": [
+    {
+      "tuple_id": "provider-capability-runpod",
+      "adapter": "RunPod",
+      "compute": "Yes",
+      "sync_inference": "Yes",
+      "async_submit_status_cancel": "Yes",
+      "availability": "Market service, not adapter",
+      "provider_actual_cost": "Exact Pod billing only",
+      "source": "docs/support-matrix.md:48",
+      "caveats": ["RunPod actual-cost reads additionally require an exact persisted workload-to-Pod mapping and a bounded authoritative billing window", "endpoint, network-volume, aggregate, empty, and lagging billing results remain unavailable and cannot write the ledger"],
+      "caveat_sources": ["docs/support-matrix.md:58-60"]
+    },
+    {
+      "tuple_id": "provider-capability-vast-ai",
+      "adapter": "Vast.ai",
+      "compute": "Yes",
+      "sync_inference": "No",
+      "async_submit_status_cancel": "No",
+      "availability": "Yes",
+      "provider_actual_cost": "No",
+      "source": "docs/support-matrix.md:49",
+      "caveats": ["no fake inference or actual-cost capability"],
+      "caveat_sources": ["docs/support-matrix.md:24"]
+    },
+    {
+      "tuple_id": "provider-capability-together",
+      "adapter": "Together",
+      "compute": "No",
+      "sync_inference": "Yes",
+      "async_submit_status_cancel": "No",
+      "availability": "Yes",
+      "provider_actual_cost": "No",
+      "source": "docs/support-matrix.md:50",
+      "caveats": ["bounded token pricing required before admission"],
+      "caveat_sources": ["docs/support-matrix.md:25"]
+    },
+    {
+      "tuple_id": "provider-capability-lambda-cloud",
+      "adapter": "Lambda Cloud",
+      "compute": "Yes",
+      "sync_inference": "No",
+      "async_submit_status_cancel": "No",
+      "availability": "Yes",
+      "provider_actual_cost": "No",
+      "source": "docs/support-matrix.md:51",
+      "caveats": ["no fake inference or actual-cost capability"],
+      "caveat_sources": ["docs/support-matrix.md:26"]
+    },
+    {
+      "tuple_id": "provider-capability-openai-compatible-gateway",
+      "adapter": "OpenAI-compatible gateway",
+      "compute": "No",
+      "sync_inference": "Yes",
+      "async_submit_status_cancel": "No",
+      "availability": "Catalog evidence only; no egress",
+      "provider_actual_cost": "No",
+      "source": "docs/support-matrix.md:52",
+      "caveats": ["no compute, async, or actual-cost capability"],
+      "caveat_sources": ["docs/support-matrix.md:39"]
+    },
+    {
+      "tuple_id": "provider-capability-alibaba-cloud-model-studio",
+      "adapter": "Alibaba Cloud Model Studio",
+      "compute": "No",
+      "sync_inference": "Yes",
+      "async_submit_status_cancel": "No",
+      "availability": "Yes",
+      "provider_actual_cost": "No",
+      "source": "docs/support-matrix.md:53",
+      "caveats": [
+        "Synchronous inference and availability in both halves from one committed catalog; Token Plan automation is gated behind an explicit acceptance; no live call was made for this candidate"
+      ],
+      "caveat_sources": [
+        "docs/support-matrix.md:27"
+      ]
+    }
+  ],
+  "provider_capability_contract_notes": [
+    {
+      "note_id": "provider-capability-contract-note",
+      "applies_to": "all adapter rows above",
+      "source": "docs/support-matrix.md:55-57",
+      "notes": [
+        "The static registry rejects unsupported capabilities instead of relying on NotImplementedError",
+        "Real-provider verification requires the named provider credential reference, an explicit operation allow-list, resource/token/byte and spend caps, cleanup policy, and TTL"
+      ],
+      "note_sources": ["docs/support-matrix.md:55-57"]
+    }
+  ],
+  "artifact_forms": [
+    {
+      "form_id": "python-broker-distribution",
+      "kind": "python",
+      "component": "Pitwall broker",
+      "form": "wheel, source archive, SBOMs, checksums, attestations",
+      "source": "docs/release/external-release-gates.md:16-19",
+      "notes": [
+        "The tag-triggered workflow then builds and verifies the wheel, source archive, SBOMs, checksums, attestations, and five GHCR images before creating the GitHub prerelease"
+      ]
+    },
+    {
+      "form_id": "python-agent-routing-distribution",
+      "kind": "python",
+      "component": "Pitwall Agent Routing",
+      "form": "the one pitwall wheel",
+      "source": "docs/agents/releasing.md:3-5",
+      "notes": [
+        "Agent Routing has no release process of its own. It ships in the one pitwall wheel and version, with the plugin manifests under plugins/ at the same version"
+      ]
+    },
+    {
+      "form_id": "plugin-claude-code",
+      "kind": "plugin",
+      "component": "Agent Routing Claude Code package",
+      "form": "Claude Code plugin package",
+      "source": "docs/agents/routing-readme.md:524",
+      "notes": [
+        "native Claude + Codex/Gemini/Kimi/OpenCode/Grok/Qwen targets; flat dispatch + Workflow DAG orchestration"
+      ]
+    },
+    {
+      "form_id": "plugin-codex",
+      "kind": "plugin",
+      "component": "Agent Routing Codex package",
+      "form": "Codex plugin package",
+      "source": "docs/agents/routing-readme.md:525",
+      "notes": [
+        "native Codex + direct or dependency-workflow Claude/Gemini/Kimi/OpenCode/Grok/Qwen targets"
+      ]
+    },
+    {
+      "form_id": "plugin-github-copilot-cli",
+      "kind": "plugin",
+      "component": "Agent Routing GitHub Copilot CLI package",
+      "form": "Copilot plugin package",
+      "source": "docs/agents/routing-readme.md:526",
+      "notes": [
+        "direct or dependency-workflow dispatch through all thirteen shims"
+      ]
+    },
+    {
+      "form_id": "source-package-data",
+      "kind": "source",
+      "component": "Agent Routing source plugins and shims",
+      "form": "installed from package data; no clone required",
+      "source": "docs/support-matrix.md:33",
+      "notes": [
+        "pitwall agents install writes the shims and the Claude Code, Codex, and GitHub Copilot CLI plugins from package data; no clone required"
+      ]
+    },
+    {
+      "form_id": "image-broker-ghcr",
+      "kind": "image",
+      "component": "Pitwall broker service images",
+      "form": "five GHCR images",
+      "source": "docs/release/external-release-gates.md:16-19",
+      "notes": [
+        "The tag-triggered workflow then builds and verifies the wheel, source archive, SBOMs, checksums, attestations, and five GHCR images before creating the GitHub prerelease",
+        "It uses GitHub's short-lived workflow token for GHCR; it never reads or requests a RunPod API key"
+      ]
+    },
+    {
+      "form_id": "image-gpu-worker",
+      "kind": "image",
+      "component": "In-repository GPU worker image",
+      "form": "none",
+      "source": "docs/support-matrix.md:40",
+      "notes": [
+        "No image, workflow, default deployment, or successful worker entry point"
+      ]
+    }
+  ],
+  "release_channel_exclusions": [
+    {
+      "channel": "PyPI",
+      "state": "excluded_from_current_release_workflow",
+      "source": "docs/release/external-release-gates.md:21-22",
+      "wording": "PyPI and TestPyPI are optional future channels and are not present in the current release workflow."
+    },
+    {
+      "channel": "TestPyPI",
+      "state": "excluded_from_current_release_workflow",
+      "source": "docs/release/external-release-gates.md:21-22",
+      "wording": "PyPI and TestPyPI are optional future channels and are not present in the current release workflow."
+    },
+    {
+      "channel": "In-repository GPU worker image",
+      "state": "no_artifact_exists",
+      "source": "docs/support-matrix.md:40",
+      "wording": "No image, workflow, default deployment, or successful worker entry point"
+    }
+  ],
+  "explicit_rejections": [
+    {
+      "rejection_id": "network-mcp-transport",
+      "capability": "MCP network transport",
+      "state": "deferred_unavailable",
+      "wording": "Local stdio only; no network listener or new identity subsystem",
+      "source": "docs/support-matrix.md:41",
+      "secondary_sources": ["docs/support-matrix.md:11"]
+    },
+    {
+      "rejection_id": "gpu-worker-image",
+      "capability": "In-repository GPU worker image",
+      "state": "deferred_unavailable",
+      "wording": "No image, workflow, default deployment, or successful worker entry point",
+      "source": "docs/support-matrix.md:40",
+      "secondary_sources": []
+    },
+    {
+      "rejection_id": "runpod-hub-deploy-publish",
+      "capability": "RunPod Hub deploy/publish",
+      "state": "unavailable",
+      "wording": "read-only Hub browse/search/get; Hub deploy/publish is unavailable",
+      "source": "docs/support-matrix.md:21",
+      "secondary_sources": []
+    }
+  ],
+  "native_host_exclusions": [
+    {
+      "host_boundary": "Broker images, Compose, and full supported runtime remain Linux-only",
+      "wording": "Managed Python 3.14.7 Agent Routing smoke; broker images and Compose remain Linux-only",
+      "source": "docs/support-matrix.md:34",
+      "secondary_sources": [
+        "docs/release/external-release-gates.md:16-19"
+      ]
+    },
+    {
+      "host_boundary": "Pi Workbench supported host is Linux on Node 22.22.1 or later with flock (util-linux)",
+      "wording": "Node 22.22.1 or later, Linux, and flock (util-linux)",
+      "source": "docs/support-matrix.md:37",
+      "secondary_sources": []
+    },
+    {
+      "host_boundary": "Pi Workbench restricted mode requires Bubblewrap, permitted user namespaces, and util-linux 2.41 or later",
+      "wording": "optional Bubblewrap restricted mode requires permitted user namespaces and util-linux 2.41 or later for setpriv --seccomp-filter",
+      "source": "docs/support-matrix.md:37",
+      "secondary_sources": []
+    }
+  ],
+  "pi_continuation_and_sandbox_limits": [
+    {
+      "limit_id": "unfinished-native-child-resume",
+      "wording": "no unfinished native-child resume",
+      "source": "docs/support-matrix.md:37",
+      "notes": []
+    },
+    {
+      "limit_id": "network-not-allowlisted",
+      "wording": "no network allowlist",
+      "source": "docs/support-matrix.md:37",
+      "notes": []
+    },
+    {
+      "limit_id": "no-per-child-credential-sandbox",
+      "wording": "no per-child credential sandbox",
+      "source": "docs/support-matrix.md:37",
+      "notes": []
+    }
+  ],
+  "verification_distinctions": [
+    {
+      "kind": "no_live_verification_yet",
+      "statement": "The quoted source status is countersign pending or no live call was made: the source states that no provider credential, spend, or resource authorization was supplied for this release candidate. Record this as the quoted source status, not as machine inspection of provider credentials or authentication. It is an unclosed verification gap, not a proven provider failure and not an approval or exception.",
+      "applies_to": [
+        "matrix-10-runpod-serverless-and-openai-compatible-endpoints",
+        "matrix-11-runpod-market-catalogue-and-billing-reads",
+        "matrix-12-runpod-resource-control",
+        "matrix-13-runpod-volume-objects-and-bounded-pod-logs",
+        "matrix-14-runpod-onboarding",
+        "matrix-15-vast-ai",
+        "matrix-16-together",
+        "matrix-17-lambda-cloud",
+        "matrix-33-alibaba-cloud-model-studio",
+        "matrix-18-self-hosted-openai-compatible-endpoints",
+        "matrix-19-runpod-pod-leases-and-serve"
+      ],
+      "sources": ["docs/support-matrix.md:4-6", "docs/support-matrix.md:19"],
+      "wording": "The code is complete but no provider credential, spend, or resource authorization was supplied for this release candidate.",
+      "not_an_approval": true
+    },
+    {
+      "kind": "provider_capability_absent",
+      "statement": "The provider contract offers no positive capability to verify (for example no inference or actual-cost path). The static registry deterministically rejects the unsupported capability rather than relying on NotImplementedError, and deterministic rejection and no-provider-write tests remain required. This is a declared boundary, not a live-verification gap, because there is no positive capability to exercise.",
+      "applies_to": [
+        "matrix-29-openai-gateway-provider-adapter",
+        "provider-capability-vast-ai",
+        "provider-capability-lambda-cloud",
+        "provider-capability-openai-compatible-gateway"
+      ],
+      "sources": ["docs/support-matrix.md:24", "docs/support-matrix.md:26", "docs/support-matrix.md:39", "docs/support-matrix.md:52", "docs/support-matrix.md:54-55"],
+      "wording": "Compute and availability only; no fake inference or actual-cost capability",
+      "required_proof_lanes": ["hermetic"],
+      "not_an_approval": true
+    },
+    {
+      "kind": "capability_deferred_no_artifact",
+      "statement": "No artifact, workflow, listener, or entry point exists in this repository. Nothing can be executed or certified until the capability is implemented; this is not a provider credential gap.",
+      "applies_to": ["matrix-30-in-repository-gpu-worker-image", "matrix-31-mcp-network-transport"],
+      "sources": ["docs/support-matrix.md:40", "docs/support-matrix.md:41"],
+      "wording": "No image, workflow, default deployment, or successful worker entry point",
+      "not_an_approval": true
+    }
+  ],
+  "unreviewed_prose_domains": [
+    "CLI, TUI, gateway, routing, config, and ops inventory units remain separate; this declarations file does not claim exhaustive all-interface mapping",
+    "Provider-specific pricing arithmetic, dossier quality, and live quota behavior are not reviewed here",
+    "Agent Routing prompt references, per-model capability cards, and example outputs are not declaration sources",
+    "Operator runbooks, QA lessons, and release notes are not reviewed as declaration sources"
+  ],
+  "sources_reviewed": [
+    "CONTRIBUTING.md",
+    "docs/support-matrix.md",
+    "docs/release/external-release-gates.md",
+    "docs/sdlc/25-pi-workbench.md",
+    "docs/agents/routing-readme.md",
+    "docs/agents/releasing.md"
+  ]
+}

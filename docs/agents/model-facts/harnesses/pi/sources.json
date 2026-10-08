@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/pi",
+  "sources": [
+    {
+      "id": "pi-cli",
+      "url": "https://pi.dev/docs/latest/cli",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:1a1f22251f13ecea265c41028d748816825ae748544da740e05098ed4a3a827a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:1a1f22251f13ecea265c41028d748816825ae748544da740e05098ed4a3a827a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-settings",
+      "url": "https://pi.dev/docs/latest/settings",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:3e424761bdd4a3d7a1630e39427aaf6ee9b1b514d948353f8de50a8c67ac3baf",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:3e424761bdd4a3d7a1630e39427aaf6ee9b1b514d948353f8de50a8c67ac3baf",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-security",
+      "url": "https://pi.dev/docs/latest/security",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:0a4d05cfcd29ff89555fa7b68966dd5f664690419bfb9db5cf0828cd5971f90d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:0a4d05cfcd29ff89555fa7b68966dd5f664690419bfb9db5cf0828cd5971f90d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-custom-provider",
+      "url": "https://pi.dev/docs/latest/custom-provider",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:6b82fa81ffc2505cfc89c5108a89c80ace32639507ef18fe3fdfc7e2ab2be6dc",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6b82fa81ffc2505cfc89c5108a89c80ace32639507ef18fe3fdfc7e2ab2be6dc",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://pi.dev/docs/latest navigation; no change log page"
+    }
+  ],
+  "watch": []
+}

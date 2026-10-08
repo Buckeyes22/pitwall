@@ -1,0 +1,1751 @@
+{
+  "behavioral_evidence": [],
+  "contracts": [
+    {
+      "contract_id": "cli-routing-command-tree",
+      "hierarchy": [
+        {
+          "confirmation": null,
+          "options": [
+            "--provider-id",
+            "--input-json",
+            "--operation",
+            "--json"
+          ],
+          "path": [
+            "routing",
+            "plan"
+          ],
+          "required": [
+            "capability_id"
+          ]
+        },
+        {
+          "confirmation": "--confirm must equal capability_id before submission",
+          "options": [
+            "--provider-id",
+            "--input-json",
+            "--idempotency-key",
+            "--webhook-url",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "routing",
+            "submit"
+          ],
+          "required": [
+            "capability_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "routing",
+            "status"
+          ],
+          "required": [
+            "workload_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "routing",
+            "result"
+          ],
+          "required": [
+            "workload_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--max-polls (1..100, default 20)",
+            "--interval (default 1.0)",
+            "--json"
+          ],
+          "path": [
+            "routing",
+            "follow"
+          ],
+          "required": [
+            "workload_id"
+          ]
+        },
+        {
+          "confirmation": "--confirm must equal workload_id before cancellation",
+          "options": [
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "routing",
+            "cancel"
+          ],
+          "required": [
+            "workload_id"
+          ]
+        }
+      ],
+      "limits": "No parser import, service call, database access, or provider call was used for this review.",
+      "output_contract": "Output(json_mode(args)); --json emits structured result/error JSON, otherwise stable Rich tables/panels. Provider exception detail is replaced at the CLI boundary.",
+      "sources": [
+        "src/pitwall/cli/routing.py:27-70",
+        "src/pitwall/cli/routing.py:73-81",
+        "src/pitwall/cli/output.py:132-138"
+      ]
+    },
+    {
+      "contract_id": "cli-runpod-resource-tree",
+      "hierarchy": [
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "pods",
+            "list"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "endpoints",
+            "list"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "templates",
+            "list"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "volumes",
+            "list"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "registry-auths",
+            "list"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "pods",
+            "get"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "endpoints",
+            "get"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "templates",
+            "get"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "volumes",
+            "get"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "registry-auths",
+            "get"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "pods",
+            "create"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": "live mutation confirm is resource id",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "pods",
+            "update"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id",
+          "options": [
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "pods",
+            "action"
+          ],
+          "required": [
+            "resource_id",
+            "action=start|stop|restart|reset"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id",
+          "options": [
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "pods",
+            "terminate"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "endpoints",
+            "create"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "endpoints",
+            "update"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "endpoints",
+            "delete"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "templates",
+            "create"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "templates",
+            "update"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "templates",
+            "delete"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "volumes",
+            "create"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "volumes",
+            "grow"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "volumes",
+            "delete"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "registry-auths",
+            "create"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--request-json (required)",
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "registry-auths",
+            "replace"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": "live mutation confirm is resource id or create name",
+          "options": [
+            "--idempotency-key (required)",
+            "--dry-run",
+            "--confirm",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "registry-auths",
+            "delete"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--limit (default 50)",
+            "--offset (default 0)",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "hub",
+            "list"
+          ],
+          "required": []
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "hub",
+            "get"
+          ],
+          "required": [
+            "resource_id"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--limit (default 50)",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "hub",
+            "search"
+          ],
+          "required": [
+            "query"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--refresh",
+            "--json"
+          ],
+          "path": [
+            "runpod",
+            "catalogue"
+          ],
+          "required": []
+        }
+      ],
+      "limits": "No mutation, provider request, audit write, or catalogue refresh was executed.",
+      "output_contract": "All named leaves use shared --json; RunPod resources serialize stable JSON or bounded human output. Catalogue source supports cached/forced reads; this review does not claim live values.",
+      "sources": [
+        "src/pitwall/cli/runpod_resources.py:60-219",
+        "src/pitwall/cli/runpod_market.py:19-35",
+        "src/pitwall/cli/output.py:132-138"
+      ]
+    },
+    {
+      "contract_id": "cli-volume-files-command-tree",
+      "hierarchy": [
+        {
+          "confirmation": null,
+          "options": [
+            "--prefix (default empty)",
+            "--max-items (default 200)",
+            "--json"
+          ],
+          "path": [
+            "volume-files",
+            "list"
+          ],
+          "required": [
+            "volume_id",
+            "data_center_id"
+          ]
+        },
+        {
+          "confirmation": "--confirm-overwrite is required with --overwrite for existing target",
+          "options": [
+            "--root (default .)",
+            "--overwrite",
+            "--confirm-overwrite",
+            "--expected-sha256",
+            "--idempotency-key",
+            "--dry-run",
+            "--json"
+          ],
+          "path": [
+            "volume-files",
+            "upload"
+          ],
+          "required": [
+            "volume_id",
+            "data_center_id",
+            "object_key",
+            "local_path"
+          ]
+        },
+        {
+          "confirmation": "--confirm-overwrite is required with --overwrite for existing target",
+          "options": [
+            "--root (default .)",
+            "--overwrite",
+            "--confirm-overwrite",
+            "--expected-sha256",
+            "--dry-run",
+            "--json"
+          ],
+          "path": [
+            "volume-files",
+            "download"
+          ],
+          "required": [
+            "volume_id",
+            "data_center_id",
+            "object_key",
+            "local_path"
+          ]
+        },
+        {
+          "confirmation": "--confirm-delete explicitly confirms deletion",
+          "options": [
+            "--confirm-delete",
+            "--idempotency-key",
+            "--dry-run",
+            "--json"
+          ],
+          "path": [
+            "volume-files",
+            "delete"
+          ],
+          "required": [
+            "volume_id",
+            "data_center_id",
+            "object_key"
+          ]
+        },
+        {
+          "confirmation": null,
+          "options": [
+            "--max-lines (default 100)",
+            "--max-bytes (default 65536)",
+            "--json"
+          ],
+          "path": [
+            "volume-files",
+            "logs"
+          ],
+          "required": [
+            "pod_id"
+          ]
+        }
+      ],
+      "limits": "No filesystem write, S3 request, provider request, or service construction was executed.",
+      "output_contract": "Shared Output emits JSON when --json is present; local/provider errors map to stable bounded error codes and do not reflect provider detail.",
+      "sources": [
+        "src/pitwall/cli/volume_files.py:30-112",
+        "src/pitwall/cli/output.py:132-138"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "src/pitwall/cli/__init__.py",
+      "role": "top-level dispatch into routing, RunPod resources, volume-files, and shared output",
+      "sha256": "61b96046f2f2047a9a91a576fc858b066fe4ae0b3788450da1b26d7ee9b3e5d8"
+    },
+    {
+      "path": "src/pitwall/cli/output.py",
+      "role": "shared --json argument helper and Output JSON/human rendering contract",
+      "sha256": "07f808a5fa18caf3470e6022e946aa8a787116b892089b73410ae7a2861c1289"
+    },
+    {
+      "path": "src/pitwall/cli/routing.py",
+      "role": "routing parser, literal command loop, request helper, confirmation, and output calls",
+      "sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101"
+    },
+    {
+      "path": "src/pitwall/cli/runpod_market.py",
+      "role": "catalogue parser and shared catalogue argument helper",
+      "sha256": "e57c4ff488ef8fa7c88693416cd33ceaf0d36eed8524d67a78a24e4c16db7dc2"
+    },
+    {
+      "path": "src/pitwall/cli/runpod_resources.py",
+      "role": "RunPod resource hierarchy, literal helper call sites, mutation flags, and confirmation",
+      "sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa"
+    },
+    {
+      "path": "src/pitwall/cli/volume_files.py",
+      "role": "volume-files hierarchy, context/path helpers, confirmations, and output calls",
+      "sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7"
+    },
+    {
+      "path": "tests/cli/test_cli_dispatch.py",
+      "role": "top-level dispatch and JSON routing tests",
+      "sha256": "c6ac41b268e9e4eb54b558c30db618f2167730daac1f4201e2bb13aa0e64a927"
+    },
+    {
+      "path": "tests/cli/test_cli_output.py",
+      "role": "shared --json parser and output tests",
+      "sha256": "3dfd6ed9e11abf7c3631371dcd704b74cc32cdbf797e4e3ccf585a1606fc5f14"
+    },
+    {
+      "path": "tests/cli/test_routing_cli_command.py",
+      "role": "routing parser, confirmation, stable JSON, and error tests",
+      "sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+    },
+    {
+      "path": "tests/cli/test_runpod_resources.py",
+      "role": "RunPod hierarchy, dry-run, confirmation, and catalogue tests",
+      "sha256": "010a0ecbaca62093b5914d95b8e4822d382c0f66fff97d1f96d225360e21754a"
+    },
+    {
+      "path": "tests/cli/test_volume_files.py",
+      "role": "volume-files parser, dry-run, confirmation, path, and stable JSON tests",
+      "sha256": "e2abf4dc92962f11c28c532c90932230546e680b609cc3d4508a7808e73fd4eb"
+    },
+    {
+      "path": "tests/release_acceptance/test_cli_arguments.py",
+      "role": "hermetic extractor fixtures, drift, dynamic-name, and scope tests",
+      "sha256": "dd2b1a99425384d6330b3350c3dfb8bfaf328f7567fde6e22daeff51747f257b"
+    },
+    {
+      "path": "tools/release_acceptance/cli_arguments.py",
+      "role": "AST-only CLI declaration extractor under review",
+      "sha256": "4ee6e0ec31a0854b39a501dc8f470a8f79d7a0e6cae85da200dac2cd741cb95b"
+    }
+  ],
+  "helper_reviews": [
+    {
+      "callers": [
+        {
+          "caller": "_parser",
+          "hierarchy": [
+            "routing",
+            "plan"
+          ],
+          "parser_variable": "plan",
+          "source": "src/pitwall/cli/routing.py:35"
+        },
+        {
+          "caller": "_parser",
+          "hierarchy": [
+            "routing",
+            "submit"
+          ],
+          "parser_variable": "submit",
+          "source": "src/pitwall/cli/routing.py:44"
+        }
+      ],
+      "declarations": [
+        {
+          "kind": "positional",
+          "position": "capability_id",
+          "required": true
+        },
+        {
+          "flags": [
+            "--provider-id"
+          ],
+          "required": false
+        },
+        {
+          "default": "{}",
+          "flags": [
+            "--input-json"
+          ],
+          "required": false
+        }
+      ],
+      "definition": {
+        "line": "73",
+        "path": "src/pitwall/cli/routing.py",
+        "role": "helper definition",
+        "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+      },
+      "helper": "_request_args",
+      "limits": "Source review establishes caller/parser relationships and declaration values; service calls, payload semantics, and provider behavior remain unexecuted.",
+      "review_status": "resolved_source_only"
+    },
+    {
+      "callers": [
+        {
+          "caller": "_add_pod_parser",
+          "hierarchy": [
+            "runpod",
+            "pods",
+            "action"
+          ],
+          "parser_variable": "action",
+          "source": "src/pitwall/cli/runpod_resources.py:89"
+        },
+        {
+          "caller": "_add_pod_parser",
+          "hierarchy": [
+            "runpod",
+            "pods",
+            "terminate"
+          ],
+          "parser_variable": "terminate",
+          "source": "src/pitwall/cli/runpod_resources.py:92"
+        },
+        {
+          "caller": "_payload_mutation",
+          "hierarchy": [
+            "runpod",
+            "{parent}",
+            "{literal command}"
+          ],
+          "parser_variable": "command",
+          "source": "src/pitwall/cli/runpod_resources.py:184"
+        },
+        {
+          "caller": "_identified_payload_mutation",
+          "hierarchy": [
+            "runpod",
+            "{parent}",
+            "{literal command}"
+          ],
+          "parser_variable": "command",
+          "source": "src/pitwall/cli/runpod_resources.py:199"
+        },
+        {
+          "caller": "_identified_delete",
+          "hierarchy": [
+            "runpod",
+            "{parent}",
+            "delete"
+          ],
+          "parser_variable": "command",
+          "source": "src/pitwall/cli/runpod_resources.py:205"
+        }
+      ],
+      "declarations": [
+        {
+          "flags": [
+            "--idempotency-key"
+          ],
+          "required": true
+        },
+        {
+          "action": "store_true",
+          "flags": [
+            "--dry-run"
+          ],
+          "required": false
+        },
+        {
+          "contract": "live mutation confirmation must equal resource id or create name",
+          "flags": [
+            "--confirm"
+          ],
+          "required": false
+        },
+        {
+          "action": "store_true",
+          "flags": [
+            "--json"
+          ],
+          "via": "add_json_argument"
+        }
+      ],
+      "definition": {
+        "line": "208",
+        "path": "src/pitwall/cli/runpod_resources.py",
+        "role": "helper definition",
+        "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+      },
+      "helper": "_mutation_flags",
+      "limits": "No mutation, provider request, audit write, or confirmation execution is claimed. The dry-run and confirmation behavior is source contract only.",
+      "review_status": "resolved_source_only"
+    },
+    {
+      "callers": [
+        {
+          "caller": "_parse_volume_files_args",
+          "hierarchy": [
+            "volume-files",
+            "list"
+          ],
+          "object_key": false,
+          "parser_variable": "listing",
+          "source": "src/pitwall/cli/volume_files.py:38"
+        },
+        {
+          "caller": "_parse_volume_files_args",
+          "hierarchy": [
+            "volume-files",
+            "upload"
+          ],
+          "object_key": true,
+          "parser_variable": "upload",
+          "source": "src/pitwall/cli/volume_files.py:44"
+        },
+        {
+          "caller": "_parse_volume_files_args",
+          "hierarchy": [
+            "volume-files",
+            "download"
+          ],
+          "object_key": true,
+          "parser_variable": "download",
+          "source": "src/pitwall/cli/volume_files.py:65"
+        },
+        {
+          "caller": "_parse_volume_files_args",
+          "hierarchy": [
+            "volume-files",
+            "delete"
+          ],
+          "object_key": true,
+          "parser_variable": "delete",
+          "source": "src/pitwall/cli/volume_files.py:80"
+        }
+      ],
+      "declarations": [
+        {
+          "position": "volume_id",
+          "required": true
+        },
+        {
+          "position": "data_center_id",
+          "required": true
+        },
+        {
+          "position": "object_key",
+          "required": true,
+          "when": "object_key=True"
+        }
+      ],
+      "definition": {
+        "line": "99",
+        "path": "src/pitwall/cli/volume_files.py",
+        "role": "helper definition",
+        "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+      },
+      "helper": "_add_volume_context",
+      "limits": "Path safety and service behavior are separate source/test contracts; no local or provider write is executed here.",
+      "review_status": "resolved_source_only"
+    },
+    {
+      "callers": [
+        {
+          "caller": "_parse_volume_files_args",
+          "hierarchy": [
+            "volume-files",
+            "upload"
+          ],
+          "parser_variable": "upload",
+          "source": "src/pitwall/cli/volume_files.py:45"
+        },
+        {
+          "caller": "_parse_volume_files_args",
+          "hierarchy": [
+            "volume-files",
+            "download"
+          ],
+          "parser_variable": "download",
+          "source": "src/pitwall/cli/volume_files.py:66"
+        }
+      ],
+      "declarations": [
+        {
+          "contract": "relative path below --root",
+          "position": "local_path",
+          "required": true
+        },
+        {
+          "contract": "existing non-symlink local root",
+          "default": ".",
+          "flags": [
+            "--root"
+          ],
+          "required": false
+        }
+      ],
+      "definition": {
+        "line": "106",
+        "path": "src/pitwall/cli/volume_files.py",
+        "role": "helper definition",
+        "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+      },
+      "helper": "_add_local_path",
+      "limits": "The path guardrail and file transfer behavior are not executed by this source review.",
+      "review_status": "resolved_source_only"
+    },
+    {
+      "callers": [
+        {
+          "caller": "add_runpod_catalogue_parser",
+          "hierarchy": [
+            "runpod",
+            "catalogue"
+          ],
+          "parser_variable": "parser",
+          "source": "src/pitwall/cli/runpod_market.py:29"
+        },
+        {
+          "caller": "cmd_runpod_catalogue",
+          "hierarchy": [
+            "runpod",
+            "catalogue",
+            "standalone"
+          ],
+          "parser_variable": "parser",
+          "source": "src/pitwall/cli/runpod_market.py:49"
+        }
+      ],
+      "declarations": [
+        {
+          "action": "store_true",
+          "contract": "force one provider refresh",
+          "flags": [
+            "--refresh"
+          ],
+          "required": false
+        },
+        {
+          "action": "store_true",
+          "flags": [
+            "--json"
+          ],
+          "via": "add_json_argument"
+        }
+      ],
+      "definition": {
+        "line": "33",
+        "path": "src/pitwall/cli/runpod_market.py",
+        "role": "helper definition",
+        "sha256": "4a2c47bc4e10f91002115fb015c9957668aafaf6f2320d5708c7f0a0d9e74bad"
+      },
+      "helper": "_add_runpod_catalogue_arguments",
+      "limits": "Catalogue cache/provider behavior remains unexecuted; this only resolves parser composition.",
+      "review_status": "resolved_source_only"
+    },
+    {
+      "callers": [
+        {
+          "hierarchy": [
+            "routing",
+            "plan"
+          ],
+          "parser_variable": "plan",
+          "source": "src/pitwall/cli/routing.py:41"
+        },
+        {
+          "hierarchy": [
+            "routing",
+            "submit"
+          ],
+          "parser_variable": "submit",
+          "source": "src/pitwall/cli/routing.py:52"
+        },
+        {
+          "hierarchy": [
+            "routing",
+            "{status|result|follow}"
+          ],
+          "parser_variable": "child",
+          "source": "src/pitwall/cli/routing.py:64"
+        },
+        {
+          "hierarchy": [
+            "routing",
+            "cancel"
+          ],
+          "parser_variable": "cancel",
+          "source": "src/pitwall/cli/routing.py:69"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "catalogue"
+          ],
+          "parser_variable": "parser",
+          "source": "src/pitwall/cli/runpod_market.py:35"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "hub",
+            "list"
+          ],
+          "parser_variable": "listing",
+          "source": "src/pitwall/cli/runpod_resources.py:155"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "hub",
+            "get"
+          ],
+          "parser_variable": "get",
+          "source": "src/pitwall/cli/runpod_resources.py:158"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "hub",
+            "search"
+          ],
+          "parser_variable": "search",
+          "source": "src/pitwall/cli/runpod_resources.py:162"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "{pods|endpoints|templates|volumes|registry-auths}",
+            "list"
+          ],
+          "parser_variable": "listing",
+          "source": "src/pitwall/cli/runpod_resources.py:167"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "{pods|endpoints|templates|volumes|registry-auths}",
+            "get"
+          ],
+          "parser_variable": "get",
+          "source": "src/pitwall/cli/runpod_resources.py:170"
+        },
+        {
+          "hierarchy": [
+            "runpod",
+            "{mutation command}"
+          ],
+          "parser_variable": "parser",
+          "source": "src/pitwall/cli/runpod_resources.py:219"
+        },
+        {
+          "hierarchy": [
+            "volume-files",
+            "list"
+          ],
+          "parser_variable": "listing",
+          "source": "src/pitwall/cli/volume_files.py:41"
+        },
+        {
+          "hierarchy": [
+            "volume-files",
+            "upload"
+          ],
+          "parser_variable": "upload",
+          "source": "src/pitwall/cli/volume_files.py:60"
+        },
+        {
+          "hierarchy": [
+            "volume-files",
+            "download"
+          ],
+          "parser_variable": "download",
+          "source": "src/pitwall/cli/volume_files.py:77"
+        },
+        {
+          "hierarchy": [
+            "volume-files",
+            "delete"
+          ],
+          "parser_variable": "delete",
+          "source": "src/pitwall/cli/volume_files.py:89"
+        },
+        {
+          "hierarchy": [
+            "volume-files",
+            "logs"
+          ],
+          "parser_variable": "logs",
+          "source": "src/pitwall/cli/volume_files.py:95"
+        }
+      ],
+      "declarations": [
+        {
+          "action": "store_true",
+          "contract": "machine-readable JSON on stdout; human output is selected when absent",
+          "flags": [
+            "--json"
+          ]
+        }
+      ],
+      "definition": {
+        "line": "132",
+        "path": "src/pitwall/cli/output.py",
+        "role": "shared helper definition",
+        "sha256": "8e5fc3ca0fd1468a13fccba5cbdd9b6f1414d8215c2c9473cbbf5266498e2559"
+      },
+      "helper": "add_json_argument",
+      "limits": "The helper is reviewed at all named call sites in this scope; other target modules and runtime rendering remain source/test evidence only.",
+      "review_status": "resolved_source_only"
+    }
+  ],
+  "inventory": {
+    "issue_count": 21,
+    "issue_topics": {
+      "aliased_constructors": 1,
+      "dynamic_command_name": 3,
+      "helper_added_arguments": 1,
+      "non_target_files": 1,
+      "runtime_behavior": 1,
+      "scope": 1,
+      "unresolved_parser_binding": 13
+    },
+    "path": "$PITWALL_EVIDENCE_ROOT/release-acceptance/remaining-release-work-zDy9jC/cli_arguments.json",
+    "retained_unresolved_scope_count": 5,
+    "reviewed_issue_count": 16,
+    "schema_version": "release-acceptance-cli-arguments.v1",
+    "source_sha256": "5f84042ae4196f1e99de1b4e6a7f07e011f837805df199911556effb089d7cf3",
+    "surface_count": 442
+  },
+  "issue_reviews": [
+    {
+      "helper": "add_json_argument",
+      "inventory_source": "src/pitwall/cli/output.py:134",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for add_json_argument is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "132",
+          "path": "src/pitwall/cli/output.py",
+          "role": "shared helper definition",
+          "sha256": "8e5fc3ca0fd1468a13fccba5cbdd9b6f1414d8215c2c9473cbbf5266498e2559"
+        },
+        {
+          "line": "134",
+          "path": "src/pitwall/cli/output.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "8e5fc3ca0fd1468a13fccba5cbdd9b6f1414d8215c2c9473cbbf5266498e2559"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/output.py:add_json_argument:parser:--json"
+      ]
+    },
+    {
+      "inventory_source": "src/pitwall/cli/routing.py:59",
+      "issue_topic": "dynamic_command_name",
+      "limits": "The extractor remains conservative for arbitrary dynamic iterables; this review resolves only this literal tuple in this source file. No parser execution or validation claim is made.",
+      "resolution": "The loop iterates exactly three literal command/help pairs: status, result, and follow. Each child parser receives workload_id and --json; follow additionally receives --max-polls and --interval.",
+      "resolved_literals": [
+        "status",
+        "result",
+        "follow"
+      ],
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "54",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "literal command/help tuple",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        },
+        {
+          "line": "59",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "add_parser loop",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        }
+      ]
+    },
+    {
+      "helper": "_request_args",
+      "inventory_source": "src/pitwall/cli/routing.py:74",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _request_args is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "73",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "helper definition",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        },
+        {
+          "line": "74",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/routing.py:_request_args:parser:capability_id"
+      ]
+    },
+    {
+      "helper": "_request_args",
+      "inventory_source": "src/pitwall/cli/routing.py:75",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _request_args is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "73",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "helper definition",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        },
+        {
+          "line": "75",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/routing.py:_request_args:parser:--provider-id"
+      ]
+    },
+    {
+      "helper": "_request_args",
+      "inventory_source": "src/pitwall/cli/routing.py:76",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _request_args is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "73",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "helper definition",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        },
+        {
+          "line": "76",
+          "path": "src/pitwall/cli/routing.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "1125defc316ced47fcb4e021e347eb6bfc9d0e3ababd54e1193c98479934bc1e"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/routing.py:_request_args:parser:--input-json"
+      ]
+    },
+    {
+      "helper": "_add_runpod_catalogue_arguments",
+      "inventory_source": "src/pitwall/cli/runpod_market.py:34",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _add_runpod_catalogue_arguments is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "33",
+          "path": "src/pitwall/cli/runpod_market.py",
+          "role": "helper definition",
+          "sha256": "4a2c47bc4e10f91002115fb015c9957668aafaf6f2320d5708c7f0a0d9e74bad"
+        },
+        {
+          "line": "34",
+          "path": "src/pitwall/cli/runpod_market.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "4a2c47bc4e10f91002115fb015c9957668aafaf6f2320d5708c7f0a0d9e74bad"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/runpod_market.py:_add_runpod_catalogue_arguments:parser:--refresh"
+      ]
+    },
+    {
+      "caller_literals": [
+        {
+          "caller": "_add_pod_parser",
+          "command": "create",
+          "parent": "pods"
+        },
+        {
+          "caller": "_add_endpoint_parser",
+          "command": "create",
+          "parent": "endpoints"
+        },
+        {
+          "caller": "_add_template_parser",
+          "command": "create",
+          "parent": "templates"
+        },
+        {
+          "caller": "_add_volume_parser",
+          "command": "create",
+          "parent": "volumes"
+        },
+        {
+          "caller": "_add_registry_parser",
+          "command": "create",
+          "parent": "registry-auths"
+        }
+      ],
+      "inventory_source": "src/pitwall/cli/runpod_resources.py:178",
+      "issue_topic": "dynamic_command_name",
+      "limits": "Only the checked-in literal call sites are resolved. A future caller or a dynamic name remains unresolved until separately reviewed.",
+      "resolution": "Every current _payload_mutation call supplies a literal command name and literal help text; the helper adds --request-json and the shared mutation flags to that caller-owned parser.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "84",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _payload_mutation callers",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "103",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "116",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "127",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "140",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "178",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "helper add_parser",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        }
+      ]
+    },
+    {
+      "caller_literals": [
+        {
+          "caller": "_add_pod_parser",
+          "command": "update",
+          "parent": "pods"
+        },
+        {
+          "caller": "_add_endpoint_parser",
+          "command": "update",
+          "parent": "endpoints"
+        },
+        {
+          "caller": "_add_template_parser",
+          "command": "update",
+          "parent": "templates"
+        },
+        {
+          "caller": "_add_registry_parser",
+          "command": "replace",
+          "parent": "registry-auths"
+        },
+        {
+          "caller": "_add_volume_parser",
+          "command": "grow",
+          "parent": "volumes"
+        }
+      ],
+      "inventory_source": "src/pitwall/cli/runpod_resources.py:192",
+      "issue_topic": "dynamic_command_name",
+      "limits": "Only the checked-in literal call sites are resolved. A future caller or a dynamic name remains unresolved until separately reviewed.",
+      "resolution": "Every current _identified_payload_mutation call supplies a literal command name and literal help text; the helper adds resource_id, --request-json, and the shared mutation flags to that caller-owned parser.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "85",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _identified_payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "104",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _identified_payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "117",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _identified_payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "141",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "literal _identified_payload_mutation caller",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "192",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "helper add_parser",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        }
+      ]
+    },
+    {
+      "helper": "_mutation_flags",
+      "inventory_source": "src/pitwall/cli/runpod_resources.py:209",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _mutation_flags is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "208",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "helper definition",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "209",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/runpod_resources.py:_mutation_flags:parser:--idempotency-key"
+      ]
+    },
+    {
+      "helper": "_mutation_flags",
+      "inventory_source": "src/pitwall/cli/runpod_resources.py:210",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _mutation_flags is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "208",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "helper definition",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "210",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/runpod_resources.py:_mutation_flags:parser:--dry-run"
+      ]
+    },
+    {
+      "helper": "_mutation_flags",
+      "inventory_source": "src/pitwall/cli/runpod_resources.py:215",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _mutation_flags is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "208",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "helper definition",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        },
+        {
+          "line": "215",
+          "path": "src/pitwall/cli/runpod_resources.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "70745652dd754df1db5256d8d0f3a58563b2319e56f54f6dad1c1be0b7011c0f"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/runpod_resources.py:_mutation_flags:parser:--confirm"
+      ]
+    },
+    {
+      "helper": "_add_volume_context",
+      "inventory_source": "src/pitwall/cli/volume_files.py:100",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _add_volume_context is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "99",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "helper definition",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        },
+        {
+          "line": "100",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/volume_files.py:_add_volume_context:parser:volume_id"
+      ]
+    },
+    {
+      "helper": "_add_volume_context",
+      "inventory_source": "src/pitwall/cli/volume_files.py:101",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _add_volume_context is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "99",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "helper definition",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        },
+        {
+          "line": "101",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/volume_files.py:_add_volume_context:parser:data_center_id"
+      ]
+    },
+    {
+      "helper": "_add_volume_context",
+      "inventory_source": "src/pitwall/cli/volume_files.py:103",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _add_volume_context is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "99",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "helper definition",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        },
+        {
+          "line": "103",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/volume_files.py:_add_volume_context:parser:object_key"
+      ]
+    },
+    {
+      "helper": "_add_local_path",
+      "inventory_source": "src/pitwall/cli/volume_files.py:107",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _add_local_path is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "106",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "helper definition",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        },
+        {
+          "line": "107",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/volume_files.py:_add_local_path:parser:local_path"
+      ]
+    },
+    {
+      "helper": "_add_local_path",
+      "inventory_source": "src/pitwall/cli/volume_files.py:108",
+      "issue_topic": "unresolved_parser_binding",
+      "limits": "This resolves the named literal call sites only. Runtime parser construction, helper aliases, and execution evidence remain unverified.",
+      "resolution": "Caller-to-parser relationship for _add_local_path is enumerated in helper_reviews; the parser argument rows are retained as source-reviewed declarations and are not treated as runtime coverage.",
+      "review_status": "resolved_source_only",
+      "source_refs": [
+        {
+          "line": "106",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "helper definition",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        },
+        {
+          "line": "108",
+          "path": "src/pitwall/cli/volume_files.py",
+          "role": "reported unresolved helper binding",
+          "sha256": "e009bb00caa5ad8c8e75063e1c154d00b7d458aa315c7003db32e24413a4ad41"
+        }
+      ],
+      "surface_ids": [
+        "cli:argument:src/pitwall/cli/volume_files.py:_add_local_path:parser:--root"
+      ]
+    }
+  ],
+  "release_claim": false,
+  "schema_version": "release-acceptance-cli-source-review.v1",
+  "scope": "Bounded source review of the current cli_arguments inventory. It resolves exact literal loop/helper relationships and records actual CLI contracts without suppressing generic dynamic, runtime, or out-of-scope issues.",
+  "status": "source_review_only",
+  "unresolved_scope": [
+    {
+      "reason": "Aliased or factory-built ArgumentParser construction remains outside this bounded literal review.",
+      "status": "unresolved",
+      "topic": "aliased_constructors"
+    },
+    {
+      "reason": "The named helpers are source-reviewed below; unrelated helper/factory argument paths remain unresolved.",
+      "status": "partial",
+      "topic": "helper_added_arguments"
+    },
+    {
+      "reason": "Files outside cli_arguments.py target selection remain outside this review.",
+      "status": "unresolved",
+      "topic": "non_target_files"
+    },
+    {
+      "reason": "No parser execution, runtime defaults, service construction, provider access, database access, or output execution is claimed.",
+      "status": "unresolved",
+      "topic": "runtime_behavior"
+    },
+    {
+      "reason": "This review covers the named current 21 issues and their checked-in dependencies; it is not exhaustive CLI scope.",
+      "status": "partial",
+      "topic": "scope"
+    }
+  ],
+  "root_review_note": "Root strengthened argument forwarding assertions, rejected extractor-as-product bindings, and corrected CLI binding oracles. Source contracts unchanged; updated reviewed test dependency hashes.\n\n2026-09-23 integration: the agent-install first wave added `pitwall doctor` and `pitwall mcp install|uninstall` (17 literal surfaces, 425 -> 442). Their arguments are spelled out per parser so the inventory resolves them; the issue inventory is unchanged at 21 with the same topics, so no issue review changed."
+}

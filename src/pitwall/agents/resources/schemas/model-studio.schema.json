@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Buckeyes22/pitwall/main/src/pitwall/agents/resources/schemas/model-studio.schema.json",
+  "title": "Alibaba Cloud Model Studio catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "snapshot", "sources", "paths", "openApi", "plans", "regions", "models", "errors"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "snapshot": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "sources": {"$ref": "#/$defs/sources"},
+    "paths": {
+      "type": "object", "additionalProperties": false, "required": ["openai", "anthropic", "native"],
+      "properties": {"openai": {"type": "string"}, "anthropic": {"type": "string"}, "native": {"type": "string"}}
+    },
+    "openApi": {
+      "type": "object", "additionalProperties": false, "required": ["host", "version", "sources"],
+      "properties": {"host": {"type": "string"}, "version": {"type": "string"}, "sources": {"$ref": "#/$defs/sources"}}
+    },
+    "plans": {"type": "object", "additionalProperties": {"$ref": "#/$defs/plan"}},
+    "regions": {"type": "object", "additionalProperties": {"$ref": "#/$defs/region"}},
+    "models": {"type": "object", "additionalProperties": {"$ref": "#/$defs/model"}},
+    "errors": {"type": "array", "items": {"$ref": "#/$defs/error"}}
+  },
+  "$defs": {
+    "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z0-9./-]+$"}},
+    "price": {"type": "string", "pattern": "^\\d+(\\.\\d+)?$"},
+    "optionalPrice": {"anyOf": [{"$ref": "#/$defs/price"}, {"type": "null"}]},
+    "positiveOrNull": {"anyOf": [{"type": "integer", "minimum": 1}, {"type": "null"}]},
+    "plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["family", "edition", "regions", "keyPrefix", "unit", "cycleDays", "exhaustion", "baseUrls", "tiers", "sources"],
+      "properties": {
+        "family": {"enum": ["token-plan", "pay-as-you-go"]},
+        "edition": {"enum": ["personal", "team", null]},
+        "regions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "keyPrefix": {"type": ["string", "null"]},
+        "unit": {"enum": ["credits", "usd"]},
+        "cycleDays": {"$ref": "#/$defs/positiveOrNull"},
+        "exhaustion": {"enum": ["blocking", "billing"]},
+        "baseUrls": {
+          "anyOf": [
+            {"type": "object", "additionalProperties": false, "required": ["openai", "anthropic", "native"],
+             "properties": {"openai": {"type": "string", "pattern": "^https://"}, "anthropic": {"type": "string", "pattern": "^https://"}, "native": {"type": "string", "pattern": "^https://"}}},
+            {"type": "null"}
+          ]
+        },
+        "tiers": {
+          "anyOf": [
+            {"type": "object", "additionalProperties": {
+              "type": "object", "additionalProperties": false, "required": ["credits", "concurrency"],
+              "properties": {
+                "credits": {"type": "integer", "minimum": 1},
+                "concurrency": {"anyOf": [{"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}}, {"type": "null"}]}
+              }
+            }},
+            {"type": "null"}
+          ]
+        },
+        "sources": {"$ref": "#/$defs/sources"}
+      }
+    },
+    "region": {
+      "type": "object", "additionalProperties": false, "required": ["workspaceHost", "legacyHost", "priced"],
+      "properties": {
+        "workspaceHost": {"type": "string", "pattern": "^\\{workspace\\}\\."},
+        "legacyHost": {"type": ["string", "null"]},
+        "priced": {"type": "boolean"}
+      }
+    },
+    "eligibility": {
+      "type": "object", "additionalProperties": false, "required": ["personal", "team", "payAsYouGo"],
+      "properties": {"personal": {"type": "boolean"}, "team": {"type": "boolean"}, "payAsYouGo": {"type": "boolean"}}
+    },
+    "tier": {
+      "type": "object", "additionalProperties": false, "required": ["aboveInputTokens", "input", "output", "cachedInput"],
+      "properties": {
+        "aboveInputTokens": {"type": "integer", "minimum": 1},
+        "input": {"$ref": "#/$defs/price"}, "output": {"$ref": "#/$defs/price"}, "cachedInput": {"$ref": "#/$defs/optionalPrice"}
+      }
+    },
+    "prices": {
+      "anyOf": [
+        {"type": "object", "additionalProperties": false, "required": ["input", "output", "cachedInput"],
+         "properties": {
+           "input": {"$ref": "#/$defs/price"}, "output": {"$ref": "#/$defs/price"}, "cachedInput": {"$ref": "#/$defs/optionalPrice"},
+           "tiers": {"type": "array", "items": {"$ref": "#/$defs/tier"}},
+           "note": {"type": "string"}
+         }},
+        {"type": "null"}
+      ]
+    },
+    "effort": {
+      "anyOf": [
+        {"type": "object", "additionalProperties": false, "required": ["param", "values", "default", "exclusiveWith"],
+         "properties": {
+           "param": {"const": "reasoning_effort"},
+           "values": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+           "default": {"type": "string"},
+           "exclusiveWith": {"type": "array", "items": {"type": "string"}}
+         }},
+        {"type": "null"}
+      ]
+    },
+    "model": {
+      "type": "object",
+      "required": ["kind", "eligibility", "sources"],
+      "properties": {
+        "kind": {"enum": ["text", "image", "video", "speech", "realtime"]},
+        "eligibility": {"$ref": "#/$defs/eligibility"},
+        "sources": {"$ref": "#/$defs/sources"}
+      },
+      "if": {"properties": {"kind": {"const": "text"}}},
+      "then": {
+        "additionalProperties": false,
+        "required": ["contextTokens", "maxInputTokens", "maxInputTokensThinking", "maxOutputTokens", "maxReasoningTokens", "inputs", "reasoning", "effort", "maxTokensIncludesReasoning", "prices"],
+        "properties": {
+          "kind": true, "eligibility": true, "sources": true,
+          "contextTokens": {"$ref": "#/$defs/positiveOrNull"},
+          "maxInputTokens": {"$ref": "#/$defs/positiveOrNull"},
+          "maxInputTokensThinking": {"$ref": "#/$defs/positiveOrNull"},
+          "maxOutputTokens": {"$ref": "#/$defs/positiveOrNull"},
+          "maxReasoningTokens": {"$ref": "#/$defs/positiveOrNull"},
+          "inputs": {"type": "array", "minItems": 1, "items": {"enum": ["text", "image", "video", "audio"]}},
+          "reasoning": {"enum": ["hybrid-on", "hybrid-off", "always", "none", "router"]},
+          "effort": {"$ref": "#/$defs/effort"},
+          "maxTokensIncludesReasoning": {"type": "boolean"},
+          "prices": {"$ref": "#/$defs/prices"}
+        }
+      },
+      "else": {"additionalProperties": false, "properties": {"kind": true, "eligibility": true, "sources": true}}
+    },
+    "error": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "classification", "cooldownSeconds"],
+      "oneOf": [{"required": ["code"]}, {"required": ["message"]}],
+      "properties": {
+        "status": {"type": "integer"},
+        "code": {"type": "string"},
+        "message": {"type": "string"},
+        "classification": {"enum": ["rate_limit", "credits_exhausted", "billing_state", "invalid_endpoint_pairing", "model_not_eligible", "model_not_found", "unavailable"]},
+        "cooldownSeconds": {"$ref": "#/$defs/positiveOrNull"}
+      }
+    }
+  }
+}

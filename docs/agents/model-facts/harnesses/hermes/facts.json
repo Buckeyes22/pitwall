@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/hermes",
+  "facts": {
+    "headlessFlag": {
+      "value": "hermes chat -q \"<prompt>\" (or --query-file <path|->)",
+      "method": "reviewed",
+      "note": "--query-file reads the prompt verbatim from a file or stdin with no shell interpretation.",
+      "evidence": [
+        {
+          "source": "hermes-cli",
+          "locator": "Running the CLI, single query mode"
+        },
+        {
+          "source": "hermes-cli",
+          "locator": "Running the CLI, --query-file example"
+        }
+      ]
+    },
+    "outputFormats": {
+      "value": [
+        "text"
+      ],
+      "method": "reviewed",
+      "note": "Only plain text is documented for single-query runs; no JSON output flag appears on the CLI page.",
+      "evidence": [
+        {
+          "source": "hermes-cli",
+          "locator": "Running the CLI, single query mode"
+        },
+        {
+          "source": "hermes-cli",
+          "locator": "Quiet Mode"
+        }
+      ]
+    },
+    "effortFlag": {
+      "value": "none on the command line; set agent.reasoning_effort in config.yaml, or /reasoning <level> inside a session",
+      "method": "reviewed",
+      "note": "No CLI flag is documented, so a headless run needs the config key or a per-model agent.reasoning_overrides entry.",
+      "evidence": [
+        {
+          "source": "hermes-configuration",
+          "locator": "Reasoning effort, /reasoning command"
+        },
+        {
+          "source": "hermes-cli",
+          "locator": "Slash commands table, /reasoning high"
+        }
+      ]
+    },
+    "permissionDefault": {
+      "value": "smart: an auxiliary model scores dangerous commands; in a -q run a blocked command is denied (single_query_mode: deny)",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "hermes-security",
+          "locator": "Approval Modes, mode table (smart is the default)"
+        },
+        {
+          "source": "hermes-security",
+          "locator": "Approval Modes, single_query_mode key"
+        }
+      ]
+    },
+    "sandboxDefault": {
+      "value": "none: terminal.backend defaults to local, so commands run on the host; docker, ssh, modal and others are opt-in",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "hermes-configuration",
+          "locator": "Terminal Backend Configuration, terminal.backend: local"
+        }
+      ]
+    },
+    "instructionFiles": {
+      "value": [
+        ".hermes.md",
+        "HERMES.md",
+        "AGENTS.override.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".cursorrules"
+      ],
+      "method": "reviewed",
+      "note": "Only one project context type loads per session, first match wins in the listed order. SOUL.md loads separately from HERMES_HOME.",
+      "evidence": [
+        {
+          "source": "hermes-context-files",
+          "locator": "Supported Context Files table"
+        },
+        {
+          "source": "hermes-context-files",
+          "locator": "Priority system"
+        }
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "note": "The delegate_task tool spawns child agents, singly or in parallel batches; delegation.provider and delegation.model route them, and auto inherits the parent.",
+      "evidence": [
+        {
+          "source": "hermes-configuration",
+          "locator": "Delegation entry, delegation.* section"
+        },
+        {
+          "source": "hermes-configuration",
+          "locator": "Terminal Backend Configuration, delegate_task(tasks=[...]) paragraph"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "hermes-context-file-order",
+      "text": "Hermes loads one project context file per session, first match wins: .hermes.md, then AGENTS.override.md, AGENTS.md, CLAUDE.md. A .hermes.md hides AGENTS.md and CLAUDE.md.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "hermes-context-files",
+      "locator": "Priority system",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hermes-single-query-denies",
+      "text": "A hermes chat -q run has nobody to answer approval prompts, so by default it denies any command the approval check flags and the agent must find another path.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "hermes-security",
+      "locator": "Approval Modes, single_query_mode key",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hermes-effort-clamps-down",
+      "text": "Hermes clamps a requested reasoning effort down to the strongest level the route accepts, never up; ultra always maps to the route's top level.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "hermes-configuration",
+      "locator": "Reasoning effort, ultra clamping",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hermes-yolo-disables-checks",
+      "text": "Passing --yolo or setting approvals.mode: off removes every command approval prompt; use it only in a disposable or isolated environment.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "hermes-security",
+      "locator": "Approval Modes, off row and YOLO Mode",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+# serve-model: design decisions to settle before the next spec
+
+Synthesized 2026-08-27 from the research wave (13 model dossiers, Unsloth GGUF catalog, GPU catalog, templates/Hub,
+wiring, engine dossiers for vLLM/SGLang/llama.cpp/others, TUI integration). Each item: the evidence, the options,
+and a recommendation. Nothing here is decided.
+
+## 1. How weights get onto the pod  (wiring--pod-to-model.md §5)
+- Evidence: `warm-volume` is scaffolding — `_build_prewarm_script` only prints `PREWARM_START/COMPLETE`
+  (`src/pitwall/cli.py:1602`); ordinary leases never receive `HF_TOKEN` (`_env_for_pod`, `launch.py:599`; only
+  `HUGGINGFACE_TOKEN` in warm-volume, `cli.py:1484`); network volumes force Secure Cloud + one DC and RunPod warns
+  concurrent writers can corrupt a volume. `HF_HUB_ENABLE_HF_TRANSFER` is ignored by huggingface_hub v1.
+- Options: A cold download per lease (no new code; 80 GB container disk baseline) · B per-DC network volume as HF
+  cache (`HF_HOME=/workspace/hf`, `--download-dir /workspace/hf/hub`, `LLAMA_CACHE=/workspace/llama-cache`) ·
+  C real pre-warm job (`hf download` + `hf cache verify`) before the serving lease.
+- Recommendation: v1 ships A (already works once `HF_TOKEN` vending exists) with B as the documented operator
+  pattern via existing `network_volume_id`/`data_center_id` provider config; C is a follow-up that replaces the
+  warm-volume marker script. Needs a decision on the HF token path (explicit `--env HF_TOKEN=…` at serve time vs.
+  a broker-side secret that is injected only into launch env and redacted from persisted payloads).
+
+## 2. Template source  (runpod--templates-and-hub.md)
+- Evidence: no official RunPod pod template for vLLM/SGLang/llama.cpp could be verified without an API key; the
+  REST template schema has structured `dockerEntrypoint`/`dockerStartCmd`/`ports`; Pitwall's `ensure_template`
+  keys the cache by image tag only and writes `dockerArgs: ""`, `ports: ""` (`templates.py:300-330`); the HTTP
+  port is currently only passed at pod create.
+- Options: (a) generated private template from a digest-pinned upstream image (current plan) · (b) reference
+  official template ids · (c) both, official ids as discovery only.
+- Recommendation: (c) as the dossier argues — but the concrete change for serve-model is keying the template
+  cache by a config hash (image digest + start cmd + port + non-secret env keys), not by image tag. Open
+  question to verify with a dry run: whether REST `ports` on `POST /pods` is honored when `templateId` is set.
+
+## 3. Engine as a first-class provider field  (engine--*.md)
+- Evidence: the three engines differ in start-command shape (vLLM: args appended to `vllm serve`, model
+  positional; SGLang: full `python3 -m sglang.launch_server --model-path …` because the image has no serving
+  ENTRYPOINT; llama.cpp: `llama-server` args with `--alias`), readiness path (`/health` + `/v1/models` · 
+  `/health_generate` · `/health`), and served-name flag (`--served-model-name` · `--served-model-name` · `--alias`).
+  The current spec/plan hard-code the vLLM shape in `_docker_start_cmd`.
+- Options: v1 vLLM-only with `engine` reserved · v1 vLLM + llama.cpp · v1 all three.
+- Recommendation: vLLM + llama.cpp in v1 (llama.cpp is the only path that fits 27–35B models on 24 GB consumer
+  GPUs and the Unsloth catalog is ready); SGLang and SGLang-Omni later. This is a **contract addition** to the
+  `serve-model` spec (`engine` field on the serve provider config + CLI `--engine`), so it must be flagged to
+  the routing side before it lands.
+
+## 4. GPU canonical-name drift  (runpod--gpu-catalog.md)
+- Evidence: five names accepted by `gpu.py` are not exact live `gpuTypes.id` values: `NVIDIA A100 80GB` →
+  `NVIDIA A100-SXM4-80GB`, `NVIDIA A100 40GB` → `NVIDIA A100-SXM4-40GB`, `NVIDIA A6000` (not returned),
+  `NVIDIA RTX 6000 Ada` → `NVIDIA RTX 6000 Ada Generation`, `NVIDIA RTX 4090` → `NVIDIA GeForce RTX 4090`.
+  Newer offerings absent from the canonical set: RTX 5090 (32 GB, $0.99/hr), RTX PRO 6000 Blackwell (96 GB,
+  $2.09/hr), B300 (288 GB).
+- Options: (i) update the canonical tuple + a tested alias→live-id map; (ii) validate against live `gpuTypes`
+  at launch.
+- Recommendation: (i) as its own small change (it is a validated contract with existing tests) before
+  serve-model's dossiers reference GPU classes; add the three newer GPUs. Pre-existing bug, independent of
+  serve-model.
+
+## 5. Where dossiers and the matrix live; runtime parser  (tui--serve-model-integration.md Q2/Q3)
+- Evidence: PyYAML is not a runtime dependency (`pyproject.toml` dependencies); dossiers carry YAML front
+  matter; the TUI sketch wants a typed catalog reader.
+- Options: add `pyyaml` runtime dep · restricted front-matter grammar parsed by hand · ship a generated
+  `matrix.json` (from the dossiers via a `tools/` script, checked in and tested) and keep YAML only in docs.
+- Recommendation: `docs/models/<org>--<model>.md` (normalized dossiers) + `docs/models/matrix.json` generated by
+  `tools/models/build_matrix.py`; runtime reads JSON only. No new dependency.
+
+## 6. TUI serve flow  (tui--serve-model-integration.md Q1/Q4)
+- Evidence: the console is read-only by design (`docs/FEATURE-ROADMAP.md:186-214`); 49 TUI tests pass; no
+  business-logic guard exists.
+- Options: preview-only (hand the command to CLI/REST) · dry-run preview + type-to-confirm launch · full launch.
+- Recommendation: catalogue + hardware-fit read-only first; serve **preview (dry-run) only** in the first cut;
+  type-to-confirm launch only after `pitwall.serve` is stable. Confidence badges are informational, not gates,
+  in v1.
+
+## 7. Readiness, arming, and timeouts  (engine--vllm.md, wiring §5)
+- Evidence: slice 1 arms the proxy at the lease readiness hook (generic `/health` probe); the spec verifies
+  `/v1/models` afterwards and tears down on mismatch — a short window where the proxy is armed against an
+  unverified model. `create_pod_with_fallback` defaults `startup_timeout_s=600`; large downloads exceed that;
+  wiring proposes 1,800 s initial cap and a size-based formula.
+- Recommendation: keep the spec's verify-then-teardown ordering for v1 (window is bounded and documented);
+  serve-model passes `startup_timeout_s` from the dossier's `startup_time_estimate_min` (default 1,800 s).
+
+## 8. Scope of the model list for v1  (unsloth--GGUF-catalog.md, dossiers)
+- Single-GPU on RunPod: Qwen3.8-27B (vLLM 80 GB / GGUF 24 GB), gemma-4-31B-it (GGUF 24 GB), Muse-Glimmer-30B
+  (GGUF 24 GB), Ornith-1.5-35B-A3B-GGUF, GLM-5.3-Flash (vLLM; Unsloth GGUF repo currently empty), 
+  Qwen3.8-Flash-Next (GGUF ≥ 72 GB, needs an unmerged llama.cpp PR).
+- Not single-GPU: GLM-5.2, DeepSeek-V4-Flash/Pro, Kimi-K3 (smallest GGUF 82 GB+; TP/multi-node).
+- Not OpenAI-chat: MiniMax-Music3 (`/v1/audio/speech`), MiniMax-H3 (video). Keep dossiers, `fits_openai_proxy: false`.
+- Recommendation: v1 verifies against the single-GPU set; `--gpu-count` passthrough allowed but documented as
+  unverified. The hardware×model matrix (in progress) is the source of truth for fit.

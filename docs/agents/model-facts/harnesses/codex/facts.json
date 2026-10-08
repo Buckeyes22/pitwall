@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/codex",
+  "facts": {
+    "headlessFlag": {
+      "value": "codex exec",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "codex-non-interactive",
+          "locator": "Non-interactive mode, opening paragraph"
+        }
+      ]
+    },
+    "outputFormats": {
+      "value": [
+        "text",
+        "jsonl"
+      ],
+      "method": "reviewed",
+      "note": "Text is the default final message on stdout; --json switches stdout to a JSON Lines event stream.",
+      "evidence": [
+        {
+          "source": "codex-non-interactive",
+          "locator": "Make output machine-readable, line 71 (--json)"
+        },
+        {
+          "source": "codex-non-interactive",
+          "locator": "Basic usage, final message on stdout"
+        }
+      ]
+    },
+    "effortFlag": {
+      "value": "-c model_reasoning_effort=<level>",
+      "method": "reviewed",
+      "note": "No dedicated effort flag is documented; the config key is set through -c.",
+      "evidence": [
+        {
+          "source": "codex-config-reference",
+          "locator": "model_reasoning_effort key, line 1091"
+        },
+        {
+          "source": "codex-config-reference",
+          "locator": "line 1791, --config overrides reasoning effort"
+        }
+      ]
+    },
+    "permissionDefault": {
+      "value": "on-request: works inside the sandbox and asks before going beyond it; for non-interactive runs the docs advise never",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "codex-config-reference",
+          "locator": "approval_policy key, line 87"
+        },
+        {
+          "source": "codex-sandboxing",
+          "locator": "Configure defaults, approval policies"
+        }
+      ]
+    },
+    "sandboxDefault": {
+      "value": "codex exec: read-only; interactive default permissions mode: workspace-write",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "codex-non-interactive",
+          "locator": "Permissions and safety, line 51"
+        },
+        {
+          "source": "codex-sandboxing",
+          "locator": "Configure defaults, workspace-write bullet"
+        }
+      ]
+    },
+    "instructionFiles": {
+      "value": [
+        "AGENTS.override.md",
+        "AGENTS.md",
+        "~/.codex/AGENTS.md"
+      ],
+      "method": "reviewed",
+      "note": "One file per directory; project_doc_fallback_filenames can add more names.",
+      "evidence": [
+        {
+          "source": "codex-agents-md",
+          "locator": "How Codex discovers guidance, steps 1 and 2"
+        }
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "codex-subagents",
+          "locator": "Opening section, line 25 (enabled by default)"
+        },
+        {
+          "source": "codex-subagents",
+          "locator": "agents.enabled defaults to true, line 372"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "codex-exec-read-only",
+      "text": "codex exec starts in a read-only sandbox. Pass --sandbox workspace-write for a run that edits files, or the run can only inspect.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "codex-non-interactive",
+      "locator": "Permissions and safety",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-exec-final-message",
+      "text": "codex exec streams progress to stderr and prints only the final message to stdout. Use -o <path> to capture it, or --json for an event stream.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "codex-non-interactive",
+      "locator": "Basic usage; Make output machine-readable",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-exec-git-repo",
+      "text": "codex exec refuses to run outside a Git repository. Add --skip-git-repo-check only where the environment is safe to change.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "codex-non-interactive",
+      "locator": "Git repository required",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-agents-md-discovery",
+      "text": "Codex reads AGENTS.override.md or AGENTS.md from ~/.codex, then one file per directory from the project root down. Later files win, and total size stops at 32 KiB.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "codex-agents-md",
+      "locator": "How Codex discovers guidance",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-sandbox-vs-approvals",
+      "text": "The sandbox sets what files and network commands can reach; approvals set when Codex pauses. Changing who reviews a request does not widen the sandbox.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "codex-permissions",
+      "locator": "How permissions work",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "codex-subagents-on-request",
+      "text": "Codex spawns subagents after a direct request or a project or skill instruction. Name the split, such as one agent per point, and say to wait and summarize.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "codex-subagents",
+      "locator": "Delegation paragraph, line 213",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

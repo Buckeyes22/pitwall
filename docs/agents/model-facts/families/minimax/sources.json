@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/minimax",
+  "sources": [
+    {
+      "id": "minimax-models",
+      "url": "https://platform.minimax.io/docs/guides/models-intro.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:16dcfc3b9baf20edd0fb89cb2e669963ce032fe114d04981814c2bd811c77503",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:16dcfc3b9baf20edd0fb89cb2e669963ce032fe114d04981814c2bd811c77503",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-invocation",
+      "url": "https://platform.minimax.io/docs/guides/text-generation.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3ab006d968aa0c53b0b1ee6fcd54f98df6901ef99dac5e35a5cecc0a0f6fb2c6",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:3ab006d968aa0c53b0b1ee6fcd54f98df6901ef99dac5e35a5cecc0a0f6fb2c6",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-anthropic-api",
+      "url": "https://platform.minimax.io/docs/api-reference/text-anthropic-api.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:8ebaa626b1ee2000f9a400b79d61e606245e73c87bd5bc1a9594a7ffc9197a6d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:8ebaa626b1ee2000f9a400b79d61e606245e73c87bd5bc1a9594a7ffc9197a6d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-m3-tool-use",
+      "url": "https://platform.minimax.io/docs/guides/text-m3-function-call.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6ce462ebc56773055a48ee530bd62588b66c0811c5a8c6cfa40259242641d93a",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:6ce462ebc56773055a48ee530bd62588b66c0811c5a8c6cfa40259242641d93a",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "minimax-release-notes",
+      "url": "https://platform.minimax.io/docs/release-notes/apis.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:46bb93b8d8ea0d6ee78921c0b2795446d42da809f612c7937b12066494bb6010",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:46bb93b8d8ea0d6ee78921c0b2795446d42da809f612c7937b12066494bb6010",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-minimax-m3",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "MiniMaxAI/MiniMax-M3",
+      "observedHash": "revision:f0e1c1e04d40177e4673a22097036854f536e9c0",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:f0e1c1e04d40177e4673a22097036854f536e9c0",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hf-minimax-m2.7",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M2.7",
+      "kind": "artifact",
+      "pageType": "model",
+      "fetch": "huggingface",
+      "format": "json",
+      "repo": "MiniMaxAI/MiniMax-M2.7",
+      "observedHash": "revision:d494266a4affc0d2995ba1fa35c8481cbd84294b",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "revision:d494266a4affc0d2995ba1fa35c8481cbd84294b",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "minimaxai",
+      "kind": "huggingface-org",
+      "org": "MiniMaxAI",
+      "pattern": "MiniMax-M[0-9][0-9A-Za-z.-]*",
+      "ignore": [
+        ".*-(MXFP8|FP8|highspeed)"
+      ],
+      "seen": [
+        "MiniMax-M1-40k",
+        "MiniMax-M1-40k-hf",
+        "MiniMax-M1-80k",
+        "MiniMax-M1-80k-hf",
+        "MiniMax-M2",
+        "MiniMax-M2.1",
+        "MiniMax-M2.5"
+      ]
+    }
+  ]
+}

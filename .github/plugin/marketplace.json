@@ -1,0 +1,34 @@
+{
+  "name": "pitwall-local",
+  "owner": {
+    "name": "Buckeyes22"
+  },
+  "metadata": {
+    "description": "Pitwall Agent Routing for GitHub Copilot CLI and VS Code agent plugins with route profiles.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "pitwall-copilot",
+      "description": "Pitwall Agent Routing for GitHub Copilot with flat external-model dispatch, route profiles, and dependency workflows over local model CLI shims.",
+      "version": "0.3.0a1",
+      "source": "plugins/copilot",
+      "category": "Productivity",
+      "keywords": [
+        "subagent-model-routing",
+        "copilot",
+        "codex",
+        "kimi",
+        "moonshot",
+        "claude",
+        "anthropic",
+        "opencode",
+        "grok",
+        "xai",
+        "qwen",
+        "shims",
+        "external-models"
+      ]
+    }
+  ]
+}

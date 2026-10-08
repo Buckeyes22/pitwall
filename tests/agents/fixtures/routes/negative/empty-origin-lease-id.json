@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "models": {
+    "pitwall-example": {
+      "model": "example/pitwall-model",
+      "endpoint": {
+        "baseUrl": "https://pitwall.example.invalid/v1/openai/llm.example/v1"
+      },
+      "origin": {
+        "kind": "pitwall",
+        "capability": "llm.example",
+        "leaseId": "",
+        "url": "https://pitwall.example.invalid"
+      }
+    }
+  }
+}

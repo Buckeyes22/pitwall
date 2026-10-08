@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/dsh",
+  "sources": [
+    {
+      "id": "dsh-providers",
+      "url": "https://deepseek-harness.github.io/deepseek-harness/en/guide/providers.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:841d0e9fd4c167066f7bafcab563ea86269eb89104cd3360ad46fd564346508c",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:841d0e9fd4c167066f7bafcab563ea86269eb89104cd3360ad46fd564346508c",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-readme",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/README.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:ff518cb6ede2d5d5e43a296f3e18f6dcfc7edc0da0ba0247e50f5579af133c4d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:ff518cb6ede2d5d5e43a296f3e18f6dcfc7edc0da0ba0247e50f5579af133c4d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-approval",
+      "url": "https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/approval.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:efcb24fd1978296660fa7bee722f04827209f555154e3a2208fcbbf51d1d0cbb",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:efcb24fd1978296660fa7bee722f04827209f555154e3a2208fcbbf51d1d0cbb",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-permission-presets",
+      "url": "https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/permission-presets.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:f5f5e76540da6df654bf6240db671d2b20d8bf580c9d11394adba933eb5e4371",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:f5f5e76540da6df654bf6240db671d2b20d8bf580c9d11394adba933eb5e4371",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-sandbox",
+      "url": "https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/sandbox.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:af266082916ade4c5b6ef9c312fc71fd2c4d018d5a2fd95397782aa199b3cb5c",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:af266082916ade4c5b6ef9c312fc71fd2c4d018d5a2fd95397782aa199b3cb5c",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "dsh-subagent",
+      "url": "https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/subagent.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:f73292cb894f37771ae6f3073f2ebc259614ce970793b85d14a611c472bdc06d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:f73292cb894f37771ae6f3073f2ebc259614ce970793b85d14a611c472bdc06d",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://deepseek-harness.github.io/deepseek-harness/llms.txt; developer preview, no change log"
+    }
+  ],
+  "watch": []
+}

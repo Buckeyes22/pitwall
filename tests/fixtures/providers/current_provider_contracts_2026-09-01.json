@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "captured_at_utc": "2026-09-01T00:00:00Z",
+    "evidence_kind": "official-provider-contract-reference",
+    "hash_algorithm": "sha256",
+    "hash_normalization": "LF-joined endpoint/auth/version facts; not a downloaded-document hash",
+    "purpose": "Hermetic metadata for MC-01 current-provider operator reads; no credential or live response is retained."
+  },
+  "providers": {
+    "vast": {
+      "official_references": [
+        "https://docs.vast.ai/api-reference/introduction",
+        "https://docs.vast.ai/api-reference/instances/"
+      ],
+      "auth": "bearer",
+      "marketplace_base_url": "https://console.vast.ai/api/v0",
+      "instance_base_url": "https://console.vast.ai/api/v1",
+      "instance_pagination": {
+        "cursor_parameter": "after_token",
+        "maximum_page_size": 25,
+        "maximum_items": 100
+      },
+      "normalized_contract_sha256_hex_groups": [
+        "59aa762b",
+        "9efce502",
+        "b1f151e5",
+        "bb65a462",
+        "36b6307b",
+        "ee0dd022",
+        "7e2dfe39",
+        "a5e23929"
+      ],
+      "source_contract": "vast-api-v0-bundles-2026-09-01"
+    },
+    "together": {
+      "official_references": [
+        "https://docs.together.ai/docs/introduction",
+        "https://docs.together.ai/reference/models-1"
+      ],
+      "auth": "bearer",
+      "base_url": "https://api.together.ai/v1",
+      "availability_path": "/models",
+      "normalized_contract_sha256_hex_groups": [
+        "d6272104",
+        "f43b529e",
+        "0704d905",
+        "5fc7ecf3",
+        "188fb36e",
+        "a518a1a8",
+        "712f5f79",
+        "0b58a6d6"
+      ],
+      "source_contract": "together-v1-models-2026-09-01"
+    },
+    "lambda_cloud": {
+      "official_references": [
+        "https://docs.lambda.ai/public-cloud/cloud-api/",
+        "https://docs.lambda.ai/public-cloud/cloud-api/#tag/instance-types"
+      ],
+      "auth": "bearer",
+      "base_url": "https://cloud.lambda.ai/api/v1",
+      "availability_path": "/instance-types",
+      "openapi_version": "1.10.0",
+      "minimum_request_interval_seconds": 1,
+      "minimum_launch_interval_seconds": 12,
+      "normalized_contract_sha256_hex_groups": [
+        "fd1f9734",
+        "469a26f5",
+        "043105d7",
+        "864f2b00",
+        "0bb864c7",
+        "4cf21d35",
+        "0d388799",
+        "9c80056d"
+      ],
+      "source_contract": "lambda-cloud-openapi-1.10.0"
+    }
+  }
+}

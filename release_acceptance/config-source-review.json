@@ -1,0 +1,628 @@
+{
+  "schema_version": "release-acceptance-config-source-review.v1",
+  "status": "partial_runtime_review",
+  "scope": "Root configuration source review plus explicitly linked runtime proofs; retained unresolved defaults and cross-package discovery are not approved.",
+  "inventory": {
+    "path": "$PITWALL_EVIDENCE_ROOT/release-acceptance/remaining-release-work-zDy9jC/config_inventory.json",
+    "schema_version": "release-acceptance-config-inventory.v1",
+    "source_sha256": "f1615821b22e3c9fbd333d31e2b54538c9a16e8de06decd5048d4d621b0742c0",
+    "issue_count": 18,
+    "dynamic_default_issue_count": 14,
+    "issue_count_note": "The supplied task wording says 13 dynamic defaults; the retained inventory contains 14, including PitwallSettings.pitwall_routing_weights default_factory=dict. All 14 are preserved here.",
+    "issues": [
+      {
+        "topic": "config_files",
+        "inventory_status": "unresolved",
+        "review_status": "runtime_tested",
+        "disposition": "Explicit missing-file, invalid-suffix, malformed TOML, absent discovered file and init/env/TOML precedence executed; evidence finish-20260921/config/root-final.xml."
+      },
+      {
+        "topic": "dynamic_default",
+        "inventory_status": "unresolved",
+        "review_status": "resolved_source_only",
+        "disposition": "All 14 source expressions are resolved below by bounded AST parsing of config.py and the imported R2 constant assignments. No repository module was imported or instantiated for this resolution."
+      },
+      {
+        "topic": "runtime_env_binding",
+        "inventory_status": "unresolved",
+        "review_status": "selected_tests_executed",
+        "disposition": "Previously selected config_runtime_env tests executed alongside added cases; no claim that every config surface is covered."
+      },
+      {
+        "topic": "other_projects",
+        "inventory_status": "unresolved",
+        "review_status": "kept_out_of_scope",
+        "disposition": "No broad other-project configuration claim is made. Gateway and Pi gaps are named separately below."
+      },
+      {
+        "topic": "scope",
+        "inventory_status": "partial",
+        "review_status": "retained",
+        "disposition": "The inventory remains a source-field and .env.example name inventory; this manifest adds a bounded review of the named defaults only."
+      }
+    ]
+  },
+  "dependencies": [
+    {
+      "path": "src/pitwall/config.py",
+      "sha256": "4f8167d8307ad28e77cee779160573e73df637d06de88a4c637ed79f9f37d095",
+      "role": "settings models, custom source order, environment alias mapping, TOML resolution, validation, and error formatting"
+    },
+    {
+      "path": "src/pitwall/r2_temp_credentials.py",
+      "sha256": "132f4fe71f051826688831ab7f694f58a954407be49b79eb5fc2fa930cee457e",
+      "role": "imported R2 permission type and default/max TTL constants"
+    },
+    {
+      "path": "src/pitwall/routing/production.py",
+      "sha256": "a69762e38528b90316309020aedd288ef78e33280391ee95d464370289af58bf",
+      "role": "routing_weights_for fallback lookup and capability/name/class/wildcard precedence"
+    },
+    {
+      "path": "tests/test_config_runtime_env.py",
+      "sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "role": "selected source review of config-file loading, env precedence, decimal parsing, routing parsing, and domain checks"
+    },
+    {
+      "path": "tests/test_r2_temp_credentials.py",
+      "sha256": "71e70f2cda7b00cbdb421d0bca27f4afbddcf4d774334a7eaf2198957478b450",
+      "role": "selected source review of imported R2 TTL validation and pod credential behavior"
+    },
+    {
+      "path": "tests/release_acceptance/test_config_inventory.py",
+      "sha256": "de56c47da261064b02fff27f530ec31979d47f1e083b044cdc66d13497d0fb77",
+      "role": "source inventory extraction, dynamic-expression retention, redaction, and drift-test coverage"
+    },
+    {
+      "path": "tools/release_acceptance/config_inventory.py",
+      "sha256": "97be2a60988af65fa4abe93b9ed011e42d0332c33589740622112e2d4cb5026f",
+      "role": "AST-only source inventory extractor after focused strict typing correction"
+    },
+    {
+      "path": "docs/sdlc/16-core-config.md",
+      "sha256": "b7b6ffb9c2307aef09b856d6be589169923d359183406156192e5af8abf5ca7b",
+      "role": "documented environment aliases, defaults, dependency contract, and routing settings"
+    },
+    {
+      "path": ".env.example",
+      "sha256": "da188ffb43c90beb5dca5e32174a3c632b889dc1853f7cbd5303d3ccdf518c62",
+      "role": "documented environment key names only; example values were not recorded"
+    },
+    {
+      "path": "src/pitwall/gateway/config.py",
+      "sha256": "e0cfa650e6795c6f2dcc5afacb64d0be958750a4c0dd1fbeafea39681fe61870",
+      "role": "gap-only source inspection for the separate Gateway configuration contract"
+    }
+  ],
+  "dynamic_defaults": [
+    {
+      "surface_id": "config:field:R2Config:temp_credential_ttl_s",
+      "source": "src/pitwall/config.py:129",
+      "expression": "DEFAULT_R2_TEMP_CREDENTIAL_TTL_S",
+      "resolved_default": 21600,
+      "resolved_type": "int",
+      "resolved_from": "src/pitwall/r2_temp_credentials.py:20 (21_600)",
+      "resolution_method": "bounded AST import-constant assignment; no import or execution",
+      "contract": "R2 temporary credential TTL in seconds; domain validation requires > 0 and <= 604800",
+      "affected_behavior": "R2Config model default and legacy configuration contract",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_r2_temp_credentials.py::test_env_config_rejects_invalid_ttl",
+          "tests/test_r2_temp_credentials.py::test_ttl_validation_rejects_excessive_ttl"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:R2Config:temp_credential_permission",
+      "source": "src/pitwall/config.py:133",
+      "expression": "DEFAULT_R2_TEMP_CREDENTIAL_PERMISSION",
+      "resolved_default": "object-read-write",
+      "resolved_type": "R2TempCredentialPermission",
+      "resolved_from": "src/pitwall/r2_temp_credentials.py:22",
+      "resolution_method": "bounded AST import-constant assignment; no import or execution",
+      "contract": "Permission is one of admin-read-write, admin-read-only, object-read-write, or object-read-only",
+      "affected_behavior": "R2Config model default and temporary credential permission validation",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_r2_temp_credentials.py::test_cloudflare_client_posts_temp_credential_request"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:BudgetConfig:monthly_budget_usd",
+      "source": "src/pitwall/config.py:148",
+      "expression": "Decimal(\"50.0\")",
+      "resolved_default": "50.0",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Monthly budget hard cap in USD; domain check rejects negatives",
+      "affected_behavior": "BudgetConfig model default",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_config_runtime_env.py::test_budget_env_values_are_decimal_exact_without_float_round_trip"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:BudgetConfig:per_request_max_usd",
+      "source": "src/pitwall/config.py:151",
+      "expression": "Decimal(\"10.0\")",
+      "resolved_default": "10.0",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Per-request cost cap in USD; domain check rejects negatives",
+      "affected_behavior": "BudgetConfig model default",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_config_runtime_env.py::test_budget_env_values_are_decimal_exact_without_float_round_trip"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:PitwallSettings:r2_temp_credential_ttl_s",
+      "source": "src/pitwall/config.py:368",
+      "expression": "DEFAULT_R2_TEMP_CREDENTIAL_TTL_S",
+      "resolved_default": 21600,
+      "resolved_type": "int",
+      "resolved_from": "src/pitwall/r2_temp_credentials.py:20 (21_600)",
+      "resolution_method": "bounded AST import-constant assignment; no import or execution",
+      "contract": "Top-level R2 temporary credential TTL; domain validation requires > 0 and <= 604800",
+      "affected_behavior": "Environment/TOML setting consumed by check_domain_config and temp credential setup",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_r2_temp_credentials.py::test_env_config_rejects_invalid_ttl",
+          "tests/test_r2_temp_credentials.py::test_ttl_validation_accepts_max_allowed_ttl"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:PitwallSettings:r2_temp_credential_permission",
+      "source": "src/pitwall/config.py:372",
+      "expression": "DEFAULT_R2_TEMP_CREDENTIAL_PERMISSION",
+      "resolved_default": "object-read-write",
+      "resolved_type": "R2TempCredentialPermission",
+      "resolved_from": "src/pitwall/r2_temp_credentials.py:22",
+      "resolution_method": "bounded AST import-constant assignment; no import or execution",
+      "contract": "Top-level permission preset uses the four-value R2 permission literal contract",
+      "affected_behavior": "Environment/TOML setting consumed by temporary credential setup",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_r2_temp_credentials.py::test_cloudflare_client_posts_temp_credential_request"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:PitwallSettings:pitwall_routing_weights",
+      "source": "src/pitwall/config.py:444",
+      "expression": "default_factory=dict",
+      "resolved_default": {},
+      "resolved_type": "dict[str, RoutingWeights]",
+      "resolution_method": "bounded source contract; factory was not called",
+      "contract": "Optional capability/name/class/* mapping; each nested RoutingWeights value is strict and bounded",
+      "affected_behavior": "No configured mapping leaves routing_weights_for to use RoutingWeights() fallback",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+          "tests/test_config_runtime_env.py::test_empty_routing_weights_env_keeps_default_mapping",
+          "tests/test_config_runtime_env.py::test_production_routing_settings_are_typed_and_decimal_exact"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:PitwallSettings:pitwall_monthly_budget_usd",
+      "source": "src/pitwall/config.py:465",
+      "expression": "Decimal(\"50.0\")",
+      "resolved_default": "50.0",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Monthly budget hard cap in USD; negative values error and a smaller monthly cap can warn when the request cap is larger",
+      "affected_behavior": "Top-level budget source consumed by domain checks, routing, inference, and cost reporting",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/test_config_runtime_env.py::test_budget_env_values_are_decimal_exact_without_float_round_trip",
+          "tests/test_config_runtime_env.py::test_domain_config_check_flags_broken_config",
+          "tests/test_config_runtime_env.py::test_domain_config_check_passes_good_config"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:PitwallSettings:pitwall_per_request_max_usd",
+      "source": "src/pitwall/config.py:469",
+      "expression": "Decimal(\"10.0\")",
+      "resolved_default": "10.0",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Per-request cap in USD; negative values error and a cap above a positive monthly budget warns",
+      "affected_behavior": "Top-level budget source consumed by domain checks, routing, inference, and cost reporting",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/test_config_runtime_env.py::test_budget_env_values_are_decimal_exact_without_float_round_trip",
+          "tests/test_config_runtime_env.py::test_domain_config_check_flags_broken_config",
+          "tests/test_config_runtime_env.py::test_domain_config_check_passes_good_config"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:PitwallSettings:pitwall_budget_breach_kill_headroom_floor_usd",
+      "source": "src/pitwall/config.py:485",
+      "expression": "Decimal(\"0.0\")",
+      "resolved_default": "0.0",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Armed budget breach escalation floor; zero means escalation only at exhaustion/overrun",
+      "affected_behavior": "Budget breach kill-switch policy threshold",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/test_config_runtime_env.py::test_budget_env_values_are_decimal_exact_without_float_round_trip"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_unconfigured_budget_and_r2_defaults_match_operator_contract"
+      }
+    },
+    {
+      "surface_id": "config:field:RoutingWeights:cost",
+      "source": "src/pitwall/config.py:59",
+      "expression": "Decimal(\"1\")",
+      "resolved_default": "1",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Finite Decimal routing cost weight with 0 <= value <= 1000",
+      "affected_behavior": "RoutingWeights() fallback cost objective",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_literal_field_contract_metadata",
+          "tests/test_config_runtime_env.py::test_production_routing_settings_are_typed_and_decimal_exact"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_routing_weights_four_nested_defaults_are_decimal_exact"
+      }
+    },
+    {
+      "surface_id": "config:field:RoutingWeights:latency",
+      "source": "src/pitwall/config.py:60",
+      "expression": "Decimal(\"0.001\")",
+      "resolved_default": "0.001",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Finite Decimal routing latency weight with 0 <= value <= 1000",
+      "affected_behavior": "RoutingWeights() fallback latency objective",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_literal_field_contract_metadata",
+          "tests/test_config_runtime_env.py::test_production_routing_settings_are_typed_and_decimal_exact"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_routing_weights_four_nested_defaults_are_decimal_exact"
+      }
+    },
+    {
+      "surface_id": "config:field:RoutingWeights:w_quota",
+      "source": "src/pitwall/config.py:61",
+      "expression": "Decimal(\"10\")",
+      "resolved_default": "10",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Finite Decimal quota weight with 0 <= value <= 1000",
+      "affected_behavior": "RoutingWeights() fallback quota objective",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_routing_weights_four_nested_defaults_are_decimal_exact"
+      }
+    },
+    {
+      "surface_id": "config:field:RoutingWeights:w_reset",
+      "source": "src/pitwall/config.py:62",
+      "expression": "Decimal(\"2.5\")",
+      "resolved_default": "2.5",
+      "resolved_type": "Decimal",
+      "resolution_method": "bounded AST literal Decimal argument; no import or execution",
+      "contract": "Finite Decimal reset-proximity weight with 0 <= value <= 1000",
+      "affected_behavior": "RoutingWeights() fallback reset objective",
+      "coverage": {
+        "status": "passed",
+        "direct_default_assertion": true,
+        "related_nodes": [
+          "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed"
+        ],
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml",
+        "direct_test": "tests/test_config_acceptance_remaining.py::test_routing_weights_four_nested_defaults_are_decimal_exact"
+      }
+    }
+  ],
+  "config_contract": {
+    "settings_source_order_high_to_low": [
+      "init_settings",
+      "_PitwallEnvSettingsSource",
+      "_PitwallTomlSettingsSource",
+      "model field defaults"
+    ],
+    "source_declaration": "src/pitwall/config.py:265-278",
+    "config_file_resolution": {
+      "source": "src/pitwall/config.py:785-796",
+      "explicit_path": "PITWALL_CONFIG_FILE, expanded with Path.expanduser",
+      "discovered_path": "./pitwall.toml in the current working directory when present",
+      "missing_explicit_file": "ConfigFileError",
+      "missing_discovered_file": "empty TOML source",
+      "suffix": "only .toml is accepted",
+      "parse_errors": "wrapped as ConfigFileError"
+    },
+    "field_name_normalization": {
+      "source": "src/pitwall/config.py:799-815",
+      "accepted_file_keys": "field names, uppercase field names, and explicit environment aliases"
+    },
+    "environment_binding": {
+      "source": "src/pitwall/config.py:872-1092",
+      "contract": "Only explicitly present environment values are supplied; first non-empty aliases win where configured; typed transforms run before Pydantic validation"
+    },
+    "load_entrypoint": {
+      "source": "src/pitwall/config.py:1095-1104",
+      "contract": "load_settings_from_env returns PitwallSettings; required runtime fields remain empty until require_runtime_env or check_domain_config"
+    },
+    "credential_safe_boundary": {
+      "manifest_rule": "Only credential names, non-secret expressions, source hashes, and fake-test node IDs are retained; configured values are omitted.",
+      "source_behavior": "Validation errors call ValidationError.errors(include_input=False); runtime env and TOML values are still inputs to the settings source and were not read in this review.",
+      "test_coverage": "Selected inventory tests assert ambient/example values are not emitted; no claim is made about every downstream log or exception path."
+    }
+  },
+  "test_coverage": [
+    {
+      "source": "tests/test_config_runtime_env.py:152",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_settings_load_default_pitwall_toml",
+      "reviewed_assertion": "A cwd pitwall.toml supplies settings values through the TOML source.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:175",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_settings_config_file_is_overridden_by_env",
+      "reviewed_assertion": "Explicit environment values override matching TOML values while other TOML fields remain available.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:201",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_budget_env_values_are_decimal_exact_without_float_round_trip",
+      "reviewed_assertion": "Decimal environment values retain exact decimal text for monthly, per-request, and headroom settings.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:288",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_production_routing_settings_are_typed_and_decimal_exact",
+      "reviewed_assertion": "Weighted routing mode parses a JSON mapping into Decimal weights and loads attempt/event limits.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:313",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_empty_routing_weights_env_keeps_default_mapping",
+      "reviewed_assertion": "An empty routing weights environment value resolves to an empty mapping.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:331",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_production_routing_settings_reject_unsafe_values[parameterized]",
+      "reviewed_assertion": "Invalid routing mode, non-finite/empty routing weights, excessive attempts, and zero event limit are rejected.",
+      "status": "passed",
+      "collection_note": "The collected file contains five parameterized nodes; this manifest records the source template without copying their input values.",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:380",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_domain_config_check_flags_broken_config",
+      "reviewed_assertion": "Domain checks report missing core runtime settings, negative budgets, and missing embedding base URL.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_config_runtime_env.py:402",
+      "test_source_sha256": "8684f83fcdef7fe1601567d1ba6cb458162ec4238f47daaf4ce45e9fb65b51bb",
+      "test_node_id": "tests/test_config_runtime_env.py::test_domain_config_check_passes_good_config",
+      "reviewed_assertion": "A supplied valid settings object passes the API domain check with R2 temp credentials disabled.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-green.xml"
+    },
+    {
+      "source": "tests/test_r2_temp_credentials.py:117",
+      "test_source_sha256": "71e70f2cda7b00cbdb421d0bca27f4afbddcf4d774334a7eaf2198957478b450",
+      "test_node_id": "tests/test_r2_temp_credentials.py::test_env_config_auto_mode_is_empty_when_unconfigured",
+      "reviewed_assertion": "Unconfigured R2 temp credential vending remains absent in auto mode.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml"
+    },
+    {
+      "source": "tests/test_r2_temp_credentials.py:126",
+      "test_source_sha256": "71e70f2cda7b00cbdb421d0bca27f4afbddcf4d774334a7eaf2198957478b450",
+      "test_node_id": "tests/test_r2_temp_credentials.py::test_env_config_rejects_invalid_ttl",
+      "reviewed_assertion": "Required R2 temp credential configuration rejects a zero TTL before a provider request.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml"
+    },
+    {
+      "source": "tests/test_r2_temp_credentials.py:175",
+      "test_source_sha256": "71e70f2cda7b00cbdb421d0bca27f4afbddcf4d774334a7eaf2198957478b450",
+      "test_node_id": "tests/test_r2_temp_credentials.py::test_ttl_validation_rejects_excessive_ttl",
+      "reviewed_assertion": "The R2 client rejects TTL values above the imported maximum.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml"
+    },
+    {
+      "source": "tests/test_r2_temp_credentials.py:192",
+      "test_source_sha256": "71e70f2cda7b00cbdb421d0bca27f4afbddcf4d774334a7eaf2198957478b450",
+      "test_node_id": "tests/test_r2_temp_credentials.py::test_ttl_validation_accepts_max_allowed_ttl",
+      "reviewed_assertion": "The R2 client accepts exactly the imported maximum TTL and sends that numeric value to the mocked transport.",
+      "status": "passed",
+      "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml"
+    },
+    {
+      "source": "tests/release_acceptance/test_config_inventory.py:118",
+      "test_source_sha256": "de56c47da261064b02fff27f530ec31979d47f1e083b044cdc66d13497d0fb77",
+      "test_node_id": "tests/release_acceptance/test_config_inventory.py::test_literal_field_contract_metadata",
+      "reviewed_assertion": "AST inventory retains literal aliases, types, constraints, and model-scoped field IDs.",
+      "status": "not_run"
+    },
+    {
+      "source": "tests/release_acceptance/test_config_inventory.py:137",
+      "test_source_sha256": "de56c47da261064b02fff27f530ec31979d47f1e083b044cdc66d13497d0fb77",
+      "test_node_id": "tests/release_acceptance/test_config_inventory.py::test_real_repo_dynamic_defaults_are_flagged_not_executed",
+      "reviewed_assertion": "Dynamic defaults remain source expressions and are explicitly marked unresolved by the inventory.",
+      "status": "not_run"
+    },
+    {
+      "source": "tests/release_acceptance/test_config_inventory.py:305",
+      "test_source_sha256": "de56c47da261064b02fff27f530ec31979d47f1e083b044cdc66d13497d0fb77",
+      "test_node_id": "tests/release_acceptance/test_config_inventory.py::test_ambient_setting_values_never_leak",
+      "reviewed_assertion": "Ambient credential-like values are not serialized by the source inventory.",
+      "status": "not_run"
+    },
+    {
+      "source": "tests/release_acceptance/test_config_inventory.py:323",
+      "test_source_sha256": "de56c47da261064b02fff27f530ec31979d47f1e083b044cdc66d13497d0fb77",
+      "test_node_id": "tests/release_acceptance/test_config_inventory.py::test_issues_state_unresolved_domains_explicitly",
+      "reviewed_assertion": "The inventory retains runtime binding, config-file, and other-project gaps as unresolved rather than approving them.",
+      "status": "not_run"
+    },
+    {
+      "source": "tests/release_acceptance/test_config_inventory.py:498",
+      "test_source_sha256": "de56c47da261064b02fff27f530ec31979d47f1e083b044cdc66d13497d0fb77",
+      "test_node_id": "tests/release_acceptance/test_config_inventory.py::test_output_is_deterministic_sorted_and_unique",
+      "reviewed_assertion": "Inventory output is deterministic, sorted, and unique for the same source.",
+      "status": "not_run"
+    }
+  ],
+  "remaining_configuration_discovery_gaps": {
+    "gateway": [
+      {
+        "surface_id": "config:field:PitwallSettings:pitwall_gateway_url",
+        "source": "src/pitwall/config.py:612",
+        "gap": "The Python loader exposes a loopback URL default and environment alias, but the selected config tests do not assert its TOML/environment precedence or URL validation. The gateway's own boot configuration (src/pitwall/gateway/config.py) is not represented by the settings inventory.",
+        "status": "resolved_loader_behavior",
+        "resolution": "Executed Python defaults and environment/TOML precedence. URL field is a string: URL/host restrictions belong to gateway doctor and the gateway's boot configuration, not the settings loader. The gateway's port and bind configuration is exercised by tests/gateway/test_config.py; complete cross-package discovery is not claimed.",
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml"
+      }
+    ],
+    "routing": [
+      {
+        "surface_id": "config:field:PitwallSettings:pitwall_routing_weights",
+        "source": "src/pitwall/config.py:444",
+        "gap": "The empty default and explicit environment JSON path are covered by source-reviewed tests, but no selected loader test asserts TOML or alias precedence for the mapping and no direct assertion checks all four nested fallback defaults together.",
+        "status": "resolved",
+        "resolution": "Executed exact Decimal defaults, documented lookup precedence, canonical/alias TOML tables separately, nested environment override preserving other TOML entries, and invalid values.",
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml"
+      },
+      {
+        "surface_id": "config:field:RoutingWeights:w_quota",
+        "source": "src/pitwall/config.py:61",
+        "gap": "The source default and finite 0..1000 contract are reviewed; no selected config test directly asserts the default quota weight value at runtime.",
+        "status": "resolved",
+        "resolution": "Executed exact Decimal defaults, documented lookup precedence, canonical/alias TOML tables separately, nested environment override preserving other TOML entries, and invalid values.",
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml"
+      },
+      {
+        "surface_id": "config:field:RoutingWeights:w_reset",
+        "source": "src/pitwall/config.py:62",
+        "gap": "The source default and finite 0..1000 contract are reviewed; no selected config test directly asserts the default reset weight value at runtime.",
+        "status": "resolved",
+        "resolution": "Executed exact Decimal defaults, documented lookup precedence, canonical/alias TOML tables separately, nested environment override preserving other TOML entries, and invalid values.",
+        "execution_evidence": "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-final.xml"
+      }
+    ]
+  },
+  "evidence": {
+    "static_resolution": {
+      "path": "$PITWALL_EVIDENCE_ROOT/release-acceptance/config-source-review-20260920T214937Z/static-resolution.json",
+      "sha256": "e623043c9caf3ec1913cc96c53c1ee44ef811963b146bc6632c8b4604034b3c1",
+      "scope": "AST parse of named config defaults and imported constant assignments only; no repository imports, settings instantiation, credentials, or provider calls"
+    },
+    "collection": {
+      "path": "$PITWALL_EVIDENCE_ROOT/release-acceptance/config-source-review-20260920T214937Z/pytest-collect.log",
+      "sha256": "a88ec26d5737f20de56b9adf596543725aace5b02098fb4b62f1569b12ab7567",
+      "command": [
+        "uv",
+        "run",
+        "pytest",
+        "--collect-only",
+        "-q",
+        "tests/test_config_runtime_env.py",
+        "tests/test_r2_temp_credentials.py",
+        "tests/release_acceptance/test_config_inventory.py"
+      ],
+      "exit_code": 0,
+      "test_count": 85,
+      "scope": "Collection only; no runtime configuration acceptance"
+    },
+    "focused_extractor_validation": {
+      "source_change": "tools/release_acceptance/config_inventory.py strict typing annotations and AST target narrowing only",
+      "mypy": "uv run mypy tools/release_acceptance/config_inventory.py: success",
+      "pytest": "uv run pytest -q tests/release_acceptance/test_config_inventory.py: 22 passed",
+      "scope": "Extractor regression validation; no runtime configuration acceptance"
+    }
+  },
+  "runtime_update_evidence": [
+    "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/root-review.json",
+    "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/gateway-config/root-artifact.json",
+    "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/pi-config/root-review.json",
+    "$PITWALL_EVIDENCE_ROOT/release-acceptance/finish-20260921/config/defaults-and-r2.xml"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/pi",
+  "facts": {
+    "headlessFlag": {
+      "value": "-p, --print",
+      "method": "reviewed",
+      "note": "Print mode also applies automatically when stdin or stdout is redirected and no JSON or RPC mode is selected.",
+      "evidence": [
+        {"source": "pi-cli", "locator": "Invocation and output, option table, -p/--print row"}
+      ]
+    },
+    "outputFormats": {
+      "value": ["text", "json", "rpc"],
+      "method": "reviewed",
+      "note": "The json mode writes JSONL events; rpc mode exchanges JSONL commands and responses over stdin and stdout.",
+      "evidence": [
+        {"source": "pi-cli", "locator": "Invocation and output, --mode rows"}
+      ]
+    },
+    "effortFlag": {
+      "value": "--thinking",
+      "method": "reviewed",
+      "note": "Accepts off, minimal, low, medium, high, xhigh, or max, clamped to what the model supports; a :level suffix on --model also works.",
+      "evidence": [
+        {"source": "pi-cli", "locator": "Models, --thinking row"}
+      ]
+    },
+    "permissionDefault": {
+      "value": "allow",
+      "method": "reviewed",
+      "note": "Pi does not ask approval before every tool call; project trust only gates project-local settings and resources.",
+      "evidence": [
+        {"source": "pi-security", "locator": "opening paragraph; Understand project trust"}
+      ]
+    },
+    "sandboxDefault": {
+      "value": "none",
+      "method": "reviewed",
+      "note": "Pi runs with the permissions of its operating-system user and has no built-in sandbox.",
+      "evidence": [
+        {"source": "pi-security", "locator": "opening paragraph; Report a security issue, last paragraph"}
+      ]
+    },
+    "instructionFiles": {
+      "value": ["AGENTS.override.md", "AGENTS.md", "CLAUDE.md"],
+      "method": "reviewed",
+      "note": "Loaded regardless of project trust; -nc/--no-context-files turns discovery off.",
+      "evidence": [
+        {"source": "pi-security", "locator": "Resources protected by project trust, context files paragraph"},
+        {"source": "pi-cli", "locator": "Resources, -nc/--no-context-files row"}
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "pi-print-mode-headless",
+      "text": "Run scripted work with pi --print and a prompt; add --mode json when you need a JSONL event stream. Redirected stdin or stdout also selects print mode.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "pi-cli",
+      "locator": "Invocation and output",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-no-sandbox",
+      "text": "Pi has no built-in sandbox and does not ask before each tool call. Run it in a container or VM, and expose only the files and credentials the task needs.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "pi-security",
+      "locator": "opening paragraph; Choose how to run Pi",
+      "surfaces": ["card", "reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-approve-project-trust",
+      "text": "Headless runs skip project-local settings and extensions unless trusted. Pass --approve (or --no-approve) to make that decision explicitly for one run.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "pi-security",
+      "locator": "Project trust without an interactive prompt",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-thinking-flag",
+      "text": "Set reasoning effort with --thinking, or a :level suffix on --model. The flag overrides the suffix, and Pi clamps the level to the model's capabilities.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "pi-cli",
+      "locator": "Models, --thinking and --model rows",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "pi-reads-agents-and-claude-md",
+      "text": "Pi loads AGENTS.md and CLAUDE.md from the working folder even when project trust is declined, so keep them short and treat them as untrusted input.",
+      "applies": ["*"],
+      "class": "harness",
+      "source": "pi-security",
+      "locator": "Resources protected by project trust, context files paragraph",
+      "surfaces": ["reference"],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "defaults": {"harness": "opencode", "endpointHarness": "qwen"},
+  "models": {
+    "claude-home": {
+      "model": "sonnet",
+      "harness": "claude",
+      "account": "a-label-longer-than-sixteen"
+    }
+  }
+}

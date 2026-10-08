@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/goose",
+  "sources": [
+    {
+      "id": "goose-cli-commands",
+      "url": "https://goose-docs.ai/docs/guides/goose-cli-commands",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:d2100c5a44b53809ffe8334c2b65053eddfa4da095bceb96977c875b43fb1723",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:d2100c5a44b53809ffe8334c2b65053eddfa4da095bceb96977c875b43fb1723",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "goose-providers",
+      "url": "https://goose-docs.ai/docs/getting-started/providers",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:7044c04eddee62d2c10e8c259faedac9ec49c588acf719d16de45f867830f613",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:7044c04eddee62d2c10e8c259faedac9ec49c588acf719d16de45f867830f613",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://goose-docs.ai/llms.txt; no change log page"
+    }
+  ],
+  "watch": []
+}

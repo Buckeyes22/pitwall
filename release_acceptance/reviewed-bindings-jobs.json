@@ -1,0 +1,273 @@
+{
+  "schema_version": "reviewed-test-bindings.v1",
+  "scope": "Dedicated source-reviewed mapping for GET/POST job status, read, result, and cancel routes. Collection only; every bound node is not_run and provides no execution acceptance.",
+  "bindings": [
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:138",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "seeded completed workload returns HTTP 200 with id, completed state, capability, provider, and RunPod job identity",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a mocked ProductionRoutingService; does not establish durable database persistence or live provider behavior",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestGetJob::test_returns_full_workload_row"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_contract.py:112",
+      "test_source_sha256": "a60605b363621a5299d0b11141180b9173207ddfa0c7859177ce4aaadbdb0cb1",
+      "reviewed_oracle": "seeded completed workload cost fields serialize as the expected quote, actual, variance, effective, reconciliation, provenance, timestamp, and provider_invoice shape",
+      "proof_lane": "hermetic",
+      "limits": "Seeded Decimal and cost quote fixture; proves response serialization shape only, not provider billing, invoice retrieval, or reconciliation against an external source",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_contract.py::test_get_job_completed_200"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_contract.py:67",
+      "test_source_sha256": "a60605b363621a5299d0b11141180b9173207ddfa0c7859177ce4aaadbdb0cb1",
+      "reviewed_oracle": "unknown workload returns HTTP 404 with workload_not_found",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service raises LookupError; does not establish behavior against a durable repository",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_contract.py::test_get_job_unknown_404"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/status",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:175",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "seeded queued workload status returns HTTP 200 with id, queued state, RunPod job identity, and submitted_at",
+      "proof_lane": "hermetic",
+      "limits": "ASGI app with a mocked ProductionRoutingService and fixed fixture timestamp; does not establish persisted status transitions",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestGetJobStatus::test_returns_state_string_for_seeded_job"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/status",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:207",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "completed status includes non-null started_at and completed_at and a null error",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service and fixed timestamps; asserts only selected status fields and not timestamp formatting or persistence",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestGetJobStatus::test_status_includes_all_fields"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/status",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_contract.py:75",
+      "test_source_sha256": "a60605b363621a5299d0b11141180b9173207ddfa0c7859177ce4aaadbdb0cb1",
+      "reviewed_oracle": "unknown workload status returns HTTP 404",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service raises LookupError; does not establish behavior against a durable repository",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_contract.py::test_get_status_unknown_404"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/result",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_contract.py:97",
+      "test_source_sha256": "a60605b363621a5299d0b11141180b9173207ddfa0c7859177ce4aaadbdb0cb1",
+      "reviewed_oracle": "completed result returns HTTP 200 with workload id, route plan id, selected provider, result, available true, and no unavailable reason",
+      "proof_lane": "hermetic",
+      "limits": "Mocked ProductionRoutingService returns a small JobResultPage; does not prove durable result retrieval or result-size bounding at a boundary",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_contract.py::test_get_result_completed_200"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/result",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:261",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "queued result returns HTTP 409 with job_not_ready, id, and queued state",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service supplies the nonterminal JobResultPage; no persisted queue state or live worker is exercised",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestGetJobResult::test_preserves_409_for_queued_job"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/result",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:277",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "running result returns HTTP 409 with job_not_ready, id, and running state",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service supplies the nonterminal JobResultPage; no persisted queue state or live worker is exercised",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestGetJobResult::test_preserves_409_for_running_job"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/result",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_contract.py:82",
+      "test_source_sha256": "a60605b363621a5299d0b11141180b9173207ddfa0c7859177ce4aaadbdb0cb1",
+      "reviewed_oracle": "unknown result workload returns HTTP 404",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service raises LookupError; does not establish behavior against a durable repository",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_contract.py::test_get_result_unknown_404"
+    },
+    {
+      "surface_id": "rest:GET:/v1/jobs/{workload_id}/result",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:305",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "failed terminal result returns HTTP 200 with available false and provider_result_unavailable",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service supplies a failed terminal JobResultPage; no real provider failure or persisted error is exercised",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestGetJobResult::test_returns_result_for_failed_job"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:327",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "queued cancel returns HTTP 200 with cancelled state and delegates once to cancel_job with the workload id",
+      "proof_lane": "hermetic",
+      "limits": "AsyncMock ProductionRoutingService; does not prove queue mutation or provider cancellation",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_queued_job"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:347",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "running cancel with a seeded RunPod job id returns HTTP 200 with cancelled state and delegates once to cancel_job",
+      "proof_lane": "hermetic",
+      "limits": "The RunPod facade is mocked; this is route delegation and response serialization only, not live RunPod cancellation",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_running_job_with_mocked_runpod"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:432",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "running cancel without a stored RunPod job id still returns HTTP 200 with cancelled state through the service facade",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service handles the missing remote id; no assertion establishes a real provider lookup or cancellation policy",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_running_without_runpod_job_id"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:371",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "cancel of a completed workload returns HTTP 200 and preserves completed state",
+      "proof_lane": "hermetic",
+      "limits": "Single request against a mocked service; demonstrates the terminal response shape only and does not prove replay idempotency or durable no-op behavior",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_idempotent_on_completed"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:387",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "cancel of a failed workload returns HTTP 200 and preserves failed state",
+      "proof_lane": "hermetic",
+      "limits": "Single request against a mocked service; demonstrates the terminal response shape only and does not prove replay idempotency or durable no-op behavior",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_idempotent_on_failed"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_read_cancel.py:403",
+      "test_source_sha256": "f62f709f4ff91ec8b1c9d9ba873d74d19a7aa5b487794e02aa6a934c53c4b038",
+      "reviewed_oracle": "cancel of a cancelled workload returns HTTP 200 and preserves cancelled state",
+      "proof_lane": "hermetic",
+      "limits": "Single request against a mocked service; demonstrates the terminal response shape only and does not prove replay idempotency or durable no-op behavior",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_idempotent_on_cancelled"
+    },
+    {
+      "surface_id": "rest:POST:/v1/jobs/{workload_id}/cancel",
+      "framework": "pytest",
+      "source": "tests/api/test_jobs_contract.py:156",
+      "test_source_sha256": "a60605b363621a5299d0b11141180b9173207ddfa0c7859177ce4aaadbdb0cb1",
+      "reviewed_oracle": "unknown workload cancel returns HTTP 404",
+      "proof_lane": "hermetic",
+      "limits": "Mocked service raises LookupError; does not establish behavior against a durable repository",
+      "reviewer": "Luna source inspection; root mapping and source review",
+      "review_state": "source_and_collection_reviewed_execution_evidence_pending",
+      "status": "not_run",
+      "test_node_id": "tests/api/test_jobs_contract.py::test_cancel_unknown_404"
+    }
+  ],
+  "rejected_inferences": [
+    {
+      "source": "tests/api/test_jobs_read_cancel.py::_attach_service",
+      "reason": "MagicMock and AsyncMock ProductionRoutingService fixtures establish route mapping and serialization only; they do not prove durable database reads, worker transitions, or live provider behavior."
+    },
+    {
+      "source": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_running_job_with_mocked_runpod",
+      "reason": "The test names a mocked RunPod path but only supplies an AsyncMock service; it is not evidence of QueueClient or RunPod cancellation."
+    },
+    {
+      "source": "tests/api/test_jobs_read_cancel.py::TestCancelJob::test_cancel_idempotent_on_completed",
+      "reason": "A single terminal-state POST and echoed state do not establish replay idempotency; the same limit applies to the failed and cancelled terminal-state cases."
+    },
+    {
+      "source": "tests/api/test_jobs_contract.py::test_get_job_completed_200",
+      "reason": "Seeded Decimal and cost quote values establish the response cost shape only; they are not real billing, an invoice, or provider reconciliation evidence."
+    }
+  ],
+  "collection": {
+    "log_sha256": "94d43e43cad334f3214067063544551fd612f2764f47f8290ed168747216692f",
+    "command": [
+      "uv",
+      "run",
+      "pytest",
+      "--collect-only",
+      "-q",
+      "tests/api/test_jobs_read_cancel.py",
+      "tests/api/test_jobs_contract.py"
+    ],
+    "exit_code": 0,
+    "test_count": 24,
+    "scope": "Collection only; no test execution or acceptance outcome was recorded. Private retained log: $PITWALL_EVIDENCE_ROOT/release-acceptance/jobs-bindings-20260920T214446Z/pytest-collect.log"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "models": {
+    "inline-example": {
+      "model": "example/inline-model",
+      "endpoint": {
+        "baseUrl": "http://127.0.0.1:9292/v1",
+        "apiKeyEnv": "EXAMPLE_INLINE_API_KEY"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "defaults": {"harness": "opencode", "endpointHarness": "qwen"},
+  "models": {
+    "claude-home": {
+      "model": "sonnet",
+      "harness": "claude",
+      "env": {"CLAUDE_CONFIG_DIR": "/srv/logins/claude-home"},
+      "account": "home"
+    }
+  }
+}

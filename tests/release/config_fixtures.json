@@ -1,0 +1,2248 @@
+{
+  "config:env:AWS_ACCESS_KEY_ID": {
+    "kind": "consumer",
+    "env": "AWS_ACCESS_KEY_ID",
+    "valid": "j37-aws-access",
+    "probe": "m('pitwall.staging_store')._has_complete_sts_pod_env(os.environ)",
+    "with": {
+      "R2_ENDPOINT": "https://r2.example",
+      "R2_BUCKET_STAGING": "b",
+      "AWS_SECRET_ACCESS_KEY": "s",
+      "AWS_SESSION_TOKEN": "t"
+    },
+    "expect": true,
+    "expect_unset": false,
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:AWS_SECRET_ACCESS_KEY": {
+    "kind": "consumer",
+    "env": "AWS_SECRET_ACCESS_KEY",
+    "valid": "j37-aws-secret",
+    "probe": "m('pitwall.staging_store')._has_complete_sts_pod_env(os.environ)",
+    "with": {
+      "R2_ENDPOINT": "https://r2.example",
+      "R2_BUCKET_STAGING": "b",
+      "AWS_ACCESS_KEY_ID": "a",
+      "AWS_SESSION_TOKEN": "t"
+    },
+    "expect": true,
+    "expect_unset": false,
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:CLOUDFLARE_ACCOUNT_ID": {
+    "kind": "alias",
+    "env": "CLOUDFLARE_ACCOUNT_ID",
+    "fields": [
+      "cloudflare_account_id"
+    ],
+    "value": "j37-cloudflare_account_id",
+    "expect": {
+      "cloudflare_account_id": "j37-cloudflare_account_id"
+    }
+  },
+  "config:env:CLOUDFLARE_API_TOKEN": {
+    "kind": "alias",
+    "env": "CLOUDFLARE_API_TOKEN",
+    "fields": [
+      "cloudflare_api_token"
+    ],
+    "value": "j37-cloudflare_api_token",
+    "expect": {
+      "cloudflare_api_token": "j37-cloudflare_api_token"
+    }
+  },
+  "config:env:DATABASE_URL": {
+    "kind": "alias",
+    "env": "DATABASE_URL",
+    "fields": [
+      "database_url"
+    ],
+    "value": "j37-database_url",
+    "expect": {
+      "database_url": "j37-database_url"
+    }
+  },
+  "config:env:HF_TOKEN": {
+    "kind": "consumer",
+    "env": "HF_TOKEN",
+    "valid": "j37-hf-token",
+    "probe": "m('pitwall.personal.service').build_personal_service(m('pitwall.config').PitwallSettings())._hf_token",
+    "with": {},
+    "expect": "j37-hf-token",
+    "expect_unset": null,
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:LANGFUSE_HOST": {
+    "kind": "alias",
+    "env": "LANGFUSE_HOST",
+    "fields": [
+      "langfuse_host"
+    ],
+    "value": "j37-langfuse_host",
+    "expect": {
+      "langfuse_host": "j37-langfuse_host"
+    }
+  },
+  "config:env:LANGFUSE_PUBLIC_KEY": {
+    "kind": "alias",
+    "env": "LANGFUSE_PUBLIC_KEY",
+    "fields": [
+      "langfuse_public_key"
+    ],
+    "value": "j37-langfuse_public_key",
+    "expect": {
+      "langfuse_public_key": "j37-langfuse_public_key"
+    }
+  },
+  "config:env:LANGFUSE_SECRET_KEY": {
+    "kind": "alias",
+    "env": "LANGFUSE_SECRET_KEY",
+    "fields": [
+      "langfuse_secret_key"
+    ],
+    "value": "j37-langfuse_secret_key",
+    "expect": {
+      "langfuse_secret_key": "j37-langfuse_secret_key"
+    }
+  },
+  "config:env:PITWALL_ADMIN_SECRET": {
+    "kind": "alias",
+    "env": "PITWALL_ADMIN_SECRET",
+    "fields": [
+      "pitwall_admin_secret"
+    ],
+    "value": "j37-pitwall_admin_secret",
+    "expect": {
+      "pitwall_admin_secret": "j37-pitwall_admin_secret"
+    }
+  },
+  "config:env:PITWALL_ALERT_FROM": {
+    "kind": "alias",
+    "env": "PITWALL_ALERT_FROM",
+    "fields": [
+      "pitwall_alert_from"
+    ],
+    "value": "j37-pitwall_alert_from",
+    "expect": {
+      "pitwall_alert_from": "j37-pitwall_alert_from"
+    }
+  },
+  "config:env:PITWALL_ALERT_TO": {
+    "kind": "alias",
+    "env": "PITWALL_ALERT_TO",
+    "fields": [
+      "pitwall_alert_to"
+    ],
+    "value": "j37-pitwall_alert_to",
+    "expect": {
+      "pitwall_alert_to": "j37-pitwall_alert_to"
+    }
+  },
+  "config:env:PITWALL_API_HOST": {
+    "kind": "consumer",
+    "env": "PITWALL_API_HOST",
+    "valid": "127.0.0.9",
+    "probe": "uvicorn_kwargs('pitwall.api')['host']",
+    "with": {},
+    "expect": "127.0.0.9",
+    "expect_unset": "127.0.0.1",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:env:PITWALL_API_MAX_BODY_BYTES": {
+    "kind": "consumer",
+    "env": "PITWALL_API_MAX_BODY_BYTES",
+    "valid": "4096",
+    "probe": "m('pitwall.api.app')._MAX_BODY_BYTES",
+    "with": {},
+    "invalid": "lots",
+    "expect": 4096,
+    "expect_unset": 8388608
+  },
+  "config:env:PITWALL_API_MAX_CONCURRENCY": {
+    "kind": "consumer",
+    "env": "PITWALL_API_MAX_CONCURRENCY",
+    "valid": "7",
+    "probe": "uvicorn_kwargs('pitwall.api')['limit_concurrency']",
+    "with": {},
+    "invalid": "0",
+    "expect": 7,
+    "expect_unset": 100
+  },
+  "config:env:PITWALL_API_PORT": {
+    "kind": "consumer",
+    "env": "PITWALL_API_PORT",
+    "valid": "18123",
+    "probe": "uvicorn_kwargs('pitwall.api')['port']",
+    "with": {},
+    "invalid": "not-a-port",
+    "expect": 18123,
+    "expect_unset": 8080
+  },
+  "config:env:PITWALL_API_SCOPED_TOKENS": {
+    "kind": "consumer",
+    "env": "PITWALL_API_SCOPED_TOKENS",
+    "valid": "{\"j37-token\": [\"read\", \"spend\"]}",
+    "probe": "sorted(m('pitwall.api.app')._API_AUTHORIZER.scopes_for('j37-token'))",
+    "with": {},
+    "invalid": "{\"j37-token\": [\"godmode\"]}",
+    "expect": [
+      "read",
+      "spend"
+    ],
+    "expect_unset": {
+      "refused": "TypeError"
+    }
+  },
+  "config:env:PITWALL_API_TOKEN": {
+    "kind": "alias",
+    "env": "PITWALL_API_TOKEN",
+    "fields": [
+      "pitwall_api_token"
+    ],
+    "value": "j37-pitwall_api_token",
+    "expect": {
+      "pitwall_api_token": "j37-pitwall_api_token"
+    }
+  },
+  "config:env:PITWALL_API_URL": {
+    "kind": "consumer",
+    "env": "PITWALL_API_URL",
+    "valid": "http://127.0.0.1:18080/",
+    "probe": "m('pitwall.cli.gateway')._api_base()",
+    "with": {},
+    "expect": "http://127.0.0.1:18080",
+    "expect_unset": "",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:env:PITWALL_ARCHIVE_DIR": {
+    "kind": "consumer",
+    "env": "PITWALL_ARCHIVE_DIR",
+    "valid": "{tmp}/archive",
+    "probe": "retention_call()['output_path']",
+    "with": {
+      "PITWALL_RETENTION_MODE": "archive",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY_VERSION": "j37-v1"
+    },
+    "expect": "{tmp}/archive",
+    "expect_unset": {
+      "refused": "SystemExit"
+    },
+    "no_invalid_reason": "a filesystem path used verbatim; an unusable one fails where it is first used"
+  },
+  "config:env:PITWALL_ARCHIVE_ENCRYPTION_KEY": {
+    "kind": "consumer",
+    "env": "PITWALL_ARCHIVE_ENCRYPTION_KEY",
+    "valid": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=",
+    "probe": "len(m('pitwall.config').decode_archive_key(os.environ['PITWALL_ARCHIVE_ENCRYPTION_KEY']))",
+    "with": {},
+    "invalid": "not-a-32-byte-key",
+    "expect": 32,
+    "expect_unset": {
+      "refused": "KeyError"
+    }
+  },
+  "config:env:PITWALL_ARCHIVE_ENCRYPTION_KEY_VERSION": {
+    "kind": "consumer",
+    "env": "PITWALL_ARCHIVE_ENCRYPTION_KEY_VERSION",
+    "valid": "j37-v1",
+    "probe": "archive_key_version()",
+    "with": {
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="
+    },
+    "expect": "j37-v1",
+    "expect_unset": {
+      "refused": "ValueError"
+    },
+    "no_invalid_reason": "an opaque key-version label recorded in each archive manifest; any non-empty label is valid"
+  },
+  "config:env:PITWALL_AUDIT_CLOUD_TYPE": {
+    "kind": "alias",
+    "env": "PITWALL_AUDIT_CLOUD_TYPE",
+    "fields": [
+      "pitwall_audit_cloud_type"
+    ],
+    "value": "COMMUNITY",
+    "expect": {
+      "pitwall_audit_cloud_type": "COMMUNITY"
+    }
+  },
+  "config:env:PITWALL_AUDIT_EXEC_TIMEOUT_MAX_S": {
+    "kind": "alias",
+    "env": "PITWALL_AUDIT_EXEC_TIMEOUT_MAX_S",
+    "fields": [
+      "pitwall_audit_exec_timeout_max_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_audit_exec_timeout_max_s": 20
+    }
+  },
+  "config:env:PITWALL_AUDIT_EXEC_TIMEOUT_S": {
+    "kind": "alias",
+    "env": "PITWALL_AUDIT_EXEC_TIMEOUT_S",
+    "fields": [
+      "pitwall_audit_exec_timeout_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_audit_exec_timeout_s": 20
+    }
+  },
+  "config:env:PITWALL_AUDIT_GPU_IDS": {
+    "kind": "alias",
+    "env": "PITWALL_AUDIT_GPU_IDS",
+    "fields": [
+      "pitwall_audit_gpu_ids"
+    ],
+    "value": "j37-pitwall_audit_gpu_ids",
+    "expect": {
+      "pitwall_audit_gpu_ids": "j37-pitwall_audit_gpu_ids"
+    }
+  },
+  "config:env:PITWALL_AUDIT_QUEUE_TIME_S": {
+    "kind": "alias",
+    "env": "PITWALL_AUDIT_QUEUE_TIME_S",
+    "fields": [
+      "pitwall_audit_queue_time_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_audit_queue_time_s": 20
+    }
+  },
+  "config:env:PITWALL_AUDIT_STARTUP_TIMEOUT_S": {
+    "kind": "alias",
+    "env": "PITWALL_AUDIT_STARTUP_TIMEOUT_S",
+    "fields": [
+      "pitwall_audit_startup_timeout_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_audit_startup_timeout_s": 20
+    }
+  },
+  "config:env:PITWALL_BASE_URL": {
+    "kind": "alias",
+    "env": "PITWALL_BASE_URL",
+    "fields": [
+      "pitwall_base_url"
+    ],
+    "value": "j37-pitwall_base_url",
+    "expect": {
+      "pitwall_base_url": "j37-pitwall_base_url"
+    }
+  },
+  "config:env:PITWALL_BIND_IP": {
+    "kind": "compose",
+    "env": "PITWALL_BIND_IP",
+    "valid": "127.0.0.3"
+  },
+  "config:env:PITWALL_BUDGET_BREACH_KILL_HEADROOM_FLOOR_USD": {
+    "kind": "alias",
+    "env": "PITWALL_BUDGET_BREACH_KILL_HEADROOM_FLOOR_USD",
+    "fields": [
+      "pitwall_budget_breach_kill_headroom_floor_usd"
+    ],
+    "value": "12.34",
+    "expect": {
+      "pitwall_budget_breach_kill_headroom_floor_usd": "12.34"
+    }
+  },
+  "config:env:PITWALL_BUDGET_BREACH_KILL_MODE": {
+    "kind": "alias",
+    "env": "PITWALL_BUDGET_BREACH_KILL_MODE",
+    "fields": [
+      "pitwall_budget_breach_kill_mode"
+    ],
+    "value": "armed",
+    "expect": {
+      "pitwall_budget_breach_kill_mode": "armed"
+    }
+  },
+  "config:env:PITWALL_BUDGET_LOCK_KEY": {
+    "kind": "alias",
+    "env": "PITWALL_BUDGET_LOCK_KEY",
+    "fields": [
+      "pitwall_budget_lock_key"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_budget_lock_key": 20
+    }
+  },
+  "config:env:PITWALL_CLOUD_WORKER_IMAGE": {
+    "kind": "alias",
+    "env": "PITWALL_CLOUD_WORKER_IMAGE",
+    "fields": [
+      "pitwall_cloud_worker_image"
+    ],
+    "value": "j37-pitwall_cloud_worker_image",
+    "expect": {
+      "pitwall_cloud_worker_image": "j37-pitwall_cloud_worker_image"
+    }
+  },
+  "config:env:PITWALL_CONFIG_FILE": {
+    "kind": "consumer",
+    "env": "PITWALL_CONFIG_FILE",
+    "valid": "{tmp}/pitwall.toml",
+    "probe": "str(m('pitwall.config').resolve_config_file())",
+    "with": {},
+    "expect": "{tmp}/pitwall.toml",
+    "expect_unset": "None",
+    "no_invalid_reason": "a filesystem path used verbatim; an unusable one fails where it is first used"
+  },
+  "config:env:PITWALL_COST_EXPORTER_HOST": {
+    "kind": "consumer",
+    "env": "PITWALL_COST_EXPORTER_HOST",
+    "valid": "127.0.0.8",
+    "probe": "uvicorn_kwargs('pitwall.cost')['host']",
+    "with": {},
+    "expect": "127.0.0.8",
+    "expect_unset": "127.0.0.1",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:env:PITWALL_COST_EXPORTER_MAX_CONCURRENCY": {
+    "kind": "consumer",
+    "env": "PITWALL_COST_EXPORTER_MAX_CONCURRENCY",
+    "valid": "5",
+    "probe": "uvicorn_kwargs('pitwall.cost')['limit_concurrency']",
+    "with": {},
+    "invalid": "-1",
+    "expect": 5,
+    "expect_unset": 20
+  },
+  "config:env:PITWALL_COST_EXPORTER_PORT": {
+    "kind": "alias",
+    "env": "PITWALL_COST_EXPORTER_PORT",
+    "fields": [
+      "pitwall_cost_exporter_port"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_cost_exporter_port": 20
+    }
+  },
+  "config:env:PITWALL_DATABASE_URL": {
+    "kind": "consumer",
+    "env": "PITWALL_DATABASE_URL",
+    "valid": "postgresql://j37@127.0.0.1:9/j37",
+    "probe": "backup_drill_dsn()",
+    "with": {},
+    "expect": "postgresql://j37@127.0.0.1:9/j37",
+    "expect_unset": "postgresql://placeholder@127.0.0.1:9/placeholder",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:env:PITWALL_DEFAULT_LEASE_TTL_S": {
+    "kind": "alias",
+    "env": "PITWALL_DEFAULT_LEASE_TTL_S",
+    "fields": [
+      "pitwall_default_lease_ttl_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_default_lease_ttl_s": 20
+    }
+  },
+  "config:env:PITWALL_DRILL_ARTIFACTS_DIR": {
+    "kind": "consumer",
+    "env": "PITWALL_DRILL_ARTIFACTS_DIR",
+    "valid": "{tmp}/drills",
+    "probe": "str(m('pitwall.db.drill_evidence').write_drill_json_report({'ok': True}, drill_type='j37').parent)",
+    "with": {},
+    "expect": "{tmp}/drills",
+    "expect_unset": "{repo}/artifacts/drills",
+    "no_invalid_reason": "a filesystem path used verbatim; an unusable one fails where it is first used"
+  },
+  "config:env:PITWALL_EMBEDDING_VIA_PITWALL": {
+    "kind": "alias",
+    "env": "PITWALL_EMBEDDING_VIA_PITWALL",
+    "fields": [
+      "pitwall_embedding_via_pitwall"
+    ],
+    "value": "true",
+    "expect": {
+      "pitwall_embedding_via_pitwall": true
+    }
+  },
+  "config:env:PITWALL_ENDPOINT_KEY": {
+    "kind": "alias",
+    "env": "PITWALL_ENDPOINT_KEY",
+    "fields": [
+      "pitwall_endpoint_key"
+    ],
+    "value": "j37-pitwall_endpoint_key",
+    "expect": {
+      "pitwall_endpoint_key": "j37-pitwall_endpoint_key"
+    }
+  },
+  "config:env:PITWALL_GATEWAY_TOKEN": {
+    "kind": "consumer",
+    "env": "PITWALL_GATEWAY_TOKEN",
+    "valid": "j37-gateway-token",
+    "probe": "m('tests.release.config_probes').gateway_supervisor_start()",
+    "with": {},
+    "expect": {
+      "refused": "GatewayPortInUse"
+    },
+    "expect_unset": {
+      "refused": "RuntimeError"
+    },
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:PITWALL_GATEWAY_URL": {
+    "kind": "alias",
+    "env": "PITWALL_GATEWAY_URL",
+    "fields": [
+      "pitwall_gateway_url"
+    ],
+    "value": "j37-pitwall_gateway_url",
+    "expect": {
+      "pitwall_gateway_url": "j37-pitwall_gateway_url"
+    }
+  },
+  "config:env:PITWALL_HF_TOKEN": {
+    "kind": "alias",
+    "env": "PITWALL_HF_TOKEN",
+    "fields": [
+      "pitwall_hf_token"
+    ],
+    "value": "j37-pitwall_hf_token",
+    "expect": {
+      "pitwall_hf_token": "j37-pitwall_hf_token"
+    }
+  },
+  "config:env:PITWALL_IMAGE_PULL_TIMEOUT_S": {
+    "kind": "alias",
+    "env": "PITWALL_IMAGE_PULL_TIMEOUT_S",
+    "fields": [
+      "pitwall_image_pull_timeout_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_image_pull_timeout_s": 20
+    }
+  },
+  "config:env:PITWALL_INBOUND_RATE_LIMIT": {
+    "kind": "alias",
+    "env": "PITWALL_INBOUND_RATE_LIMIT",
+    "fields": [
+      "pitwall_inbound_rate_limit"
+    ],
+    "value": "60/60s",
+    "expect": {
+      "pitwall_inbound_rate_limit": "60/60s"
+    }
+  },
+  "config:env:PITWALL_JOB_EVENT_LIMIT": {
+    "kind": "alias",
+    "env": "PITWALL_JOB_EVENT_LIMIT",
+    "fields": [
+      "pitwall_job_event_limit"
+    ],
+    "value": "50",
+    "expect": {
+      "pitwall_job_event_limit": 50
+    }
+  },
+  "config:env:PITWALL_LEASE_ADVANCE_WARNING_MIN": {
+    "kind": "alias",
+    "env": "PITWALL_LEASE_ADVANCE_WARNING_MIN",
+    "fields": [
+      "pitwall_lease_advance_warning_min"
+    ],
+    "value": "30,10",
+    "expect": {
+      "pitwall_lease_advance_warning_min": "30,10"
+    }
+  },
+  "config:env:PITWALL_MCP_RELAY_WAIT_SECONDS": {
+    "kind": "consumer",
+    "env": "PITWALL_MCP_RELAY_WAIT_SECONDS",
+    "valid": "12.5",
+    "probe": "m('pitwall.mcp.relay').wait_seconds_from_env(os.environ)",
+    "with": {},
+    "expect": 12.5,
+    "expect_unset": 30.0,
+    "no_invalid_reason": "a relay tuning value; a value that is not a positive number falls back to the 30-second default with a warning naming the variable, so the harness connection never fails on it"
+  },
+  "config:env:PITWALL_MCP_TRANSPORT": {
+    "kind": "alias",
+    "env": "PITWALL_MCP_TRANSPORT",
+    "fields": [
+      "pitwall_mcp_transport"
+    ],
+    "value": "stdio",
+    "expect": {
+      "pitwall_mcp_transport": "stdio"
+    }
+  },
+  "config:env:PITWALL_MONTHLY_BUDGET_USD": {
+    "kind": "alias",
+    "env": "PITWALL_MONTHLY_BUDGET_USD",
+    "fields": [
+      "pitwall_monthly_budget_usd"
+    ],
+    "value": "12.34",
+    "expect": {
+      "pitwall_monthly_budget_usd": "12.34"
+    }
+  },
+  "config:env:PITWALL_PER_REQUEST_MAX_USD": {
+    "kind": "alias",
+    "env": "PITWALL_PER_REQUEST_MAX_USD",
+    "fields": [
+      "pitwall_per_request_max_usd"
+    ],
+    "value": "12.34",
+    "expect": {
+      "pitwall_per_request_max_usd": "12.34"
+    }
+  },
+  "config:env:PITWALL_PRE_SPEND_MODE": {
+    "kind": "alias",
+    "env": "PITWALL_PRE_SPEND_MODE",
+    "fields": [
+      "pitwall_pre_spend_mode"
+    ],
+    "value": "redact",
+    "expect": {
+      "pitwall_pre_spend_mode": "redact"
+    }
+  },
+  "config:env:PITWALL_RETENTION_BATCH_SIZE": {
+    "kind": "consumer",
+    "env": "PITWALL_RETENTION_BATCH_SIZE",
+    "valid": "250",
+    "probe": "retention_call()['batch_size']",
+    "with": {
+      "PITWALL_RETENTION_MODE": "archive",
+      "PITWALL_ARCHIVE_DIR": "archive",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY_VERSION": "j37-v1"
+    },
+    "invalid": "100000",
+    "expect": 250,
+    "expect_unset": 1000
+  },
+  "config:env:PITWALL_RETENTION_DAYS": {
+    "kind": "consumer",
+    "env": "PITWALL_RETENTION_DAYS",
+    "valid": "30",
+    "probe": "retention_call()['older_than_days']",
+    "with": {
+      "PITWALL_RETENTION_MODE": "archive",
+      "PITWALL_ARCHIVE_DIR": "archive",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY_VERSION": "j37-v1"
+    },
+    "invalid": "0",
+    "expect": 30,
+    "expect_unset": 90
+  },
+  "config:env:PITWALL_RETENTION_MODE": {
+    "kind": "consumer",
+    "env": "PITWALL_RETENTION_MODE",
+    "valid": "archive-purge",
+    "probe": "retention_call()['purge']",
+    "with": {
+      "PITWALL_ARCHIVE_DIR": "archive",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=",
+      "PITWALL_ARCHIVE_ENCRYPTION_KEY_VERSION": "j37-v1"
+    },
+    "invalid": "sometimes",
+    "expect": true,
+    "expect_unset": {
+      "refused": "KeyError"
+    }
+  },
+  "config:env:PITWALL_ROUTING_MAX_ATTEMPTS": {
+    "kind": "alias",
+    "env": "PITWALL_ROUTING_MAX_ATTEMPTS",
+    "fields": [
+      "pitwall_routing_max_attempts"
+    ],
+    "value": "5",
+    "expect": {
+      "pitwall_routing_max_attempts": 5
+    }
+  },
+  "config:env:PITWALL_ROUTING_MODE": {
+    "kind": "alias",
+    "env": "PITWALL_ROUTING_MODE",
+    "fields": [
+      "pitwall_routing_mode"
+    ],
+    "value": "weighted",
+    "expect": {
+      "pitwall_routing_mode": "weighted"
+    }
+  },
+  "config:env:PITWALL_ROUTING_WEIGHTS": {
+    "kind": "alias",
+    "env": "PITWALL_ROUTING_WEIGHTS",
+    "fields": [
+      "pitwall_routing_weights"
+    ],
+    "value": "{\"*\": {\"cost\": \"2\"}}",
+    "expect": {
+      "pitwall_routing_weights": {
+        "*": {
+          "cost": "2",
+          "latency": "0.001",
+          "w_quota": "10",
+          "w_reset": "2.5"
+        }
+      }
+    }
+  },
+  "config:env:PITWALL_RUNPOD_CAPACITY_ERROR_SUBSTRINGS": {
+    "kind": "alias",
+    "env": "PITWALL_RUNPOD_CAPACITY_ERROR_SUBSTRINGS",
+    "fields": [
+      "pitwall_gpu_broker_capacity_error_substrings"
+    ],
+    "value": "j37-pitwall_gpu_broker_capacity_error_substrings",
+    "expect": {
+      "pitwall_gpu_broker_capacity_error_substrings": "j37-pitwall_gpu_broker_capacity_error_substrings"
+    }
+  },
+  "config:env:PITWALL_RUNPOD_MARKET_CACHE_TTL_S": {
+    "kind": "alias",
+    "env": "PITWALL_RUNPOD_MARKET_CACHE_TTL_S",
+    "fields": [
+      "runpod_market_cache_ttl_s"
+    ],
+    "value": "12.5",
+    "expect": {
+      "runpod_market_cache_ttl_s": 12.5
+    }
+  },
+  "config:env:PITWALL_RUN_LIVE": {
+    "kind": "consumer",
+    "env": "PITWALL_RUN_LIVE",
+    "valid": "1",
+    "probe": "m('tests.support.live').is_live()",
+    "with": {
+      "PITWALL_BASE_URL": "http://127.0.0.1:9"
+    },
+    "invalid": "ture",
+    "expect": true,
+    "expect_unset": false
+  },
+  "config:env:PITWALL_UNSAFE_ALLOW_INSECURE_BIND": {
+    "kind": "consumer",
+    "env": "PITWALL_UNSAFE_ALLOW_INSECURE_BIND",
+    "valid": "1",
+    "probe": "insecure_bind_allowed()",
+    "with": {},
+    "invalid": "yes-please",
+    "expect": "allowed",
+    "expect_unset": "refused"
+  },
+  "config:env:PITWALL_VOLUME_ATTACH_TIMEOUT_S": {
+    "kind": "alias",
+    "env": "PITWALL_VOLUME_ATTACH_TIMEOUT_S",
+    "fields": [
+      "pitwall_volume_attach_timeout_s"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_volume_attach_timeout_s": 20
+    }
+  },
+  "config:env:PITWALL_WEBHOOK_ENCRYPTION_CURRENT_KEY": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_ENCRYPTION_CURRENT_KEY",
+    "valid": "j37",
+    "probe": "m('pitwall.webhook_dispatcher.secret_store').WebhookSecretCipher.from_env().current_version",
+    "with": {
+      "PITWALL_WEBHOOK_ENCRYPTION_KEYS": "{\"j37\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb=\"}"
+    },
+    "expect": "j37",
+    "expect_unset": {
+      "refused": "ValueError"
+    },
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:PITWALL_WEBHOOK_ENCRYPTION_KEYS": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_ENCRYPTION_KEYS",
+    "valid": "{\"j37\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb=\"}",
+    "probe": "sorted(m('pitwall.webhook_dispatcher.secret_store').WebhookSecretCipher.from_env()._keys)",
+    "with": {
+      "PITWALL_WEBHOOK_ENCRYPTION_CURRENT_KEY": "j37"
+    },
+    "invalid": "{\"j37\": \"short\"}",
+    "expect": [
+      "j37"
+    ],
+    "expect_unset": {
+      "refused": "ValueError"
+    }
+  },
+  "config:env:PITWALL_WEBHOOK_HOST": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_HOST",
+    "valid": "127.0.0.7",
+    "probe": "uvicorn_kwargs('pitwall.webhook_receiver')['host']",
+    "with": {},
+    "expect": "127.0.0.7",
+    "expect_unset": "127.0.0.1",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:env:PITWALL_WEBHOOK_MAX_BODY_BYTES": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_MAX_BODY_BYTES",
+    "valid": "2048",
+    "probe": "m('pitwall.webhook_receiver')._MAX_BODY_BYTES",
+    "with": {},
+    "invalid": "0",
+    "expect": 2048,
+    "expect_unset": 1048576
+  },
+  "config:env:PITWALL_WEBHOOK_MAX_CONCURRENCY": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_MAX_CONCURRENCY",
+    "valid": "9",
+    "probe": "uvicorn_kwargs('pitwall.webhook_receiver')['limit_concurrency']",
+    "with": {},
+    "invalid": "many",
+    "expect": 9,
+    "expect_unset": 50
+  },
+  "config:env:PITWALL_WEBHOOK_PREVIOUS_SECRETS": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_PREVIOUS_SECRETS",
+    "valid": "[\"j37-old\"]",
+    "probe": "m('pitwall.webhook_receiver')._PREVIOUS_WEBHOOK_SECRETS",
+    "with": {},
+    "invalid": "{\"not\": \"a list\"}",
+    "expect": [
+      "j37-old"
+    ],
+    "expect_unset": []
+  },
+  "config:env:PITWALL_WEBHOOK_RATE_LIMIT": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_RATE_LIMIT",
+    "valid": "30/15s",
+    "probe": "list(m('pitwall.webhook_receiver')._WEBHOOK_RATE_LIMIT)",
+    "with": {},
+    "invalid": "fast",
+    "expect": [
+      30,
+      15.0
+    ],
+    "expect_unset": [
+      120,
+      60.0
+    ]
+  },
+  "config:env:PITWALL_WEBHOOK_RECEIVER_PORT": {
+    "kind": "alias",
+    "env": "PITWALL_WEBHOOK_RECEIVER_PORT",
+    "fields": [
+      "pitwall_webhook_receiver_port"
+    ],
+    "value": "20",
+    "expect": {
+      "pitwall_webhook_receiver_port": 20
+    }
+  },
+  "config:env:PITWALL_WEBHOOK_SECRET": {
+    "kind": "consumer",
+    "env": "PITWALL_WEBHOOK_SECRET",
+    "valid": "j37-webhook-secret",
+    "probe": "bool(m('pitwall.webhook_receiver')._WEBHOOK_SECRET)",
+    "with": {},
+    "expect": true,
+    "expect_unset": false,
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:PITWALL_WORKBENCH_ACCOUNTING_PATH": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_ACCOUNTING_PATH",
+    "valid": "{tmp}/accounting.jsonl",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_ACCOUNTING_PATH')",
+    "with": {},
+    "expect": "{tmp}/accounting.jsonl",
+    "expect_unset": null,
+    "no_invalid_reason": "an opaque value handed to Pi unchanged; the extension that reads it validates it there"
+  },
+  "config:env:PITWALL_WORKBENCH_ACCOUNT_BUDGET_DIR": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_ACCOUNT_BUDGET_DIR",
+    "valid": "{tmp}/budgets",
+    "probe": "m('tests.release.config_probes').workbench_account_budget_dir()",
+    "with": {},
+    "expect": "{tmp}/budgets",
+    "expect_unset": "{tmp}/.local/state/pitwall/pi-workbench/account-budgets",
+    "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
+  },
+  "config:env:PITWALL_WORKBENCH_AGENT_DIR": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_AGENT_DIR",
+    "valid": "{tmp}/agent-state",
+    "probe": "m('tests.release.config_probes').workbench_agent_dir()",
+    "with": {},
+    "expect": "{tmp}/agent-state",
+    "expect_unset": {
+      "root": "{tmp}/.local/state/pitwall/pi-workbench",
+      "mode": "agent"
+    },
+    "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
+  },
+  "config:env:PITWALL_WORKBENCH_APPROVED_CHECKS": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_APPROVED_CHECKS",
+    "valid": "[\"pnpm test\"]",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_APPROVED_CHECKS')",
+    "with": {},
+    "expect": "[\"pnpm test\"]",
+    "expect_unset": null,
+    "no_invalid_reason": "an opaque value handed to Pi unchanged; the extension that reads it validates it there"
+  },
+  "config:env:PITWALL_WORKBENCH_CANDIDATE_B_EXTENSION": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_CANDIDATE_B_EXTENSION",
+    "valid": "{tmp}/candidate-b",
+    "probe": "m('tests.release.config_probes').workbench_candidate_b()",
+    "with": {
+      "PITWALL_WORKBENCH_PI_BIN": "{tmp}/pi"
+    },
+    "expect": "{tmp}/candidate-b",
+    "expect_unset": "{tmp}/.local/state/pitwall-readiness/pi-workbench/backend-review/fixture/node_modules/pi-subagents/index.ts",
+    "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
+  },
+  "config:env:PITWALL_WORKBENCH_HOSTED_MAX_COMPLETION_TOKENS": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_HOSTED_MAX_COMPLETION_TOKENS",
+    "valid": "512",
+    "probe": "m('tests.release.config_probes').workbench_hosted_completion_cap()",
+    "with": {},
+    "expect": 512,
+    "expect_unset": null,
+    "no_invalid_reason": "an integer from 256 through 8192 that only hosted acceptance reads; a value outside that range stops the acceptance run with a ValueError naming the variable, not `pitwall config check`"
+  },
+  "config:env:PITWALL_WORKBENCH_NATIVE_PROFILE": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_NATIVE_PROFILE",
+    "valid": "{tmp}/native.json",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_NATIVE_PROFILE')",
+    "with": {},
+    "expect": "{tmp}/native.json",
+    "expect_unset": null,
+    "no_invalid_reason": "an opaque value handed to Pi unchanged; the extension that reads it validates it there"
+  },
+  "config:env:PITWALL_WORKBENCH_PI_BIN": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_PI_BIN",
+    "valid": "{tmp}/pi",
+    "probe": "m('tests.release.config_probes').workbench_pi_bin()",
+    "with": {},
+    "expect": "{tmp}/pi",
+    "expect_unset": {
+      "refused": "LauncherError"
+    },
+    "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
+  },
+  "config:env:PITWALL_WORKBENCH_PROVIDER_PROFILE": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_PROVIDER_PROFILE",
+    "valid": "{tmp}/provider.json",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_PROVIDER_PROFILE')",
+    "with": {},
+    "expect": "{tmp}/provider.json",
+    "expect_unset": null,
+    "no_invalid_reason": "an opaque value handed to Pi unchanged; the extension that reads it validates it there"
+  },
+  "config:env:PITWALL_WORKBENCH_RESOURCE_DIR": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_RESOURCE_DIR",
+    "valid": "{tmp}/admission",
+    "probe": "m('tests.release.config_probes').workbench_admission_dir()",
+    "with": {},
+    "expect": "{tmp}/admission",
+    "expect_unset": "{tmp}/.local/state/pitwall/pi-workbench/admission",
+    "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
+  },
+  "config:env:PITWALL_WORKBENCH_RESTRICTED": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_RESTRICTED",
+    "valid": "j37-operator-value",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_RESTRICTED', True)",
+    "with": {},
+    "expect": "1",
+    "expect_unset": "1",
+    "no_invalid_reason": "the launcher owns this value for Pi and ignores the operator's; the parent environment value never reaches Pi, so nothing is invalid",
+    "operator_value_ignored": true
+  },
+  "config:env:PITWALL_WORKBENCH_RESTRICTED_CREDENTIAL_ENV": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_RESTRICTED_CREDENTIAL_ENV",
+    "valid": "OPERATOR_KEY",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_RESTRICTED_CREDENTIAL_ENV', True, 'J37_PROFILE_KEY')",
+    "with": {
+      "J37_PROFILE_KEY": "placeholder"
+    },
+    "expect": "J37_PROFILE_KEY",
+    "expect_unset": "J37_PROFILE_KEY",
+    "no_invalid_reason": "the launcher owns this value for Pi and ignores the operator's; the parent environment value never reaches Pi, so nothing is invalid",
+    "operator_value_ignored": true
+  },
+  "config:env:PITWALL_WORKBENCH_RESTRICTED_RUNTIME_ROOT": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_RESTRICTED_RUNTIME_ROOT",
+    "valid": "{tmp}/operator-root",
+    "probe": "m('tests.release.config_probes').workbench_launch_env('PITWALL_WORKBENCH_RESTRICTED_RUNTIME_ROOT', True)",
+    "with": {},
+    "expect": "{repo}/src/pitwall/workbench/pi_extensions",
+    "expect_unset": "{repo}/src/pitwall/workbench/pi_extensions",
+    "no_invalid_reason": "the launcher owns this value for Pi and ignores the operator's; the parent environment value never reaches Pi, so nothing is invalid",
+    "operator_value_ignored": true
+  },
+  "config:env:PITWALL_WORKBENCH_RUNTIME_DIR": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_RUNTIME_DIR",
+    "valid": "{tmp}/runtime",
+    "probe": "m('tests.release.config_probes').workbench_runtime_base()",
+    "with": {},
+    "expect": "{tmp}/runtime",
+    "expect_unset": "{tmp}/.local/state/pitwall/pi-workbench/runtime",
+    "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
+  },
+  "config:env:PITWALL_WORKBENCH_TINTIN_EXTENSION": {
+    "kind": "consumer",
+    "env": "PITWALL_WORKBENCH_TINTIN_EXTENSION",
+    "valid": "{tmp}/tintin.js",
+    "probe": "m('tests.release.config_probes').workbench_tintin_path()",
+    "with": {},
+    "expect": "{tmp}/tintin.js",
+    "expect_unset": {
+      "refused": "LauncherError"
+    },
+    "no_invalid_reason": "a path to the pinned backend's entry point; a missing file is reported by the comparison runner as an absent candidate, not as invalid configuration",
+    "create_file": true
+  },
+  "config:env:POSTGRES_PASSWORD": {
+    "kind": "compose",
+    "env": "POSTGRES_PASSWORD",
+    "valid": "j37-postgres-password",
+    "expect_rendered": "j37-postgres-password",
+    "expect_count": 6,
+    "required": true
+  },
+  "config:env:R2_ACCESS_KEY": {
+    "kind": "alias",
+    "env": "R2_ACCESS_KEY",
+    "fields": [
+      "r2_access_key",
+      "r2_parent_access_key_id"
+    ],
+    "value": "j37-r2_access_key",
+    "expect": {
+      "r2_access_key": "j37-r2_access_key",
+      "r2_parent_access_key_id": "j37-r2_access_key"
+    }
+  },
+  "config:env:R2_BUCKET_STAGING": {
+    "kind": "alias",
+    "env": "R2_BUCKET_STAGING",
+    "fields": [
+      "r2_bucket_staging"
+    ],
+    "value": "j37-r2_bucket_staging",
+    "expect": {
+      "r2_bucket_staging": "j37-r2_bucket_staging"
+    }
+  },
+  "config:env:R2_ENDPOINT": {
+    "kind": "alias",
+    "env": "R2_ENDPOINT",
+    "fields": [
+      "r2_endpoint"
+    ],
+    "value": "j37-r2_endpoint",
+    "expect": {
+      "r2_endpoint": "j37-r2_endpoint"
+    }
+  },
+  "config:env:R2_PARENT_ACCESS_KEY_ID": {
+    "kind": "alias",
+    "env": "R2_PARENT_ACCESS_KEY_ID",
+    "fields": [
+      "r2_parent_access_key_id"
+    ],
+    "value": "j37-r2_parent_access_key_id",
+    "expect": {
+      "r2_parent_access_key_id": "j37-r2_parent_access_key_id"
+    }
+  },
+  "config:env:R2_SECRET_KEY": {
+    "kind": "alias",
+    "env": "R2_SECRET_KEY",
+    "fields": [
+      "r2_secret_key"
+    ],
+    "value": "j37-r2_secret_key",
+    "expect": {
+      "r2_secret_key": "j37-r2_secret_key"
+    }
+  },
+  "config:env:R2_TEMP_CREDENTIALS_ENABLED": {
+    "kind": "alias",
+    "env": "R2_TEMP_CREDENTIALS_ENABLED",
+    "fields": [
+      "r2_temp_credentials_enabled"
+    ],
+    "value": "true",
+    "expect": {
+      "r2_temp_credentials_enabled": "true"
+    }
+  },
+  "config:env:R2_TEMP_CREDENTIALS_REQUIRED": {
+    "kind": "alias",
+    "env": "R2_TEMP_CREDENTIALS_REQUIRED",
+    "fields": [
+      "r2_temp_credentials_required"
+    ],
+    "value": "true",
+    "expect": {
+      "r2_temp_credentials_required": true
+    }
+  },
+  "config:env:R2_TEMP_CREDENTIAL_OBJECTS": {
+    "kind": "alias",
+    "env": "R2_TEMP_CREDENTIAL_OBJECTS",
+    "fields": [
+      "r2_temp_credential_objects"
+    ],
+    "value": "j37-r2_temp_credential_objects",
+    "expect": {
+      "r2_temp_credential_objects": "j37-r2_temp_credential_objects"
+    }
+  },
+  "config:env:R2_TEMP_CREDENTIAL_PERMISSION": {
+    "kind": "alias",
+    "env": "R2_TEMP_CREDENTIAL_PERMISSION",
+    "fields": [
+      "r2_temp_credential_permission"
+    ],
+    "value": "object-read-only",
+    "expect": {
+      "r2_temp_credential_permission": "object-read-only"
+    }
+  },
+  "config:env:R2_TEMP_CREDENTIAL_PREFIXES": {
+    "kind": "alias",
+    "env": "R2_TEMP_CREDENTIAL_PREFIXES",
+    "fields": [
+      "r2_temp_credential_prefixes"
+    ],
+    "value": "j37-r2_temp_credential_prefixes",
+    "expect": {
+      "r2_temp_credential_prefixes": "j37-r2_temp_credential_prefixes"
+    }
+  },
+  "config:env:R2_TEMP_CREDENTIAL_TTL_S": {
+    "kind": "alias",
+    "env": "R2_TEMP_CREDENTIAL_TTL_S",
+    "fields": [
+      "r2_temp_credential_ttl_s"
+    ],
+    "value": "20",
+    "expect": {
+      "r2_temp_credential_ttl_s": 20
+    }
+  },
+  "config:env:REDIS_PASSWORD": {
+    "kind": "compose",
+    "env": "REDIS_PASSWORD",
+    "valid": "j37-redis-password",
+    "expect_rendered": "j37-redis-password",
+    "expect_count": 4,
+    "required": true
+  },
+  "config:env:REDIS_URL": {
+    "kind": "alias",
+    "env": "REDIS_URL",
+    "fields": [
+      "redis_url"
+    ],
+    "value": "j37-redis_url",
+    "expect": {
+      "redis_url": "j37-redis_url"
+    }
+  },
+  "config:env:RESEND_API_KEY": {
+    "kind": "alias",
+    "env": "RESEND_API_KEY",
+    "fields": [
+      "resend_api_key"
+    ],
+    "value": "j37-resend_api_key",
+    "expect": {
+      "resend_api_key": "j37-resend_api_key"
+    }
+  },
+  "config:env:RUNPOD_API_KEY": {
+    "kind": "alias",
+    "env": "RUNPOD_API_KEY",
+    "fields": [
+      "runpod_api_key"
+    ],
+    "value": "j37-runpod_api_key",
+    "expect": {
+      "runpod_api_key": "j37-runpod_api_key"
+    }
+  },
+  "config:env:RUNPOD_DATA_CENTER_ID": {
+    "kind": "alias",
+    "env": "RUNPOD_DATA_CENTER_ID",
+    "fields": [
+      "runpod_data_center_id"
+    ],
+    "value": "j37-runpod_data_center_id",
+    "expect": {
+      "runpod_data_center_id": "j37-runpod_data_center_id"
+    }
+  },
+  "config:env:RUNPOD_LIVE": {
+    "kind": "consumer",
+    "env": "RUNPOD_LIVE",
+    "valid": "yes",
+    "probe": "m('tests.support.live').is_live()",
+    "with": {
+      "PITWALL_BASE_URL": "http://127.0.0.1:9"
+    },
+    "invalid": "maybe",
+    "expect": true,
+    "expect_unset": false
+  },
+  "config:env:RUNPOD_NETWORK_VOLUME_ID": {
+    "kind": "alias",
+    "env": "RUNPOD_NETWORK_VOLUME_ID",
+    "fields": [
+      "runpod_network_volume_id"
+    ],
+    "value": "j37-runpod_network_volume_id",
+    "expect": {
+      "runpod_network_volume_id": "j37-runpod_network_volume_id"
+    }
+  },
+  "config:env:RUNPOD_REGISTRY_AUTH_ID": {
+    "kind": "alias",
+    "env": "RUNPOD_REGISTRY_AUTH_ID",
+    "fields": [
+      "runpod_registry_auth_id"
+    ],
+    "value": "j37-runpod_registry_auth_id",
+    "expect": {
+      "runpod_registry_auth_id": "j37-runpod_registry_auth_id"
+    }
+  },
+  "config:env:RUNPOD_REGISTRY_AUTH_ID_DOCKER_HUB": {
+    "kind": "alias",
+    "env": "RUNPOD_REGISTRY_AUTH_ID_DOCKER_HUB",
+    "fields": [
+      "runpod_registry_auth_id_docker_hub"
+    ],
+    "value": "j37-runpod_registry_auth_id_docker_hub",
+    "expect": {
+      "runpod_registry_auth_id_docker_hub": "j37-runpod_registry_auth_id_docker_hub"
+    }
+  },
+  "config:env:RUNPOD_REGISTRY_AUTH_ID_GHCR": {
+    "kind": "alias",
+    "env": "RUNPOD_REGISTRY_AUTH_ID_GHCR",
+    "fields": [
+      "runpod_registry_auth_id_ghcr"
+    ],
+    "value": "j37-runpod_registry_auth_id_ghcr",
+    "expect": {
+      "runpod_registry_auth_id_ghcr": "j37-runpod_registry_auth_id_ghcr"
+    }
+  },
+  "config:env:RUNPOD_REGISTRY_AUTH_ID_GITLAB": {
+    "kind": "alias",
+    "env": "RUNPOD_REGISTRY_AUTH_ID_GITLAB",
+    "fields": [
+      "runpod_registry_auth_id_gitlab"
+    ],
+    "value": "j37-runpod_registry_auth_id_gitlab",
+    "expect": {
+      "runpod_registry_auth_id_gitlab": "j37-runpod_registry_auth_id_gitlab"
+    }
+  },
+  "config:env:RUNPOD_REST_API_URL": {
+    "kind": "alias",
+    "env": "RUNPOD_REST_API_URL",
+    "fields": [
+      "runpod_rest_api_url"
+    ],
+    "value": "j37-runpod_rest_api_url",
+    "expect": {
+      "runpod_rest_api_url": "j37-runpod_rest_api_url"
+    }
+  },
+  "config:env:RUNPOD_REST_V1_API_URL": {
+    "kind": "alias",
+    "env": "RUNPOD_REST_V1_API_URL",
+    "fields": [
+      "runpod_rest_v1_api_url"
+    ],
+    "value": "j37-runpod_rest_v1_api_url",
+    "expect": {
+      "runpod_rest_v1_api_url": "j37-runpod_rest_v1_api_url"
+    }
+  },
+  "config:env:RUNPOD_REST_V2_API_URL": {
+    "kind": "consumer",
+    "env": "RUNPOD_REST_V2_API_URL",
+    "valid": "http://127.0.0.1:9/v2/",
+    "probe": "m('pitwall.runpod_client.pods')._rest_v2_base_url()",
+    "with": {},
+    "expect": "http://127.0.0.1:9/v2",
+    "expect_unset": "https://api.runpod.io/v2",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:env:RUNPOD_S3_ACCESS_KEY": {
+    "kind": "consumer",
+    "env": "RUNPOD_S3_ACCESS_KEY",
+    "valid": "j37-s3-access",
+    "probe": "type(m('pitwall.runpod_files').build_configured_volume_file_service()._object_store).__name__",
+    "with": {
+      "RUNPOD_S3_SECRET_KEY": "s3-secret-placeholder"
+    },
+    "expect": "NetworkVolumeObjectStore",
+    "expect_unset": "_MissingObjectStore",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:RUNPOD_S3_SECRET_KEY": {
+    "kind": "consumer",
+    "env": "RUNPOD_S3_SECRET_KEY",
+    "valid": "j37-s3-secret",
+    "probe": "type(m('pitwall.runpod_files').build_configured_volume_file_service()._object_store).__name__",
+    "with": {
+      "RUNPOD_S3_ACCESS_KEY": "s3-access-placeholder"
+    },
+    "expect": "NetworkVolumeObjectStore",
+    "expect_unset": "_MissingObjectStore",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:TAILSCALE_OAUTH_CLIENT_ID": {
+    "kind": "consumer",
+    "env": "TAILSCALE_OAUTH_CLIENT_ID",
+    "valid": "j37-ts-id",
+    "probe": "type(m('pitwall.api.admin.emergency')._network_sever_from_env()).__name__",
+    "with": {
+      "TAILSCALE_OAUTH_CLIENT_SECRET": "s",
+      "TAILSCALE_TAILNET": "t"
+    },
+    "expect": "TailscaleNetworkSever",
+    "expect_unset": "NoOpNetworkSever",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:TAILSCALE_OAUTH_CLIENT_SECRET": {
+    "kind": "consumer",
+    "env": "TAILSCALE_OAUTH_CLIENT_SECRET",
+    "valid": "j37-ts-secret",
+    "probe": "type(m('pitwall.api.admin.emergency')._network_sever_from_env()).__name__",
+    "with": {
+      "TAILSCALE_OAUTH_CLIENT_ID": "i",
+      "TAILSCALE_TAILNET": "t"
+    },
+    "expect": "TailscaleNetworkSever",
+    "expect_unset": "NoOpNetworkSever",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:env:TAILSCALE_TAILNET": {
+    "kind": "consumer",
+    "env": "TAILSCALE_TAILNET",
+    "valid": "j37-tailnet",
+    "probe": "type(m('pitwall.api.admin.emergency')._network_sever_from_env()).__name__",
+    "with": {
+      "TAILSCALE_OAUTH_CLIENT_ID": "i",
+      "TAILSCALE_OAUTH_CLIENT_SECRET": "s"
+    },
+    "expect": "TailscaleNetworkSever",
+    "expect_unset": "NoOpNetworkSever",
+    "no_invalid_reason": "a provider-side identifier used verbatim; the provider refuses an unknown one"
+  },
+  "config:env:XDG_STATE_HOME": {
+    "kind": "consumer",
+    "env": "XDG_STATE_HOME",
+    "valid": "{tmp}/state",
+    "probe": "str(m('pitwall.personal.state').default_state_root())",
+    "with": {},
+    "expect": "{tmp}/state/pitwall",
+    "expect_unset": "{tmp}/xdg/pitwall",
+    "no_invalid_reason": "a filesystem path used verbatim; an unusable one fails where it is first used"
+  },
+  "config:field:AgentProfileDefaults:endpointHarness": {
+    "kind": "agents",
+    "toml": "[agents.profiles.defaults]\nendpointHarness = \"qwen\"\n",
+    "wrong_toml": "[agents.profiles.defaults]\nendpointHarness = 3\n"
+  },
+  "config:field:AgentProfileDefaults:harness": {
+    "kind": "agents",
+    "toml": "[agents.profiles.defaults]\nharness = \"codex\"\n",
+    "wrong_toml": "[agents.profiles.defaults]\nharness = 3\n"
+  },
+  "config:field:AgentProfilesSettings:defaults": {
+    "kind": "agents",
+    "toml": "[agents.profiles.defaults]\nharness = \"codex\"\n",
+    "wrong_toml": "[agents.profiles]\ndefaults = 3\n"
+  },
+  "config:field:AgentProfilesSettings:endpoints": {
+    "kind": "agents",
+    "toml": "[agents.profiles.endpoints.gpu]\nbaseUrl = \"http://gpu:8000/v1\"\n",
+    "wrong_toml": "[agents.profiles]\nendpoints = 3\n"
+  },
+  "config:field:AgentProfilesSettings:harnesses": {
+    "kind": "agents",
+    "toml": "[agents.profiles.harnesses.qwen]\nendpointAgnostic = true\n",
+    "wrong_toml": "[agents.profiles]\nharnesses = 3\n"
+  },
+  "config:field:AgentProfilesSettings:models": {
+    "kind": "agents",
+    "toml": "[agents.profiles.models.m]\nmodel = \"x\"\n",
+    "wrong_toml": "[agents.profiles]\nmodels = 3\n"
+  },
+  "config:field:AgentProfilesSettings:pitwall": {
+    "kind": "agents",
+    "toml": "[agents.profiles.pitwall]\nleases = {}\n",
+    "wrong_toml": "[agents.profiles]\npitwall = 3\n"
+  },
+  "config:field:AgentsSettings:profiles": {
+    "kind": "agents",
+    "toml": "[agents.profiles.models.m]\nmodel = \"x\"\n",
+    "wrong_toml": "[agents]\nprofiles = 3\n"
+  },
+  "config:field:PitwallSettings:cloudflare_account_id": {
+    "kind": "field",
+    "field": "cloudflare_account_id",
+    "env": "CLOUDFLARE_ACCOUNT_ID",
+    "valid": "j37-cloudflare_account_id",
+    "invalid": null,
+    "toml": "\"j37-toml-cloudflare_account_id\"",
+    "expect": "j37-cloudflare_account_id",
+    "toml_expect": "j37-toml-cloudflare_account_id",
+    "no_invalid_reason": "a provider-side identifier used verbatim; the provider refuses an unknown one"
+  },
+  "config:field:PitwallSettings:cloudflare_api_token": {
+    "kind": "field",
+    "field": "cloudflare_api_token",
+    "env": "CLOUDFLARE_API_TOKEN",
+    "valid": "j37-cloudflare_api_token",
+    "invalid": null,
+    "toml": "\"j37-toml-cloudflare_api_token\"",
+    "expect": "j37-cloudflare_api_token",
+    "toml_expect": "j37-toml-cloudflare_api_token",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:database_url": {
+    "kind": "field",
+    "field": "database_url",
+    "env": "DATABASE_URL",
+    "valid": "j37-database_url",
+    "invalid": null,
+    "toml": "\"j37-toml-database_url\"",
+    "expect": "j37-database_url",
+    "toml_expect": "j37-toml-database_url",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:langfuse_host": {
+    "kind": "field",
+    "field": "langfuse_host",
+    "env": "LANGFUSE_HOST",
+    "valid": "j37-langfuse_host",
+    "invalid": null,
+    "toml": "\"j37-toml-langfuse_host\"",
+    "expect": "j37-langfuse_host",
+    "toml_expect": "j37-toml-langfuse_host",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:langfuse_public_key": {
+    "kind": "field",
+    "field": "langfuse_public_key",
+    "env": "LANGFUSE_PUBLIC_KEY",
+    "valid": "j37-langfuse_public_key",
+    "invalid": null,
+    "toml": "\"j37-toml-langfuse_public_key\"",
+    "expect": "j37-langfuse_public_key",
+    "toml_expect": "j37-toml-langfuse_public_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:langfuse_secret_key": {
+    "kind": "field",
+    "field": "langfuse_secret_key",
+    "env": "LANGFUSE_SECRET_KEY",
+    "valid": "j37-langfuse_secret_key",
+    "invalid": null,
+    "toml": "\"j37-toml-langfuse_secret_key\"",
+    "expect": "j37-langfuse_secret_key",
+    "toml_expect": "j37-toml-langfuse_secret_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:pitwall_admin_secret": {
+    "kind": "field",
+    "field": "pitwall_admin_secret",
+    "env": "PITWALL_ADMIN_SECRET",
+    "valid": "j37-pitwall_admin_secret",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_admin_secret\"",
+    "expect": "j37-pitwall_admin_secret",
+    "toml_expect": "j37-toml-pitwall_admin_secret",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:pitwall_alert_from": {
+    "kind": "field",
+    "field": "pitwall_alert_from",
+    "env": "PITWALL_ALERT_FROM",
+    "valid": "j37-pitwall_alert_from",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_alert_from\"",
+    "expect": "j37-pitwall_alert_from",
+    "toml_expect": "j37-toml-pitwall_alert_from",
+    "no_invalid_reason": "an e-mail address used verbatim; the mail provider refuses an unusable one"
+  },
+  "config:field:PitwallSettings:pitwall_alert_to": {
+    "kind": "field",
+    "field": "pitwall_alert_to",
+    "env": "PITWALL_ALERT_TO",
+    "valid": "j37-pitwall_alert_to",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_alert_to\"",
+    "expect": "j37-pitwall_alert_to",
+    "toml_expect": "j37-toml-pitwall_alert_to",
+    "no_invalid_reason": "an e-mail address used verbatim; the mail provider refuses an unusable one"
+  },
+  "config:field:PitwallSettings:pitwall_api_token": {
+    "kind": "field",
+    "field": "pitwall_api_token",
+    "env": "PITWALL_API_TOKEN",
+    "valid": "j37-pitwall_api_token",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_api_token\"",
+    "expect": "j37-pitwall_api_token",
+    "toml_expect": "j37-toml-pitwall_api_token",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:pitwall_audit_cloud_type": {
+    "kind": "field",
+    "field": "pitwall_audit_cloud_type",
+    "env": "PITWALL_AUDIT_CLOUD_TYPE",
+    "valid": "COMMUNITY",
+    "invalid": "j37-not-an-option",
+    "toml": "\"SECURE\"",
+    "expect": "COMMUNITY",
+    "toml_expect": "SECURE"
+  },
+  "config:field:PitwallSettings:pitwall_audit_exec_timeout_max_s": {
+    "kind": "field",
+    "field": "pitwall_audit_exec_timeout_max_s",
+    "env": "PITWALL_AUDIT_EXEC_TIMEOUT_MAX_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_audit_exec_timeout_s": {
+    "kind": "field",
+    "field": "pitwall_audit_exec_timeout_s",
+    "env": "PITWALL_AUDIT_EXEC_TIMEOUT_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_audit_gpu_ids": {
+    "kind": "field",
+    "field": "pitwall_audit_gpu_ids",
+    "env": "PITWALL_AUDIT_GPU_IDS",
+    "valid": "j37-pitwall_audit_gpu_ids",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_audit_gpu_ids\"",
+    "expect": "j37-pitwall_audit_gpu_ids",
+    "toml_expect": "j37-toml-pitwall_audit_gpu_ids",
+    "no_invalid_reason": "a free-form comma-separated list used verbatim; every entry is accepted"
+  },
+  "config:field:PitwallSettings:pitwall_audit_queue_time_s": {
+    "kind": "field",
+    "field": "pitwall_audit_queue_time_s",
+    "env": "PITWALL_AUDIT_QUEUE_TIME_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_audit_startup_timeout_s": {
+    "kind": "field",
+    "field": "pitwall_audit_startup_timeout_s",
+    "env": "PITWALL_AUDIT_STARTUP_TIMEOUT_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_base_url": {
+    "kind": "field",
+    "field": "pitwall_base_url",
+    "env": "PITWALL_BASE_URL",
+    "valid": "j37-pitwall_base_url",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_base_url\"",
+    "expect": "j37-pitwall_base_url",
+    "toml_expect": "j37-toml-pitwall_base_url",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:pitwall_budget_breach_kill_headroom_floor_usd": {
+    "kind": "field",
+    "field": "pitwall_budget_breach_kill_headroom_floor_usd",
+    "env": "PITWALL_BUDGET_BREACH_KILL_HEADROOM_FLOOR_USD",
+    "valid": "12.34",
+    "invalid": "not-a-decimal",
+    "toml": "\"23.45\"",
+    "expect": "12.34",
+    "toml_expect": "23.45"
+  },
+  "config:field:PitwallSettings:pitwall_budget_breach_kill_mode": {
+    "kind": "field",
+    "field": "pitwall_budget_breach_kill_mode",
+    "env": "PITWALL_BUDGET_BREACH_KILL_MODE",
+    "valid": "armed",
+    "invalid": "j37-not-an-option",
+    "toml": "\"shadow\"",
+    "expect": "armed",
+    "toml_expect": "shadow"
+  },
+  "config:field:PitwallSettings:pitwall_budget_lock_key": {
+    "kind": "field",
+    "field": "pitwall_budget_lock_key",
+    "env": "PITWALL_BUDGET_LOCK_KEY",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_cloud_worker_image": {
+    "kind": "field",
+    "field": "pitwall_cloud_worker_image",
+    "env": "PITWALL_CLOUD_WORKER_IMAGE",
+    "valid": "j37-pitwall_cloud_worker_image",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_cloud_worker_image\"",
+    "expect": "j37-pitwall_cloud_worker_image",
+    "toml_expect": "j37-toml-pitwall_cloud_worker_image",
+    "no_invalid_reason": "a container image reference used verbatim; the provider refuses one it cannot pull"
+  },
+  "config:field:PitwallSettings:pitwall_cost_exporter_port": {
+    "kind": "field",
+    "field": "pitwall_cost_exporter_port",
+    "env": "PITWALL_COST_EXPORTER_PORT",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_default_lease_ttl_s": {
+    "kind": "field",
+    "field": "pitwall_default_lease_ttl_s",
+    "env": "PITWALL_DEFAULT_LEASE_TTL_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_embedding_via_pitwall": {
+    "kind": "field",
+    "field": "pitwall_embedding_via_pitwall",
+    "env": "PITWALL_EMBEDDING_VIA_PITWALL",
+    "valid": "true",
+    "invalid": "maybe",
+    "toml": "false",
+    "expect": true,
+    "toml_expect": false
+  },
+  "config:field:PitwallSettings:pitwall_endpoint_key": {
+    "kind": "field",
+    "field": "pitwall_endpoint_key",
+    "env": "PITWALL_ENDPOINT_KEY",
+    "valid": "j37-pitwall_endpoint_key",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_endpoint_key\"",
+    "expect": "j37-pitwall_endpoint_key",
+    "toml_expect": "j37-toml-pitwall_endpoint_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:pitwall_endpoint_probe_timeout_s": {
+    "kind": "field",
+    "field": "pitwall_endpoint_probe_timeout_s",
+    "env": "PITWALL_ENDPOINT_PROBE_TIMEOUT_S",
+    "valid": "21",
+    "invalid": "0",
+    "toml": "22",
+    "expect": 21,
+    "toml_expect": 22
+  },
+  "config:field:PitwallSettings:pitwall_gateway_url": {
+    "kind": "field",
+    "field": "pitwall_gateway_url",
+    "env": "PITWALL_GATEWAY_URL",
+    "valid": "j37-pitwall_gateway_url",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_gateway_url\"",
+    "expect": "j37-pitwall_gateway_url",
+    "toml_expect": "j37-toml-pitwall_gateway_url",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:pitwall_gpu_broker_capacity_error_substrings": {
+    "kind": "field",
+    "field": "pitwall_gpu_broker_capacity_error_substrings",
+    "env": "PITWALL_RUNPOD_CAPACITY_ERROR_SUBSTRINGS",
+    "valid": "j37-pitwall_gpu_broker_capacity_error_substrings",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_gpu_broker_capacity_error_substrings\"",
+    "expect": "j37-pitwall_gpu_broker_capacity_error_substrings",
+    "toml_expect": "j37-toml-pitwall_gpu_broker_capacity_error_substrings",
+    "no_invalid_reason": "a free-form comma-separated list used verbatim; every entry is accepted"
+  },
+  "config:field:PitwallSettings:pitwall_hf_token": {
+    "kind": "field",
+    "field": "pitwall_hf_token",
+    "env": "PITWALL_HF_TOKEN",
+    "valid": "j37-pitwall_hf_token",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_hf_token\"",
+    "expect": "j37-pitwall_hf_token",
+    "toml_expect": "j37-toml-pitwall_hf_token",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:pitwall_image_pull_timeout_s": {
+    "kind": "field",
+    "field": "pitwall_image_pull_timeout_s",
+    "env": "PITWALL_IMAGE_PULL_TIMEOUT_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_inbound_rate_limit": {
+    "kind": "field",
+    "field": "pitwall_inbound_rate_limit",
+    "env": "PITWALL_INBOUND_RATE_LIMIT",
+    "valid": "60/60s",
+    "invalid": "lots",
+    "toml": "\"30/60s\"",
+    "expect": "60/60s",
+    "toml_expect": "30/60s"
+  },
+  "config:field:PitwallSettings:pitwall_job_event_limit": {
+    "kind": "field",
+    "field": "pitwall_job_event_limit",
+    "env": "PITWALL_JOB_EVENT_LIMIT",
+    "valid": "50",
+    "invalid": "0",
+    "toml": "51",
+    "expect": 50,
+    "toml_expect": 51
+  },
+  "config:field:PitwallSettings:pitwall_lease_advance_warning_min": {
+    "kind": "field",
+    "field": "pitwall_lease_advance_warning_min",
+    "env": "PITWALL_LEASE_ADVANCE_WARNING_MIN",
+    "valid": "30,10",
+    "invalid": "soon",
+    "toml": "\"20,4\"",
+    "expect": "30,10",
+    "toml_expect": "20,4"
+  },
+  "config:field:PitwallSettings:pitwall_lease_max_lifetime_min": {
+    "kind": "field",
+    "field": "pitwall_lease_max_lifetime_min",
+    "env": "PITWALL_LEASE_MAX_LIFETIME_MIN",
+    "valid": "21",
+    "invalid": "0",
+    "toml": "22",
+    "expect": 21,
+    "toml_expect": 22
+  },
+  "config:field:PitwallSettings:pitwall_mcp_transport": {
+    "kind": "field",
+    "field": "pitwall_mcp_transport",
+    "env": "PITWALL_MCP_TRANSPORT",
+    "valid": "stdio",
+    "invalid": "j37-not-an-option",
+    "toml": "\"stdio\"",
+    "expect": "stdio",
+    "toml_expect": "stdio"
+  },
+  "config:field:PitwallSettings:pitwall_models_dir": {
+    "kind": "field",
+    "field": "pitwall_models_dir",
+    "env": "PITWALL_MODELS_DIR",
+    "valid": "/tmp/j37-models",
+    "invalid": null,
+    "toml": "\"/tmp/j37-models-toml\"",
+    "expect": "/tmp/j37-models",
+    "toml_expect": "/tmp/j37-models-toml",
+    "no_invalid_reason": "a filesystem path used verbatim; an unusable one fails where it is first used"
+  },
+  "config:field:PitwallSettings:pitwall_monthly_budget_usd": {
+    "kind": "field",
+    "field": "pitwall_monthly_budget_usd",
+    "env": "PITWALL_MONTHLY_BUDGET_USD",
+    "valid": "12.34",
+    "invalid": "not-a-decimal",
+    "toml": "\"23.45\"",
+    "expect": "12.34",
+    "toml_expect": "23.45"
+  },
+  "config:field:PitwallSettings:pitwall_per_request_max_usd": {
+    "kind": "field",
+    "field": "pitwall_per_request_max_usd",
+    "env": "PITWALL_PER_REQUEST_MAX_USD",
+    "valid": "12.34",
+    "invalid": "not-a-decimal",
+    "toml": "\"23.45\"",
+    "expect": "12.34",
+    "toml_expect": "23.45"
+  },
+  "config:field:PitwallSettings:pitwall_pre_spend_mode": {
+    "kind": "field",
+    "field": "pitwall_pre_spend_mode",
+    "env": "PITWALL_PRE_SPEND_MODE",
+    "valid": "redact",
+    "invalid": "j37-not-an-option",
+    "toml": "\"block\"",
+    "expect": "redact",
+    "toml_expect": "block"
+  },
+  "config:field:PitwallSettings:pitwall_price_max_age_s": {
+    "kind": "field",
+    "field": "pitwall_price_max_age_s",
+    "env": "PITWALL_PRICE_MAX_AGE_S",
+    "valid": "21",
+    "invalid": "0",
+    "toml": "22",
+    "expect": 21,
+    "toml_expect": 22
+  },
+  "config:field:PitwallSettings:pitwall_routing_cli": {
+    "kind": "field",
+    "field": "pitwall_routing_cli",
+    "env": "PITWALL_ROUTING_CLI",
+    "valid": "j37-pitwall_routing_cli",
+    "invalid": null,
+    "toml": "\"j37-toml-pitwall_routing_cli\"",
+    "toml_expect": "j37-toml-pitwall_routing_cli",
+    "no_invalid_reason": "an executable name or path looked up when a route is attached; a missing one is the named refusal routing_cli_missing (J29)",
+    "expect": "j37-pitwall_routing_cli"
+  },
+  "config:field:PitwallSettings:pitwall_routing_max_attempts": {
+    "kind": "field",
+    "field": "pitwall_routing_max_attempts",
+    "env": "PITWALL_ROUTING_MAX_ATTEMPTS",
+    "valid": "5",
+    "invalid": "0",
+    "toml": "6",
+    "expect": 5,
+    "toml_expect": 6
+  },
+  "config:field:PitwallSettings:pitwall_routing_mode": {
+    "kind": "field",
+    "field": "pitwall_routing_mode",
+    "env": "PITWALL_ROUTING_MODE",
+    "valid": "weighted",
+    "invalid": "j37-not-an-option",
+    "toml": "\"priority\"",
+    "expect": "weighted",
+    "toml_expect": "priority"
+  },
+  "config:field:PitwallSettings:pitwall_routing_weights": {
+    "kind": "field",
+    "field": "pitwall_routing_weights",
+    "env": "PITWALL_ROUTING_WEIGHTS",
+    "valid": "{\"*\": {\"cost\": \"2\"}}",
+    "invalid": "{\"*\": {\"cost\": \"-1\"}}",
+    "toml": "{\"*\" = {cost = \"3\"}}",
+    "expect": {
+      "*": {
+        "cost": "2",
+        "latency": "0.001",
+        "w_quota": "10",
+        "w_reset": "2.5"
+      }
+    },
+    "toml_expect": {
+      "*": {
+        "cost": "3",
+        "latency": "0.001",
+        "w_quota": "10",
+        "w_reset": "2.5"
+      }
+    }
+  },
+  "config:field:PitwallSettings:pitwall_saturation_4xx_threshold": {
+    "kind": "field",
+    "field": "pitwall_saturation_4xx_threshold",
+    "env": "PITWALL_SATURATION_4XX_THRESHOLD",
+    "valid": "21",
+    "invalid": "0",
+    "toml": "22",
+    "expect": 21,
+    "toml_expect": 22
+  },
+  "config:field:PitwallSettings:pitwall_saturation_window_s": {
+    "kind": "field",
+    "field": "pitwall_saturation_window_s",
+    "env": "PITWALL_SATURATION_WINDOW_S",
+    "valid": "21",
+    "invalid": "0",
+    "toml": "22",
+    "expect": 21,
+    "toml_expect": 22
+  },
+  "config:field:PitwallSettings:pitwall_volume_attach_timeout_s": {
+    "kind": "field",
+    "field": "pitwall_volume_attach_timeout_s",
+    "env": "PITWALL_VOLUME_ATTACH_TIMEOUT_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:pitwall_webhook_loopback_allowlist": {
+    "kind": "field",
+    "field": "pitwall_webhook_loopback_allowlist",
+    "env": "PITWALL_WEBHOOK_LOOPBACK_ALLOWLIST",
+    "valid": "127.0.0.1:9000",
+    "invalid": "not a host:port list!",
+    "toml": "[\"127.0.0.1:9001\"]",
+    "expect": [
+      "127.0.0.1:9000"
+    ],
+    "toml_expect": [
+      "127.0.0.1:9001"
+    ]
+  },
+  "config:field:PitwallSettings:pitwall_webhook_receiver_port": {
+    "kind": "field",
+    "field": "pitwall_webhook_receiver_port",
+    "env": "PITWALL_WEBHOOK_RECEIVER_PORT",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:r2_access_key": {
+    "kind": "field",
+    "field": "r2_access_key",
+    "env": "R2_ACCESS_KEY",
+    "valid": "j37-r2_access_key",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_access_key\"",
+    "expect": "j37-r2_access_key",
+    "toml_expect": "j37-toml-r2_access_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:r2_bucket_staging": {
+    "kind": "field",
+    "field": "r2_bucket_staging",
+    "env": "R2_BUCKET_STAGING",
+    "valid": "j37-r2_bucket_staging",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_bucket_staging\"",
+    "expect": "j37-r2_bucket_staging",
+    "toml_expect": "j37-toml-r2_bucket_staging",
+    "no_invalid_reason": "a provider-side identifier used verbatim; the provider refuses an unknown one"
+  },
+  "config:field:PitwallSettings:r2_endpoint": {
+    "kind": "field",
+    "field": "r2_endpoint",
+    "env": "R2_ENDPOINT",
+    "valid": "j37-r2_endpoint",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_endpoint\"",
+    "expect": "j37-r2_endpoint",
+    "toml_expect": "j37-toml-r2_endpoint",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:r2_parent_access_key_id": {
+    "kind": "field",
+    "field": "r2_parent_access_key_id",
+    "env": "R2_PARENT_ACCESS_KEY_ID",
+    "valid": "j37-r2_parent_access_key_id",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_parent_access_key_id\"",
+    "expect": "j37-r2_parent_access_key_id",
+    "toml_expect": "j37-toml-r2_parent_access_key_id",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:r2_secret_key": {
+    "kind": "field",
+    "field": "r2_secret_key",
+    "env": "R2_SECRET_KEY",
+    "valid": "j37-r2_secret_key",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_secret_key\"",
+    "expect": "j37-r2_secret_key",
+    "toml_expect": "j37-toml-r2_secret_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:r2_temp_credential_objects": {
+    "kind": "field",
+    "field": "r2_temp_credential_objects",
+    "env": "R2_TEMP_CREDENTIAL_OBJECTS",
+    "valid": "j37-r2_temp_credential_objects",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_temp_credential_objects\"",
+    "expect": "j37-r2_temp_credential_objects",
+    "toml_expect": "j37-toml-r2_temp_credential_objects",
+    "no_invalid_reason": "a free-form comma-separated list used verbatim; every entry is accepted"
+  },
+  "config:field:PitwallSettings:r2_temp_credential_permission": {
+    "kind": "field",
+    "field": "r2_temp_credential_permission",
+    "env": "R2_TEMP_CREDENTIAL_PERMISSION",
+    "valid": "object-read-only",
+    "invalid": "j37-not-an-option",
+    "toml": "\"admin-read-only\"",
+    "expect": "object-read-only",
+    "toml_expect": "admin-read-only"
+  },
+  "config:field:PitwallSettings:r2_temp_credential_prefixes": {
+    "kind": "field",
+    "field": "r2_temp_credential_prefixes",
+    "env": "R2_TEMP_CREDENTIAL_PREFIXES",
+    "valid": "j37-r2_temp_credential_prefixes",
+    "invalid": null,
+    "toml": "\"j37-toml-r2_temp_credential_prefixes\"",
+    "expect": "j37-r2_temp_credential_prefixes",
+    "toml_expect": "j37-toml-r2_temp_credential_prefixes",
+    "no_invalid_reason": "a free-form comma-separated list used verbatim; every entry is accepted"
+  },
+  "config:field:PitwallSettings:r2_temp_credential_ttl_s": {
+    "kind": "field",
+    "field": "r2_temp_credential_ttl_s",
+    "env": "R2_TEMP_CREDENTIAL_TTL_S",
+    "valid": "20",
+    "invalid": "not-a-number",
+    "toml": "21",
+    "expect": 20,
+    "toml_expect": 21
+  },
+  "config:field:PitwallSettings:r2_temp_credentials_enabled": {
+    "kind": "field",
+    "field": "r2_temp_credentials_enabled",
+    "env": "R2_TEMP_CREDENTIALS_ENABLED",
+    "valid": "true",
+    "invalid": "maybe",
+    "toml": "\"false\"",
+    "expect": "true",
+    "toml_expect": "false"
+  },
+  "config:field:PitwallSettings:r2_temp_credentials_required": {
+    "kind": "field",
+    "field": "r2_temp_credentials_required",
+    "env": "R2_TEMP_CREDENTIALS_REQUIRED",
+    "valid": "true",
+    "invalid": "maybe",
+    "toml": "false",
+    "expect": true,
+    "toml_expect": false
+  },
+  "config:field:PitwallSettings:redis_url": {
+    "kind": "field",
+    "field": "redis_url",
+    "env": "REDIS_URL",
+    "valid": "j37-redis_url",
+    "invalid": null,
+    "toml": "\"j37-toml-redis_url\"",
+    "expect": "j37-redis_url",
+    "toml_expect": "j37-toml-redis_url",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:resend_api_key": {
+    "kind": "field",
+    "field": "resend_api_key",
+    "env": "RESEND_API_KEY",
+    "valid": "j37-resend_api_key",
+    "invalid": null,
+    "toml": "\"j37-toml-resend_api_key\"",
+    "expect": "j37-resend_api_key",
+    "toml_expect": "j37-toml-resend_api_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:resend_budget_alert_email": {
+    "kind": "field",
+    "field": "resend_budget_alert_email",
+    "env": "RESEND_BUDGET_ALERT_EMAIL",
+    "valid": "j37-resend_budget_alert_email",
+    "invalid": null,
+    "toml": "\"j37-toml-resend_budget_alert_email\"",
+    "expect": "j37-resend_budget_alert_email",
+    "toml_expect": "j37-toml-resend_budget_alert_email",
+    "no_invalid_reason": "an e-mail address used verbatim; the mail provider refuses an unusable one"
+  },
+  "config:field:PitwallSettings:resend_sender_email": {
+    "kind": "field",
+    "field": "resend_sender_email",
+    "env": "RESEND_SENDER_EMAIL",
+    "valid": "j37-resend_sender_email",
+    "invalid": null,
+    "toml": "\"j37-toml-resend_sender_email\"",
+    "expect": "j37-resend_sender_email",
+    "toml_expect": "j37-toml-resend_sender_email",
+    "no_invalid_reason": "an e-mail address used verbatim; the mail provider refuses an unusable one"
+  },
+  "config:field:PitwallSettings:runpod_api_key": {
+    "kind": "field",
+    "field": "runpod_api_key",
+    "env": "RUNPOD_API_KEY",
+    "valid": "j37-runpod_api_key",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_api_key\"",
+    "expect": "j37-runpod_api_key",
+    "toml_expect": "j37-toml-runpod_api_key",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:runpod_data_center_id": {
+    "kind": "field",
+    "field": "runpod_data_center_id",
+    "env": "RUNPOD_DATA_CENTER_ID",
+    "valid": "j37-runpod_data_center_id",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_data_center_id\"",
+    "expect": "j37-runpod_data_center_id",
+    "toml_expect": "j37-toml-runpod_data_center_id",
+    "no_invalid_reason": "a provider-side identifier used verbatim; the provider refuses an unknown one"
+  },
+  "config:field:PitwallSettings:runpod_market_cache_ttl_s": {
+    "kind": "field",
+    "field": "runpod_market_cache_ttl_s",
+    "env": "PITWALL_RUNPOD_MARKET_CACHE_TTL_S",
+    "valid": "12.5",
+    "invalid": "nan",
+    "toml": "13.5",
+    "expect": 12.5,
+    "toml_expect": 13.5
+  },
+  "config:field:PitwallSettings:runpod_network_volume_id": {
+    "kind": "field",
+    "field": "runpod_network_volume_id",
+    "env": "RUNPOD_NETWORK_VOLUME_ID",
+    "valid": "j37-runpod_network_volume_id",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_network_volume_id\"",
+    "expect": "j37-runpod_network_volume_id",
+    "toml_expect": "j37-toml-runpod_network_volume_id",
+    "no_invalid_reason": "a provider-side identifier used verbatim; the provider refuses an unknown one"
+  },
+  "config:field:PitwallSettings:runpod_registry_auth_id": {
+    "kind": "field",
+    "field": "runpod_registry_auth_id",
+    "env": "RUNPOD_REGISTRY_AUTH_ID",
+    "valid": "j37-runpod_registry_auth_id",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_registry_auth_id\"",
+    "expect": "j37-runpod_registry_auth_id",
+    "toml_expect": "j37-toml-runpod_registry_auth_id",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:runpod_registry_auth_id_docker_hub": {
+    "kind": "field",
+    "field": "runpod_registry_auth_id_docker_hub",
+    "env": "RUNPOD_REGISTRY_AUTH_ID_DOCKER_HUB",
+    "valid": "j37-runpod_registry_auth_id_docker_hub",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_registry_auth_id_docker_hub\"",
+    "expect": "j37-runpod_registry_auth_id_docker_hub",
+    "toml_expect": "j37-toml-runpod_registry_auth_id_docker_hub",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:runpod_registry_auth_id_ghcr": {
+    "kind": "field",
+    "field": "runpod_registry_auth_id_ghcr",
+    "env": "RUNPOD_REGISTRY_AUTH_ID_GHCR",
+    "valid": "j37-runpod_registry_auth_id_ghcr",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_registry_auth_id_ghcr\"",
+    "expect": "j37-runpod_registry_auth_id_ghcr",
+    "toml_expect": "j37-toml-runpod_registry_auth_id_ghcr",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:runpod_registry_auth_id_gitlab": {
+    "kind": "field",
+    "field": "runpod_registry_auth_id_gitlab",
+    "env": "RUNPOD_REGISTRY_AUTH_ID_GITLAB",
+    "valid": "j37-runpod_registry_auth_id_gitlab",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_registry_auth_id_gitlab\"",
+    "expect": "j37-runpod_registry_auth_id_gitlab",
+    "toml_expect": "j37-toml-runpod_registry_auth_id_gitlab",
+    "no_invalid_reason": "a credential or credential identifier, used verbatim; any non-empty value is accepted and none is replaced by a default"
+  },
+  "config:field:PitwallSettings:runpod_rest_api_url": {
+    "kind": "field",
+    "field": "runpod_rest_api_url",
+    "env": "RUNPOD_REST_API_URL",
+    "valid": "j37-runpod_rest_api_url",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_rest_api_url\"",
+    "expect": "j37-runpod_rest_api_url",
+    "toml_expect": "j37-toml-runpod_rest_api_url",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:PitwallSettings:runpod_rest_v1_api_url": {
+    "kind": "field",
+    "field": "runpod_rest_v1_api_url",
+    "env": "RUNPOD_REST_V1_API_URL",
+    "valid": "j37-runpod_rest_v1_api_url",
+    "invalid": null,
+    "toml": "\"j37-toml-runpod_rest_v1_api_url\"",
+    "expect": "j37-runpod_rest_v1_api_url",
+    "toml_expect": "j37-toml-runpod_rest_v1_api_url",
+    "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
+  },
+  "config:field:RoutingWeights:cost": {
+    "kind": "weight",
+    "weight": "cost",
+    "valid": "0.5",
+    "invalid": "-1",
+    "expect": "0.5"
+  },
+  "config:field:RoutingWeights:latency": {
+    "kind": "weight",
+    "weight": "latency",
+    "valid": "0.5",
+    "invalid": "-1",
+    "expect": "0.5"
+  },
+  "config:field:RoutingWeights:w_quota": {
+    "kind": "weight",
+    "weight": "w_quota",
+    "valid": "0.5",
+    "invalid": "-1",
+    "expect": "0.5"
+  },
+  "config:field:RoutingWeights:w_reset": {
+    "kind": "weight",
+    "weight": "w_reset",
+    "valid": "0.5",
+    "invalid": "-1",
+    "expect": "0.5"
+  }
+}

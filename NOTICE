@@ -1,0 +1,74 @@
+Pitwall
+Copyright 2026 The Pitwall Authors
+
+Pitwall is an independent open-source project. It is not affiliated with, endorsed by, sponsored
+by, or approved by RunPod, Vast.ai, Together AI, Lambda, OpenAI, Anthropic, Google, GitHub,
+Microsoft, xAI, Moonshot AI, Alibaba Cloud, Zhipu AI, MiniMax, DeepSeek, Meta, Hugging Face,
+OmniRoute, or any other provider or tool it names. Product and company names are trademarks of
+their respective owners and are used only to identify the services and tools Pitwall provides
+interoperability with.
+
+Pitwall Agent Routing (`src/pitwall/agents/`) was first released as a separate MIT-licensed
+component, and its copyright holder is the same as the broker's. Since 0.2.0a1 it is part of the
+one Pitwall package, which is licensed under Apache-2.0 as a whole (see `LICENSE`). The MIT terms
+under which Agent Routing was released (up to `agent-routing/v0.12.0`) remain granted for that code
+and are reproduced here:
+
+    MIT License
+
+    Copyright (c) 2026 Buckeyes22
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+Bundled dependencies are licensed under their own terms. Published service
+images include unmodified Paramiko (LGPL-2.1), certifi (MPL-2.0), and tqdm
+(MPL-2.0 AND MIT). Their source-form Python files and upstream license texts are
+preserved in the images. See the project SBOM under docs/sbom/ for exact versions, and
+docs/legal/container-image-licenses.md for the image license obligations.
+
+The Pitwall workbench (`src/pitwall/workbench/`) continues the Apache-2.0 `pi-workbench` project
+under the same licence and copyright holder. The gateway's vendored OmniRoute `open-sse/` source files were removed with the Node package.
+
+The gateway catalog (`config/gateway-catalog.json` and the seed files generated from it) is
+derived from data published in OmniRoute 3.8.50 (npm tarball SHA-256
+738c58af1faae8c57eb643a939d1191f8d7e083d9295ef61687d2bff04878c29, pinned in
+`config/gateway-catalog.lock.json`). OmniRoute is distributed under the following license, which
+applies to that derived material:
+
+    MIT License
+
+    Copyright (c) 2026 diegosouzapw
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.

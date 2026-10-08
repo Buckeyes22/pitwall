@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-fable-5",
+  "sources": [
+    {
+      "id": "anthropic-fable-5",
+      "url": "https://platform.claude.com/docs/en/models/fable-5/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3fdbd85b54cd87c9690d4c96f651a7644926d7efab8be6711fc007ed94bd80b0",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:3fdbd85b54cd87c9690d4c96f651a7644926d7efab8be6711fc007ed94bd80b0",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-effort",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/effort.md",
+      "kind": "vendor",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-fable-5-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:0487e942e489fffab11d413caa1b9795ac13463a213df77e545d833fea653bf9",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:0487e942e489fffab11d413caa1b9795ac13463a213df77e545d833fea653bf9",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-fable-5-migration",
+      "url": "https://platform.claude.com/docs/en/models/fable-5/migration-guide.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:a433b060d2fc1846c7c6f11f6d7320150b66b08032aa1342ad278adef422db0b",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:a433b060d2fc1846c7c6f11f6d7320150b66b08032aa1342ad278adef422db0b",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-deprecations",
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:35dc7e935ec3e34cdf64ebc6ceb54171998cdb46907ec9a6d278b8761bb5fd65",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "cc-model-config",
+      "url": "https://code.claude.com/docs/en/model-config.md",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-fable-5-1",
+      "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:157b8f0f5b86db6f50c88008c2ee2bdb59cc3870a7e19087c16fd3fc05e4550e",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:157b8f0f5b86db6f50c88008c2ee2bdb59cc3870a7e19087c16fd3fc05e4550e",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-fable-5-1-prompting",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4aa7e61031b5d52456433bd9804503717b8e0b5a3c35137f48ea5324c7913db4",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:4aa7e61031b5d52456433bd9804503717b8e0b5a3c35137f48ea5324c7913db4",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-fable-5-1-whats-new",
+      "url": "https://platform.claude.com/docs/en/models/fable-5-1/whats-new-fable-5-1.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:30472af79f9ed359079fc13e596dd86c37a78043c00dc7b0b4f1aed6735b569c",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:30472af79f9ed359079fc13e596dd86c37a78043c00dc7b0b4f1aed6735b569c",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-fable-5-1-migration",
+      "url": "https://platform.claude.com/docs/en/models/fable-5-1/migration-guide.md",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:542f13c8680e85d646a7553f17320e7c1aede28fcd5e59d31093b1a60f6b6cb8",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:542f13c8680e85d646a7553f17320e7c1aede28fcd5e59d31093b1a60f6b6cb8",
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "anthropic-mythos-5-1",
+      "url": "https://platform.claude.com/docs/en/models/mythos-5-1/overview.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:02ac6af64537b3db27f6520c15e748d8af66f6b36bc1c3bef2a0d9f6a3161c8a",
+      "observedAt": "2026-10-07",
+      "reviewedHash": "sha256:02ac6af64537b3db27f6520c15e748d8af66f6b36bc1c3bef2a0d9f6a3161c8a",
+      "reviewedAt": "2026-10-07"
+    }
+  ],
+  "notPublished": [],
+  "watch": [
+    {
+      "id": "anthropic-models",
+      "kind": "index",
+      "url": "https://platform.claude.com/llms.txt",
+      "pattern": "models/((?:fable|mythos)-[0-9][0-9-]*)/overview\\.md",
+      "ignore": [],
+      "seen": [
+        "fable-5",
+        "fable-5-1",
+        "mythos-5",
+        "mythos-5-1"
+      ]
+    }
+  ]
+}

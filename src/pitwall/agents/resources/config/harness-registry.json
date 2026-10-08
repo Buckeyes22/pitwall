@@ -1,0 +1,1102 @@
+{
+  "schemaVersion": 1,
+  "hosts": {
+    "claude": {
+      "displayName": "Claude Code",
+      "packagePath": "plugins/claude",
+      "nativeHarnesses": [
+        "claude"
+      ]
+    },
+    "codex": {
+      "displayName": "Codex",
+      "packagePath": "plugins/codex",
+      "nativeHarnesses": [
+        "codex"
+      ]
+    },
+    "copilot": {
+      "displayName": "GitHub Copilot CLI",
+      "packagePath": "plugins/copilot",
+      "nativeHarnesses": []
+    }
+  },
+  "harnesses": {
+    "codex": {
+      "displayName": "OpenAI Codex",
+      "shim": "codex-shim.sh",
+      "binaryCandidates": [
+        "codex"
+      ],
+      "binaryOverrideEnv": "CODEX_BIN",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "nativeHosts": [
+        "codex"
+      ],
+      "promptDelivery": "stdin",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "codex-config",
+        "fallback": "codex-default"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model",
+        "model="
+      ],
+      "effort": {
+        "kind": "config",
+        "key": "model_reasoning_effort",
+        "values": [
+          "none",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "capabilities": {
+        "authProbe": true,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "gpt-5.6-sol": {
+          "displayName": "GPT-5.6 Sol",
+          "aliases": [],
+          "effortValues": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-5.6-terra": {
+          "displayName": "GPT-5.6 Terra",
+          "aliases": [],
+          "effortValues": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-5.6-luna": {
+          "displayName": "GPT-5.6 Luna",
+          "aliases": [],
+          "effortValues": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-6-astra": {
+          "displayName": "GPT-6 Astra",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-6-luna": {
+          "displayName": "GPT-6 Luna",
+          "aliases": [],
+          "effortValues": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-6.1-sol": {
+          "displayName": "GPT-6.1 Sol",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        }
+      },
+      "routeFamilies": []
+    },
+    "claude": {
+      "displayName": "Anthropic Claude Code",
+      "shim": "claude-shim.sh",
+      "binaryCandidates": [
+        "claude"
+      ],
+      "binaryOverrideEnv": "CLAUDE_BIN",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "nativeHosts": [
+        "claude"
+      ],
+      "promptDelivery": "stdin",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "registry",
+        "fallback": "sonnet"
+      },
+      "modelSelectors": [
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--effort",
+        "values": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "capabilities": {
+        "authProbe": true,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "sonnet": {
+          "displayName": "Claude Sonnet 5.5",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/anthropic-claude-sonnet-5-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#claude-sonnet-55",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/claude-sonnet-5.md",
+          "provenance": "model-facts:families/claude-sonnet-5"
+        },
+        "opus": {
+          "displayName": "Claude Opus 5.5",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/anthropic-claude-opus-4.8-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#claude-opus-55",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/claude-opus-4.8.md",
+          "provenance": "model-facts:families/claude-opus-4.8"
+        },
+        "fable": {
+          "displayName": "Claude Fable 5.1",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/anthropic-claude-fable-5-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#claude-fable-51",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/claude-fable-5.md",
+          "provenance": "model-facts:families/claude-fable-5"
+        },
+        "haiku": {
+          "displayName": "Claude Haiku 5.5",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/anthropic-claude-haiku-5-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#claude-haiku-55",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/claude-haiku-5.md",
+          "provenance": "model-facts:families/claude-haiku-5"
+        }
+      },
+      "routeFamilies": []
+    },
+    "grok": {
+      "displayName": "xAI Grok Build",
+      "shim": "grok-shim.sh",
+      "binaryCandidates": [
+        "grok"
+      ],
+      "binaryOverrideEnv": "GROK_BIN",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "nativeHosts": [],
+      "promptDelivery": "file",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "registry",
+        "fallback": "grok-4.7"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--effort",
+        "values": [
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "capabilities": {
+        "authProbe": true,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "grok-4.7": {
+          "displayName": "Grok 4.7",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ],
+          "promptReference": "docs/prompting/xai-grok-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#xai-grok-47-through-grok-build",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/grok.md",
+          "provenance": "model-facts:families/grok"
+        }
+      },
+      "routeFamilies": []
+    },
+    "kimi": {
+      "displayName": "Moonshot Kimi Code",
+      "shim": "kimi-shim.sh",
+      "binaryCandidates": [
+        "kimi"
+      ],
+      "binaryOverrideEnv": "KIMI_BIN",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "kimi-config",
+        "fallback": "kimi-default"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model"
+      ],
+      "effort": {
+        "kind": "none",
+        "key": null,
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": true,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "kimi-code/k3": {
+          "displayName": "Kimi K3",
+          "aliases": [],
+          "effortValues": [],
+          "promptReference": "docs/prompting/kimi-moonshot-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#kimi",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/kimi.md",
+          "provenance": "model-facts:families/kimi"
+        }
+      },
+      "routeFamilies": []
+    },
+    "opencode": {
+      "displayName": "OpenCode",
+      "shim": "opencode-shim.sh",
+      "binaryCandidates": [
+        "opencode",
+        "$HOME/.opencode/bin/opencode"
+      ],
+      "binaryOverrideEnv": "OPENCODE_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "config-sync",
+      "configSync": {
+        "path": "${XDG_CONFIG_HOME:-~/.config}/opencode/opencode.json"
+      },
+      "nativeHosts": [],
+      "promptDelivery": "stdin",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "positional",
+        "fallback": null
+      },
+      "modelSelectors": [],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--variant",
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": true,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": [
+        {
+          "id": "glm",
+          "displayName": "GLM",
+          "patterns": [
+            "glm-*",
+            "zai-*",
+            "zai-coding-plan/*",
+            "opencode-go/glm-*"
+          ],
+          "example": "zai-coding-plan/glm-5.3",
+          "promptReference": "docs/prompting/glm-zhipu-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#glm",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/glm.md"
+        },
+        {
+          "id": "minimax",
+          "displayName": "MiniMax",
+          "patterns": [
+            "minimax*",
+            "minimax/*",
+            "opencode-go/minimax*"
+          ],
+          "example": "minimax/MiniMax-M3.1-Flash-Preview",
+          "promptReference": "docs/prompting/minimax-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#minimax",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md"
+        },
+        {
+          "id": "kimi",
+          "displayName": "Kimi (OpenCode Go)",
+          "patterns": [
+            "opencode-go/kimi-*"
+          ],
+          "example": "opencode-go/kimi-k3",
+          "promptReference": "docs/prompting/kimi-moonshot-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#kimi",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/kimi.md"
+        },
+        {
+          "id": "deepseek-v4",
+          "displayName": "DeepSeek (OpenCode Go)",
+          "patterns": [
+            "opencode-go/deepseek-*"
+          ],
+          "example": "opencode-go/deepseek-v4.1-flash",
+          "promptReference": "docs/prompting/deepseek-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#deepseek-v4",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/deepseek.md"
+        },
+        {
+          "id": "qwen",
+          "displayName": "Qwen (OpenCode Go)",
+          "patterns": [
+            "opencode-go/qwen*"
+          ],
+          "example": "opencode-go/qwen3.8-max",
+          "promptReference": "docs/prompting/qwen-alibaba-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#qwen",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/qwen.md"
+        },
+        {
+          "id": "gpt",
+          "displayName": "GPT (OpenCode Go)",
+          "patterns": [
+            "opencode-go/gpt-*"
+          ],
+          "example": "opencode-go/gpt-6-luna",
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md"
+        },
+        {
+          "id": "grok",
+          "displayName": "Grok (OpenCode Go)",
+          "patterns": [
+            "opencode-go/grok-*"
+          ],
+          "example": "opencode-go/grok-4.7",
+          "promptReference": "docs/prompting/xai-grok-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#xai-grok-47-through-grok-build",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/grok.md"
+        },
+        {
+          "id": "muse",
+          "displayName": "Muse Spark (OpenCode Go)",
+          "patterns": [
+            "opencode-go/muse-*"
+          ],
+          "example": "opencode-go/muse-spark-1.3-contributor",
+          "promptReference": "docs/prompting/meta-muse-code-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#muse-code",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/muse-spark.md"
+        },
+        {
+          "id": "longcat",
+          "displayName": "LongCat (OpenCode Go)",
+          "patterns": [
+            "opencode-go/longcat-*"
+          ],
+          "example": "opencode-go/longcat-2.5-preview-free",
+          "promptReference": "docs/prompting/meituan-longcat-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#longcat",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/longcat.md"
+        },
+        {
+          "id": "mimo",
+          "displayName": "MiMo (OpenCode Go)",
+          "patterns": [
+            "opencode-go/mimo-*"
+          ],
+          "example": "opencode-go/mimo-v2.6-flash",
+          "promptReference": "docs/prompting/xiaomi-mimo-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#mimo",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/mimo.md"
+        },
+        {
+          "id": "hy",
+          "displayName": "Tencent Hy (OpenCode Go)",
+          "patterns": [
+            "opencode-go/hy*"
+          ],
+          "example": "opencode-go/hy4-preview",
+          "promptReference": "docs/prompting/tencent-hy-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#hy-tencent",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/hy.md"
+        }
+      ]
+    },
+    "goose": {
+      "displayName": "goose",
+      "shim": "goose-shim.sh",
+      "binaryCandidates": [
+        "goose"
+      ],
+      "binaryOverrideEnv": "GOOSE_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "env",
+      "endpointEnv": {
+        "baseUrl": "OPENAI_HOST",
+        "apiKey": "OPENAI_API_KEY",
+        "model": "GOOSE_MODEL"
+      },
+      "nativeHosts": [],
+      "promptDelivery": "stdin",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "goose-config",
+        "fallback": "goose-default"
+      },
+      "modelSelectors": [
+        "--model"
+      ],
+      "effort": {
+        "kind": "none",
+        "key": null,
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": []
+    },
+    "qwen": {
+      "displayName": "Qwen Code",
+      "shim": "qwen-shim.sh",
+      "binaryCandidates": [
+        "qwen",
+        "$HOME/.local/bin/qwen"
+      ],
+      "binaryOverrideEnv": "QWEN_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "env",
+      "endpointEnv": {
+        "baseUrl": "OPENAI_BASE_URL",
+        "apiKey": "OPENAI_API_KEY",
+        "model": "QWEN_MODEL"
+      },
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "qwen-config",
+        "fallback": "qwen-default"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model"
+      ],
+      "effort": {
+        "kind": "none",
+        "key": null,
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": [
+        {
+          "id": "qwen",
+          "displayName": "Qwen",
+          "patterns": [
+            "qwen*",
+            "*/qwen*"
+          ],
+          "example": "qwen3-coder",
+          "promptReference": "docs/prompting/qwen-alibaba-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#qwen",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/qwen.md"
+        }
+      ]
+    },
+    "hermes": {
+      "displayName": "Hermes Agent",
+      "shim": "hermes-shim.sh",
+      "binaryCandidates": [
+        "hermes"
+      ],
+      "binaryOverrideEnv": "HERMES_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "config-sync",
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "hermes-config",
+        "fallback": "hermes-default"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model"
+      ],
+      "effort": {
+        "kind": "none",
+        "key": null,
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": [],
+      "configSync": {
+        "path": "${HERMES_HOME:-~/.hermes}/config.yaml"
+      }
+    },
+    "pi": {
+      "displayName": "Pi coding agent",
+      "shim": "pi-shim.sh",
+      "binaryCandidates": [
+        "pi"
+      ],
+      "binaryOverrideEnv": "PI_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "config-sync",
+      "configSync": {
+        "path": "${PI_CODING_AGENT_DIR:-~/.pi/agent}/models.json"
+      },
+      "nativeHosts": [],
+      "promptDelivery": "file",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "pi-config",
+        "fallback": "pi-default"
+      },
+      "modelSelectors": [
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--thinking",
+        "values": [
+          "off",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": []
+    },
+    "muse": {
+      "displayName": "Meta Muse Code",
+      "shim": "muse-shim.sh",
+      "binaryCandidates": [
+        "muse"
+      ],
+      "binaryOverrideEnv": "MUSE_BIN",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "nativeHosts": [],
+      "promptDelivery": "file",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "registry",
+        "fallback": "muse-spark-1.3"
+      },
+      "modelSelectors": [
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--reasoning-effort",
+        "values": [
+          "none",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ]
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "muse-spark-1.2": {
+          "displayName": "Muse Spark 1.2",
+          "aliases": [],
+          "effortValues": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/meta-muse-code-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#muse-code",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/muse-spark.md",
+          "provenance": "model-facts:families/muse-spark"
+        },
+        "muse-spark-1.3": {
+          "displayName": "Muse Spark 1.3",
+          "aliases": [],
+          "effortValues": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/meta-muse-code-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#muse-code",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/muse-spark.md",
+          "provenance": "model-facts:families/muse-spark"
+        }
+      },
+      "routeFamilies": []
+    },
+    "cline": {
+      "displayName": "Cline CLI",
+      "shim": "cline-shim.sh",
+      "binaryCandidates": [
+        "cline"
+      ],
+      "binaryOverrideEnv": "CLINE_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "config-sync",
+      "configSync": {
+        "path": "${CLINE_DIR:-~/.cline}/data/settings/providers.json"
+      },
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "cline-config",
+        "fallback": "cline-default"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--thinking",
+        "values": [
+          "none",
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": []
+    },
+    "dsh": {
+      "displayName": "DeepSeek Harness (experimental)",
+      "shim": "dsh-shim.sh",
+      "binaryCandidates": [
+        "dsh"
+      ],
+      "binaryOverrideEnv": "DSH_BIN",
+      "harnessKind": "model-agnostic",
+      "endpointDelivery": "config-sync",
+      "configSync": {
+        "path": "${DSH_HOME:-~/.dsh}/settings.yaml"
+      },
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "dsh-config",
+        "fallback": "dsh-default"
+      },
+      "modelSelectors": [],
+      "effort": {
+        "kind": "none",
+        "key": null,
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {},
+      "routeFamilies": []
+    },
+    "agy": {
+      "displayName": "Antigravity CLI",
+      "shim": "agy-shim.sh",
+      "binaryCandidates": [
+        "agy",
+        "$HOME/.local/bin/agy"
+      ],
+      "binaryOverrideEnv": "AGY_BIN",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "allowUnknownModels": true,
+      "defaultModel": {
+        "source": "registry",
+        "fallback": "gemini-3.8-flash"
+      },
+      "modelSelectors": [
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--effort",
+        "values": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "gemini-3.7-flash": {
+          "displayName": "Gemini 3.7 Flash",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
+          "provenance": "model-facts:families/gemini"
+        },
+        "gemini-3.6-flash": {
+          "displayName": "Gemini 3.6 Flash",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
+          "provenance": "model-facts:families/gemini"
+        },
+        "gemini-3.5-flash": {
+          "displayName": "Gemini 3.5 Flash",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
+          "provenance": "model-facts:families/gemini"
+        },
+        "gemini-3.1-pro": {
+          "displayName": "Gemini 3.1 Pro",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "high"
+          ],
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
+          "provenance": "model-facts:families/gemini"
+        },
+        "gemini-3.8-flash": {
+          "displayName": "Gemini 3.8 Flash",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
+          "provenance": "model-facts:families/gemini"
+        }
+      },
+      "routeFamilies": [
+        {
+          "id": "gemini",
+          "displayName": "Gemini",
+          "patterns": [
+            "gemini-*"
+          ],
+          "example": "gemini-3.8-flash",
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md"
+        }
+      ]
+    },
+    "zcode": {
+      "displayName": "ZCode (Z.AI account)",
+      "shim": "zcode-shim.sh",
+      "binaryCandidates": [
+        "zcode",
+        "$HOME/.local/bin/zcode"
+      ],
+      "binaryOverrideEnv": "ZCODE_BIN",
+      "nativeHosts": [],
+      "promptDelivery": "argv",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "allowUnknownModels": false,
+      "defaultModel": {
+        "source": "registry",
+        "fallback": "zcode-default"
+      },
+      "modelSelectors": [],
+      "effort": {
+        "kind": "none",
+        "key": null,
+        "values": []
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "zcode-default": {
+          "displayName": "ZCode saved model",
+          "aliases": [],
+          "effortValues": [],
+          "promptReference": "docs/agents/zcode.md",
+          "runtimeReference": "references/model-prompting.md#zcode",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/harnesses/zcode.md",
+          "provenance": "ZCode CLI 0.16.9 --help and zai-org/ZCode CLI arguments; checked 2026-10-04"
+        }
+      },
+      "routeFamilies": []
+    }
+  },
+  "modelFamilies": {
+    "muse-glimmer": {
+      "displayName": "Meta Muse Glimmer",
+      "vendor": "Meta",
+      "patterns": [
+        "*muse-glimmer*",
+        "meta-models/Muse-Glimmer*"
+      ],
+      "models": [
+        "meta-models/Muse-Glimmer-30B",
+        "meta-models/Muse-Glimmer-30B-GGUF"
+      ],
+      "license": "Apache-2.0",
+      "contextWindow": 131072,
+      "reasoningControl": {
+        "kind": "system-prompt-line",
+        "detail": "Reasoning strength: low|medium|high|xhigh (default high)"
+      },
+      "samplingDefaults": {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "top_k": 64
+      },
+      "servingHint": "vllm/vllm-openai:muse-glimmer --enable-auto-tool-choice --tool-call-parser muse_glimmer --reasoning-parser muse_glimmer",
+      "modelCardUrl": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+      "promptReference": "docs/prompting/meta-muse-glimmer-prompting-reference.md",
+      "runtimeReference": "references/model-prompting.md#muse-glimmer",
+      "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/muse-glimmer.md",
+      "provenance": "model-facts:families/muse-glimmer"
+    },
+    "deepseek-v4": {
+      "displayName": "DeepSeek V4",
+      "vendor": "DeepSeek",
+      "patterns": [
+        "deepseek-v4*",
+        "deepseek-ai/DeepSeek-V4*"
+      ],
+      "models": [
+        "deepseek-ai/DeepSeek-V4.1-Flash",
+        "deepseek-ai/DeepSeek-V4-Flash-0731",
+        "deepseek-ai/DeepSeek-V4-Pro-0813"
+      ],
+      "license": "MIT",
+      "contextWindow": 1048576,
+      "reasoningControl": {
+        "kind": "request-parameter",
+        "detail": "reasoning_effort low|high|max; thinking_mode"
+      },
+      "samplingDefaults": {
+        "temperature": 1.0,
+        "top_p": 1.0
+      },
+      "servingHint": "vllm; DSpark speculative decoding optional",
+      "modelCardUrl": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+      "promptReference": "docs/prompting/deepseek-prompting-reference.md",
+      "runtimeReference": "references/model-prompting.md#deepseek-v4",
+      "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/deepseek.md",
+      "provenance": "model-facts:families/deepseek"
+    },
+    "gemma-4": {
+      "displayName": "Gemma 4",
+      "vendor": "Google DeepMind",
+      "patterns": [
+        "gemma-4*",
+        "google/gemma-4*"
+      ],
+      "models": [
+        "google/gemma-4-31B",
+        "google/gemma-4-26B-A4B",
+        "google/gemma-4-12B",
+        "google/gemma-4-E4B",
+        "google/gemma-4-E2B"
+      ],
+      "license": "Apache-2.0",
+      "contextWindow": 262144,
+      "reasoningControl": {
+        "kind": "system-prompt-token",
+        "detail": "<|think|> token at the start of the system prompt enables thinking"
+      },
+      "samplingDefaults": {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "top_k": 64
+      },
+      "servingHint": "vllm or llama.cpp; E-series context is 131072",
+      "modelCardUrl": "https://huggingface.co/google/gemma-4-31B-it",
+      "promptReference": "docs/prompting/google-gemma-prompting-reference.md",
+      "runtimeReference": "references/model-prompting.md#gemma-4",
+      "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemma.md",
+      "provenance": "model-facts:families/gemma"
+    }
+  }
+}

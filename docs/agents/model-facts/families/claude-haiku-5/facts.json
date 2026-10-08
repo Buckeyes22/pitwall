@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/claude-haiku-5",
+  "runtimeReference": "references/model-prompting.md#claude-haiku-55",
+  "promptReference": "prompting/anthropic-claude-haiku-5-prompting-reference.md",
+  "models": {
+    "claude-haiku-5.5": {
+      "status": "current",
+      "displayName": "Claude Haiku 5.5",
+      "routes": [
+        {
+          "harness": "claude",
+          "model": "haiku",
+          "register": true
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1000000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Capabilities table, Context window row"
+            }
+          ]
+        },
+        "maxOutput": {
+          "value": 128000,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Capabilities table, Max output row"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Capabilities table, Input to output row"
+            }
+          ]
+        },
+        "knowledgeCutoff": {
+          "value": "Jun 2026",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Capabilities table, Reliable knowledge cutoff row"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-effort",
+              "locator": "Recommended effort levels for Claude Haiku 5.5 (supports all five levels); Effort levels table, availability column"
+            }
+          ]
+        },
+        "effortDefault": {
+          "value": "medium",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Capabilities table, Default effort row"
+            },
+            {
+              "source": "anthropic-effort",
+              "locator": "How effort works; Recommended effort levels for Claude Haiku 5.5"
+            }
+          ]
+        },
+        "thinkingCanDisable": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-thinking-models",
+              "locator": "Thinking support table, Claude Haiku 5.5 row and footnote 2 (disabled accepted at effort high or below)"
+            },
+            {
+              "source": "anthropic-haiku-5-5-whats-new",
+              "locator": "New capabilities, Adaptive thinking and effort"
+            },
+            {
+              "source": "cc-model-config",
+              "locator": "Extended thinking, paragraph after the controls table (Claude Code cannot turn thinking off on Haiku 5.5)",
+              "disagrees": true,
+              "states": false
+            }
+          ],
+          "note": "The API accepts disabled at effort high or below and returns 400 at xhigh or max. Claude Code offers no off switch for this model, so a Claude Code route cannot disable thinking."
+        },
+        "samplingLocked": {
+          "value": true,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Good to know, temperature/top_p/top_k bullet"
+            },
+            {
+              "source": "anthropic-deprecations",
+              "locator": "API parameter deprecations table, temperature/top_p/top_k row"
+            }
+          ]
+        },
+        "released": {
+          "value": "2026-10-07",
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "anthropic-haiku-5-5",
+              "locator": "Availability table, Released row"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "guidance": [
+    {
+      "id": "haiku-5-5-positioning",
+      "text": "Anthropic positions it for high-volume, latency-sensitive work such as classification, extraction, routing and subagent tasks, with the lowest latency and price in the current lineup.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-models-overview",
+      "locator": "Compare models table, Description, Comparative latency and Pricing rows",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-alias-reaches-5-5",
+      "text": "In Claude Code the haiku alias reaches Haiku 5.5 on the Anthropic API from v2.1.293; on Platform on AWS, Bedrock, Agent Platform and Foundry it still reaches Haiku 4.5. Pin claude-haiku-5-5 by name.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "harness",
+      "source": "cc-model-config",
+      "locator": "Model aliases, provider table; Version history",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-effort-medium",
+      "text": "Effort defaults to medium; start there, including for agentic coding. Use low for chat and simple volume work. xhigh and max need measured gains over Sonnet 5.5. It is the first Haiku with effort levels.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Use effort to control thinking",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-thinking-disable",
+      "text": "Thinking is on by default. disabled is accepted at high effort or below and returns 400 at xhigh or max; budget_tokens always returns 400. To think less, lower effort first.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-thinking-models",
+      "locator": "Thinking support table, footnote 2",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-claude-code-thinking",
+      "text": "Claude Code shows no off switch for thinking on Haiku 5.5, and MAX_THINKING_TOKENS=0 has no effect there. Use a lower effort level to reduce thinking in a Claude Code route.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "harness",
+      "source": "cc-model-config",
+      "locator": "Extended thinking, paragraph after the controls table",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-max-tokens",
+      "text": "Thinking counts toward max_tokens, which can reach 128000, so limits sized for Haiku 4.5 can stop after a thinking block. The newer tokenizer also yields about 30 percent more tokens for the same text.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-whats-new",
+      "locator": "Behavior changes, Same text counts as more tokens; New capabilities, Larger context window and output",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-early-stop-and-verify",
+      "text": "In long agent prompts at low effort it can stop early or report a change done without running a check. Raise effort, or ask for a real test, type-check or build run before it reports done.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Prevent early stopping in long agent prompts; Tell coding agents to verify their changes",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-search-nudge",
+      "text": "With a search tool, give it today's date. At low effort or with long system prompts also say its training data is old so changed facts need a search. A blanket always-search rule adds searches without better answers.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Accurate search results",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-json-with-tools",
+      "text": "With thinking off and a JSON output format it may skip a tool call it needs. Keep adaptive thinking on, drop the output format on turns that need a tool, or force the call; it still accepts forced tool_choice.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Use adaptive thinking with JSON output and your own tools",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-breaking-requests",
+      "text": "Assistant prefill returns 400 even with thinking off, so end messages with a user turn. Omit temperature, top_p and top_k. Computer use on the API and Google Cloud needs the computer_toolset_20260801 toolset.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-whats-new",
+      "locator": "Summary of changes from Claude Haiku 4.5",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-mid-turn-user-messages",
+      "text": "Keep user text out of tool_result blocks. Send mid-turn user input as a user turn after the last tool result, with harness notices in a separate system message, or it may treat the text as injected and ignore it.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Mid-turn user messages",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-reasoning-in-reply",
+      "text": "With thinking off or at low effort it sometimes writes reasoning-like text into the reply that users see. If you see it, switch to adaptive thinking at medium effort.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Keep reasoning out of user-facing text",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-refusals",
+      "text": "Safety classifiers can decline cyber, frontier_llm, bio and general_harms requests with stop reason refusal. There is no server-side fallback, so handle the refusal in the client; resending usually repeats it.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-prompting",
+      "locator": "Safeguard refusals",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-claude-code-no-fallback",
+      "text": "Claude Code's automatic fallback covers flagged requests from Fable, Opus 5.5, Sonnet 5.5 and Opus 5 only, and does not name Haiku 5.5. Do not expect it to re-run a refused Haiku 5.5 request on another model.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "harness",
+      "source": "cc-model-config",
+      "locator": "Automatic model fallback",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-append-only-history",
+      "text": "Thinking blocks work only in the account that produced them and only while the system prompt, tools and earlier turns are unchanged. Editing history can fail a replayed block with a 400, so keep it append-only.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-migration",
+      "locator": "Replay thinking blocks through the account that produced them; Keep earlier turns unchanged",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-07"
+    },
+    {
+      "id": "haiku-5-5-priority-tier",
+      "text": "Priority Tier is not supported on Haiku 5.5, so capacity committed on Haiku 4.5 does not carry over and must be planned separately.",
+      "applies": [
+        "claude-haiku-5.5"
+      ],
+      "class": "vendor",
+      "source": "anthropic-haiku-5-5-migration",
+      "locator": "Migration checklist, closing paragraph",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-07"
+    }
+  ]
+}

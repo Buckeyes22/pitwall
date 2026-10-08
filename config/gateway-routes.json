@@ -1,0 +1,263 @@
+{
+  "routes": {
+    "gw-aihorde-cydonia-24b-v4-3": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_AIHORDE_ANON",
+      "base_url": "https://oai.aihorde.net/v1",
+      "key_required": true,
+      "model_id": "aphrodite/TheDrummer/Cydonia-24B-v4.3"
+    },
+    "gw-aihorde-gemma-4-31b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_AIHORDE_ANON",
+      "base_url": "https://oai.aihorde.net/v1",
+      "key_required": true,
+      "model_id": "google/gemma-4-31b"
+    },
+    "gw-aihorde-skyfall-31b-v4-2": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_AIHORDE_ANON",
+      "base_url": "https://oai.aihorde.net/v1",
+      "key_required": true,
+      "model_id": "aphrodite/TheDrummer/Skyfall-31B-v4.2"
+    },
+    "gw-cerebras-gpt-oss-120b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_CEREBRAS",
+      "base_url": "https://api.cerebras.ai/v1",
+      "key_required": true,
+      "model_id": "gpt-oss-120b"
+    },
+    "gw-cerebras-zai-glm-4-7": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_CEREBRAS",
+      "base_url": "https://api.cerebras.ai/v1",
+      "key_required": true,
+      "model_id": "zai-glm-4.7"
+    },
+    "gw-groq-gpt-oss-120b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_GROQ",
+      "base_url": "https://api.groq.com/openai/v1",
+      "key_required": true,
+      "model_id": "openai/gpt-oss-120b"
+    },
+    "gw-groq-gpt-oss-20b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_GROQ",
+      "base_url": "https://api.groq.com/openai/v1",
+      "key_required": true,
+      "model_id": "openai/gpt-oss-20b"
+    },
+    "gw-groq-llama-3-3-70b-versatile": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_GROQ",
+      "base_url": "https://api.groq.com/openai/v1",
+      "key_required": true,
+      "model_id": "llama-3.3-70b-versatile"
+    },
+    "gw-groq-llama-4-scout-17b-16e-instruct": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_GROQ",
+      "base_url": "https://api.groq.com/openai/v1",
+      "key_required": true,
+      "model_id": "meta-llama/llama-4-scout-17b-16e-instruct"
+    },
+    "gw-groq-qwen3-32b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_GROQ",
+      "base_url": "https://api.groq.com/openai/v1",
+      "key_required": true,
+      "model_id": "qwen/qwen3-32b"
+    },
+    "gw-ovhcloud-gpt-oss-120b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_OVHCLOUD_ANON",
+      "base_url": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "key_required": false,
+      "model_id": "gpt-oss-120b"
+    },
+    "gw-ovhcloud-gpt-oss-20b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_OVHCLOUD_ANON",
+      "base_url": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "key_required": false,
+      "model_id": "gpt-oss-20b"
+    },
+    "gw-ovhcloud-mistral-small-3-2-24b-instruct-2506": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_OVHCLOUD_ANON",
+      "base_url": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "key_required": false,
+      "model_id": "Mistral-Small-3.2-24B-Instruct-2506"
+    },
+    "gw-ovhcloud-qwen2-5-vl-72b-instruct": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_OVHCLOUD_ANON",
+      "base_url": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "key_required": false,
+      "model_id": "Qwen2.5-VL-72B-Instruct"
+    },
+    "gw-ovhcloud-qwen3-6-27b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_OVHCLOUD_ANON",
+      "base_url": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "key_required": false,
+      "model_id": "Qwen3.6-27B"
+    },
+    "gw-pollinations-deepseek": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "deepseek"
+    },
+    "gw-pollinations-gemini-flash-lite-3-1": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "gemini-flash-lite-3.1"
+    },
+    "gw-pollinations-gemini-large": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "gemini-large"
+    },
+    "gw-pollinations-gemini-search": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "gemini-search"
+    },
+    "gw-pollinations-glm": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "glm"
+    },
+    "gw-pollinations-grok": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "grok"
+    },
+    "gw-pollinations-grok-large": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "grok-large"
+    },
+    "gw-pollinations-kimi": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "kimi"
+    },
+    "gw-pollinations-minimax": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "minimax"
+    },
+    "gw-pollinations-mistral": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "mistral"
+    },
+    "gw-pollinations-mistral-large": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "mistral-large"
+    },
+    "gw-pollinations-nova": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "nova"
+    },
+    "gw-pollinations-nova-fast": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "nova-fast"
+    },
+    "gw-pollinations-openai": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "openai"
+    },
+    "gw-pollinations-openai-fast": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "openai-fast"
+    },
+    "gw-pollinations-openai-large": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "openai-large"
+    },
+    "gw-pollinations-perplexity-fast": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "perplexity-fast"
+    },
+    "gw-pollinations-perplexity-reasoning": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "perplexity-reasoning"
+    },
+    "gw-pollinations-polly": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "polly"
+    },
+    "gw-pollinations-qwen-coder": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "qwen-coder"
+    },
+    "gw-pollinations-qwen-coder-large": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "qwen-coder-large"
+    },
+    "gw-pollinations-qwen-large": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "qwen-large"
+    },
+    "gw-pollinations-qwen-safety": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "qwen-safety"
+    },
+    "gw-pollinations-qwen-vision": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_POLLINATIONS",
+      "base_url": "https://gen.pollinations.ai/v1",
+      "key_required": false,
+      "model_id": "qwen-vision"
+    },
+    "gw-sparkdesk-lite": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_SPARKDESK",
+      "base_url": "https://spark-api-open.xf-yun.com/v1",
+      "key_required": true,
+      "model_id": "lite"
+    },
+    "gw-uncloseai-gemma4:31b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_UNCLOSEAI",
+      "base_url": "https://hermes.ai.unturf.com/v1",
+      "key_required": false,
+      "model_id": "gemma4:31b"
+    },
+    "gw-uncloseai-hermes-3-llama-3-1-8b-fp8-dynamic": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_UNCLOSEAI",
+      "base_url": "https://hermes.ai.unturf.com/v1",
+      "key_required": false,
+      "model_id": "adamo1139/Hermes-3-Llama-3.1-8B-FP8-Dynamic"
+    },
+    "gw-uncloseai-qwen3-6:27b": {
+      "api_key_env": "PITWALL_GATEWAY_KEY_UNCLOSEAI",
+      "base_url": "https://hermes.ai.unturf.com/v1",
+      "key_required": false,
+      "model_id": "qwen3.6:27b"
+    }
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,2506 @@
+{
+ "pitwall|": {
+  "argv": [],
+  "database": false,
+  "daemon": true,
+  "unknown_exit": 1
+ },
+ "pitwall|agents": {
+  "argv": [
+   "agents"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents answer": {
+  "argv": [
+   "agents",
+   "answer",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1",
+   "0001",
+   "yes",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents dispatch": {
+  "argv": [
+   "agents",
+   "dispatch"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents doctor": {
+  "argv": [
+   "agents",
+   "doctor",
+   "--installation-only",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "checks",
+   "generatedAt",
+   "modes",
+   "schemaVersion",
+   "status",
+   "summary",
+   "tool"
+  ]
+ },
+ "pitwall|agents harnesses": {
+  "argv": [
+   "agents",
+   "harnesses",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents inbox": {
+  "argv": [
+   "agents",
+   "inbox",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "asks",
+   "sequenceGaps",
+   "steers"
+  ]
+ },
+ "pitwall|agents install": {
+  "argv": [
+   "agents",
+   "install",
+   "--harness",
+   "codex"
+  ],
+  "database": false,
+  "exit": 0,
+  "stdout_contains": "installed"
+ },
+ "pitwall|agents mcp": {
+  "argv": [
+   "agents",
+   "mcp"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents migrate": {
+  "argv": [
+   "agents",
+   "migrate"
+  ],
+  "database": false,
+  "exit": 0,
+  "stdout_contains": "nothing to migrate"
+ },
+ "pitwall|agents broker": {
+  "argv": [
+   "agents",
+   "broker"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents broker receiver": {
+  "argv": [
+   "agents",
+   "broker",
+   "receiver",
+   "--host",
+   "127.0.0.1",
+   "--port",
+   "0"
+  ],
+  "database": false,
+  "daemon": true
+ },
+ "pitwall|agents broker subscribe": {
+  "argv": [
+   "agents",
+   "broker",
+   "subscribe",
+   "--receiver-url",
+   "http://127.0.0.1:9/hook"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents broker watch": {
+  "argv": [
+   "agents",
+   "broker",
+   "watch",
+   "--interval",
+   "1"
+  ],
+  "database": false,
+  "daemon": true
+ },
+ "pitwall|agents profiles": {
+  "argv": [
+   "agents",
+   "profiles"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents profiles add": {
+  "argv": [
+   "agents",
+   "profiles",
+   "add",
+   "j36-route",
+   "--harness",
+   "opencode",
+   "--base-url",
+   "http://127.0.0.1:9/v1",
+   "--model",
+   "j36-model"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents profiles add-model-studio-endpoint": {
+  "argv": [
+   "agents",
+   "profiles",
+   "add-model-studio-endpoint",
+   "j36-ms",
+   "--plan",
+   "token-plan-personal",
+   "--tier",
+   "pro"
+  ],
+  "database": false,
+  "exit": 0,
+  "stdout_contains": "saved endpoint j36-ms"
+ },
+ "pitwall|agents profiles discover": {
+  "argv": [
+   "agents",
+   "profiles",
+   "discover",
+   "--base-url",
+   "http://127.0.0.1:9/v1",
+   "--timeout",
+   "2",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents profiles list": {
+  "argv": [
+   "agents",
+   "profiles",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents profiles probe": {
+  "argv": [
+   "agents",
+   "profiles",
+   "probe",
+   "j36-route",
+   "--timeout",
+   "2",
+   "--json"
+  ],
+  "database": false,
+  "before": [
+   [
+    "pitwall",
+    "agents",
+    "profiles",
+    "add",
+    "j36-route",
+    "--harness",
+    "opencode",
+    "--base-url",
+    "http://127.0.0.1:9/v1",
+    "--model",
+    "j36-model"
+   ]
+  ],
+  "exit": 1,
+  "json_keys": [
+   "detail",
+   "expires_at",
+   "http_status",
+   "leaseId",
+   "models",
+   "name",
+   "remedy",
+   "status"
+  ]
+ },
+ "pitwall|agents profiles refresh": {
+  "argv": [
+   "agents",
+   "profiles",
+   "refresh",
+   "j36-route",
+   "--json"
+  ],
+  "database": false,
+  "before": [
+   [
+    "pitwall",
+    "agents",
+    "profiles",
+    "add",
+    "j36-route",
+    "--harness",
+    "opencode",
+    "--base-url",
+    "http://127.0.0.1:9/v1",
+    "--model",
+    "j36-model"
+   ]
+  ],
+  "exit": 2
+ },
+ "pitwall|agents profiles remove": {
+  "argv": [
+   "agents",
+   "profiles",
+   "remove",
+   "j36-route"
+  ],
+  "database": false,
+  "before": [
+   [
+    "pitwall",
+    "agents",
+    "profiles",
+    "add",
+    "j36-route",
+    "--harness",
+    "opencode",
+    "--base-url",
+    "http://127.0.0.1:9/v1",
+    "--model",
+    "j36-model"
+   ]
+  ],
+  "exit": 0
+ },
+ "pitwall|agents profiles resolve": {
+  "argv": [
+   "agents",
+   "profiles",
+   "resolve",
+   "j36-route",
+   "--json"
+  ],
+  "database": false,
+  "before": [
+   [
+    "pitwall",
+    "agents",
+    "profiles",
+    "add",
+    "j36-route",
+    "--harness",
+    "opencode",
+    "--base-url",
+    "http://127.0.0.1:9/v1",
+    "--model",
+    "j36-model"
+   ]
+  ],
+  "exit": 78
+ },
+ "pitwall|agents profiles show": {
+  "argv": [
+   "agents",
+   "profiles",
+   "show",
+   "j36-route"
+  ],
+  "database": false,
+  "before": [
+   [
+    "pitwall",
+    "agents",
+    "profiles",
+    "add",
+    "j36-route",
+    "--harness",
+    "opencode",
+    "--base-url",
+    "http://127.0.0.1:9/v1",
+    "--model",
+    "j36-model"
+   ]
+  ],
+  "exit": 0,
+  "json_keys": [
+   "entry",
+   "resolved",
+   "summary"
+  ]
+ },
+ "pitwall|agents profiles sync": {
+  "argv": [
+   "agents",
+   "profiles",
+   "sync",
+   "--dry-run"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents runs": {
+  "argv": [
+   "agents",
+   "runs"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents runs apply": {
+  "argv": [
+   "agents",
+   "runs",
+   "apply",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents runs cleanup": {
+  "argv": [
+   "agents",
+   "runs",
+   "cleanup",
+   "--older-than",
+   "30"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents runs diff": {
+  "argv": [
+   "agents",
+   "runs",
+   "diff",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents runs discard": {
+  "argv": [
+   "agents",
+   "runs",
+   "discard",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents runs list": {
+  "argv": [
+   "agents",
+   "runs",
+   "list"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents runs logs": {
+  "argv": [
+   "agents",
+   "runs",
+   "logs",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents runs resume": {
+  "argv": [
+   "agents",
+   "runs",
+   "resume",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents runs show": {
+  "argv": [
+   "agents",
+   "runs",
+   "show",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents runs stop": {
+  "argv": [
+   "agents",
+   "runs",
+   "stop",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents setup": {
+  "argv": [
+   "agents",
+   "setup"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents setup harnesses": {
+  "argv": [
+   "agents",
+   "setup",
+   "harnesses",
+   "--dry-run",
+   "--no-color"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents setup inventory": {
+  "argv": [
+   "agents",
+   "setup",
+   "inventory",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "errors",
+   "generatedAt",
+   "harnesses",
+   "schemaVersion"
+  ]
+ },
+ "pitwall|agents setup mcp": {
+  "argv": [
+   "agents",
+   "setup",
+   "mcp",
+   "--dry-run"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents setup profiles": {
+  "argv": [
+   "agents",
+   "setup",
+   "profiles",
+   "--no-color"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents steer": {
+  "argv": [
+   "agents",
+   "steer",
+   "7c9e6679-7425-40de-944b-e07fc1f0b0d1",
+   "--kind",
+   "note",
+   "--message",
+   "j36 note",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents uninstall": {
+  "argv": [
+   "agents",
+   "uninstall"
+  ],
+  "before": [
+   [
+    "pitwall",
+    "agents",
+    "install",
+    "--harness",
+    "codex"
+   ]
+  ],
+  "database": false,
+  "exit": 0,
+  "stdout_contains": "removed"
+ },
+ "pitwall|agents workflow": {
+  "argv": [
+   "agents",
+   "workflow"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents workflow cancel": {
+  "argv": [
+   "agents",
+   "workflow",
+   "cancel",
+   "wf-j36"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|agents workflow list": {
+  "argv": [
+   "agents",
+   "workflow",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|agents workflow resume": {
+  "argv": [
+   "agents",
+   "workflow",
+   "resume",
+   "wf-j36"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents workflow run": {
+  "argv": [
+   "agents",
+   "workflow",
+   "run",
+   "--host",
+   "claude",
+   "missing-workflow.md"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|agents workflow show": {
+  "argv": [
+   "agents",
+   "workflow",
+   "show",
+   "wf-j36"
+  ],
+  "database": false,
+  "exit": 1
+ },
+ "pitwall|budget": {
+  "argv": [
+   "budget"
+  ],
+  "database": true,
+  "exit": 2
+ },
+ "pitwall|budget set": {
+  "argv": [
+   "budget",
+   "set",
+   "--monthly",
+   "50",
+   "--reason",
+   "release journey raise",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "budget_remaining_usd",
+   "mtd_spend_usd",
+   "monthly_budget_usd",
+   "per_request_max_usd",
+   "source"
+  ]
+ },
+ "pitwall|budget show": {
+  "argv": [
+   "budget",
+   "show",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "budget_remaining_usd",
+   "mtd_spend_usd",
+   "monthly_budget_usd",
+   "per_request_max_usd",
+   "source"
+  ]
+ },
+ "pitwall|burn-rate": {
+  "argv": [
+   "burn-rate",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_breached",
+   "at_budget",
+   "budget_usd",
+   "confidence",
+   "daily_rate_usd",
+   "data_sufficiency",
+   "forecast_total_usd",
+   "last_rollup_day",
+   "now",
+   "observation_window",
+   "percent_consumed",
+   "projected_breach_at",
+   "projected_breach_eta_days",
+   "projection_overflow",
+   "remaining_budget_usd",
+   "spend_to_date_usd",
+   "stale",
+   "trend"
+  ]
+ },
+ "pitwall|config": {
+  "argv": [
+   "config"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|config check": {
+  "argv": [
+   "config",
+   "check",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "service",
+   "status",
+   "success"
+  ]
+ },
+ "pitwall|cost": {
+  "argv": [
+   "cost"
+  ],
+  "database": true,
+  "exit": 2
+ },
+ "pitwall|cost summary": {
+  "argv": [
+   "cost",
+   "summary",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "entries",
+   "total_usd"
+  ]
+ },
+ "pitwall|cost workloads": {
+  "argv": [
+   "cost",
+   "workloads",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "workloads"
+  ]
+ },
+ "pitwall|create-capability": {
+  "argv": [
+   "create-capability",
+   "--name",
+   "j36.cap",
+   "--version",
+   "1.0.0",
+   "--class",
+   "embedding",
+   "--cost-mode",
+   "per_request",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "capability",
+   "success"
+  ]
+ },
+ "pitwall|dashboard": {
+  "argv": [
+   "dashboard"
+  ],
+  "database": true,
+  "daemon": true
+ },
+ "pitwall|db": {
+  "argv": [
+   "db",
+   "reset",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ],
+  "stdout_contains": "Refusing destructive database reset",
+  "then": {
+   "argv": [
+    "db",
+    "status",
+    "--json"
+   ],
+   "exit": 0
+  }
+ },
+ "pitwall|doctor": {
+  "argv": [
+   "doctor",
+   "--json"
+  ],
+  "database": true,
+  "registry_backend": true,
+  "exit": 0,
+  "json_keys": [
+   "checks",
+   "mode",
+   "schema_version",
+   "status",
+   "summary",
+   "version"
+  ]
+ },
+ "pitwall|gateway": {
+  "argv": [
+   "gateway"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|gateway doctor": {
+  "argv": [
+   "gateway",
+   "doctor",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "checks",
+   "ok"
+  ]
+ },
+ "pitwall|gateway status": {
+  "argv": [
+   "gateway",
+   "status",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "api_url",
+   "lock",
+   "quotas",
+   "source"
+  ]
+ },
+ "pitwall|gateway sync": {
+  "argv": [
+   "gateway",
+   "sync",
+   "--version",
+   "0.0.0-j36",
+   "--from-json",
+   "missing-catalog.json",
+   "--repo-root",
+   "."
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|guardrails": {
+  "argv": [
+   "guardrails"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|guardrails preview": {
+  "argv": [
+   "guardrails",
+   "preview",
+   "--payload",
+   "{\"texts\": [\"hello\"]}",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "blocked",
+   "decision",
+   "elapsed_ms",
+   "findings",
+   "inspected_bytes",
+   "limit_reason",
+   "limited",
+   "mode",
+   "redacted_payload"
+  ]
+ },
+ "pitwall|guardrails status": {
+  "argv": [
+   "guardrails",
+   "status",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "counters",
+   "last_decision",
+   "limits",
+   "mode",
+   "rules"
+  ]
+ },
+ "pitwall|init": {
+  "argv": [
+   "init",
+   "--non-interactive",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "capability",
+   "health_status",
+   "provider",
+   "success"
+  ]
+ },
+ "pitwall|leases": {
+  "argv": [
+   "leases"
+  ],
+  "database": true,
+  "exit": 2
+ },
+ "pitwall|leases list": {
+  "argv": [
+   "leases",
+   "list",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "items",
+   "refreshed_at",
+   "total"
+  ]
+ },
+ "pitwall|leases renew": {
+  "argv": [
+   "leases",
+   "renew",
+   "lease_j36_missing",
+   "--extends-minutes",
+   "10",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|leases stop": {
+  "argv": [
+   "leases",
+   "stop",
+   "lease_j36_missing",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|mcp": {
+  "argv": [
+   "mcp"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|mcp install": {
+  "argv": [
+   "mcp",
+   "install",
+   "--dry-run",
+   "--json",
+   "claude-code"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "results"
+  ]
+ },
+ "pitwall|mcp relay": {
+  "argv": [
+   "mcp",
+   "relay"
+  ],
+  "database": false,
+  "exit": 64,
+  "stderr_contains": "usage: pitwall mcp relay -- COMMAND"
+ },
+ "pitwall|mcp serve": {
+  "argv": [
+   "mcp",
+   "serve"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|mcp serve broker": {
+  "argv": [
+   "mcp",
+   "serve",
+   "broker"
+  ],
+  "database": true,
+  "exit": 0
+ },
+ "pitwall|mcp serve channel": {
+  "argv": [
+   "mcp",
+   "serve",
+   "channel"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|mcp uninstall": {
+  "argv": [
+   "mcp",
+   "uninstall",
+   "--dry-run",
+   "--json",
+   "claude-code"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "results"
+  ]
+ },
+ "pitwall|models": {
+  "argv": [
+   "models"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|models evidence": {
+  "argv": [
+   "models",
+   "evidence",
+   "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "--variant",
+   "gguf:Q4_K_M",
+   "--gpu-class",
+   "NVIDIA GeForce RTX 3090",
+   "--observed-vram-gb",
+   "20",
+   "--observed-startup-s",
+   "240"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|models fit": {
+  "argv": [
+   "models",
+   "fit",
+   "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "age_seconds",
+   "model",
+   "options",
+   "source",
+   "stale",
+   "variant"
+  ]
+ },
+ "pitwall|models list": {
+  "argv": [
+   "models",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "models"
+  ]
+ },
+ "pitwall|models show": {
+  "argv": [
+   "models",
+   "show",
+   "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "accessed",
+   "architecture",
+   "body",
+   "capabilities",
+   "confidence",
+   "family",
+   "license",
+   "model_id",
+   "openai_chat",
+   "pitwall",
+   "release_date",
+   "variants",
+   "vendor"
+  ]
+ },
+ "pitwall|provider-ops": {
+  "argv": [
+   "provider-ops"
+  ],
+  "database": true,
+  "exit": 2
+ },
+ "pitwall|provider-ops availability": {
+  "argv": [
+   "provider-ops",
+   "availability",
+   "prov_demo_runpod_lb",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "error_code",
+   "items",
+   "observed_at",
+   "provider_id",
+   "source_contract",
+   "status"
+  ]
+ },
+ "pitwall|provider-ops describe": {
+  "argv": [
+   "provider-ops",
+   "describe",
+   "prov_demo_runpod_lb",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "adapter_id",
+   "capabilities",
+   "config",
+   "credential_configured",
+   "credential_ref",
+   "enabled",
+   "name",
+   "persisted_health",
+   "pricing_kind",
+   "provider_id",
+   "provider_type"
+  ]
+ },
+ "pitwall|provider-ops health": {
+  "argv": [
+   "provider-ops",
+   "health",
+   "prov_demo_runpod_lb",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "availability_count",
+   "error_code",
+   "live_status",
+   "observed_at",
+   "persisted_health",
+   "provider_id"
+  ]
+ },
+ "pitwall|provider-ops list": {
+  "argv": [
+   "provider-ops",
+   "list",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "items",
+   "total"
+  ]
+ },
+ "pitwall|quotas": {
+  "argv": [
+   "quotas",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "quotas",
+   "source"
+  ]
+ },
+ "pitwall|register-endpoint": {
+  "argv": [
+   "register-endpoint",
+   "--endpoint-id",
+   "epj36",
+   "--provider-type",
+   "serverless_lb",
+   "--capability-id",
+   "cap_embedding_demo",
+   "--name",
+   "j36-endpoint",
+   "--gpu-class",
+   "NVIDIA L4",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "provider",
+   "success"
+  ]
+ },
+ "pitwall|register-template": {
+  "argv": [
+   "register-template",
+   "--image",
+   "docker.io/example/worker:sha-abc",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "container_disk_gb",
+   "dry_run",
+   "effect",
+   "env_keys",
+   "estimated_ceiling",
+   "idempotency_key",
+   "image",
+   "image_sha",
+   "irreversible",
+   "normalized_name",
+   "operation",
+   "provider",
+   "registry_auth_id",
+   "resource",
+   "resource_id",
+   "resource_type",
+   "template_display_name",
+   "template_name"
+  ]
+ },
+ "pitwall|retention": {
+  "argv": [
+   "retention"
+  ],
+  "database": true,
+  "exit": 2
+ },
+ "pitwall|retention run": {
+  "argv": [
+   "retention",
+   "run",
+   "--archive-dir",
+   "archive",
+   "--dry-run"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "cutoff_at",
+   "database_committed",
+   "deleted_count",
+   "format_version",
+   "mode",
+   "run_id",
+   "workload_count"
+  ]
+ },
+ "pitwall|routing": {
+  "argv": [
+   "routing"
+  ],
+  "database": true,
+  "exit": 2
+ },
+ "pitwall|routing cancel": {
+  "argv": [
+   "routing",
+   "cancel",
+   "wkl_j36_missing",
+   "--json"
+  ],
+  "database": true,
+  "exit": 2,
+  "json_keys": [
+   "error"
+  ],
+  "stdout_contains": "--confirm must exactly match workload_id"
+ },
+ "pitwall|routing follow": {
+  "argv": [
+   "routing",
+   "follow",
+   "wkl_j36_missing",
+   "--max-polls",
+   "1",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|routing plan": {
+  "argv": [
+   "routing",
+   "plan",
+   "embedding.demo",
+   "--input-json",
+   "{\"texts\": [\"hi\"]}",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "attempts",
+   "capability_id",
+   "capability_name",
+   "eliminated",
+   "fallback_chain",
+   "mode",
+   "observed_at",
+   "operation",
+   "payload_sha256",
+   "plan_id",
+   "provider_constraint",
+   "ranked_candidates",
+   "selected_provider_id",
+   "signal_policy",
+   "weights"
+  ]
+ },
+ "pitwall|routing result": {
+  "argv": [
+   "routing",
+   "result",
+   "wkl_j36_missing",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|routing status": {
+  "argv": [
+   "routing",
+   "status",
+   "wkl_j36_missing",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|routing submit": {
+  "argv": [
+   "routing",
+   "submit",
+   "embedding.demo",
+   "--input-json",
+   "{\"texts\": [\"hi\"]}",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "cost",
+   "dry_run",
+   "plan",
+   "provider_id",
+   "state",
+   "workload_id"
+  ]
+ },
+ "pitwall|runpod": {
+  "argv": [
+   "runpod"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod catalogue": {
+  "argv": [
+   "runpod",
+   "catalogue",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "age_seconds",
+   "availability",
+   "balance",
+   "billing_categories",
+   "cache_expires_at",
+   "cache_hit",
+   "components",
+   "datacenters",
+   "forced_refresh",
+   "gpus",
+   "provider",
+   "refresh_attempted_at",
+   "stale",
+   "state",
+   "unavailable"
+  ]
+ },
+ "pitwall|runpod endpoints": {
+  "argv": [
+   "runpod",
+   "endpoints"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod endpoints create": {
+  "argv": [
+   "runpod",
+   "endpoints",
+   "create",
+   "--request-json",
+   "{\"name\": \"j36-ep\", \"image\": \"docker.io/example/worker:sha-abc\", \"gpu\": {\"pools\": [\"ADA_24\"]}}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod endpoints delete": {
+  "argv": [
+   "runpod",
+   "endpoints",
+   "delete",
+   "j36res",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod endpoints get": {
+  "argv": [
+   "runpod",
+   "endpoints",
+   "get",
+   "j36res",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod endpoints list": {
+  "argv": [
+   "runpod",
+   "endpoints",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod endpoints update": {
+  "argv": [
+   "runpod",
+   "endpoints",
+   "update",
+   "j36res",
+   "--request-json",
+   "{\"workers\": {\"minimum\": 0, \"maximum\": 2}, \"scaling\": {\"type\": \"QUEUE_DELAY\", \"value\": 4}}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod hub": {
+  "argv": [
+   "runpod",
+   "hub"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod hub get": {
+  "argv": [
+   "runpod",
+   "hub",
+   "get",
+   "j36hub",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod hub list": {
+  "argv": [
+   "runpod",
+   "hub",
+   "list",
+   "--limit",
+   "3",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod hub search": {
+  "argv": [
+   "runpod",
+   "hub",
+   "search",
+   "vllm",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod pods": {
+  "argv": [
+   "runpod",
+   "pods"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod pods action": {
+  "argv": [
+   "runpod",
+   "pods",
+   "action",
+   "j36res",
+   "stop",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod pods create": {
+  "argv": [
+   "runpod",
+   "pods",
+   "create",
+   "--request-json",
+   "{\"name\": \"j36-pod\", \"image\": \"docker.io/example/worker:sha-abc\", \"gpu_type_ids\": [\"NVIDIA L4\"], \"ttl_minutes\": 15}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod pods get": {
+  "argv": [
+   "runpod",
+   "pods",
+   "get",
+   "j36res",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod pods list": {
+  "argv": [
+   "runpod",
+   "pods",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod pods terminate": {
+  "argv": [
+   "runpod",
+   "pods",
+   "terminate",
+   "j36res",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod pods update": {
+  "argv": [
+   "runpod",
+   "pods",
+   "update",
+   "j36res",
+   "--request-json",
+   "{\"ports\": [\"8000/http\"]}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod registry-auths": {
+  "argv": [
+   "runpod",
+   "registry-auths"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod registry-auths create": {
+  "argv": [
+   "runpod",
+   "registry-auths",
+   "create",
+   "--request-json",
+   "{\"name\": \"j36-auth\", \"username\": \"j36\", \"password_env\": \"J36_REGISTRY_PASSWORD\"}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod registry-auths delete": {
+  "argv": [
+   "runpod",
+   "registry-auths",
+   "delete",
+   "j36res",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod registry-auths get": {
+  "argv": [
+   "runpod",
+   "registry-auths",
+   "get",
+   "j36res",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod registry-auths list": {
+  "argv": [
+   "runpod",
+   "registry-auths",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod registry-auths replace": {
+  "argv": [
+   "runpod",
+   "registry-auths",
+   "replace",
+   "j36res",
+   "--request-json",
+   "{\"name\": \"j36-auth\", \"username\": \"j36\", \"password_env\": \"J36_REGISTRY_PASSWORD\"}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod templates": {
+  "argv": [
+   "runpod",
+   "templates"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod templates create": {
+  "argv": [
+   "runpod",
+   "templates",
+   "create",
+   "--request-json",
+   "{\"name\": \"j36-tpl\", \"image\": \"docker.io/example/worker:sha-abc\"}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod templates delete": {
+  "argv": [
+   "runpod",
+   "templates",
+   "delete",
+   "j36res",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod templates get": {
+  "argv": [
+   "runpod",
+   "templates",
+   "get",
+   "j36res",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod templates list": {
+  "argv": [
+   "runpod",
+   "templates",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod templates update": {
+  "argv": [
+   "runpod",
+   "templates",
+   "update",
+   "j36res",
+   "--request-json",
+   "{\"image\": \"docker.io/example/worker:sha-def\"}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod volumes": {
+  "argv": [
+   "runpod",
+   "volumes"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|runpod volumes create": {
+  "argv": [
+   "runpod",
+   "volumes",
+   "create",
+   "--request-json",
+   "{\"name\": \"j36-vol\", \"size_gb\": 10, \"data_center_id\": \"US-KS-2\"}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod volumes delete": {
+  "argv": [
+   "runpod",
+   "volumes",
+   "delete",
+   "j36res",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "already_absent",
+   "changed",
+   "dry_run",
+   "effect",
+   "estimated_ceiling",
+   "idempotency_key",
+   "irreversible",
+   "operation",
+   "provider",
+   "resource",
+   "resource_id",
+   "resource_type"
+  ]
+ },
+ "pitwall|runpod volumes get": {
+  "argv": [
+   "runpod",
+   "volumes",
+   "get",
+   "j36res",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod volumes grow": {
+  "argv": [
+   "runpod",
+   "volumes",
+   "grow",
+   "j36res",
+   "--request-json",
+   "{\"size_gb\": 20}",
+   "--idempotency-key",
+   "j36-key-0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod volumes list": {
+  "argv": [
+   "runpod",
+   "volumes",
+   "list",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "json_keys": [
+   "changed",
+   "detail",
+   "error",
+   "operation",
+   "provider_status",
+   "resource_id",
+   "resource_type",
+   "retryable"
+  ]
+ },
+ "pitwall|runpod-onboard": {
+  "argv": [
+   "runpod-onboard",
+   "onboarding.json",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "detail",
+   "error",
+   "result",
+   "step"
+  ]
+ },
+ "pitwall|seed": {
+  "argv": [
+   "seed",
+   "{repo}/seed/capabilities.yaml",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "capabilities",
+   "providers"
+  ]
+ },
+ "pitwall|serve": {
+  "argv": [
+   "serve",
+   "--model",
+   "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "--gpu-class",
+   "NVIDIA GeForce RTX 3090",
+   "--route",
+   "j36-route",
+   "--max-usd-per-hour",
+   "0.01"
+  ],
+  "database": false,
+  "exit": 1,
+  "stderr_contains": "refused: unpriced"
+ },
+ "pitwall|serve (registry)": {
+  "argv": [
+   "serve",
+   "--capability",
+   "coding.chat",
+   "--model",
+   "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "--gpu-class",
+   "NVIDIA GeForce RTX 3090",
+   "--rate-per-second",
+   "0.0001",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "capability",
+   "cost_estimate_usd",
+   "created",
+   "dry_run",
+   "engine",
+   "expires_at",
+   "gpu_count",
+   "lease_id",
+   "model_id",
+   "price_age_seconds",
+   "price_source",
+   "price_stale",
+   "provider_id",
+   "provider_kind",
+   "proxy_base_url",
+   "template_id",
+   "variant",
+   "workload_id"
+  ],
+  "registry_backend": true
+ },
+ "pitwall|set-provider-health": {
+  "argv": [
+   "set-provider-health",
+   "prov_demo_runpod_lb",
+   "healthy",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "provider",
+   "success"
+  ]
+ },
+ "pitwall|setup": {
+  "argv": [
+   "setup",
+   "--yes"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|status": {
+  "argv": [
+   "status",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "leases"
+  ]
+ },
+ "pitwall|stop": {
+  "argv": [
+   "stop",
+   "j36-route",
+   "--json"
+  ],
+  "database": false,
+  "exit": 1,
+  "stderr_contains": "refused: unknown_route j36-route"
+ },
+ "pitwall|terminate-pod": {
+  "argv": [
+   "terminate-pod",
+   "--pod-id",
+   "podj36",
+   "--no-verify",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error",
+   "warnings"
+  ]
+ },
+ "pitwall|usage": {
+  "argv": [
+   "usage",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "observed_at",
+   "plans"
+  ]
+ },
+ "pitwall|usage serve": {
+  "argv": [
+   "usage",
+   "serve",
+   "--host",
+   "127.0.0.1",
+   "--port",
+   "0"
+  ],
+  "database": false,
+  "daemon": true
+ },
+ "pitwall|volume-files": {
+  "argv": [
+   "volume-files"
+  ],
+  "database": false,
+  "exit": 2
+ },
+ "pitwall|volume-files delete": {
+  "argv": [
+   "volume-files",
+   "delete",
+   "j36vol",
+   "US-KS-2",
+   "a.txt",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 2,
+  "json_keys": [
+   "error"
+  ],
+  "stdout_contains": "volume_file_confirmation_required"
+ },
+ "pitwall|volume-files download": {
+  "argv": [
+   "volume-files",
+   "download",
+   "j36vol",
+   "US-KS-2",
+   "a.txt",
+   "a.txt",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|volume-files list": {
+  "argv": [
+   "volume-files",
+   "list",
+   "j36vol",
+   "US-KS-2",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|volume-files logs": {
+  "argv": [
+   "volume-files",
+   "logs",
+   "podj36",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|volume-files upload": {
+  "argv": [
+   "volume-files",
+   "upload",
+   "j36vol",
+   "US-KS-2",
+   "a.txt",
+   "upload.txt",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 1,
+  "json_keys": [
+   "error"
+  ]
+ },
+ "pitwall|warm-volume": {
+  "argv": [
+   "warm-volume",
+   "--model",
+   "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "--volume-id",
+   "j36vol",
+   "--dry-run",
+   "--json"
+  ],
+  "database": true,
+  "exit": 0,
+  "json_keys": [
+   "cache_state",
+   "capability",
+   "cost_estimate_usd",
+   "datacenter",
+   "dry_run",
+   "engine",
+   "gpu_class",
+   "gpu_count",
+   "lease_id",
+   "model_id",
+   "price_source",
+   "provider_id",
+   "seconds_to_ready",
+   "torn_down",
+   "variant",
+   "volume_id"
+  ]
+ },
+ "pitwall|agents setup pi": {
+  "argv": [
+   "agents",
+   "setup",
+   "pi",
+   "--dry-run"
+  ],
+  "database": false,
+  "exit": 0
+ },
+ "pitwall|gateway serve": {
+  "argv": [
+   "gateway",
+   "serve",
+   "--port",
+   "0"
+  ],
+  "database": false,
+  "exit": 1,
+  "stderr_contains": "PITWALL_GATEWAY_TOKEN"
+ },
+ "pitwall|workbench": {
+  "argv": [
+   "workbench"
+  ],
+  "database": false,
+  "exit": 2
+ }
+}

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/hermes",
+  "sources": [
+    {
+      "id": "hermes-cli",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:0029c08feb5bbec3a4328ad7dc33a0512a6e14c440f17559a8b0576a5beaaf6d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:0029c08feb5bbec3a4328ad7dc33a0512a6e14c440f17559a8b0576a5beaaf6d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hermes-configuration",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/configuration",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:3e92bb2d310b91f09bdea6b488b7af6db076ea1b42f9203e9d7f76b89b09ce15",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:3e92bb2d310b91f09bdea6b488b7af6db076ea1b42f9203e9d7f76b89b09ce15",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hermes-security",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/security",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:eae130ce063b91c4dae1bcb54dbd0baf4b6b53301a6bbad9ba24e4421e017253",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:eae130ce063b91c4dae1bcb54dbd0baf4b6b53301a6bbad9ba24e4421e017253",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "hermes-context-files",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/context-files",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:59f3ac601c0e0814b9459a43abf1b247789e7ba6f37e3cf38654c01e147b09be",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:59f3ac601c0e0814b9459a43abf1b247789e7ba6f37e3cf38654c01e147b09be",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://hermes-agent.nousresearch.com/docs/llms.txt; no change log page"
+    }
+  ],
+  "watch": []
+}

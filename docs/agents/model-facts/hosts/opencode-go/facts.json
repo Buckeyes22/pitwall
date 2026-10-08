@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "unit": "hosts/opencode-go",
+  "models": {
+    "grok-4.6": {
+      "status": "current",
+      "displayName": "Grok 4.6 on OpenCode Go",
+      "of": "families/grok#grok-4.6",
+      "facts": {}
+    },
+    "kimi-k3": {
+      "status": "current",
+      "displayName": "Kimi K3 on OpenCode Go",
+      "of": "families/kimi#kimi-k3",
+      "facts": {}
+    },
+    "qwen3.8-flash": {
+      "status": "current",
+      "displayName": "Qwen3.8 Flash on OpenCode Go",
+      "of": "families/qwen#qwen3.8-flash",
+      "facts": {}
+    },
+    "muse-spark-1.3-contributor": {
+      "status": "current",
+      "displayName": "Muse Spark 1.3 Contributor on OpenCode Go",
+      "of": "families/muse-spark#muse-spark-1.3",
+      "facts": {}
+    },
+    "longcat-2.0": {
+      "status": "current",
+      "displayName": "LongCat-2.0 on OpenCode Go",
+      "of": "families/longcat#longcat-2.0",
+      "facts": {}
+    },
+    "hy3": {
+      "status": "current",
+      "displayName": "Hy3 on OpenCode Go",
+      "of": "families/hy#hy3",
+      "facts": {}
+    },
+    "hy4-preview": {
+      "status": "current",
+      "displayName": "Hy4 preview on OpenCode Go",
+      "of": "families/hy#hy4-preview",
+      "facts": {}
+    },
+    "gpt-6-luna": {
+      "status": "current",
+      "displayName": "GPT 6 Luna on OpenCode Go",
+      "of": "families/codex#gpt-6-luna",
+      "facts": {}
+    },
+    "grok-4.7": {
+      "status": "current",
+      "displayName": "Grok 4.7 on OpenCode Go",
+      "of": "families/grok#grok-4.7",
+      "facts": {}
+    },
+    "deepseek-v4.1-flash": {
+      "status": "current",
+      "displayName": "DeepSeek V4.1 Flash on OpenCode Go",
+      "of": "families/deepseek#deepseek-v4.1-flash",
+      "facts": {}
+    },
+    "qwen3.8-max": {
+      "status": "current",
+      "displayName": "Qwen3.8 Max on OpenCode Go",
+      "of": "families/qwen#qwen3.8-max",
+      "facts": {}
+    },
+    "mimo-v2.6-pro": {
+      "status": "current",
+      "displayName": "MiMo-V2.6-Pro on OpenCode Go",
+      "of": "families/mimo#mimo-v2.6-pro",
+      "facts": {}
+    },
+    "mimo-v2.6-flash": {
+      "status": "current",
+      "displayName": "MiMo-V2.6-Flash on OpenCode Go",
+      "of": "families/mimo#mimo-v2.6-flash",
+      "facts": {}
+    },
+    "longcat-2.5-preview-free": {
+      "status": "current",
+      "displayName": "LongCat 2.5 Preview Free on OpenCode Go",
+      "of": "families/longcat#longcat-2.5-preview",
+      "facts": {}
+    }
+  },
+  "guidance": [
+    {
+      "id": "opencode-go-send-session-header",
+      "text": "Go routes and caches by session: identify the client with its own user agent and send a stable x-opencode-session per conversation, unless the client sends a native session header Go recognises.",
+      "applies": [
+        "*"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Where can I use it?",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-validated-clients",
+      "text": "Go names Hermes, Claude Code, Codex, ZCode, Pi, jcode, and Kilo Code CLI as working clients. Hermes, jcode, and Kilo Code CLI need a build with the session-header fix.",
+      "applies": [
+        "*"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Validated Clients",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-problematic-clients",
+      "text": "Go reports incomplete session support for DeepSeek Harness, GitHub Copilot Chat, Kimi Code, and MiMo Code, so cache reuse and routing through them may be weaker.",
+      "applies": [
+        "*"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Known Problematic Clients",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-limits-windows",
+      "text": "Go caps each model by dollar spend: 20% of its monthly limit per 5 hours and 50% per week. Costlier models such as Kimi K3, Grok 4.7, and Qwen3.8 Max run out fastest; batch work accordingly.",
+      "applies": [
+        "*"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Usage limits",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-kimi-k3-budget",
+      "text": "Kimi K3 has one of the smallest monthly allowances on Go, about 490 requests a month at typical usage on the base plan. Save it for work that needs it.",
+      "applies": [
+        "kimi-k3"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Estimated requests, Kimi K3 row",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-grok-zdr-batch",
+      "text": "On Go, zero data retention for Grok 4.7 and 4.6 disables the stateful Responses API, Files and Collections, and the Batch API. Do not plan on those through this route.",
+      "applies": [
+        "grok-4.7",
+        "grok-4.6"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Privacy, Grok 4.7/4.6 note",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-muse-trains-on-prompts",
+      "text": "The Muse Spark contributor route on Go is discounted because Meta may train on your prompts and completions, and it is limited to permitted regions. Send no private code through it.",
+      "applies": [
+        "muse-spark-1.3-contributor"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Privacy, Muse Spark 1.3 Contributor note",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-gpt-6-luna-price-step",
+      "text": "GPT 6 Luna prices step up for requests above 272K tokens (input $0.10 to $0.20, output $0.50 to $0.75 per 1M), so keep prompts under that size.",
+      "applies": [
+        "gpt-6-luna"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Usage limits, GPT 6 Luna rows",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-grok-4-7-price-step",
+      "text": "Grok 4.7 and 4.6 cost double per token once a request passes 200K tokens on Go, so keep prompts under that size.",
+      "applies": [
+        "grok-4.7",
+        "grok-4.6"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Usage limits, Grok 4.7 and Grok 4.6 rows",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-deepseek-v4-1-flash-peak-pricing",
+      "text": "DeepSeek V4.1 Flash costs double during peak hours on Go, 01:00-04:00 and 06:00-10:00 UTC on weekdays. Schedule bulk work off-peak.",
+      "applies": [
+        "deepseek-v4.1-flash"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Usage limits, DeepSeek peak-hours note",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-longcat-preview-free",
+      "text": "LongCat 2.5 Preview Free costs nothing on Go and has no usage cap, but only for a limited time. Do not build a standing route on it.",
+      "applies": [
+        "longcat-2.5-preview-free"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Usage limits, LongCat 2.5 Preview Free row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-go-qwen-max-budget",
+      "text": "Qwen3.8 Max has one of the smallest monthly allowances on Go, about 810 requests a month at typical usage on the base plan. Save it for work that needs it.",
+      "applies": [
+        "qwen3.8-max"
+      ],
+      "class": "host",
+      "source": "opencode-go-docs",
+      "locator": "Estimated requests, Qwen3.8 Max row",
+      "surfaces": [
+        "card"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}

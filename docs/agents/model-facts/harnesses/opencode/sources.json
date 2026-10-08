@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/opencode",
+  "sources": [
+    {
+      "id": "opencode-cli",
+      "url": "https://opencode.ai/docs/cli/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:9456fc0c4f499d89151f4098f51483f15936046cb9a20efd89aa1c0a362aed33",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:9456fc0c4f499d89151f4098f51483f15936046cb9a20efd89aa1c0a362aed33",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-agents",
+      "url": "https://opencode.ai/docs/agents/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:04fb1c59a324d7b4e8e83bd7e061cf1b0250fcc8e64bcd95269c1638ad9470e9",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:04fb1c59a324d7b4e8e83bd7e061cf1b0250fcc8e64bcd95269c1638ad9470e9",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-permissions",
+      "url": "https://opencode.ai/docs/permissions/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:de8bfcdb93a43d131de590adcb43955c71544c49c520b8a08298ae4d0d3a6d5d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:de8bfcdb93a43d131de590adcb43955c71544c49c520b8a08298ae4d0d3a6d5d",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-rules",
+      "url": "https://opencode.ai/docs/rules/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:7074c3c776a2511698b9fd69376203be5d181f766fef32dd7ab43319018ab49f",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:7074c3c776a2511698b9fd69376203be5d181f766fef32dd7ab43319018ab49f",
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "opencode-models",
+      "url": "https://opencode.ai/docs/models/",
+      "kind": "harness",
+      "pageType": "harness",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:5f5aac941178adc13e7c953bdc4914c437c9409086303b06c9086fb48865cc4d",
+      "observedAt": "2026-09-28",
+      "reviewedHash": "sha256:5f5aac941178adc13e7c953bdc4914c437c9409086303b06c9086fb48865cc4d",
+      "reviewedAt": "2026-09-28"
+    }
+  ],
+  "notPublished": [
+    {
+      "pageType": "changes",
+      "kind": "harness",
+      "searchedAt": "2026-09-28",
+      "searched": "https://opencode.ai/docs/ navigation; no change log page"
+    }
+  ],
+  "watch": []
+}

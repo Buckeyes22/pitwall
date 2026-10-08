@@ -1,0 +1,211 @@
+entries:
+  - model_id: "MiniMaxAI/MiniMax-Music3"
+    variant: "bf16"
+    engine: "sglang"
+    image: "unverified"
+    openai_chat: false
+    min_vram_gb: 24
+    context_assumed: 10240
+    container_disk_gb: 60
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA RTX 4090", gpu_count: 1, fit: "fits", evidence: "MiniMaxAI--MiniMax-Music3.md:40-46,69-77"}
+    confidence: "medium"
+    notes: "Audio endpoint /v1/audio/speech; 1800 s proposed initial cap (wiring--pod-to-model.md:127-129)."
+  - model_id: "MiniMaxAI/MiniMax-H3"
+    variant: "bf16"
+    engine: "vllm"
+    image: "vllm/vllm-omni:minimax-h3"
+    openai_chat: false
+    min_vram_gb: 202
+    context_assumed: unverified
+    container_disk_gb: 135
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA RTX 4090", gpu_count: 2, fit: "fits", evidence: "MiniMaxAI--MiniMax-H3.md:27-75,98-106"}
+    confidence: "medium"
+    notes: "Video endpoint /v1/videos; TP2/DLO profile, not chat; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "Qwen/Qwen3.8-27B"
+    variant: "fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:latest"
+    openai_chat: true
+    min_vram_gb: 80
+    context_assumed: 32768
+    container_disk_gb: 70
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA A100 80GB PCIe", gpu_count: 1, fit: "fits", evidence: "Qwen--Qwen3.8-27B.md:27-62,81-91"}
+    confidence: "medium"
+    notes: "FP8 recipe uses 0.85 utilization and FP8 KV; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "Qwen/Qwen3.8-27B"
+    variant: "gguf:UD-Q4_K_XL"
+    engine: "llama.cpp"
+    image: "ghcr.io/ggml-org/llama.cpp:server-cuda13"
+    openai_chat: true
+    min_vram_gb: 24
+    context_assumed: 131072
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA RTX 4090", gpu_count: 1, fit: "fits", evidence: "unsloth--Qwen3.8-27B-GGUF.md:34,122-140"}
+      - {gpu_class: "NVIDIA RTX 5000 Ada Generation", gpu_count: 1, fit: "unverified", evidence: "unsloth--Qwen3.8-27B-GGUF.md:44-45,122-140"}
+    confidence: "medium"
+    notes: "Direct 24-GB Q4_K_M-style evidence exists at 131072; larger files are weight-only; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "Qwen/Qwen3.8-Flash-Next"
+    variant: "fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:qwen38-flash-next"
+    openai_chat: true
+    min_vram_gb: 141
+    context_assumed: 262144
+    container_disk_gb: 220
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA H200", gpu_count: 8, fit: "fits", evidence: "Qwen--Qwen3.8-Flash-Next.md:27-65,81-95"}
+    confidence: "medium"
+    notes: "Documented TP8 expert-parallel launch; not single GPU; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "deepseek-ai/DeepSeek-V4-Flash-0731"
+    variant: "fp4+fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:v0.25.0"
+    openai_chat: true
+    min_vram_gb: unverified
+    context_assumed: unverified
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: unverified
+    gpu_options:
+      - {gpu_class: "NVIDIA H200", gpu_count: 1, fit: "unverified", evidence: "deepseek-ai--DeepSeek-V4-Flash-0731.md:18-29,60-77"}
+    confidence: "medium"
+    notes: "Dossier does not establish VRAM, TP, disk, context, or timeout."
+  - model_id: "deepseek-ai/DeepSeek-V4-Pro-0813"
+    variant: "fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:v0.25.0"
+    openai_chat: true
+    min_vram_gb: unverified
+    context_assumed: unverified
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: unverified
+    gpu_options:
+      - {gpu_class: "NVIDIA H200", gpu_count: 1, fit: "unverified", evidence: "deepseek-ai--DeepSeek-V4-Pro-0813.md:18-28,61-78"}
+    confidence: "medium"
+    notes: "Dossier does not establish VRAM, TP, disk, context, or timeout."
+  - model_id: "google/gemma-4-31B-it"
+    variant: "bf16"
+    engine: "vllm"
+    image: "vllm/vllm-openai:gemma4"
+    openai_chat: true
+    min_vram_gb: 80
+    context_assumed: 32768
+    container_disk_gb: 75
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA A100 80GB PCIe", gpu_count: 1, fit: "fits", evidence: "google--gemma-4-31B-it.md:18-62"}
+    confidence: "medium"
+    notes: "Native path; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "google/gemma-4-31B-it"
+    variant: "gguf:UD-Q5_K_XL"
+    engine: "llama.cpp"
+    image: "ghcr.io/ggml-org/llama.cpp:server-cuda"
+    openai_chat: true
+    min_vram_gb: 24
+    context_assumed: unverified
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA RTX 4090", gpu_count: 1, fit: "unverified", evidence: "unsloth--gemma-4-31B-it-GGUF.md:41-56; unsloth--GGUF-catalog.md:17,22-25"}
+    confidence: "medium"
+    notes: "Quant size is a 24-GB candidate only; runtime/KV context is unverified."
+  - model_id: "meta-models/Muse-Glimmer-30B"
+    variant: "bf16"
+    engine: "vllm"
+    image: "vllm/vllm-openai:muse-glimmer"
+    openai_chat: true
+    min_vram_gb: 80
+    context_assumed: 32768
+    container_disk_gb: 75
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA A100 80GB PCIe", gpu_count: 1, fit: "fits", evidence: "meta-models--Muse-Glimmer-30B.md:20-61"}
+    confidence: "medium"
+    notes: "Native path; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "meta-models/Muse-Glimmer-30B"
+    variant: "gguf:UD-Q5_K_XL"
+    engine: "llama.cpp"
+    image: "ghcr.io/ggml-org/llama.cpp:server-cuda"
+    openai_chat: true
+    min_vram_gb: 24
+    context_assumed: unverified
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA RTX 4090", gpu_count: 1, fit: "unverified", evidence: "unsloth--Muse-Glimmer-30B-GGUF.md:41-50; unsloth--GGUF-catalog.md:16,22-25"}
+    confidence: "medium"
+    notes: "Quant size is a 24-GB candidate only; runtime/KV context is unverified."
+  - model_id: "moonshotai/Kimi-K3"
+    variant: "fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:kimi-k3"
+    openai_chat: true
+    min_vram_gb: unverified
+    context_assumed: unverified
+    container_disk_gb: 1800
+    startup_timeout_s_suggested: unverified
+    gpu_options:
+      - {gpu_class: "NVIDIA B200", gpu_count: 16, fit: "unverified", evidence: "moonshotai--Kimi-K3.md:20-26,51-70,83-91"}
+    confidence: "medium"
+    notes: "Documented TP16 B200 topology; no numeric fit or timeout published."
+  - model_id: "ornith-ai/Ornith-1.5-35B-A3B-GGUF"
+    variant: "gguf:Q4_K_M"
+    engine: "llama.cpp"
+    image: "ghcr.io/ggml-org/llama.cpp:server-cuda"
+    openai_chat: true
+    min_vram_gb: 24
+    context_assumed: 32768
+    container_disk_gb: 30
+    startup_timeout_s_suggested: 1800
+    gpu_options:
+      - {gpu_class: "NVIDIA RTX A6000", gpu_count: 1, fit: "fits", evidence: "ornith-ai--Ornith-1.5-35B-A3B-GGUF.md:20-61,81-108"}
+      - {gpu_class: "NVIDIA RTX 4090", gpu_count: 1, fit: "tight", evidence: "ornith-ai--Ornith-1.5-35B-A3B-GGUF.md:57-61,81-108"}
+    confidence: "medium"
+    notes: "24 GB is nominal floor only; 48 GB is documented practical route; timeout proposal from wiring--pod-to-model.md:127-129."
+  - model_id: "zai-org/GLM-5.2"
+    variant: "fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:glm52"
+    openai_chat: true
+    min_vram_gb: 893
+    context_assumed: 131072
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: unverified
+    gpu_options:
+      - {gpu_class: "NVIDIA H200", gpu_count: 8, fit: "fits", evidence: "zai-org--GLM-5.2.md:22-43,65-75"}
+    confidence: "high"
+    notes: "TP8 H200 documented at 131072; no disk/timeout published."
+  - model_id: "zai-org/GLM-5.2"
+    variant: "nvfp4"
+    engine: "vllm"
+    image: "vllm/vllm-openai:glm52"
+    openai_chat: true
+    min_vram_gb: 558
+    context_assumed: unverified
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: unverified
+    gpu_options:
+      - {gpu_class: "NVIDIA B200", gpu_count: 8, fit: "unverified", evidence: "zai-org--GLM-5.2.md:23,72-75"}
+    confidence: "high"
+    notes: "Official minimum is multi-GPU but context-specific B200 placement is not published."
+  - model_id: "zai-org/GLM-5.3-Flash"
+    variant: "fp8"
+    engine: "vllm"
+    image: "vllm/vllm-openai:glm53-flash"
+    openai_chat: true
+    min_vram_gb: 386
+    context_assumed: 131072
+    container_disk_gb: unverified
+    startup_timeout_s_suggested: 3600
+    gpu_options:
+      - {gpu_class: "NVIDIA H200", gpu_count: 4, fit: "fits", evidence: "zai-org--GLM-5.3-Flash.md:20-42,64-74"}
+    confidence: "high"
+    notes: "Official 3600-s engine-ready setting; TP4 H200 documented at 131072."

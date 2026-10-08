@@ -1,0 +1,59 @@
+{
+ "updated": 1790576734,
+ "providers": [
+  {
+   "name": "claude",
+   "label": "Claude",
+   "tier": "Max 20x",
+   "s_pct": 42,
+   "s_reset_min": 120,
+   "w_pct": 24,
+   "w_reset_min": 5000,
+   "status": "ok",
+   "extra": {},
+   "s_rate": null,
+   "w_rate": null,
+   "s_eta_min": null,
+   "w_eta_min": null,
+   "s_hist": [
+    42
+   ]
+  },
+  {
+   "name": "codex",
+   "label": "Codex",
+   "tier": "Pro",
+   "s_pct": 35,
+   "s_reset_min": 120,
+   "w_pct": 10,
+   "w_reset_min": 5000,
+   "status": "ok",
+   "extra": {},
+   "s_rate": null,
+   "w_rate": null,
+   "s_eta_min": null,
+   "w_eta_min": null,
+   "s_hist": [
+    35
+   ]
+  },
+  {
+   "name": "glm",
+   "label": "GLM",
+   "tier": "Coding Plan",
+   "s_pct": 21,
+   "s_reset_min": 120,
+   "w_pct": 42,
+   "w_reset_min": 5000,
+   "status": "ok",
+   "extra": {},
+   "s_rate": null,
+   "w_rate": null,
+   "s_eta_min": null,
+   "w_eta_min": null,
+   "s_hist": [
+    21
+   ]
+  }
+ ]
+}

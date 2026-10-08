@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "unit": "harnesses/muse",
+  "facts": {
+    "headlessFlag": {
+      "value": "muse exec <prompt> (or --prompt-file <path>)",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-extending",
+          "locator": "Headless and CI, code block"
+        }
+      ]
+    },
+    "outputFormats": {
+      "value": [
+        "plain",
+        "jsonl"
+      ],
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-extending",
+          "locator": "Headless and CI, --json line"
+        }
+      ]
+    },
+    "effortFlag": {
+      "value": "--reasoning-effort <level>",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-configuration",
+          "locator": "Set reasoning effort"
+        }
+      ]
+    },
+    "permissionDefault": {
+      "value": "Auto-review profile: same access as Ask me, with an automated judge clearing eligible approvals; approval mode on-request",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-permissions",
+          "locator": "Permission profiles"
+        }
+      ]
+    },
+    "sandboxDefault": {
+      "value": "on: OS sandbox (Seatbelt, bubblewrap, Windows sandbox) with workspace and temp writes only; network proxy-only, per-destination approval",
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-permissions",
+          "locator": "Run inside the sandbox"
+        }
+      ]
+    },
+    "instructionFiles": {
+      "value": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".agents/AGENTS.md",
+        ".claude/CLAUDE.md"
+      ],
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-configuration",
+          "locator": "Project instructions with AGENTS.md"
+        }
+      ]
+    },
+    "subagents": {
+      "value": true,
+      "method": "reviewed",
+      "evidence": [
+        {
+          "source": "muse-code-extending",
+          "locator": "Subagents and multi-agent"
+        }
+      ]
+    }
+  },
+  "guidance": [
+    {
+      "id": "muse-headless-unattended",
+      "text": "A headless muse exec run cannot answer approval prompts. Choose --disable-approval (sandbox stays on) or --yolo (no guardrails, isolated container only) before it starts.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-extending",
+      "locator": "Headless and CI, Control approvals for automation",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-exec-exit-code",
+      "text": "The muse exec exit code reports how the run ended, not whether the work is right: 0 means the turn finished. Gate on your own test command.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-extending",
+      "locator": "Headless and CI, exit code paragraph",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-sandbox-needs-bubblewrap",
+      "text": "On Linux the sandbox needs a working bubblewrap and a non-musl build; without it every shell command fails as an environment error. It also keeps .git, .muse, and .agents read-only.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-permissions",
+      "locator": "Run inside the sandbox",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-disable-sandbox-widens",
+      "text": "--disable-sandbox also lets the file tools write anywhere and forces full network egress, overriding --sandbox-network. Prefer --disable-approval when only prompts are the problem.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-permissions",
+      "locator": "Run without guardrails",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-trust-gates-project-rules",
+      "text": "Project AGENTS.md, rules, skills, and hooks load only in a trusted workspace; --trust-workspace or --yolo grants that. Committed project memory loads even when untrusted.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-configuration",
+      "locator": "Project instructions with AGENTS.md; Memory loads in untrusted workspaces",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-ultra-effort-delegates",
+      "text": "The ultra effort level is a client-side setting that can make Muse Code delegate more aggressively and defaults the agent tree to 64 slots; unsupported providers run it at xhigh.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-configuration",
+      "locator": "Set reasoning effort, Premium reasoning tiers note",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "muse-settings-schema-version",
+      "text": "A ~/.config/muse/settings.json without \"schema_version\": 1 fails every command at startup; a missing file is fine.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "muse-code-configuration",
+      "locator": "The settings file, IMPORTANT note",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-09-28"
+    }
+  ]
+}
