@@ -3,26 +3,21 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
 import asyncpg
 import pytest
 
 from pitwall.db import _register_codecs
-from pitwall.migrations import discover_migrations
+from tests.db.schema_catalog import Catalog
 
-_ROOT = Path(__file__).resolve().parents[2]
-_MIGRATION = _ROOT / "db/migrations/0034_capabilities_zero_cost_mode.sql"
+pytestmark = pytest.mark.integration
 _PG_URL = os.getenv("PITWALL_TEST_DATABASE_URL", "")
 
 
-def test_0034_widens_the_cost_mode_check() -> None:
-    records = discover_migrations(_ROOT / "db/migrations")
-    assert "0034_capabilities_zero_cost_mode" in [record.version for record in records]
-    sql = _MIGRATION.read_text(encoding="utf-8")
-    assert "capabilities_cost_mode_check" in sql
-    assert "'zero'" in sql
-    assert "'per_second'" in sql and "'per_request'" in sql and "'per_token'" in sql
+async def test_0034_widens_the_cost_mode_check(db_catalog: Catalog) -> None:
+    check = await db_catalog.constraint("capabilities", "capabilities_cost_mode_check")
+
+    assert set(check.literals) == {"per_second", "per_request", "per_token", "zero"}
 
 
 @pytest.mark.asyncio

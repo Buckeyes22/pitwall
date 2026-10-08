@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import asyncio
 import os
 import shutil
@@ -16,6 +17,7 @@ import asyncpg
 import pytest
 
 from tests import _hermetic_env
+from tests.hang_guard import HANG_GUARD_SECS
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -92,7 +94,7 @@ def test_every_db_module_is_integration_marked() -> None:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=180,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     collected = [line for line in result.stdout.splitlines() if "::" in line]
@@ -103,6 +105,74 @@ def test_every_db_module_is_integration_marked() -> None:
         or any(line.startswith(test_id) for test_id in _DB_TEST_IDS)
     ]
     assert leaked == []
+
+
+# Fixtures that hand a test a live Postgres: the integration lane's per-test schema pool and the
+# migrated-schema fixtures in tests/db/conftest.py.
+_DB_FIXTURES = frozenset({"pg_pool", "migrated_schema", "db_catalog", "db_sandbox"})
+
+
+def _integration_marked(decorators: list[ast.expr]) -> bool:
+    return any("mark.integration" in ast.unparse(decorator) for decorator in decorators)
+
+
+def _module_integration_marked(tree: ast.Module) -> bool:
+    return any(
+        isinstance(node, ast.Assign)
+        and any(
+            isinstance(target, ast.Name) and target.id == "pytestmark" for target in node.targets
+        )
+        and "mark.integration" in ast.unparse(node.value)
+        for node in tree.body
+    )
+
+
+def _requests_db_fixture(node: ast.AST) -> bool:
+    return isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef) and any(
+        argument.arg in _DB_FIXTURES for argument in node.args.args + node.args.kwonlyargs
+    )
+
+
+def _unmarked_tests(body: list[ast.stmt], inherited: bool) -> list[str]:
+    unmarked: list[str] = []
+    for node in body:
+        if isinstance(node, ast.ClassDef):
+            class_marked = (
+                inherited
+                or _integration_marked(node.decorator_list)
+                or any(
+                    isinstance(item, ast.Assign) and "mark.integration" in ast.unparse(item.value)
+                    for item in node.body
+                )
+            )
+            unmarked += [f"{node.name}.{name}" for name in _unmarked_tests(node.body, class_marked)]
+        elif (
+            isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef)
+            and node.name.startswith("test")
+            and not (inherited or _integration_marked(node.decorator_list))
+        ):
+            unmarked.append(node.name)
+    return unmarked
+
+
+def test_every_module_using_a_database_fixture_is_integration_marked() -> None:
+    """A module that takes a live-database fixture is marked ``integration`` (module-level
+    ``pytestmark``), or else each of its tests carries the marker itself."""
+    offenders: list[str] = []
+    for path in sorted((_REPO_ROOT / "tests").rglob("*.py")):
+        if path.name == "conftest.py":
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        if not any(_requests_db_fixture(node) for node in ast.walk(tree)):
+            continue
+        offenders += [
+            f"{path.relative_to(_REPO_ROOT)}::{name}"
+            for name in _unmarked_tests(tree.body, _module_integration_marked(tree))
+        ]
+    assert offenders == [], (
+        "tests in modules that use a live-database fixture must be integration-marked "
+        f"(add `pytestmark = pytest.mark.integration`): {offenders}"
+    )
 
 
 def test_hermetic_placeholder_is_unreachable() -> None:
@@ -122,24 +192,37 @@ def test_marker_checks_ignore_a_checkout_directory_named_like_a_marker(tmp_path:
     shutil.copytree(
         _REPO_ROOT / "tests", checkout / "tests", ignore=shutil.ignore_patterns("__pycache__")
     )
-    result = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "pytest",
-            "--collect-only",
-            "-q",
-            "-p",
-            "no:randomly",
-            "-m",
-            "not integration",
-            "tests/db/test_repository.py",
-        ],
-        cwd=checkout,
-        capture_output=True,
-        text=True,
-        timeout=180,
-        check=False,
-    )
-    assert "deselected" in result.stdout, result.stdout[-2000:]
-    assert not [line for line in result.stdout.splitlines() if "::" in line]
+
+    def collect(marker_expression: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "--collect-only",
+                "-q",
+                "-p",
+                "no:randomly",
+                "-m",
+                marker_expression,
+                "tests/db/test_repository.py",
+            ],
+            cwd=checkout,
+            capture_output=True,
+            text=True,
+            timeout=HANG_GUARD_SECS,
+            check=False,
+        )
+
+    def collected(result: subprocess.CompletedProcess[str]) -> list[str]:
+        return [line for line in result.stdout.splitlines() if "::" in line]
+
+    # Exit 0 (something collected) or 5 (everything deselected) are the only clean outcomes; 2 or
+    # 4 would be a collection error, which must not read as "nothing leaked".
+    fast = collect("not integration")
+    assert fast.returncode in (0, 5), fast.stdout[-2000:] + fast.stderr[-2000:]
+    assert collected(fast) == []
+    # The module's tests are really there, and selected by the integration marker alone.
+    integration = collect("integration")
+    assert integration.returncode == 0, integration.stdout[-2000:] + integration.stderr[-2000:]
+    assert collected(integration)

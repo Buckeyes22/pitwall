@@ -7,7 +7,6 @@ import os
 import tempfile
 import threading
 import unittest
-from contextlib import suppress
 from pathlib import Path
 
 from pitwall.agents.mailbox import (
@@ -18,6 +17,7 @@ from pitwall.agents.mailbox import (
     MailboxOpenAskError,
     derive_deadline_s,
 )
+from tests.agents.mailbox_probe import OpenAskContention
 from tests.hang_guard import HANG_GUARD_SECS
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -187,10 +187,10 @@ class MailboxAtomicityTests(unittest.TestCase):
     def test_concurrent_asks_respect_max_open(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "runs" / DISPATCH
-            # Both writers read the pending asks, then meet at the barrier. Without a lock
-            # both pass the check; with one the second writer never reaches the barrier,
-            # so the timeout (not a hang) releases the first.
-            barrier = threading.Barrier(2)
+            # Each writer holds its open-ask lookup until both have asked for the open-ask lock.
+            # Without the lock both pass the check and both write; with it the second writer queues
+            # behind the first, finds its ask open, and is refused.
+            contention = OpenAskContention()
             outcomes: list[str] = []
 
             def write(index: int) -> None:
@@ -199,8 +199,7 @@ class MailboxAtomicityTests(unittest.TestCase):
 
                 def synchronized_pending() -> list[dict[str, object]]:
                     asks = original()
-                    with suppress(threading.BrokenBarrierError):
-                        barrier.wait(timeout=1.0)
+                    contention.hold()
                     return asks
 
                 box.pending_asks = synchronized_pending  # type: ignore[method-assign]  # reason: the test widens the check-then-write window
@@ -211,10 +210,11 @@ class MailboxAtomicityTests(unittest.TestCase):
                     outcomes.append("refused")
 
             threads = [threading.Thread(target=write, args=(i,)) for i in range(2)]
-            for thread in threads:
-                thread.start()
-            for thread in threads:
-                thread.join(timeout=HANG_GUARD_SECS)
+            with contention.installed():
+                for thread in threads:
+                    thread.start()
+                for thread in threads:
+                    thread.join(timeout=HANG_GUARD_SECS)
             self.assertEqual(["refused", "written"], sorted(outcomes))
             self.assertEqual(1, len(Mailbox(root, DISPATCH).pending_asks()))
 

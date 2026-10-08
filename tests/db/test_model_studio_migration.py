@@ -5,7 +5,6 @@ from __future__ import annotations
 import datetime as dt
 import os
 from decimal import Decimal
-from pathlib import Path
 
 import asyncpg
 import pytest
@@ -13,30 +12,21 @@ import pytest
 from pitwall.core.enums import ProviderAdapterId, ProviderType
 from pitwall.db import _register_codecs
 from pitwall.db.quota_repository import QuotaRepository
-from pitwall.migrations import discover_migrations
+from tests.db.schema_catalog import Catalog
 
-_ROOT = Path(__file__).resolve().parents[2]
-_MIGRATION = _ROOT / "db/migrations/0035_model_studio.sql"
+pytestmark = pytest.mark.integration
 _PG_URL = os.getenv("PITWALL_TEST_DATABASE_URL", "")
 
 
-def test_0035_is_the_latest_migration_and_widens_every_check() -> None:
-    records = discover_migrations(_ROOT / "db/migrations")
-    assert "0035_model_studio" in {record.version for record in records}
-    sql = _MIGRATION.read_text(encoding="utf-8")
-    for constraint in (
-        "providers_provider_type_check",
-        "providers_adapter_id_check",
-        "provider_quotas_free_type_check",
-    ):
-        assert constraint in sql
-    assert sql.count("'model_studio'") == 2
-    assert "'subscription-credits'" in sql and "'pay-as-you-go'" in sql
+async def test_0035_widens_every_check_and_the_enums_match(db_catalog: Catalog) -> None:
+    providers = await db_catalog.constraints("providers")
+    quotas = await db_catalog.constraints("provider_quotas")
 
-
-def test_enums_match_the_migration() -> None:
-    assert ProviderType.MODEL_STUDIO.value == "model_studio"
-    assert ProviderAdapterId.MODEL_STUDIO.value == "model_studio"
+    assert ProviderType.MODEL_STUDIO.value in providers["providers_provider_type_check"].literals
+    assert ProviderAdapterId.MODEL_STUDIO.value in providers["providers_adapter_id_check"].literals
+    assert {"subscription-credits", "pay-as-you-go"} <= set(
+        quotas["provider_quotas_free_type_check"].literals
+    )
 
 
 @pytest.mark.asyncio

@@ -16,9 +16,7 @@ def _deprecated_command() -> str:
 
 
 def test_guard_passes_current_worker_owned_paths() -> None:
-    repo_root = Path.cwd()
-
-    assert deprecated_hf_cli.main(["--root", str(repo_root)]) == 0
+    assert deprecated_hf_cli.main(["--root", str(_REPO_ROOT)]) == 0
 
 
 def test_guard_fails_on_deprecated_cli_in_worker_owned_path(

@@ -751,10 +751,11 @@ class ShimContractTests(unittest.TestCase):
             self.assertEqual(0, process.returncode, stderr.decode(errors="replace"))
             self.assertTrue(stdout.endswith(b"SHIM-DONE exit=0\n"))
         raw_lines = sandbox.ledger.read_text(encoding="utf-8").splitlines()
-        self.assertEqual(16, len(raw_lines))
+        # One started and one finished line per dispatch, none torn or interleaved.
+        self.assertEqual(2 * len(processes), len(raw_lines))
         records = [json.loads(line) for line in raw_lines]
-        self.assertEqual(8, sum(record["event"] == "started" for record in records))
-        self.assertEqual(8, sum(record["event"] == "finished" for record in records))
+        self.assertEqual(len(processes), sum(record["event"] == "started" for record in records))
+        self.assertEqual(len(processes), sum(record["event"] == "finished" for record in records))
 
 
 GLIMMER_ROUTES = {

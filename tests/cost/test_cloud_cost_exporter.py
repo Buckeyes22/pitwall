@@ -17,15 +17,19 @@ from pitwall.cost.exporter import (
     workload_queue_depth,
 )
 
+ROOT = Path(__file__).resolve().parents[2]
+ALERTS = ROOT / "config" / "prometheus" / "pitwall-cloud-alerts.yml"
+EXPORTER_SOURCE = ROOT / "src" / "pitwall" / "cost" / "exporter.py"
+
 
 def test_alerts_yaml_parses_and_has_three_budget_tiers() -> None:
-    body = yaml.safe_load(Path("config/prometheus/pitwall-cloud-alerts.yml").read_text())
+    body = yaml.safe_load(ALERTS.read_text())
     names = {rule["alert"] for rule in body["groups"][0]["rules"]}
     assert {"PitwallCloudBudget50", "PitwallCloudBudget75", "PitwallCloudBudget90"}.issubset(names)
 
 
 def test_alerts_cover_operational_failure_signals() -> None:
-    body = yaml.safe_load(Path("config/prometheus/pitwall-cloud-alerts.yml").read_text())
+    body = yaml.safe_load(ALERTS.read_text())
     names = {rule["alert"] for rule in body["groups"][0]["rules"]}
     assert {
         "PitwallWorkloadQueueBacklog",
@@ -37,7 +41,7 @@ def test_alerts_cover_operational_failure_signals() -> None:
 
 
 def test_alerts_severity_mapping() -> None:
-    body = yaml.safe_load(Path("config/prometheus/pitwall-cloud-alerts.yml").read_text())
+    body = yaml.safe_load(ALERTS.read_text())
     severity = {rule["alert"]: rule["labels"]["severity"] for rule in body["groups"][0]["rules"]}
     assert severity["PitwallCloudBudget50"] == "info"
     assert severity["PitwallCloudBudget75"] == "warning"
@@ -45,7 +49,7 @@ def test_alerts_severity_mapping() -> None:
 
 
 def test_exporter_metric_names_in_app_source() -> None:
-    src = Path("src/pitwall/cost/exporter.py").read_text()
+    src = EXPORTER_SOURCE.read_text()
     for metric in (
         "pitwall_cloud_spend_month_usd",
         "pitwall_cloud_budget_pct",
@@ -64,12 +68,12 @@ def test_exporter_metric_names_in_app_source() -> None:
 
 
 def test_metric_labels_documented() -> None:
-    src = Path("src/pitwall/cost/exporter.py").read_text()
+    src = EXPORTER_SOURCE.read_text()
     assert '"provider"' in src
 
 
 def test_no_tailscale_joins_in_exporter_query() -> None:
-    src = Path("src/pitwall/cost/exporter.py").read_text()
+    src = EXPORTER_SOURCE.read_text()
     assert "JOIN" not in src or "tailscale" not in src.upper()
 
 

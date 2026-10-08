@@ -21,6 +21,8 @@ import asyncpg
 import httpx
 import pytest
 
+pytestmark = pytest.mark.integration
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 

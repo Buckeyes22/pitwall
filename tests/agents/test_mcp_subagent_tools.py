@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
 import json
 import os
 import tempfile
@@ -10,6 +9,7 @@ import threading
 import time
 import unittest
 from pathlib import Path
+from typing import Any
 from unittest import mock
 
 from pitwall.agents import (
@@ -23,6 +23,7 @@ from pitwall.agents.channel import (
 from pitwall.agents.run_store import (
     RunStore,
 )
+from tests.agents.mailbox_probe import OpenAskContention
 from tests.agents.mcp_test_client import (
     McpTestClient,
 )
@@ -117,17 +118,29 @@ class SubagentToolTests(unittest.TestCase):
         from pitwall.agents.mailbox import Mailbox
 
         tools = mcp_tools.SubagentTools(self.env)
-        barrier = threading.Barrier(2)
-        seen = threading.local()
+        # The open-ask lookup and the write share one lock. Hold the first caller inside that lock
+        # (in its lookup) until the second has asked for the same lock: only a lock that really
+        # covers lookup and write then lands both callers on one ask. A handshake, not a timer.
         original = Mailbox.pending_asks
+        original_write = Mailbox.write_ask
+        contention = OpenAskContention()
+        written = threading.Semaphore(0)
+        seen = threading.local()
 
         def widened(box: Mailbox) -> list[dict]:
             asks = original(box)
-            if not getattr(seen, "waited", False):
-                seen.waited = True  # only each caller's first check meets the other caller
-                with contextlib.suppress(threading.BrokenBarrierError):
-                    barrier.wait(timeout=1.0)
+            if threading.current_thread().name.startswith("ask-caller") and not getattr(
+                seen, "waited", False
+            ):
+                seen.waited = True  # only each caller's first lookup is held
+                contention.hold()
             return asks
+
+        def counted(box: Mailbox, **kwargs: Any) -> dict:
+            try:
+                return original_write(box, **kwargs)
+            finally:
+                written.release()
 
         outcomes: list[object] = []
 
@@ -137,12 +150,20 @@ class SubagentToolTests(unittest.TestCase):
             except Exception as exc:  # noqa: BLE001  # reason: collected, then asserted
                 outcomes.append(exc)
 
-        with mock.patch.object(Mailbox, "pending_asks", widened):
-            threads = [threading.Thread(target=call) for _ in range(2)]
+        with (
+            mock.patch.object(Mailbox, "pending_asks", widened),
+            mock.patch.object(Mailbox, "write_ask", counted),
+            contention.installed(),
+        ):
+            threads = [
+                threading.Thread(target=call, name=f"ask-caller-{index}") for index in range(2)
+            ]
             for thread in threads:
                 thread.start()
             self._wait_for(self.store.path / "mailbox" / "asks" / "0001.json")
-            time.sleep(1.5)  # let the second caller finish its lookup before the answer lands
+            # The answer may land only after both callers have finished their ask lookup.
+            for _ in threads:
+                self.assertTrue(written.acquire(timeout=HANG_GUARD_SECS), "a caller never wrote")
             answer_ask(
                 self.operator_env,
                 DISPATCH_ID,
@@ -154,6 +175,7 @@ class SubagentToolTests(unittest.TestCase):
             )
             for thread in threads:
                 thread.join(HANG_GUARD_SECS)
+        self.assertTrue(contention.contended.is_set(), "the callers never contended for the lock")
         self.assertEqual(
             ["0001", "0001"],
             [o["ask_id"] if isinstance(o, dict) else repr(o) for o in outcomes],
@@ -200,8 +222,32 @@ class SubagentToolTests(unittest.TestCase):
         other = self.client.call("ask_orchestrator", _ask_args(question="Something else?"))
         self.assertTrue(other["result"]["isError"])
         self.assertIn("ask 0001 is still open", other["result"]["content"][0]["text"])
-        again, again_box = self._call_in_background(_ask_args())
-        time.sleep(0.3)
+        # The retry runs in this process so the test can see it land on the open ask: the answer
+        # must not be written before that, or the retry would open a second ask instead.
+        from pitwall.agents.mailbox import Mailbox
+
+        original_write = Mailbox.write_ask
+        reentered = threading.Event()
+        again_box: dict = {}
+
+        def noting(box: Mailbox, **kwargs: Any) -> dict:
+            try:
+                return original_write(box, **kwargs)
+            finally:
+                if threading.current_thread().name == "ask-retry":
+                    reentered.set()
+
+        def retry() -> None:
+            again_box.update(
+                mcp_tools.SubagentTools(self.env).ask(
+                    _ask_args(), threading.Event(), lambda _m: None
+                )
+            )
+
+        again = threading.Thread(target=retry, name="ask-retry")
+        with mock.patch.object(Mailbox, "write_ask", noting):
+            again.start()
+            self.assertTrue(reentered.wait(HANG_GUARD_SECS), "the retry never reached the mailbox")
         answer_ask(
             self.operator_env,
             DISPATCH_ID,
@@ -214,7 +260,7 @@ class SubagentToolTests(unittest.TestCase):
         first.join(HANG_GUARD_SECS)
         again.join(HANG_GUARD_SECS)
         self.assertEqual("b", first_box["result"]["structuredContent"]["choice"])
-        self.assertEqual("b", again_box["result"]["structuredContent"]["choice"])
+        self.assertEqual(("0001", "b"), (again_box["ask_id"], again_box["choice"]))
         self.assertEqual(1, len(self.store.mailbox().asks()))
 
     def test_cap_and_disabled_channel_are_refusals(self) -> None:

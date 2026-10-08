@@ -1,17 +1,22 @@
-from pathlib import Path
+"""Migration 0033: gateway providers are allowed and the quota tables exist."""
 
-from pitwall.migrations import discover_migrations
+from __future__ import annotations
 
-_ROOT = Path(__file__).resolve().parents[2]
-_MIGRATION = _ROOT / "db/migrations/0033_gateway_quotas.sql"
+import pytest
+
+from tests.db.schema_catalog import Catalog
+
+pytestmark = pytest.mark.integration
 
 
-def test_0033_widens_both_provider_checks() -> None:
-    records = discover_migrations(_ROOT / "db/migrations")
-    assert "0033_gateway_quotas" in {rec.version for rec in records}
-    sql = _MIGRATION.read_text(encoding="utf-8")
-    assert "providers_adapter_id_check" in sql
-    assert "'openai_gateway'" in sql
-    assert "CREATE TABLE pitwall.provider_quotas" in sql
-    assert "CREATE TABLE pitwall.provider_quota_samples" in sql
-    assert "CREATE TABLE pitwall.model_id_map" in sql
+async def test_0033_widens_the_adapter_check_and_adds_the_quota_tables(db_catalog: Catalog) -> None:
+    adapter = await db_catalog.constraint("providers", "providers_adapter_id_check")
+    provider_type = await db_catalog.constraint("providers", "providers_provider_type_check")
+
+    assert "openai_gateway" in adapter.literals
+    assert "openai_gateway" in provider_type.literals
+    assert {
+        "provider_quotas",
+        "provider_quota_samples",
+        "model_id_map",
+    } <= await db_catalog.tables()

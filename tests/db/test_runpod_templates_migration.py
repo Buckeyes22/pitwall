@@ -8,6 +8,8 @@ from urllib.parse import urlparse
 
 import pytest
 
+pytestmark = pytest.mark.integration
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"

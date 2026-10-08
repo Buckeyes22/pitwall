@@ -12,8 +12,7 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def test_guard_passes_current_worker_owned_paths() -> None:
-    repo_root = Path.cwd()
-    assert dep_pin_checker.main(["--root", str(repo_root)]) == 0
+    assert dep_pin_checker.main(["--root", str(_REPO_ROOT)]) == 0
 
 
 def test_guard_fails_on_unpinned_torch_in_worker_dockerfile(

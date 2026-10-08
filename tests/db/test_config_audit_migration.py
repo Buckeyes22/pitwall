@@ -8,25 +8,31 @@ from urllib.parse import urlparse
 
 import pytest
 
+from tests.db.schema_catalog import Catalog
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
 
 
-def test_config_audit_migration_matches_spec_columns() -> None:
-    sql = (_MIGRATION_DIR / "0007_config_audit.sql").read_text()
+pytestmark = pytest.mark.integration
 
-    assert "CREATE TABLE pitwall.config_audit" in sql
-    assert "actor                    TEXT NOT NULL" in sql
-    assert "action                   TEXT NOT NULL" in sql
-    assert "entity_type              TEXT NOT NULL" in sql
-    assert "entity_id                TEXT NOT NULL" in sql
-    assert "old_value                JSONB" in sql
-    assert "new_value                JSONB" in sql
-    assert "change_reason            TEXT" in sql
-    assert "created_at               TIMESTAMPTZ DEFAULT now()" in sql
-    assert "idx_audit_entity" in sql
-    assert "ON pitwall.config_audit(entity_type, entity_id, created_at DESC)" in sql
+
+async def test_config_audit_table_matches_spec(db_catalog: Catalog) -> None:
+    await db_catalog.expect_columns(
+        "config_audit",
+        actor="text not null",
+        action="text not null",
+        entity_type="text not null",
+        entity_id="text not null",
+        old_value="jsonb",
+        new_value="jsonb",
+        change_reason="text",
+        created_at="timestamptz default now()",
+    )
+    index = await db_catalog.index("config_audit", "idx_audit_entity")
+    assert index.columns == ("entity_type", "entity_id", "created_at")
+    assert index.descending == (False, False, True)
 
 
 def test_config_audit_insert_requirements_and_index() -> None:

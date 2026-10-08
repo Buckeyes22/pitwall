@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import socket
@@ -29,35 +30,45 @@ ROOT = Path(__file__).resolve().parents[2]
 DISPATCH_ID = "00000000-0000-4000-8000-0000000000c7"
 
 
+def _free_port() -> int:
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        return int(listener.getsockname()[1])
+
+
 def _start_receiver(env: dict[str, str]) -> tuple[str, subprocess.Popen[str]]:
-    """Start a real receiver and return its base URL and process (so a test can SIGKILL it)."""
-    listener = socket.socket()
-    listener.bind(("127.0.0.1", 0))
-    port = listener.getsockname()[1]
-    listener.close()
-    process = subprocess.Popen(
-        [
-            str(PITWALL),
-            "agents",
-            "broker",
-            "receiver",
-            "--port",
-            str(port),
-        ],
-        env=env,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
+    """Start a real receiver and return its base URL and process (so a test can SIGKILL it).
+
+    A free port is only free until something else takes it: under parallel load another test's
+    server (or a just-killed receiver's lingering socket) can own it by the time the receiver
+    binds. A receiver that failed to bind exits, so health only counts while *our* process is
+    still alive, and a port that was taken is retried with a fresh one.
+    """
     opener = request.build_opener(request.ProxyHandler({}))
     deadline = time.monotonic() + HANG_GUARD_SECS
     while time.monotonic() < deadline:
-        try:
-            with opener.open(f"http://127.0.0.1:{port}/health", timeout=0.5):
+        port = _free_port()
+        process = subprocess.Popen(
+            [str(PITWALL), "agents", "broker", "receiver", "--port", str(port)],
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        while time.monotonic() < deadline and process.poll() is None:
+            try:
+                with opener.open(f"http://127.0.0.1:{port}/health", timeout=0.5):
+                    pass
+            except OSError, http.client.HTTPException:  # not listening yet, or not ours
+                time.sleep(0.05)
+                continue
+            if process.poll() is None:
                 return f"http://127.0.0.1:{port}", process
-        except error.URLError, TimeoutError:
-            time.sleep(0.05)
-    process.kill()
+        if process.poll() is None:
+            process.kill()
+        process.wait(timeout=HANG_GUARD_SECS)
+        if process.stderr is not None:
+            process.stderr.close()
     raise AssertionError("receiver did not become healthy")
 
 

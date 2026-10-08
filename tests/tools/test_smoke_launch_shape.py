@@ -25,6 +25,8 @@ from tools.engines.smoke_launch_shape import (
     verify_llama_http,
 )
 
+MODELS_DIR = Path(__file__).resolve().parents[2] / "docs" / "models"
+
 
 def test_build_catalogue_cases_calls_launch_shape_for_every_variant(
     monkeypatch: pytest.MonkeyPatch,
@@ -51,7 +53,7 @@ def test_build_catalogue_cases_calls_launch_shape_for_every_variant(
         "tools.engines.smoke_launch_shape.launch_shape",
         fake_launch_shape,
     )
-    catalogue = load_catalogue(Path("docs/models"))
+    catalogue = load_catalogue(MODELS_DIR)
 
     cases = build_catalogue_cases(catalogue)
 
@@ -62,7 +64,7 @@ def test_build_catalogue_cases_calls_launch_shape_for_every_variant(
 
 
 def test_minimax_omni_omits_task_type_rejected_by_pinned_image() -> None:
-    cases = build_catalogue_cases(load_catalogue(Path("docs/models")))
+    cases = build_catalogue_cases(load_catalogue(MODELS_DIR))
     case = next(item for item in cases if item.model_id == "MiniMaxAI/MiniMax-H3")
 
     assert "--omni" in case.argv
@@ -70,7 +72,7 @@ def test_minimax_omni_omits_task_type_rejected_by_pinned_image() -> None:
 
 
 def test_parse_cases_include_every_shipped_variant_and_sglang() -> None:
-    catalogue = load_catalogue(Path("docs/models"))
+    catalogue = load_catalogue(MODELS_DIR)
     cases = build_parse_cases(catalogue)
 
     shipped = {
