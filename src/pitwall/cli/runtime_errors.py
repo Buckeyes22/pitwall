@@ -11,7 +11,6 @@ human reason follows the code (``code: reason``).
 
 from __future__ import annotations
 
-import asyncio
 import errno
 import os
 import socket
@@ -70,42 +69,38 @@ def _is_unwritable(exc: BaseException) -> bool:
     )
 
 
+def _class_names(exc: BaseException) -> set[str]:
+    return {cls.__name__ for cls in type(exc).__mro__}
+
+
 def runtime_reason(exc: BaseException) -> str | None:
-    """The one-line fix for *exc*, or None when it is not a known runtime condition."""
+    """The one-line fix for *exc*, or None when it is not a known runtime condition.
+
+    Classes are recognised by name so this module imports neither the database layer nor its
+    driver: a CLI module must not depend on either.
+    """
     for item in _chain(exc):
         if _is_unwritable(item):
             assert isinstance(item, OSError)
             return f"cannot write {item.filename}: {item.strerror}. {_UNWRITABLE_HINT}"
-
-    from pitwall.cost.budget_gate import BudgetNotConfigured
-    from pitwall.db import DatabaseNotConfiguredError
-
     for item in _chain(exc):
-        if isinstance(item, DatabaseNotConfiguredError):
+        names = _class_names(item)
+        if "DatabaseNotConfiguredError" in names:
             return _DB_NOT_SET
-        if isinstance(item, BudgetNotConfigured):
+        if getattr(type(item), "error_code", None) == "budget_not_configured":
             return f"{item}. Export it as a positive USD amount, for example 100."
     for item in _chain(exc):
-        if _is_database_down(item):
+        names = _class_names(item)
+        asyncpg_error = type(item).__module__.startswith("asyncpg")
+        if (
+            isinstance(item, ConnectionError | TimeoutError | socket.gaierror)
+            or (isinstance(item, OSError) and item.errno in {errno.ENETUNREACH, errno.EHOSTUNREACH})
+            or (asyncpg_error and "PostgresConnectionError" in names)
+        ):
             return _database_unreachable()
-        if _is_database_refusal(item):
+        if asyncpg_error and names & {"InvalidPasswordError", "InvalidCatalogNameError"}:
             return _DB_REFUSED
     return None
-
-
-def _is_database_down(exc: BaseException) -> bool:
-    import asyncpg
-
-    return isinstance(
-        exc,
-        ConnectionError | TimeoutError | socket.gaierror | asyncpg.PostgresConnectionError,
-    ) or (isinstance(exc, OSError) and exc.errno in {errno.ENETUNREACH, errno.EHOSTUNREACH})
-
-
-def _is_database_refusal(exc: BaseException) -> bool:
-    import asyncpg
-
-    return isinstance(exc, asyncpg.InvalidPasswordError | asyncpg.InvalidCatalogNameError)
 
 
 def failure_line(code: str, exc: BaseException) -> str:
@@ -139,22 +134,25 @@ def report_failure(
 
 
 def database_preflight(timeout: float = 5.0) -> str | None:
-    """Open and close one connection to ``DATABASE_URL``; return the one-line fix on failure."""
-    import asyncpg
+    """Open and close one TCP connection to the ``DATABASE_URL`` host; return the fix on failure.
 
+    Only reachability is checked: credentials and the database name are the server's to judge.
+    """
     dsn = os.environ.get("DATABASE_URL")
     if not dsn:
         return _DB_NOT_SET
-
-    async def _probe() -> None:
-        connection = await asyncpg.connect(dsn, timeout=timeout)
-        await connection.close()
-
     try:
-        asyncio.run(_probe())
-    except Exception as exc:  # reason: any failure to connect is reported as one line, no text
-        return runtime_reason(exc) or _database_unreachable()
-    return None
+        parts = urlsplit(dsn)
+        host, port = parts.hostname, parts.port or 5432
+    except ValueError:
+        return None
+    if not host or dsn.startswith(("postgres:///", "postgresql:///")):
+        return None  # a unix-socket or default-host DSN: leave it to the driver
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return None
+    except OSError:
+        return _database_unreachable()
 
 
 def exit_with(service: str, reason: str, code: int = 1) -> NoReturn:
