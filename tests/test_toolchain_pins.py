@@ -9,6 +9,7 @@ CPython (uv 0.11.19 had no CPython 3.14.7, which failed the first v0.3.0a1 tag r
 
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -96,6 +97,11 @@ def test_python_is_provisioned_only_through_the_version_file() -> None:
         assert not re.search(r"python-version:\s*[\"']?\d", text), path.name
 
 
+@pytest.mark.skipif(
+    os.environ.get("PITWALL_DEPENDENCY_COMPAT") == "1",
+    reason="the dependency-compatibility job re-resolves uv.lock on purpose, so the committed "
+    "pre-commit pin cannot match it",
+)
 def test_pre_commit_ruff_matches_the_locked_ruff() -> None:
     config = yaml.safe_load((ROOT / ".pre-commit-config.yaml").read_text(encoding="utf-8"))
     ruff = next(repo for repo in config["repos"] if repo["repo"].endswith("/ruff-pre-commit"))
