@@ -9,6 +9,7 @@ and fixtures are intentionally included.
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import shutil
@@ -71,10 +72,11 @@ def _candidate_files() -> list[str]:
 
 
 def _scan(baseline: Path) -> dict[str, Any]:
-    executable = shutil.which("detect-secrets")
-    if executable is None:
+    if importlib.util.find_spec("detect_secrets") is None:
         raise RuntimeError("detect-secrets is not installed; run `uv sync --frozen --extra dev`")
-    command = [executable, "scan", "--no-verify", "--baseline", str(baseline)]
+    # The scanner runs under this interpreter, so the gate works without the venv on PATH.
+    command = [sys.executable, "-m", "detect_secrets", "scan", "--no-verify"]
+    command.extend(("--baseline", str(baseline)))
     for pattern in _EXCLUDES:
         command.extend(("--exclude-files", pattern))
     for pattern in _EXCLUDE_LINES:
@@ -91,9 +93,13 @@ def _regenerate() -> int:
     with tempfile.TemporaryDirectory(prefix="pitwall-secret-scan-") as temp_dir:
         scan_baseline = Path(temp_dir) / "baseline.json"
         shutil.copy2(_BASELINE, scan_baseline)
-        _scan(scan_baseline)
-        shutil.copy2(scan_baseline, _BASELINE)
-    document = json.loads(_BASELINE.read_text(encoding="utf-8"))
+        document = _scan(scan_baseline)
+    # The scan records its temporary copy as the baseline file; store the real name so a
+    # regeneration with no new findings does not change the committed file.
+    for entry in document.get("filters_used", []):
+        if entry.get("path") == "detect_secrets.filters.common.is_baseline_file":
+            entry["filename"] = _BASELINE.name
+    _BASELINE.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
     pending = _unreviewed(document)
     for filename, line, kind in pending:
         print(f"needs audit: {filename}:{line}: {kind}", file=sys.stderr)

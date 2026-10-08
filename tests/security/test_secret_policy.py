@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import subprocess
+import sys
 
 from tools.security import check_secrets
 
@@ -31,7 +32,7 @@ def _scan_tree(tmp_path, files: dict[str, str]) -> set[tuple[str, str]]:
         json.dumps({**json.loads(baseline.read_text(encoding="utf-8")), "results": {}}),
         encoding="utf-8",
     )
-    command = [shutil.which("detect-secrets") or "detect-secrets", "scan", "--no-verify"]
+    command = [sys.executable, "-m", "detect_secrets", "scan", "--no-verify"]
     command.extend(("--baseline", str(baseline)))
     for pattern in check_secrets._EXCLUDES[:1]:
         command.extend(("--exclude-files", pattern))
@@ -65,3 +66,25 @@ def test_digest_lines_are_not_findings_but_other_hex_still_is(tmp_path) -> None:
 def test_failure_messages_print_the_regeneration_command() -> None:
     assert "check_secrets.py --regenerate" in check_secrets._REGENERATE
     assert check_secrets._AUDIT.startswith("uv run --frozen detect-secrets audit")
+
+
+def test_regenerate_stores_the_baseline_name_not_the_scan_copy(tmp_path, monkeypatch) -> None:
+    import json
+
+    baseline = tmp_path / ".secrets.baseline"
+    baseline.write_text("{}", encoding="utf-8")
+    scanned = {
+        "filters_used": [
+            {
+                "path": "detect_secrets.filters.common.is_baseline_file",
+                "filename": "/tmp/pitwall-secret-scan-abc123/baseline.json",
+            }
+        ],
+        "results": {},
+    }
+    monkeypatch.setattr(check_secrets, "_BASELINE", baseline)
+    monkeypatch.setattr(check_secrets, "_scan", lambda _path: json.loads(json.dumps(scanned)))
+
+    assert check_secrets._regenerate() == 0
+    written = json.loads(baseline.read_text(encoding="utf-8"))
+    assert written["filters_used"][0]["filename"] == ".secrets.baseline"
