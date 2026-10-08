@@ -29,6 +29,8 @@ from typing import Any
 
 import pytest
 
+from tests.hang_guard import HANG_GUARD_SECS
+
 pytestmark = [pytest.mark.release, pytest.mark.integration, pytest.mark.journey_harness]
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -122,7 +124,11 @@ def _run_one(key: str, journey_env: dict[str, str]) -> Outcome:
         run = {"cwd": tmp, "env": env, "stdin": subprocess.DEVNULL}
         for before in fixture.get("before", []):
             subprocess.run(
-                _argv(before[0], before[1:]), **run, capture_output=True, timeout=60, check=True
+                _argv(before[0], before[1:]),
+                **run,
+                capture_output=True,
+                timeout=HANG_GUARD_SECS,
+                check=True,
             )
         argv = _argv(program, fixture["argv"])
         if fixture.get("daemon"):
@@ -143,11 +149,18 @@ def _run_one(key: str, journey_env: dict[str, str]) -> Outcome:
         then_code = None
         if "then" in fixture:
             then = subprocess.run(
-                _argv(program, fixture["then"]["argv"]), **run, capture_output=True, timeout=60
+                _argv(program, fixture["then"]["argv"]),
+                **run,
+                capture_output=True,
+                timeout=HANG_GUARD_SECS,
             )
             then_code = then.returncode
         unknown = subprocess.run(
-            [*argv, "--j36-not-a-flag"], **run, capture_output=True, text=True, timeout=60
+            [*argv, "--j36-not-a-flag"],
+            **run,
+            capture_output=True,
+            text=True,
+            timeout=HANG_GUARD_SECS,
         )
     return Outcome(code, alive, stdout, stderr, then_code, unknown.returncode, unknown.stderr)
 
