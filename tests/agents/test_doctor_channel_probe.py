@@ -159,11 +159,18 @@ def test_probe_waits_for_a_server_that_starts_slower_than_five_seconds(
 def test_probe_warns_at_once_when_the_server_exits_before_replying(
     monkeypatch: pytest.MonkeyPatch, modern: bool
 ) -> None:
-    _fake_server_popen(monkeypatch, "import sys\nsys.exit(3)\n")
+    # The server takes the probe's first request and then dies without replying. Exiting before
+    # reading it would race the probe's write (a scheduling delay between spawn and write turns
+    # the exit into a broken pipe, which is reported as an unreadable reply, not an exit code).
+    _fake_server_popen(monkeypatch, "import sys\nsys.stdin.readline()\nsys.exit(3)\n")
+    ceiling = HANG_GUARD_SECS
+    monkeypatch.setattr(doctor, "CHANNEL_HANDSHAKE_TIMEOUT", ceiling)
     started = time.monotonic()
     failure: list[str] = []
     assert _probe_channel_server({}, None, modern=modern, failure=failure) is None
-    assert time.monotonic() - started < doctor.CHANNEL_HANDSHAKE_TIMEOUT / 3
+    assert (
+        time.monotonic() - started < ceiling / 3
+    )  # the exit was noticed, the ceiling not waited out
     assert failure == ["exited with code 3 before replying"]  # not the ceiling wording
 
 
