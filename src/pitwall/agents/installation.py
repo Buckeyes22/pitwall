@@ -91,6 +91,8 @@ class InstallResult:
     removed: list[Path] = field(default_factory=list)
     mcp_harnesses: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    #: Hosts and channel targets left out because their CLI was not found (auto-detect only).
+    skipped: list[str] = field(default_factory=list)
 
 
 def shim_names() -> tuple[str, ...]:
@@ -491,6 +493,14 @@ def install(
         previous["mcpRegistrations"] if previous else {}
     )
     result = InstallResult()
+    if harnesses is None:
+        from .capability_inventory import CHANNEL_HARNESSES
+
+        result.skipped.extend(
+            f"channel server: {harness} (CLI not found)"
+            for harness in CHANNEL_HARNESSES
+            if harness not in targets
+        )
     for path, content in planned.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         _write_atomic(path, content, 0o755 if _executable(path) else 0o644)
@@ -512,6 +522,7 @@ def install(
     registered: list[str] = []
     for host in hosts:
         if plugin_hosts is None and shutil.which(host, path=env.get("PATH")) is None:
+            result.skipped.append(f"plugins: {host} (CLI not found)")
             continue
         failed = _failed_registration(host, locations.plugins, run, lister)
         if failed:

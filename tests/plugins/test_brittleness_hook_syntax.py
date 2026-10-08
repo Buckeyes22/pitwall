@@ -35,7 +35,9 @@ _NEWER_THAN_39 = {"tomllib"}
 @pytest.mark.parametrize("path", HOOKS, ids=lambda p: str(p.relative_to(PLUGINS)))
 def test_plugin_hook_does_not_import_post_39_stdlib_unguarded(path: Path) -> None:
     tree = ast.parse(path.read_text(encoding="utf-8"))
-    for node in tree.body:  # top level only: a try/except ImportError wrapper is not a top-level Import
+    for (
+        node
+    ) in tree.body:  # top level only: a try/except ImportError wrapper is not a top-level Import
         names: list[str] = []
         if isinstance(node, ast.Import):
             names = [alias.name.split(".")[0] for alias in node.names]

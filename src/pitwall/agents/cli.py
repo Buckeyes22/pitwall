@@ -365,6 +365,9 @@ def _install(harnesses: list[str] | None, plugin_hosts: list[str] | None) -> int
     print(f"installed {len(result.files)} files")
     if result.mcp_harnesses:
         print("registered the channel server with: " + ", ".join(result.mcp_harnesses))
+    if result.skipped:
+        print("skipped (CLI not found): " + "; ".join(result.skipped))
+        print("install those CLIs, then run `pitwall agents install` again to register them")
     for warning in result.warnings:
         print(f"warning: {warning}", file=sys.stderr)
     return 0
@@ -1532,7 +1535,10 @@ def _program_name() -> str:
 
 
 def _add_dispatch_commands(subparsers: Any) -> None:
-    dispatch = subparsers.add_parser("dispatch")
+    dispatch = subparsers.add_parser(
+        "dispatch",
+        help="Run one prompt through a harness or a named profile (what the shims call).",
+    )
     dispatch.add_argument(
         "harness",
         choices=(
@@ -1554,7 +1560,9 @@ def _add_dispatch_commands(subparsers: Any) -> None:
         ),
     )
     dispatch.add_argument("harness_args", nargs=argparse.REMAINDER)
-    internal = subparsers.add_parser("_shim", add_help=False)
+    internal = subparsers.add_parser(
+        "_shim", add_help=False, help="Internal: entry point of the installed shims."
+    )
     internal.add_argument(
         "harness",
         choices=(
@@ -1576,7 +1584,9 @@ def _add_dispatch_commands(subparsers: Any) -> None:
         ),
     )
     internal.add_argument("harness_args", nargs=argparse.REMAINDER)
-    subparsers.add_parser("_steer-gate", add_help=False)
+    subparsers.add_parser(
+        "_steer-gate", add_help=False, help="Internal: the steering gate the plugin hooks call."
+    )
     install = subparsers.add_parser(
         "install",
         help="Write the shims, install the plugins, and register the channel MCP server.",
@@ -1600,20 +1610,26 @@ def _add_dispatch_commands(subparsers: Any) -> None:
 
 
 def _add_run_commands(subparsers: Any) -> None:
-    runs = subparsers.add_parser("runs")
+    runs = subparsers.add_parser(
+        "runs", help="List, inspect, resume, stop, apply, and clean up dispatch runs."
+    )
     run_commands = runs.add_subparsers(dest="runs_command", required=True)
-    run_commands.add_parser("list")
-    show = run_commands.add_parser("show")
+    run_commands.add_parser("list", help="List recorded runs.")
+    show = run_commands.add_parser("show", help="Show one run record.")
     show.add_argument("dispatch_id")
-    logs = run_commands.add_parser("logs")
+    logs = run_commands.add_parser("logs", help="Print a run's stdout and/or stderr.")
     logs.add_argument("dispatch_id")
     logs.add_argument("--channel", choices=("stdout", "stderr", "both"), default="stdout")
-    cleanup = run_commands.add_parser("cleanup")
+    cleanup = run_commands.add_parser(
+        "cleanup", help="Remove old finished runs and their worktrees."
+    )
     cleanup.add_argument("--older-than", type=_parse_age, metavar="DAYS")
     cleanup.add_argument("--all", action="store_true")
-    diff = run_commands.add_parser("diff")
+    diff = run_commands.add_parser("diff", help="Show the changes a worktree run made.")
     diff.add_argument("dispatch_id")
-    apply = run_commands.add_parser("apply")
+    apply = run_commands.add_parser(
+        "apply", help="Apply a worktree run's changes to a target checkout."
+    )
     apply.add_argument("dispatch_id")
     apply.add_argument("--target", type=Path, default=Path.cwd())
     apply.add_argument(
@@ -1621,16 +1637,24 @@ def _add_run_commands(subparsers: Any) -> None:
         action="store_true",
         help="cherry-pick captured commits before applying working changes",
     )
-    discard = run_commands.add_parser("discard")
+    discard = run_commands.add_parser(
+        "discard", help="Discard a worktree run's branch and worktree."
+    )
     discard.add_argument("dispatch_id")
     discard.add_argument("--yes", action="store_true")
-    resume = run_commands.add_parser("resume")
+    resume = run_commands.add_parser(
+        "resume", help="Resume a run paused for answers to its questions."
+    )
     resume.add_argument("dispatch_id")
-    stop = run_commands.add_parser("stop")
+    stop = run_commands.add_parser(
+        "stop", help="Ask a running dispatch to stop, then terminate it after a grace period."
+    )
     stop.add_argument("dispatch_id")
     stop.add_argument("--message")
     stop.add_argument("--grace", type=int, default=60)
-    steer = subparsers.add_parser("steer")
+    steer = subparsers.add_parser(
+        "steer", help="Send a steer (priority, scope, stop, ...) to a running dispatch."
+    )
     steer.add_argument("dispatch_id")
     steer.add_argument("--kind", choices=sorted(STEER_KINDS), required=True)
     steer.add_argument("--message", required=True)
@@ -1640,7 +1664,9 @@ def _add_run_commands(subparsers: Any) -> None:
 
 
 def _add_doctor_commands(subparsers: Any) -> None:
-    doctor = subparsers.add_parser("doctor")
+    doctor = subparsers.add_parser(
+        "doctor", help="Check the installation, harness CLIs, profiles, and channel; read-only."
+    )
     doctor.add_argument("--json", action="store_true", dest="json_output")
     doctor.add_argument(
         "--harness",
@@ -1665,11 +1691,15 @@ def _add_doctor_commands(subparsers: Any) -> None:
     doctor.add_argument("--live-auth", action="store_true")
     doctor.add_argument("--discover-models", action="store_true")
     doctor.add_argument("--probe-routes", action="store_true")
-    harnesses_parser = subparsers.add_parser("harnesses")
+    harnesses_parser = subparsers.add_parser(
+        "harnesses", help="Show which harness CLIs are installed and usable."
+    )
     harnesses_parser.add_argument("--json", action="store_true", dest="json_output")
-    inbox_parser = subparsers.add_parser("inbox")
+    inbox_parser = subparsers.add_parser(
+        "inbox", help="List the questions running dispatches are waiting on."
+    )
     inbox_parser.add_argument("--json", action="store_true", dest="json_output")
-    answer = subparsers.add_parser("answer")
+    answer = subparsers.add_parser("answer", help="Answer a question a running dispatch asked.")
     answer.add_argument("dispatch_id")
     answer.add_argument("ask_id")
     answer.add_argument("choice")
@@ -1681,19 +1711,31 @@ def _add_doctor_commands(subparsers: Any) -> None:
 
 
 def _add_setup_commands(subparsers: Any) -> None:
-    setup = subparsers.add_parser("setup")
+    setup = subparsers.add_parser(
+        "setup",
+        help="Install harness CLIs, Pi, the capability inventory, profiles, and MCP registration.",
+    )
     setup_commands = setup.add_subparsers(dest="setup_command", required=True)
-    setup_harnesses = setup_commands.add_parser("harnesses")
+    setup_harnesses = setup_commands.add_parser(
+        "harnesses",
+        help="Interactively install missing harness CLIs (checksum-verified installers).",
+    )
     setup_harnesses.add_argument("--dry-run", action="store_true")
     setup_harnesses.add_argument("--no-color", action="store_true")
     setup_pi = setup_commands.add_parser(
         "pi", help="Install the pinned Pi and pi-subagents that `pitwall workbench` requires."
     )
     setup_pi.add_argument("--dry-run", action="store_true")
-    setup_inventory = setup_commands.add_parser("inventory")
+    setup_inventory = setup_commands.add_parser(
+        "inventory", help="Write the harness capability inventory."
+    )
     setup_inventory.add_argument("--json", action="store_true", dest="json_output")
-    setup_routes = setup_commands.add_parser("profiles")
-    setup_mcp = setup_commands.add_parser("mcp")
+    setup_routes = setup_commands.add_parser(
+        "profiles", help="Interactively create route profiles."
+    )
+    setup_mcp = setup_commands.add_parser(
+        "mcp", help="Register or remove the channel MCP server in harness configs."
+    )
     setup_mcp.add_argument("--harness", action="append", dest="harnesses")
     setup_mcp.add_argument("--command", dest="server_command")
     setup_mcp.add_argument("--remove", action="store_true")
@@ -1703,35 +1745,43 @@ def _add_setup_commands(subparsers: Any) -> None:
 
 
 def _add_routes_commands(subparsers: Any) -> None:
-    routes_parser = subparsers.add_parser("profiles")
+    routes_parser = subparsers.add_parser(
+        "profiles", help="List, add, probe, and sync named route profiles from pitwall.toml."
+    )
     routes_commands = routes_parser.add_subparsers(dest="routes_command", required=True)
-    routes_list = routes_commands.add_parser("list")
+    routes_list = routes_commands.add_parser("list", help="List profiles.")
     routes_list.add_argument("--json", action="store_true", dest="json_output")
-    routes_show = routes_commands.add_parser("show")
+    routes_show = routes_commands.add_parser("show", help="Show one profile.")
     routes_show.add_argument("name")
-    routes_resolve = routes_commands.add_parser("resolve")
+    routes_resolve = routes_commands.add_parser(
+        "resolve", help="Resolve a profile spec to the harness, model, and endpoint it would use."
+    )
     routes_resolve.add_argument("spec")
     routes_resolve.add_argument("--json", action="store_true", dest="json_output")
-    routes_probe = routes_commands.add_parser("probe")
+    routes_probe = routes_commands.add_parser("probe", help="Probe a profile's endpoint.")
     routes_probe.add_argument("name")
     routes_probe.add_argument("--json", action="store_true", dest="json_output")
     routes_probe.add_argument(
         "--timeout", type=_positive_float, default=DEFAULT_TIMEOUT, metavar="SECONDS"
     )
-    routes_discover = routes_commands.add_parser("discover")
+    routes_discover = routes_commands.add_parser(
+        "discover", help="Discover the models an endpoint serves."
+    )
     discover_target = routes_discover.add_mutually_exclusive_group(required=True)
     discover_target.add_argument("name", nargs="?")
     discover_target.add_argument("--base-url", dest="base_url")
     routes_discover.add_argument("--api-key-env", dest="api_key_env")
     routes_discover.add_argument("--json", action="store_true", dest="json_output")
     routes_discover.add_argument("--timeout", type=_positive_float, default=10.0, metavar="SECONDS")
-    routes_refresh = routes_commands.add_parser("refresh")
+    routes_refresh = routes_commands.add_parser(
+        "refresh", help="Refresh profiles that came from a Pitwall broker."
+    )
     refresh_target = routes_refresh.add_mutually_exclusive_group(required=True)
     refresh_target.add_argument("name", nargs="?")
     refresh_target.add_argument("--all-pitwall", action="store_true", dest="all_pitwall")
     routes_refresh.add_argument("--pitwall-url", dest="pitwall_url")
     routes_refresh.add_argument("--json", action="store_true", dest="json_output")
-    routes_add = routes_commands.add_parser("add")
+    routes_add = routes_commands.add_parser("add", help="Add or update a profile.")
     routes_add.add_argument("name")
     routes_add.add_argument("--model", required=False)
     routes_add.add_argument("--from-pitwall", metavar="CAPABILITY", dest="from_pitwall")
@@ -1750,7 +1800,9 @@ def _add_routes_commands(subparsers: Any) -> None:
     routes_add.add_argument("--effort")
     routes_add.add_argument("--workspace", choices=WORKSPACES)
     routes_add.add_argument("--task-mode", dest="task_mode", choices=TASK_MODES)
-    ms_endpoint = routes_commands.add_parser("add-model-studio-endpoint")
+    ms_endpoint = routes_commands.add_parser(
+        "add-model-studio-endpoint", help="Add an Alibaba Model Studio endpoint."
+    )
     ms_endpoint.add_argument("name")
     ms_endpoint.add_argument(
         "--plan", choices=("token-plan-personal", "token-plan-team", "pay-as-you-go")
@@ -1765,41 +1817,56 @@ def _add_routes_commands(subparsers: Any) -> None:
     ms_endpoint.add_argument(
         "--accept-token-plan-automation", action="store_true", dest="accept_token_plan_automation"
     )
-    routes_remove = routes_commands.add_parser("remove")
+    routes_remove = routes_commands.add_parser("remove", help="Remove a profile.")
     routes_remove.add_argument("name")
-    routes_sync = routes_commands.add_parser("sync")
+    routes_sync = routes_commands.add_parser(
+        "sync", help="Write profiles into the harnesses configs that need them."
+    )
     routes_sync.add_argument("--harness")
     routes_sync.add_argument("--dry-run", action="store_true")
     routes_sync.add_argument("--yes", action="store_true")
 
 
 def _add_pitwall_and_workflow_commands(subparsers: Any) -> None:
-    pitwall = subparsers.add_parser("broker")
+    pitwall = subparsers.add_parser(
+        "broker", help="Connect to a Pitwall broker: receiver, subscription, and watch."
+    )
     pitwall_commands = pitwall.add_subparsers(dest="pitwall_command", required=True)
-    pitwall_receiver = pitwall_commands.add_parser("receiver")
+    pitwall_receiver = pitwall_commands.add_parser(
+        "receiver", help="Run the local receiver for broker notifications."
+    )
     pitwall_receiver.add_argument("--host", default="127.0.0.1")
     pitwall_receiver.add_argument("--port", type=int, default=8765)
     pitwall_receiver.add_argument("--install", action="store_true")
     pitwall_receiver.add_argument("--enable", action="store_true")
-    pitwall_subscribe = pitwall_commands.add_parser("subscribe")
+    pitwall_subscribe = pitwall_commands.add_parser(
+        "subscribe", help="Subscribe a receiver URL to broker events."
+    )
     pitwall_subscribe.add_argument("--receiver-url", required=True)
-    pitwall_watch = pitwall_commands.add_parser("watch")
+    pitwall_watch = pitwall_commands.add_parser(
+        "watch", help="Poll the broker and refresh broker-derived profiles."
+    )
     pitwall_watch.add_argument("--interval", type=_interval_argument, default=300.0)
-    workflow = subparsers.add_parser("workflow")
+    workflow = subparsers.add_parser(
+        "workflow", help="Run, list, resume, and cancel dependency-ordered workflows."
+    )
     workflow_commands = workflow.add_subparsers(dest="workflow_command", required=True)
-    workflow_run = workflow_commands.add_parser("run")
+    workflow_run = workflow_commands.add_parser("run", help="Run a workflow file.")
     workflow_run.add_argument("path", type=Path)
     workflow_run.add_argument("--host", choices=("claude", "codex", "copilot"), required=True)
-    workflow_list = workflow_commands.add_parser("list")
+    workflow_list = workflow_commands.add_parser("list", help="List workflows.")
     workflow_list.add_argument("--json", action="store_true", dest="json_output")
-    workflow_show = workflow_commands.add_parser("show")
+    workflow_show = workflow_commands.add_parser("show", help="Show one workflow.")
     workflow_show.add_argument("workflow_id")
-    workflow_resume = workflow_commands.add_parser("resume")
+    workflow_resume = workflow_commands.add_parser("resume", help="Resume a workflow.")
     workflow_resume.add_argument("workflow_id")
     workflow_resume.add_argument("--host", choices=("claude", "codex", "copilot"))
-    workflow_cancel = workflow_commands.add_parser("cancel")
+    workflow_cancel = workflow_commands.add_parser("cancel", help="Cancel a workflow.")
     workflow_cancel.add_argument("workflow_id")
-    subparsers.add_parser("mcp")
+    subparsers.add_parser(
+        "mcp",
+        help="Serve the channel MCP server over stdio (what `pitwall mcp serve channel` runs).",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:

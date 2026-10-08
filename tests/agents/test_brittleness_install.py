@@ -46,3 +46,49 @@ class McpCommandTests(unittest.TestCase):
             self.run_install()
         self.assertFalse((self.home / ".codex" / "config.toml").exists())
         self.assertFalse((self.home / ".claude" / "scripts").exists())
+
+
+class SkippedHostsTests(unittest.TestCase):
+    def setUp(self) -> None:
+        temp = tempfile.TemporaryDirectory(prefix="pitwall-skipped-hosts-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.home = self.root / "home"
+        self.bin = self.root / "bin"
+        self.home.mkdir()
+        self.bin.mkdir()
+        pitwall = self.bin / "pitwall"
+        pitwall.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+        pitwall.chmod(0o755)
+        self.env = {"HOME": str(self.home), "PATH": str(self.bin)}
+
+    def test_install_records_every_host_and_channel_skipped_for_a_missing_cli(self) -> None:
+        result = install(self.env, self.home, runner=lambda _a: 0, lister=lambda _a: "")
+        skipped = " | ".join(result.skipped)
+        for host in ("claude", "codex", "copilot"):
+            self.assertIn(f"plugins: {host}", skipped)
+        for harness in ("claude", "codex", "copilot", "opencode"):
+            self.assertIn(f"channel server: {harness}", skipped)
+        self.assertEqual([], result.mcp_harnesses)
+
+    def test_explicit_selections_report_nothing_as_skipped(self) -> None:
+        result = install(self.env, self.home, harnesses=(), plugin_hosts=(), runner=lambda _a: 0)
+        self.assertEqual([], result.skipped)
+
+    def test_cli_install_output_lists_the_skipped_hosts(self) -> None:
+        import contextlib
+        import io
+
+        from pitwall.agents import cli
+
+        out = io.StringIO()
+        with (
+            mock.patch.dict(os.environ, self.env, clear=True),
+            contextlib.redirect_stdout(out),
+        ):
+            code = cli.main(["install"])
+        self.assertEqual(0, code)
+        text = out.getvalue()
+        self.assertIn("skipped (CLI not found):", text)
+        self.assertIn("plugins: claude", text)
+        self.assertIn("pitwall agents install", text)
