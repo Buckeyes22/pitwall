@@ -583,8 +583,8 @@ jobs:
 
       - name: Run integration suite (real Postgres + Redis)
         env:
-          # DATABASE_URL drives the legacy _REAL_DB_TEST_MODULES (tests/db,
-          # tests/test_webhook_duplicate_delivery_stress); PITWALL_TEST_* drives the
+          # DATABASE_URL drives the integration-marked modules that open their own
+          # connections (tests/db, tests/test_webhook_duplicate_delivery_stress); PITWALL_TEST_* drives the
           # tests/integration pg_pool/redis_client fixtures. Both point at the same
           # docker-compose infra so the full `-m integration` union runs green.
           DATABASE_URL: postgresql://pitwall:pitwall@127.0.0.1:5444/pitwall_test

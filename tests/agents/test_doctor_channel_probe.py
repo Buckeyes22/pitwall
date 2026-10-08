@@ -175,6 +175,24 @@ def test_probe_warns_at_once_when_the_server_exits_before_replying(
 
 
 @pytest.mark.parametrize("modern", [False, True])
+def test_probe_names_the_exit_code_when_the_server_dies_before_the_first_write(
+    monkeypatch: pytest.MonkeyPatch, modern: bool
+) -> None:
+    # The server is already gone when the probe writes, so the write hits a closed pipe.
+    real_popen = subprocess.Popen
+
+    def exited_popen(_argv: object, **kwargs: Any) -> Any:
+        process = real_popen([sys.executable, "-c", "import sys\nsys.exit(3)\n"], **kwargs)
+        process.wait(timeout=HANG_GUARD_SECS)
+        return process
+
+    monkeypatch.setattr(doctor.subprocess, "Popen", exited_popen)
+    failure: list[str] = []
+    assert _probe_channel_server({}, None, modern=modern, failure=failure) is None
+    assert failure == ["exited with code 3 before replying"]
+
+
+@pytest.mark.parametrize("modern", [False, True])
 def test_probe_gives_up_on_a_silent_live_server_at_the_ceiling(
     monkeypatch: pytest.MonkeyPatch, modern: bool
 ) -> None:

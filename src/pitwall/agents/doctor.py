@@ -1981,8 +1981,12 @@ def _probe_channel_server(
 
         def send(message: dict[str, Any]) -> None:
             assert process is not None and process.stdin is not None
-            process.stdin.write((json.dumps(message) + "\n").encode("utf-8"))
-            process.stdin.flush()
+            try:
+                process.stdin.write((json.dumps(message) + "\n").encode("utf-8"))
+                process.stdin.flush()
+            except BrokenPipeError:
+                child_exited()  # the server is gone; name its exit, not an unreadable reply
+                raise
 
         def reply_result(reply: dict[str, Any] | None) -> dict[str, Any] | None:
             """The reply's `result` object, or None when it is missing or not an object."""
