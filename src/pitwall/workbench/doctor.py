@@ -43,7 +43,8 @@ INSTALL_COMMAND = (
     f"npm install -g --ignore-scripts {PI_PACKAGE}@{PINNED_PI_VERSION} "
     f"{SUBAGENTS_PACKAGE}@{PINNED_SUBAGENTS_VERSION}"
 )
-MINIMUM_NODE = (22, 22, 1)
+MIN_NODE = "22.22.1"
+MINIMUM_NODE = tuple(int(part) for part in MIN_NODE.split("."))
 BWRAP = "/usr/bin/bwrap"
 SETPRIV = "/usr/bin/setpriv"
 SUPPORTED_ARCHITECTURES = ("x64", "arm64")
@@ -162,6 +163,8 @@ class DoctorProbe:
     find_executable: Callable[[str, Mapping[str, str]], str | None] | None = None
     path_exists: Callable[[str], bool] | None = None
     setpriv_supports_seccomp_filter: Callable[[str], bool] | None = None
+    #: Returns why bubblewrap cannot build a sandbox here, or None when it can.
+    bubblewrap_failure: Callable[[str], str | None] | None = None
 
 
 def _find_executable(name: str, env: Mapping[str, str]) -> str | None:
@@ -175,6 +178,40 @@ def _find_executable(name: str, env: Mapping[str, str]) -> str | None:
 
 def _executable_exists(path: str) -> bool:
     return os.access(path, os.X_OK)
+
+
+def _bubblewrap_failure(path: str) -> str | None:
+    """Run a trivial sandbox; None when bubblewrap works, else a one-line reason.
+
+    The file existing proves nothing: bubblewrap needs unprivileged user namespaces, which
+    containers, hardened kernels, and Ubuntu 24.04's AppArmor policy commonly deny.
+    """
+    true = "/bin/true" if os.access("/bin/true", os.X_OK) else "/usr/bin/true"
+    argv = [
+        path,
+        "--unshare-pid",
+        "--ro-bind",
+        "/",
+        "/",
+        "--proc",
+        "/proc",
+        "--dev",
+        "/dev",
+        "--",
+        true,
+    ]
+    try:
+        completed = subprocess.run(  # noqa: S603  # reason: fixed argv, absolute bwrap path, no shell
+            argv, capture_output=True, text=True, check=False, timeout=10
+        )
+    except subprocess.TimeoutExpired:
+        return "bubblewrap probe timed out after 10 s"
+    except OSError as exc:
+        return f"bubblewrap probe could not run: {exc}"
+    if completed.returncode == 0:
+        return None
+    lines = (completed.stderr or "").strip().splitlines()
+    return lines[-1][:200] if lines else f"bubblewrap probe exited {completed.returncode}"
 
 
 def _host_node_version(env: Mapping[str, str]) -> str | None:
@@ -216,6 +253,7 @@ def runtime_doctor(
     find = probe.find_executable or _find_executable
     exists = probe.path_exists or _executable_exists
     supports_seccomp = probe.setpriv_supports_seccomp_filter or setpriv_supports_seccomp_filter
+    bubblewrap_failure = probe.bubblewrap_failure or _bubblewrap_failure
     linux = system == "linux"
     flock_path = find("flock", env) if linux else None
     # Restricted launch uses these exact absolute paths; a different PATH entry must not make
@@ -233,6 +271,8 @@ def runtime_doctor(
         restricted = {"status": "missing-setpriv"}
     elif not supports_seccomp(setpriv_path):
         restricted = {"status": "setpriv-lacks-seccomp-filter", "setpriv": setpriv_path}
+    elif (unusable := bubblewrap_failure(bubblewrap_path)) is not None:
+        restricted = {"status": "bubblewrap-unusable", "detail": unusable}
     else:
         restricted = {
             "status": "available",
@@ -437,10 +477,10 @@ def workbench_section() -> DoctorSection:
             node_status,
             f"node {node['version']}"
             if node["supported"]
-            else f"node {node['version'] or 'not found'}; 22.22.1 or newer is required by Pi",
+            else f"node {node['version'] or 'not found'}; Pitwall requires Node {MIN_NODE} or newer",
             None
             if node["supported"]
-            else "install Node.js 22.22.1 or newer from https://nodejs.org",
+            else f"install Node.js {MIN_NODE} or newer from https://nodejs.org",
         )
     )
     flock = runtime["flock"]
@@ -463,10 +503,13 @@ def workbench_section() -> DoctorSection:
             "ok" if available else "skip",
             "restricted mode is available"
             if available
-            else f"restricted mode unavailable: {restricted['status']} (optional)",
+            else f"restricted mode unavailable: {restricted['status']}"
+            + (f" ({restricted['detail']})" if restricted.get("detail") else "")
+            + " (optional)",
             None
             if available
-            else "restricted mode needs Linux, bubblewrap, and setpriv from util-linux 2.41 or newer",
+            else "restricted mode needs Linux, a working bubblewrap (unprivileged user "
+            "namespaces allowed), and setpriv from util-linux 2.41 or newer",
         )
     )
     return DoctorSection("workbench", tuple(checks))
