@@ -25,10 +25,13 @@ def _probe(**changes: Any) -> wb.DoctorProbe:
 
 
 def test_min_node_is_one_string_constant() -> None:
-    assert wb.MIN_NODE == "22.22.1"
-    assert wb.MINIMUM_NODE == (22, 22, 1)
-    assert wb._supported_node("22.22.1")
-    assert not wb._supported_node("22.22.0")
+    major, minor, patch = (int(part) for part in wb.MIN_NODE.split("."))
+    assert (major, minor, patch) == wb.MINIMUM_NODE
+    assert wb._supported_node(wb.MIN_NODE)
+    assert wb._supported_node(f"{major}.{minor}.{patch + 1}")
+    if patch:
+        assert not wb._supported_node(f"{major}.{minor}.{patch - 1}")
+    assert not wb._supported_node(f"{major - 1}.{minor}.{patch}")
 
 
 def test_a_bubblewrap_that_cannot_sandbox_makes_restricted_mode_unavailable() -> None:
@@ -97,6 +100,6 @@ def test_doctor_row_names_the_bubblewrap_failure() -> None:
 def test_node_row_states_the_pitwall_requirement() -> None:
     runtime = _runtime(node={"version": "20.1.0", "supported": False})
     row = _checks(runtime)["workbench.node"]
-    assert "Pitwall requires Node 22.22.1 or newer" in row.detail
+    assert f"Pitwall requires Node {wb.MIN_NODE} or newer" in row.detail
     assert "required by Pi" not in row.detail
-    assert "22.22.1" in (row.next_step or "")
+    assert wb.MIN_NODE in (row.next_step or "")

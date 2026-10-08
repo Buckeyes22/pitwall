@@ -144,6 +144,10 @@ def test_pi_extensions_job_pins_node_and_runner_with_a_reason() -> None:
     assert len(set(versions.values())) == 1, versions
     (pinned,) = set(versions.values())
     assert re.fullmatch(r"\d+\.\d+\.\d+", pinned), "pin an exact Node version"
+    # CI tests the floor `pitwall workbench doctor` enforces, not some other Node.
+    from pitwall.workbench.doctor import MIN_NODE
+
+    assert pinned == MIN_NODE, f"ci.yml pins Node {pinned}; workbench doctor requires {MIN_NODE}"
     assert "make pi-extensions-check" in _step_text(job)
     header = text.split("\n  pi-extensions:\n", 1)[1].split("steps:", 1)[0]
     assert "# " in header, "the runner and Node pins need an explanatory comment"
