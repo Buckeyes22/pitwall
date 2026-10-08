@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+from typing import Any
 
 import pytest
 
@@ -11,14 +12,14 @@ from pitwall.cli.output import Output
 LONG_ID = "gw-agentrouter-claude-opus-4-8-with-a-very-long-provider-identifier-suffix"
 
 
-def _render(**kwargs: object) -> str:
+def _render(**kwargs: Any) -> str:
     buffer = io.StringIO()
     out = Output(stdout_file=buffer)
     out.print_table(
         "Things",
         ["ID", "Pool", "Free type", "Used/budget", "Headroom"],
         [[LONG_ID, "agentrouter", "one-time-initial", "0/200000000", "[##########] 100%"]],
-        **kwargs,  # type: ignore[arg-type]
+        **kwargs,
     )
     return buffer.getvalue()
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -10,10 +11,10 @@ from pitwall.doctor import DoctorReport, Probes, run_doctor
 
 
 def _probes() -> Probes:
-    async def unused(*_args: object) -> dict[str, object]:
+    async def unused(*_args: object) -> Any:
         raise AssertionError("personal mode never probes the registry services")
 
-    return Probes(database=unused, redis=unused, api_health=unused, canary=unused)  # type: ignore[arg-type]
+    return Probes(database=unused, redis=unused, api_health=unused, canary=unused)
 
 
 async def _doctor(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, toml_text: str) -> DoctorReport:

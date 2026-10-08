@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from pitwall.cli.base_url import configured_base_url, default_base_url
@@ -50,14 +52,14 @@ async def test_doctor_probes_the_api_on_the_configured_port() -> None:
 
     seen: list[str] = []
 
-    async def api_health(url: str, token: str | None, timeout: float) -> dict[str, object]:
+    async def api_health(url: str, token: str | None, timeout: float) -> dict[str, Any]:
         seen.append(url)
         raise ProbeError("down")
 
-    async def down(*_args: object) -> dict[str, object]:
+    async def down(*_args: object) -> Any:
         raise ProbeError("down")
 
-    probes = Probes(database=down, redis=down, api_health=api_health, canary=down)  # type: ignore[arg-type]
+    probes = Probes(database=down, redis=down, api_health=api_health, canary=down)
     env = {"PITWALL_API_PORT": "9292", "HOME": "/nonexistent", "PATH": ""}
 
     await doctor_module._registry_checks(
