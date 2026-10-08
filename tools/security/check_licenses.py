@@ -127,7 +127,7 @@ def evaluate(
     }
     seen_review: set[str] = set()
     for row in rows:
-        name = canonicalize_name(row["name"])
+        name: str = canonicalize_name(row["name"])
         if npm:
             name = f"{row['name'].lower()}@{row['version']}"
         license_value = row["license"]
