@@ -475,7 +475,8 @@ jobs:
           uv run pytest tests/workbench/test_restricted.py tests/workbench/test_surfaces.py \
             tests/workbench/test_dynamic_contract_acceptance.py tests/workbench/pi_extensions \
             -p no:randomly -p no:cov -q -rs | tee "$RUNNER_TEMP/pytest.log"
-          if grep -E '^SKIPPED .*(bubblewrap|setpriv|seccomp|sandbox|node)' "$RUNNER_TEMP/pytest.log"; then
+          # Any skip here means a prerequisite (bubblewrap, Node, the pinned Pi packages) was missing.
+          if grep -E '^SKIPPED' "$RUNNER_TEMP/pytest.log"; then
             echo "::error::a restricted-mode or Pi extension test skipped on the pinned runner"
             exit 1
           fi

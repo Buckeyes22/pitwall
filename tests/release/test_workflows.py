@@ -152,8 +152,9 @@ def test_pi_extensions_job_pins_node_and_runner_with_a_reason() -> None:
     header = text.split("\n  pi-extensions:\n", 1)[1].split("steps:", 1)[0]
     assert "# " in header, "the runner and Node pins need an explanatory comment"
     assert "PITWALL_PI_MODULES" in _step_text(job)
-    # A skipped sandbox test would hide a broken restricted mode, so the job fails on it.
-    assert "SKIPPED" in _step_text(job)
+    # A skipped sandbox or extension test would hide a missing prerequisite, so any skip fails
+    # the job (a keyword filter missed "pinned Pi packages are not installed").
+    assert "grep -E '^SKIPPED' " in _step_text(job)
 
 
 def test_release_triggers_only_v_tags() -> None:
