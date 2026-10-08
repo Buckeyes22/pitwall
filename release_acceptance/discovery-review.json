@@ -114,7 +114,7 @@
     {
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
-      "source": "src/pitwall/cli/output.py:138",
+      "source": "src/pitwall/cli/output.py:172",
       "span_sha256": "5b81e0d682f1b19e10f1395f2c0711c2a62bea82e327a4f5d68729e7a6fda19e",
       "reviewer": "root",
       "interpretation": "add_json_argument adds --json (store_true) to each parser it is given; every command that calls it owns its own --json surface.",
@@ -621,7 +621,7 @@
     {
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
-      "source": "docker-compose.testinfra.yml:10",
+      "source": "docker-compose.testinfra.yml:9",
       "span_sha256": "693a0e862b32d139056137c89a6fa56c1a01d226fe3e05ca460d7d755c8df864",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
@@ -633,7 +633,7 @@
     {
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
-      "source": "docker-compose.testinfra.yml:27",
+      "source": "docker-compose.testinfra.yml:26",
       "span_sha256": "528710cb8c8545b0ee113ab03c9076c98536469c64e6a9ac2cb1cc17d94f3d6a",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",

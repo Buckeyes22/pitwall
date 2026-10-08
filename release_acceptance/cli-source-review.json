@@ -686,12 +686,12 @@
     {
       "path": "src/pitwall/cli/output.py",
       "role": "shared --json argument helper and Output JSON/human rendering contract",
-      "normalized_sha256": "28112b09cbc844564d43101247fe2f08793d9a33e3dc7791f34984526f54d92f"
+      "normalized_sha256": "35576a0a0e09c71da819c28995f8c3128925b8f24082d2bf0c01c2225e7ec808"
     },
     {
       "path": "src/pitwall/cli/routing.py",
       "role": "routing parser, literal command loop, request helper, confirmation, and output calls",
-      "normalized_sha256": "103a2324b83c838483f334370968653d0451449bbecb1fcaa32036aeecee63cc"
+      "normalized_sha256": "27d04f10e241cd52355cbb3e30a47802b8544d6ad7df8e169e6c29ff8cc892a1"
     },
     {
       "path": "src/pitwall/cli/runpod_market.py",
