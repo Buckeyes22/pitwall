@@ -81,7 +81,7 @@ def span_digest(root: Path, source: str) -> str:
             parts = [relative]
             for outer in chain[:-1]:
                 parts.append(
-                    f"{type(outer).__name__}:{outer.name}"  # type: ignore[attr-defined]
+                    f"{type(outer).__name__}:{outer.name}"
                     if isinstance(outer, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef)
                     else _header(outer)
                 )
