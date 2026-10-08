@@ -38,7 +38,14 @@ Model facts, their sources, and the files generated from them are described in
 [model-facts/README.md](model-facts/README.md). Change a model's facts in
 `docs/agents/model-facts/<unit>/facts.json`, then run `uv run python tools/agents/sync_model_facts.py`,
 `uv run python tools/agents/sync_routes.py`, and `uv run python tools/agents/validate_model_facts.py`.
-`tools/agents/check_generated.py` runs all three checks.
+`tools/agents/check_generated.py` runs all three checks; when it reports a stale generated file it
+prints the regeneration command, and `make regen` regenerates every generated asset at once.
+
+Editing a test file or bumping a model revision also moves digests recorded elsewhere. Rebind with
+`make regen-bindings` (`uv run --frozen python -m tools.release_acceptance.bind_surfaces
+--accept-reviewed`), which also refreshes the source-review records. Secret-scan results do not
+depend on those digests; if `tools/security/check_secrets.py` reports a new finding, run
+`uv run --frozen python tools/security/check_secrets.py --regenerate` and audit it.
 
 ## Dependencies
 
