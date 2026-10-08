@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import asyncio
 import os
 import shutil
@@ -104,6 +105,74 @@ def test_every_db_module_is_integration_marked() -> None:
         or any(line.startswith(test_id) for test_id in _DB_TEST_IDS)
     ]
     assert leaked == []
+
+
+# Fixtures that hand a test a live Postgres: the integration lane's per-test schema pool and the
+# migrated-schema fixtures in tests/db/conftest.py.
+_DB_FIXTURES = frozenset({"pg_pool", "migrated_schema", "db_catalog", "db_sandbox"})
+
+
+def _integration_marked(decorators: list[ast.expr]) -> bool:
+    return any("mark.integration" in ast.unparse(decorator) for decorator in decorators)
+
+
+def _module_integration_marked(tree: ast.Module) -> bool:
+    return any(
+        isinstance(node, ast.Assign)
+        and any(
+            isinstance(target, ast.Name) and target.id == "pytestmark" for target in node.targets
+        )
+        and "mark.integration" in ast.unparse(node.value)
+        for node in tree.body
+    )
+
+
+def _requests_db_fixture(node: ast.AST) -> bool:
+    return isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef) and any(
+        argument.arg in _DB_FIXTURES for argument in node.args.args + node.args.kwonlyargs
+    )
+
+
+def _unmarked_tests(body: list[ast.stmt], inherited: bool) -> list[str]:
+    unmarked: list[str] = []
+    for node in body:
+        if isinstance(node, ast.ClassDef):
+            class_marked = (
+                inherited
+                or _integration_marked(node.decorator_list)
+                or any(
+                    isinstance(item, ast.Assign) and "mark.integration" in ast.unparse(item.value)
+                    for item in node.body
+                )
+            )
+            unmarked += [f"{node.name}.{name}" for name in _unmarked_tests(node.body, class_marked)]
+        elif (
+            isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef)
+            and node.name.startswith("test")
+            and not (inherited or _integration_marked(node.decorator_list))
+        ):
+            unmarked.append(node.name)
+    return unmarked
+
+
+def test_every_module_using_a_database_fixture_is_integration_marked() -> None:
+    """A module that takes a live-database fixture is marked ``integration`` (module-level
+    ``pytestmark``), or else each of its tests carries the marker itself."""
+    offenders: list[str] = []
+    for path in sorted((_REPO_ROOT / "tests").rglob("*.py")):
+        if path.name == "conftest.py":
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        if not any(_requests_db_fixture(node) for node in ast.walk(tree)):
+            continue
+        offenders += [
+            f"{path.relative_to(_REPO_ROOT)}::{name}"
+            for name in _unmarked_tests(tree.body, _module_integration_marked(tree))
+        ]
+    assert offenders == [], (
+        "tests in modules that use a live-database fixture must be integration-marked "
+        f"(add `pytestmark = pytest.mark.integration`): {offenders}"
+    )
 
 
 def test_hermetic_placeholder_is_unreachable() -> None:

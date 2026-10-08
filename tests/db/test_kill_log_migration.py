@@ -8,10 +8,15 @@ from urllib.parse import urlparse
 
 import pytest
 
+from tests.db.schema_catalog import Catalog
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
 _R2_ROTATED_COL = "_".join(("r2", "credentials", "rotated"))
+
+
+pytestmark = pytest.mark.integration
 
 
 def test_kill_log_insert_and_defaults() -> None:
@@ -26,16 +31,20 @@ def test_kill_log_insert_and_defaults() -> None:
     )
 
 
-def test_kill_log_no_uio_columns() -> None:
-    migration_path = _MIGRATION_DIR / "0006_kill_log.sql"
-    sql = migration_path.read_text()
-    forbidden = [
-        "tailscale_acl_updated",
-        _R2_ROTATED_COL,
-        "skypilot_clusters_destroyed",
-    ]
-    for col in forbidden:
-        assert col not in sql, f"forbidden legacy column '{col}' found in migration"
+async def test_kill_log_has_no_legacy_uio_columns(db_catalog: Catalog) -> None:
+    columns = await db_catalog.columns("kill_log")
+
+    assert columns, "kill_log is missing"
+    assert {"tailscale_acl_updated", _R2_ROTATED_COL, "skypilot_clusters_destroyed"}.isdisjoint(
+        columns
+    )
+    await db_catalog.expect_columns(
+        "kill_log",
+        triggered_at="timestamptz not null default now()",
+        reason="text not null",
+        actor="text not null",
+        errors="jsonb not null default '[]'::jsonb",
+    )
 
 
 def _run_sql(database_url: str) -> subprocess.CompletedProcess[str]:

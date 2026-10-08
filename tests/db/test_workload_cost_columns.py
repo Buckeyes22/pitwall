@@ -8,21 +8,37 @@ from urllib.parse import urlparse
 
 import pytest
 
+from tests.db.schema_catalog import Catalog, MigrationSandbox
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
+pytestmark = pytest.mark.integration
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
 
 
-def test_workload_cost_columns_migration_has_expected_sql() -> None:
-    sql = (_MIGRATION_DIR / "0011_workload_cost_columns.sql").read_text()
+async def test_workload_cost_columns_and_non_negative_checks(db_catalog: Catalog) -> None:
+    await db_catalog.expect_columns(
+        "workloads", cost_estimate_usd="numeric(12,6)", cost_actual_usd="numeric(12,6)"
+    )
+    constraints = await db_catalog.constraints("workloads")
 
-    assert "cost_estimate_usd" in sql
-    assert "cost_actual_usd" in sql
-    assert "NUMERIC(12,6)" in sql
-    assert "idx_workloads_month_spend" in sql
-    assert "IF NOT EXISTS" in sql
-    assert "workloads_cost_estimate_nonneg" in sql
-    assert "workloads_cost_actual_nonneg" in sql
+    assert constraints["workloads_cost_estimate_nonneg"].contains(
+        "cost_estimate_usd IS NULL OR cost_estimate_usd >= 0"
+    )
+    assert constraints["workloads_cost_actual_nonneg"].contains(
+        "cost_actual_usd IS NULL OR cost_actual_usd >= 0"
+    )
+
+
+async def test_0011_adds_the_month_spend_index_and_is_safe_to_reapply(
+    db_sandbox: MigrationSandbox,
+) -> None:
+    await db_sandbox.apply_through("0011_workload_cost_columns")
+    month_spend = await Catalog(db_sandbox.connection).indexes("workloads")
+
+    assert "idx_workloads_month_spend" in month_spend
+    # Re-running the migration (as a repaired ledger would) must not fail on what exists.
+    await db_sandbox.reapply("0011_workload_cost_columns")
 
 
 def test_workload_cost_columns_mtd_spend_and_constraints() -> None:

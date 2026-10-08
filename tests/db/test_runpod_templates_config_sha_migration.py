@@ -2,26 +2,42 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import pytest
 
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-_MIGRATION = _REPO_ROOT / "db" / "migrations" / "0023_runpod_templates_config_sha.sql"
+from tests.db.schema_catalog import Catalog, MigrationSandbox
+
+pytestmark = pytest.mark.integration
 
 
-def test_config_sha_migration_backfills_before_not_null() -> None:
-    sql = _MIGRATION.read_text()
+async def test_config_sha_is_required_and_replaces_the_image_only_cache_key(
+    db_catalog: Catalog,
+) -> None:
+    await db_catalog.expect_columns("runpod_templates", config_sha="text not null")
+    constraints = await db_catalog.constraints("runpod_templates")
+    unique = constraints["runpod_templates_name_config_sha_key"]
 
-    assert "ADD COLUMN config_sha TEXT" in sql
-    assert "UPDATE pitwall.runpod_templates" in sql
-    assert "ALTER COLUMN config_sha SET NOT NULL" in sql
-    assert sql.index("UPDATE pitwall.runpod_templates") < sql.index(
-        "ALTER COLUMN config_sha SET NOT NULL"
+    assert unique.kind == "unique"
+    assert unique.columns == ("name", "config_sha")
+    assert "runpod_templates_name_image_sha_key" not in constraints
+    assert (
+        await db_catalog.index("runpod_templates", "idx_runpod_templates_config_sha")
+    ).columns == ("config_sha",)
+
+
+async def test_existing_rows_are_backfilled_before_the_column_becomes_required(
+    db_sandbox: MigrationSandbox,
+) -> None:
+    await db_sandbox.apply_through("0022_capability_served_model")
+    connection = db_sandbox.connection
+    await connection.execute(
+        "INSERT INTO pitwall.runpod_templates (id, runpod_template_id, name, image_sha, image_ref) "
+        "VALUES ('tpl_1', 'rp_1', 'worker', 'sha256:abc', 'registry/worker@sha256:abc')"
     )
 
+    await db_sandbox.apply_through("0023_runpod_templates_config_sha")
 
-def test_config_sha_replaces_image_only_unique_cache_key() -> None:
-    sql = _MIGRATION.read_text()
-
-    assert "DROP CONSTRAINT runpod_templates_name_image_sha_key" in sql
-    assert "UNIQUE (name, config_sha)" in sql
-    assert "idx_runpod_templates_config_sha" in sql
+    # The deterministic legacy identity: two md5 digests of the old image-only key.
+    assert await connection.fetchval(
+        "SELECT config_sha = md5('legacy:' || image_sha) || md5('legacy-config:' || image_sha) "
+        "FROM pitwall.runpod_templates WHERE id = 'tpl_1'"
+    )

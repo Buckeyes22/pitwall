@@ -2,17 +2,18 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import pytest
 
-_MIGRATION = (
-    Path(__file__).resolve().parents[2] / "db/migrations/0037_workloads_submitted_at_index.sql"
-)
+from tests.db.schema_catalog import Catalog
+
+pytestmark = pytest.mark.integration
 
 
-def test_0037_creates_the_plain_index_and_drops_the_partial_one() -> None:
-    sql = _MIGRATION.read_text(encoding="utf-8")
-    assert (
-        "CREATE INDEX IF NOT EXISTS idx_workloads_submitted_at ON pitwall.workloads (submitted_at)"
-        in sql
-    )
-    assert "DROP INDEX IF EXISTS pitwall.idx_workloads_month_spend" in sql
+async def test_0037_has_the_plain_index_and_no_partial_one(db_catalog: Catalog) -> None:
+    indexes = await db_catalog.indexes("workloads")
+
+    plain = indexes["idx_workloads_submitted_at"]
+    assert plain.columns == ("submitted_at",)
+    assert plain.predicate is None
+    assert not plain.unique
+    assert "idx_workloads_month_spend" not in indexes

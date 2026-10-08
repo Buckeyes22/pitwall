@@ -4,35 +4,32 @@
 and ``config_audit_action_check`` constraints. Unit tests drive that path through
 fakes, which accept any string, so a new actor or action can pass every hermetic
 gate and still fail at runtime against a real database. This test closes the gap by
-comparing the source to the schema directly.
+comparing the source to the migrated schema directly.
 """
 
 from __future__ import annotations
 
 import ast
-import re
 from pathlib import Path
 
 import pytest
 
+from tests.db.schema_catalog import Catalog
+
+pytestmark = pytest.mark.integration
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-_MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _SRC_DIR = _REPO_ROOT / "src" / "pitwall"
 
 _COLUMNS = ("actor", "action")
 
 
-def _allowed(column: str) -> set[str]:
-    """Read a column's allow-list from the newest migration that defines it."""
+async def _allowed(db_catalog: Catalog, column: str) -> set[str]:
+    """A column's allow-list as the migrated database enforces it."""
 
-    constraint = f"config_audit_{column}_check"
-    defining = sorted(p for p in _MIGRATION_DIR.glob("*.sql") if constraint in p.read_text())
-    assert defining, f"no migration defines {constraint}"
-
-    body = defining[-1].read_text().split(f"ADD CONSTRAINT {constraint}")[-1]
-    listed = re.search(rf"{column} IN \(([^)]*)\)", body, re.DOTALL)
-    assert listed is not None, f"could not parse the {column} list from {defining[-1].name}"
-    return set(re.findall(r"'([^']+)'", listed.group(1)))
+    check = await db_catalog.constraint("config_audit", f"config_audit_{column}_check")
+    assert check.kind == "check" and check.columns == (column,)
+    return set(check.literals)
 
 
 def _literals(node: ast.expr) -> list[str]:
@@ -93,16 +90,20 @@ def _written(column: str) -> list[tuple[str, int, str]]:
     return found
 
 
-def test_lease_renewal_actors_from_the_cli_and_reconciler_are_seen_and_allowed() -> None:
+async def test_lease_renewal_actors_from_the_cli_and_reconciler_are_seen_and_allowed(
+    db_catalog: Catalog,
+) -> None:
     """The renewal actors that once failed the check on Postgres (fixed by 0042)."""
     written = {value for _path, _line, value in _written("actor")}
     assert {"cli:lease", "reconciler:activity"} <= written
-    assert {"cli:lease", "reconciler:activity"} <= _allowed("actor")
+    assert {"cli:lease", "reconciler:activity"} <= await _allowed(db_catalog, "actor")
 
 
 @pytest.mark.parametrize("column", _COLUMNS)
-def test_every_audit_value_written_is_allowed_by_the_constraint(column: str) -> None:
-    allowed = _allowed(column)
+async def test_every_audit_value_written_is_allowed_by_the_constraint(
+    db_catalog: Catalog, column: str
+) -> None:
+    allowed = await _allowed(db_catalog, column)
     written = _written(column)
 
     assert written, f"expected to find insert_audit call sites writing {column}"

@@ -1,14 +1,25 @@
+"""Migration 0025: webhook subscriptions may subscribe to lease.expiring; the default is unchanged."""
+
 from __future__ import annotations
 
-from pathlib import Path
+import pytest
 
-_MIGRATION = (
-    Path(__file__).resolve().parents[2] / "db/migrations/0025_webhook_subscription_event_types.sql"
-)
+from tests.db.schema_catalog import Catalog
+
+pytestmark = pytest.mark.integration
 
 
-def test_event_type_migration_allows_expiring_and_preserves_completion_default() -> None:
-    sql = _MIGRATION.read_text()
+async def test_event_types_default_keeps_completion_and_allow_list_has_expiring(
+    db_catalog: Catalog,
+) -> None:
+    await db_catalog.expect_columns(
+        "webhook_subscriptions",
+        event_types="text[] not null default ARRAY['workload.completed']::TEXT[]",
+    )
+    allowed = await db_catalog.constraint(
+        "webhook_subscriptions", "webhook_subscription_event_types_allowed"
+    )
 
-    assert "DEFAULT ARRAY['workload.completed']::TEXT[]" in sql
-    assert "'lease.expiring'" in sql
+    assert allowed.kind == "check"
+    assert allowed.columns == ("event_types",)
+    assert {"workload.completed", "lease.expiring"} <= set(allowed.literals)

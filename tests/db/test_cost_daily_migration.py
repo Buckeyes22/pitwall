@@ -8,21 +8,30 @@ from urllib.parse import urlparse
 
 import pytest
 
+from tests.db.schema_catalog import Catalog
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
 
 
-def test_cost_daily_migration_matches_spec_columns() -> None:
-    sql = (_MIGRATION_DIR / "0009_cost_daily.sql").read_text()
+pytestmark = pytest.mark.integration
 
-    assert "CREATE TABLE pitwall.cost_daily" in sql
-    assert "day                      DATE NOT NULL" in sql
-    assert "capability_class         TEXT NOT NULL" in sql
-    assert "provider_type            TEXT NOT NULL" in sql
-    assert "workload_count           INTEGER NOT NULL" in sql
-    assert "cost_usd                 NUMERIC(12,6) NOT NULL" in sql
-    assert "PRIMARY KEY (day, capability_class, provider_type)" in sql
+
+async def test_cost_daily_table_matches_spec(db_catalog: Catalog) -> None:
+    await db_catalog.expect_columns(
+        "cost_daily",
+        day="date not null",
+        capability_class="text not null",
+        provider_type="text not null",
+        workload_count="int4 not null",
+        cost_usd="numeric(12,6) not null",
+    )
+    assert await db_catalog.primary_key("cost_daily") == (
+        "day",
+        "capability_class",
+        "provider_type",
+    )
 
 
 def test_cost_daily_insert_and_constraints() -> None:

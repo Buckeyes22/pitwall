@@ -133,25 +133,6 @@ def _block_real_current_provider_control_plane_dns() -> Iterator[None]:
         socket.getaddrinfo = original
 
 
-# Test modules that open a real asyncpg connection (DATABASE_URL) with no skip
-# guard. Auto-marked `integration` in pytest_collection_modifyitems so the fast
-# suite never tries to reach a live Postgres (release program converts these to pg_pool).
-_REAL_DB_TEST_MODULES = (
-    "tests/db/test_repository.py",
-    "tests/db/test_migration_indexes.py",
-    "tests/db/test_cover_duplicate_rejection.py",
-    "tests/db/test_alert_events_migration.py",
-    "tests/db/test_config_audit_migration.py",
-    "tests/db/test_cost_daily_migration.py",
-    "tests/db/test_kill_log_migration.py",
-    "tests/db/test_migration_full.py",
-    "tests/db/test_reset_safety.py",
-    "tests/db/test_runpod_templates_migration.py",
-    "tests/db/test_workload_cost_columns.py",
-    "tests/test_webhook_duplicate_delivery_stress.py",
-)
-
-
 @pytest.fixture(autouse=True)
 def _postgres_only_for_integration(request: pytest.FixtureRequest) -> Iterator[None]:
     """Fail non-integration tests that touch Postgres; feed integration ones the test URL.
@@ -537,19 +518,6 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
         for item in items:
             if item.get_closest_marker("benchmark") is not None:
                 item.add_marker(skip_benchmark)
-
-    # Real-DB test modules connect to Postgres via DATABASE_URL with no skip
-    # guard, so they must run only under the integration marker, never in the
-    # default fast suite (`-m "not integration"`). Keeps the fast suite green
-    # with no live DB even though conftest sets a placeholder DATABASE_URL for
-    # import-time require_runtime_env during collection.
-    for item in items:
-        nodeid = item.nodeid.replace("\\", "/")
-        if (
-            any(nodeid.startswith(p) for p in _REAL_DB_TEST_MODULES)
-            and item.get_closest_marker("integration") is None
-        ):
-            item.add_marker(pytest.mark.integration)
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)

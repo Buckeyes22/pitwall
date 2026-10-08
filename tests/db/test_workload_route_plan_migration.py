@@ -1,41 +1,67 @@
-"""ROUTE-01 append-only workload plan persistence contract."""
+"""ROUTE-01 append-only workload plan persistence contract (migration 0031)."""
 
 from __future__ import annotations
 
-from pathlib import Path
+import json
 
-from pitwall.migrations import discover_migrations
+import pytest
 
-_ROOT = Path(__file__).parents[2]
-_MIGRATION = _ROOT / "db/migrations/0031_workload_route_plan.sql"
+from tests.db.schema_catalog import Catalog
+
+pytestmark = pytest.mark.integration
+
+_PLAN_ID = "plan_" + "0123456789abcdef" * 2
+_INSERT = (
+    "INSERT INTO pitwall.workloads (id, capability_id, provider_id, type, state, submitted_at, "
+    "route_plan_id, route_plan, route_attempts) "
+    "VALUES ('wl_rp', 'cap', 'prov', 'run', 'queued', now(), $1, $2::jsonb, $3::jsonb)"
+)
 
 
-def test_route_plan_migration_follows_billing_identity_record() -> None:
-    records = discover_migrations(_ROOT / "db/migrations")
-    versions = [record.version for record in records]
-
-    assert "0031_workload_route_plan" in versions
-    assert (
-        versions.index("0031_workload_route_plan")
-        == versions.index("0030_lease_workload_billing_identity") + 1
+async def test_route_plan_columns_and_index(db_catalog: Catalog) -> None:
+    await db_catalog.expect_columns(
+        "workloads",
+        route_plan_id="text",
+        route_plan="jsonb",
+        route_attempts="jsonb not null default '[]'::jsonb",
     )
-    assert [
-        record.filename for record in records if record.version == "0031_workload_route_plan"
-    ] == [_MIGRATION.name]
+    index = await db_catalog.index("workloads", "idx_workloads_route_plan_id")
+
+    assert index.columns == ("route_plan_id",)
 
 
-def test_route_plan_migration_requires_paired_safe_document() -> None:
-    sql = _MIGRATION.read_text(encoding="utf-8")
+async def test_route_plan_checks_require_a_paired_safe_document(db_catalog: Catalog) -> None:
+    constraints = await db_catalog.constraints("workloads")
 
-    assert "ADD COLUMN route_plan_id TEXT" in sql
-    assert "ADD COLUMN route_plan JSONB" in sql
-    assert "workloads_route_plan_pair_check" in sql
-    assert "jsonb_typeof(route_plan) = 'object'" in sql
-    assert "route_plan_id ~ '^plan_[0-9a-f]{32}$'" in sql
-    assert "route_plan ? 'plan_id'" in sql
-    assert "route_plan ->> 'plan_id' IS NOT NULL" in sql
-    assert "route_plan ->> 'plan_id' = route_plan_id" in sql
-    assert "ADD COLUMN route_attempts JSONB NOT NULL DEFAULT '[]'::jsonb" in sql
-    assert "jsonb_array_length(route_attempts) <= 100" in sql
-    assert "pg_column_size(route_plan) <= 1048576" in sql
-    assert "idx_workloads_route_plan_id" in sql
+    assert constraints["workloads_route_plan_pair_check"].contains(
+        "(route_plan_id IS NULL AND route_plan IS NULL) "
+        "OR (route_plan_id IS NOT NULL AND route_plan IS NOT NULL)"
+    )
+    assert constraints["workloads_route_plan_object_check"].contains(
+        "jsonb_typeof(route_plan) = 'object'"
+    )
+    assert constraints["workloads_route_plan_id_shape_check"].contains(
+        "route_plan_id ~ '^plan_[0-9a-f]{32}$'"
+    )
+    identity = constraints["workloads_route_plan_identity_check"]
+    assert identity.contains("route_plan ? 'plan_id'")
+    assert identity.contains("route_plan ->> 'plan_id' IS NOT NULL")
+    assert identity.contains("route_plan ->> 'plan_id' = route_plan_id")
+    assert constraints["workloads_route_attempts_shape_check"].contains(
+        "jsonb_array_length(route_attempts) <= 100"
+    )
+    assert constraints["workloads_route_plan_size_check"].contains(
+        "pg_column_size(route_plan) <= 1048576"
+    )
+
+
+async def test_the_database_refuses_an_unpaired_or_mismatched_plan(db_catalog: Catalog) -> None:
+    plan = json.dumps({"plan_id": _PLAN_ID})
+    ok = await db_catalog.rejects(_INSERT, _PLAN_ID, plan, "[]")
+    unpaired = await db_catalog.rejects(_INSERT, _PLAN_ID, None, "[]")
+    bad_shape = await db_catalog.rejects(_INSERT, "plan_x", json.dumps({"plan_id": "plan_x"}), "[]")
+    mismatch = await db_catalog.rejects(_INSERT, _PLAN_ID, json.dumps({"plan_id": "other"}), "[]")
+    too_many = await db_catalog.rejects(_INSERT, _PLAN_ID, plan, json.dumps([{}] * 101))
+
+    assert ok is None
+    assert all(failure is not None for failure in (unpaired, bad_shape, mismatch, too_many))
