@@ -26,6 +26,18 @@ _EXCLUDES = (
     r"(?:^|/)uv\.lock$",
     r"(?:^|/)\.secrets\.baseline$",
 )
+# Lines whose only high-entropy content is a content digest or a pinned revision. They change
+# every time a bound test file or model-facts revision changes, are public hashes rather than
+# credentials, and would otherwise force a second baseline regeneration after every edit.
+# Everything else in those files, and every other line, is still scanned.
+_EXCLUDE_LINES = (
+    # release_acceptance records and installer pins: "sha256": "<64 hex>" (and *_sha256 keys)
+    r'sha256": "[0-9a-f]{64}"',
+    # model-facts revision fact: the whole line is `"value": "<40 hex git revision>"`
+    r'^\s*"value": "[0-9a-f]{40}",?\s*$',
+)
+_REGENERATE = "uv run --frozen python tools/security/check_secrets.py --regenerate"
+_AUDIT = "uv run --frozen detect-secrets audit .secrets.baseline"
 
 
 def _fingerprints(document: dict[str, Any]) -> set[tuple[str, str, str]]:
@@ -65,6 +77,8 @@ def _scan(baseline: Path) -> dict[str, Any]:
     command = [executable, "scan", "--no-verify", "--baseline", str(baseline)]
     for pattern in _EXCLUDES:
         command.extend(("--exclude-files", pattern))
+    for pattern in _EXCLUDE_LINES:
+        command.extend(("--exclude-lines", pattern))
     command.extend(_candidate_files())
     result = subprocess.run(command, cwd=_ROOT, check=False, capture_output=True, text=True)
     if result.returncode != 0:
@@ -72,12 +86,42 @@ def _scan(baseline: Path) -> dict[str, Any]:
     return cast(dict[str, Any], json.loads(baseline.read_text(encoding="utf-8")))
 
 
-def main() -> int:
+def _regenerate() -> int:
+    """Rewrite the baseline from the canonical scan, keeping every existing audit decision."""
+    with tempfile.TemporaryDirectory(prefix="pitwall-secret-scan-") as temp_dir:
+        scan_baseline = Path(temp_dir) / "baseline.json"
+        shutil.copy2(_BASELINE, scan_baseline)
+        _scan(scan_baseline)
+        shutil.copy2(scan_baseline, _BASELINE)
+    document = json.loads(_BASELINE.read_text(encoding="utf-8"))
+    pending = _unreviewed(document)
+    for filename, line, kind in pending:
+        print(f"needs audit: {filename}:{line}: {kind}", file=sys.stderr)
+    if pending:
+        print(
+            f"audit each finding above (mark real secrets for removal, false positives "
+            f"is_secret=false) with `{_AUDIT}`, then rerun "
+            "`uv run --frozen python tools/security/check_secrets.py`",
+            file=sys.stderr,
+        )
+        return 1
+    print(f"baseline regenerated: {len(_fingerprints(document))} reviewed findings")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    arguments = sys.argv[1:] if argv is None else argv
+    if arguments == ["--regenerate"]:
+        return _regenerate()
+    if arguments:
+        print("usage: check_secrets.py [--regenerate]", file=sys.stderr)
+        return 2
     approved = json.loads(_BASELINE.read_text(encoding="utf-8"))
     pending = _unreviewed(approved)
     if pending:
         for filename, line, kind in pending:
             print(f"unreviewed baseline finding: {filename}:{line}: {kind}", file=sys.stderr)
+        print(f"audit them with `{_AUDIT}`", file=sys.stderr)
         return 1
 
     with tempfile.TemporaryDirectory(prefix="pitwall-secret-scan-") as temp_dir:
@@ -95,7 +139,8 @@ def main() -> int:
         print(f"stale secret-baseline entry: {filename}: {kind}", file=sys.stderr)
     if additions or stale:
         print(
-            "regenerate with the canonical scan and audit every changed finding",
+            f"fix: run `{_REGENERATE}`, audit any finding it lists with `{_AUDIT}`, and "
+            "commit .secrets.baseline (a real secret must be removed from the tree instead)",
             file=sys.stderr,
         )
         return 1

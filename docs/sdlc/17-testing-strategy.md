@@ -84,7 +84,13 @@ The security chain includes:
 
 - Bandit with a reviewed baseline;
 - pip-audit over the frozen runtime dependency graph;
-- deterministic detect-secrets review and drift detection;
+- deterministic detect-secrets review and drift detection (`tools/security/check_secrets.py`);
+  the scan ignores only lines that are a `sha256` digest (`"sha256": "<64 hex>"`, which includes
+  `release_acceptance/*.json`) or a model-facts revision (`"value": "<40 hex>"`), so editing a
+  bound test file or bumping a revision never needs a baseline regeneration. Every other line is
+  scanned. When a new finding appears, fix it with
+  `uv run --frozen python tools/security/check_secrets.py --regenerate`, audit what it lists with
+  `uv run --frozen detect-secrets audit .secrets.baseline`, and commit `.secrets.baseline`;
 - license allow/deny/review policy over the runtime graph;
 - Semgrep registry rules plus the repository-local policy;
 - security-marked regression tests and all-operation Schemathesis fuzzing;
@@ -228,6 +234,22 @@ pin changes only with a stated reason. Constructs discovery cannot read statical
 each reviewed in `release_acceptance/discovery-review.json` and kept current by
 `tests/release_acceptance/test_discovery_review.py`.
 
+An entry is keyed by `file:line` and pins the normalized AST of the reviewed definition
+(`span_sha256`: the statement at that line plus the headers of the loops, branches, classes, and
+functions around it; the whitespace-normalized line for Compose files), and the file pins in
+`release_acceptance/cli-source-review.json` hash the module's AST (`normalized_sha256`). A
+comment, blank line, or edit elsewhere in the file therefore changes nothing but line numbers.
+Refresh the records after any edit to a reviewed file:
+
+```bash
+uv run --frozen python -m tools.release_acceptance.review_records
+```
+
+It re-lines entries and re-hashes pins whose reviewed content is unchanged. If a reviewed
+definition changed it writes nothing and lists the entries to re-read; after re-reading them run
+the same command with `--accept-reviewed`. `bind_surfaces` (below) runs the same refresh, so
+`make regen-bindings` covers both.
+
 **A new surface is bound to the test that proves it.** Families with a fixture file bind by rule
 in `tools/release_acceptance/bind_surfaces.py` (MCP tools to J34, REST operations to J35, CLI
 commands and arguments to J36, configuration keys to J37, migrations to J43, shims to J40); every
@@ -237,8 +259,11 @@ map entry, regenerate the bindings; the command fails naming any unmapped surfac
 the static index cannot find:
 
 ```bash
-uv run --frozen python -m tools.release_acceptance.bind_surfaces
+uv run --frozen python -m tools.release_acceptance.bind_surfaces --accept-reviewed
 ```
+
+(`make regen-bindings` runs the same command. Without `--accept-reviewed` it also refuses to
+re-hash a hand-reviewed binding whose test changed; with it, re-read the listed tests first.)
 
 `tests/release_acceptance/test_surface_bindings.py` runs in the hermetic lane and fails when a
 surface is unmapped or the committed bindings differ from what the rules and map produce, so a

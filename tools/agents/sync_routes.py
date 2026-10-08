@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+REGEN_COMMAND = "uv run --frozen python tools/agents/sync_routes.py"
 sys.path.insert(0, str(ROOT / "src"))
 
 from pitwall.agents import (  # noqa: E402  # reason: sys.path bootstrap
@@ -61,6 +62,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.check:
             for path in changed:
                 print(f"stale generated route asset: {path.relative_to(ROOT)}", file=sys.stderr)
+            print(
+                f"fix: run `{REGEN_COMMAND}` (or `make regen`) and commit the result",
+                file=sys.stderr,
+            )
             return 1
         for path in changed:
             print(f"generated {path.relative_to(ROOT)}")
