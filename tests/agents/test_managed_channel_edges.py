@@ -379,7 +379,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
 
         self.assertEqual("orphan", event["event"])
         self.assertIn("exited without recording a terminal state", event["error"])
-        self.assertEqual(-signal.SIGTERM, harness.wait(timeout=10))
+        self.assertEqual(-signal.SIGTERM, harness.wait(timeout=HANG_GUARD_SECS))
         document = json.loads(store.artifact("run.json").read_text(encoding="utf-8"))
         self.assertEqual("failed", document["state"])
         abandoned = json.loads(store.artifact("abandoned.json").read_text(encoding="utf-8"))
@@ -414,7 +414,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
         self.assertEqual(1, exit_code)
         self.assertIn("abandoned", err.getvalue())
         self.assertNotIn("aborted", out.getvalue())
-        self.assertIsNotNone(harness.wait(timeout=10))
+        self.assertIsNotNone(harness.wait(timeout=HANG_GUARD_SECS))
         self.assertFalse((store.path / "mailbox").exists())
 
     def test_cleanup_ends_the_harness_of_a_dead_managed_supervisor(self) -> None:
@@ -431,7 +431,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
             {"pgid": harness.pid, "pidStartIdentity": identity},
         )
         cleanup_runs(self.env, older_than_seconds=None, remove_all=True)
-        self.assertIsNotNone(harness.wait(timeout=10))
+        self.assertIsNotNone(harness.wait(timeout=HANG_GUARD_SECS))
         self.assertFalse(store.path.exists())
 
     def test_a_stale_launch_sidecar_does_not_orphan_a_live_resumed_supervisor(self) -> None:

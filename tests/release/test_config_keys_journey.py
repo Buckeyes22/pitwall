@@ -24,6 +24,8 @@ from typing import Any
 
 import pytest
 
+from tests.hang_guard import HANG_GUARD_SECS
+
 pytestmark = [pytest.mark.release]
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -71,7 +73,7 @@ def _config_check(name: str, value: str) -> tuple[int, str]:
         env=env,
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
     )
     return result.returncode, result.stdout + result.stderr
 
@@ -129,7 +131,7 @@ def _probe(fixture: dict[str, Any], value: str | None, tmp_path: Path) -> Any:
         env=env,
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
     )
     assert result.returncode == 0, (fixture["env"], result.stderr[-600:])
     # Paths inside the scratch dir or the checkout compare as placeholders, so the fixtures
@@ -201,7 +203,7 @@ def test_agents_table_field(key: str, tmp_path: Path) -> None:
             env=env,
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=HANG_GUARD_SECS,
         )
         output = result.stdout + result.stderr
         assert result.returncode == expected, (key, output[-400:])

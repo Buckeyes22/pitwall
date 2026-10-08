@@ -30,6 +30,7 @@ from tests.gateway.test_app_support import (
     json_response,
     running_gateway,
 )
+from tests.hang_guard import HANG_GUARD_SECS
 
 STREAM_CHAT = {"model": "m", "stream": True, "messages": [{"role": "user", "content": "hi"}]}
 KEY = f"sk-test-{'x' * 24}"
@@ -613,7 +614,7 @@ def run_python(code: str, env: dict[str, str]) -> subprocess.CompletedProcess[st
         [sys.executable, "-c", code],
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
         env=env,
         check=False,
     )

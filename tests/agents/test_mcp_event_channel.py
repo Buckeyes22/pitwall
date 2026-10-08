@@ -181,7 +181,7 @@ class ManagedEventChannelTests(unittest.TestCase):
             ["ps", "-o", "pid=,ppid=,stat=,etime=,command=", "-p", f"{launcher_pid},{server_pid}"],
             capture_output=True,
             text=True,
-            timeout=5,
+            timeout=HANG_GUARD_SECS,
             check=False,
         ).stdout
         return (

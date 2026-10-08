@@ -12,6 +12,7 @@ from pitwall.agents.dispatch import _LegacyDispatch
 from pitwall.agents.harnesses import get_adapter
 from pitwall.agents.process import ProcessResult
 from tests.agents.shim_test_support import ShimSandbox
+from tests.hang_guard import HANG_GUARD_SECS
 
 EMPTY_REASON = "exited 0 without writing anything to stdout; recording exit 77"
 AGY_DENIAL = (
@@ -32,7 +33,10 @@ class EmptyOutputTests(unittest.TestCase):
         prompt = str(self.sandbox.prompt())
         args = ["test-provider/test-model", prompt] if harness == "opencode" else [prompt]
         result = self.sandbox.run(
-            harness, args, env=self.sandbox.environment(FAKE_STDOUT=stdout, **extra), timeout=30
+            harness,
+            args,
+            env=self.sandbox.environment(FAKE_STDOUT=stdout, **extra),
+            timeout=HANG_GUARD_SECS,
         )
         (run,) = self.sandbox.run_directories()
         document = json.loads((run / "result.json").read_text(encoding="utf-8"))

@@ -23,6 +23,7 @@ from pitwall.agents.run_store import (
     RunStore,
 )
 from tests.agents.shim_test_support import PITWALL
+from tests.hang_guard import HANG_GUARD_SECS
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -206,7 +207,7 @@ class SteerCliTests(unittest.TestCase):
             result = self._cli("runs", "stop", DISPATCH_ID, "--grace", "5")
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertIn("still running", result.stdout)
-            self.assertEqual(-signal.SIGTERM, harness.wait(timeout=10))
+            self.assertEqual(-signal.SIGTERM, harness.wait(timeout=HANG_GUARD_SECS))
             self.assertFalse((self.store.path / "mailbox" / "steer").exists())
             again = self._cli("runs", "stop", DISPATCH_ID)
             self.assertEqual(1, again.returncode)
