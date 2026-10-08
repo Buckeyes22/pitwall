@@ -14,6 +14,7 @@ from decimal import Decimal
 from typing import Any, Literal
 
 from pitwall.cli.args import normalize_model_id
+from pitwall.cli.base_url import configured_base_url
 from pitwall.cli.output import Output, add_json_argument
 from pitwall.cli.output import json_mode as _json_mode
 from pitwall.personal.routes import routing_command
@@ -312,7 +313,7 @@ async def _serve_model_async(args: argparse.Namespace, out: Output) -> int:
     result = await serve_model(
         await get_pool(),
         ServeRequest.model_validate(values),
-        base_url=settings.pitwall_base_url.strip().rstrip("/") or "http://127.0.0.1:8080",
+        base_url=configured_base_url(settings.pitwall_base_url),
         settings=settings,
         catalogue=catalogue,
     )
@@ -323,7 +324,7 @@ async def _serve_model_async(args: argparse.Namespace, out: Output) -> int:
             routing_cli=settings.pitwall_routing_cli,
             route=args.route,
             capability=result.capability,
-            base_url=settings.pitwall_base_url.strip().rstrip("/") or "http://127.0.0.1:8080",
+            base_url=configured_base_url(settings.pitwall_base_url),
             env=os.environ,
         )
     data = result.to_dict()
@@ -354,7 +355,7 @@ async def _serve_model_async(args: argparse.Namespace, out: Output) -> int:
         remedy = (
             f"{settings.pitwall_routing_cli} profiles add {args.route} "
             f"--from-pitwall {result.capability} --pitwall-url "
-            f"{settings.pitwall_base_url.strip().rstrip('/') or 'http://127.0.0.1:8080'}"
+            f"{configured_base_url(settings.pitwall_base_url)}"
         )
         if out.json_mode:
             data["route_registration"] = asdict(registration)

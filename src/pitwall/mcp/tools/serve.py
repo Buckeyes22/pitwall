@@ -10,6 +10,7 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
+from pitwall.cli.base_url import configured_base_url
 from pitwall.cli.serve_model import register_route
 from pitwall.config import get_settings
 from pitwall.core.enums import LeaseRenewalPolicy
@@ -165,7 +166,7 @@ async def pitwall_serve_model(
     result = await serve_model(
         await get_pool(),
         ServeRequest.model_validate(values),
-        base_url=settings.pitwall_base_url.strip().rstrip("/") or "http://127.0.0.1:8080",
+        base_url=configured_base_url(settings.pitwall_base_url),
         settings=settings,
         catalogue=load_catalogue(),
     )
@@ -176,7 +177,7 @@ async def pitwall_serve_model(
             routing_cli=settings.pitwall_routing_cli,
             route=route,
             capability=result.capability,
-            base_url=settings.pitwall_base_url.strip().rstrip("/") or "http://127.0.0.1:8080",
+            base_url=configured_base_url(settings.pitwall_base_url),
             env=os.environ,
         )
         data["route_registration"] = asdict(registration)

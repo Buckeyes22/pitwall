@@ -18,13 +18,13 @@ from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlsplit
 
+from pitwall.cli.base_url import default_base_url
 from pitwall.config import PitwallSettings
 from pitwall.personal.routes import DEFAULT_ROUTING_CLI, routing_available
 
 Status = Literal["ok", "warn", "fail", "skip"]
 Mode = Literal["personal", "registry"]
 SCHEMA_VERSION = 1
-DEFAULT_API_URL = "http://127.0.0.1:8080"
 DEFAULT_TIMEOUT_S = 5.0
 CANARY_TEXT = "pitwall doctor canary"
 _DEPENDENTS_OF_DB = (
@@ -650,7 +650,7 @@ async def _registry_checks(
         checks.append(_check("spend.kill_switch", "spend", "skip", "database unreachable"))
         checks.append(_check("spend.burn_rate", "spend", "skip", "database unreachable"))
 
-    resolved_api_url = api_url or environ.get("PITWALL_API_URL") or DEFAULT_API_URL
+    resolved_api_url = api_url or default_base_url(environ)
     resolved_api_token = api_token or environ.get("PITWALL_API_TOKEN")
     api_ok = False
     try:

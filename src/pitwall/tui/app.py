@@ -11,6 +11,7 @@ from rich.traceback import Traceback
 from textual.app import App
 from textual.binding import Binding
 
+from pitwall.cli.base_url import configured_base_url
 from pitwall.config import load_settings_from_env
 from pitwall.models import load_catalogue
 from pitwall.onboarding import RunPodOnboardingService, create_runpod_onboarding_service
@@ -498,7 +499,7 @@ class PitwallApp(App[None]):
         self._hardware_fit_source = hardware_fit_source
         if self._serve_action_source is None and self._pool is not None:
             settings = load_settings_from_env()
-            base_url = settings.pitwall_base_url.strip().rstrip("/") or "http://127.0.0.1:8080"
+            base_url = configured_base_url(settings.pitwall_base_url)
             self._serve_action_source = PitwallServeActionSource(
                 self._pool,
                 base_url=base_url,

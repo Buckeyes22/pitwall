@@ -28,13 +28,14 @@ from pitwall.workbench.admission import (
     require_linux,
 )
 from pitwall.workbench.runtime_settings import is_safe_integer
+from pitwall.workbench.state_dir import workbench_state_dir
 
 _GROUP_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}")
 UnknownUsage = Literal["hold", "release"]
 
 
 def default_account_budget_dir() -> Path:
-    return Path.home() / ".local/state/pitwall/pi-workbench/account-budgets"
+    return workbench_state_dir("account-budgets")
 
 
 class AccountBudgetError(RuntimeError):

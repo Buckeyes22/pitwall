@@ -24,7 +24,9 @@ def _parse_doctor_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument("--strict", action="store_true", help="Treat warnings as failures.")
     parser.add_argument(
-        "--api-url", help="API base URL (default: PITWALL_API_URL or http://127.0.0.1:8080)."
+        "--api-url",
+        help="API base URL (default: PITWALL_API_URL, else http://127.0.0.1:$PITWALL_API_PORT, "
+        "port 8080 if unset).",
     )
     parser.add_argument(
         "--canary",

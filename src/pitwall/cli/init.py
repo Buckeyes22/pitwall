@@ -20,7 +20,6 @@ _DEFAULT_INIT_PROVIDER_TYPE = "serverless_lb"
 _DEFAULT_INIT_REGION = "US-EXAMPLE-1"
 _DEFAULT_INIT_GPU_CLASS = "NVIDIA L4"
 _DEFAULT_INIT_PER_SECOND_ACTIVE = "0.001"
-_DEFAULT_INIT_SMOKE_BASE_URL = "http://127.0.0.1:8080"
 
 
 def _parse_init_args(argv: list[str]) -> argparse.Namespace:
@@ -64,8 +63,9 @@ def _parse_init_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--priority", type=int, default=1)
     parser.add_argument(
         "--smoke-base-url",
-        default=_DEFAULT_INIT_SMOKE_BASE_URL,
-        help=f"Base URL used in the printed smoke command (default: {_DEFAULT_INIT_SMOKE_BASE_URL})",
+        default=None,
+        help="Base URL used in the printed smoke command "
+        "(default: PITWALL_API_URL, else http://127.0.0.1:$PITWALL_API_PORT, port 8080 if unset)",
     )
     parser.add_argument(
         "--smoke-text",
@@ -133,7 +133,9 @@ async def _init_async(args: argparse.Namespace) -> int:
     out.add_json("provider", provider.model_dump(mode="json"))
     out.add_json("health_status", "healthy")
     if not out.json_mode:
-        _print_smoke_inference_command(args.smoke_base_url, capability.name, args.smoke_text)
+        _print_smoke_inference_command(
+            _resolve_smoke_base_url(args.smoke_base_url), capability.name, args.smoke_text
+        )
     out.emit()
     return 0
 
@@ -260,6 +262,12 @@ def _print_smoke_inference_command(base_url: str, capability_name: str, text: st
         print("  -H 'Authorization: Bearer <api-token>' \\")
     print("  -H 'Content-Type: application/json' \\")
     print(f"  -d {shlex.quote(_json_dumps(payload))}")
+
+
+def _resolve_smoke_base_url(value: str | None) -> str:
+    from pitwall.cli.base_url import configured_base_url
+
+    return configured_base_url(value or "")
 
 
 def _json_dumps(payload: dict[str, Any]) -> str:

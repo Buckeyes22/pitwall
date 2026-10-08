@@ -96,7 +96,7 @@ export class AccountBudgetAdmission {
   private readonly statePath: string;
   private readonly lockPath: string;
 
-  constructor(policy: AccountBudgetPolicy, directory = process.env.PITWALL_WORKBENCH_ACCOUNT_BUDGET_DIR ?? join(homedir(), ".local/state/pitwall/pi-workbench/account-budgets")) {
+  constructor(policy: AccountBudgetPolicy, directory = process.env.PITWALL_WORKBENCH_ACCOUNT_BUDGET_DIR ?? join(process.env.XDG_STATE_HOME?.trim() || join(homedir(), ".local/state"), "pitwall/pi-workbench/account-budgets")) {
     validatePolicy(policy);
     this.policy = { ...policy };
     this.directory = resolve(directory);
