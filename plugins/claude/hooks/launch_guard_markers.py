@@ -79,7 +79,7 @@ def _dispatch_running(dispatch_id: str) -> bool:
     try:
         launcher_path = root / "launches" / dispatch_id / "launcher.json"
         launcher = json.loads(launcher_path.read_text(encoding="utf-8"))
-    except OSError, json.JSONDecodeError, UnicodeDecodeError:
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
         return False
     return isinstance(launcher, dict) and _pid_running(launcher.get("pid"))
 
@@ -230,7 +230,7 @@ def sweep_stale_locks(root: Path, now: float) -> None:
 def read_marker(path: Path) -> dict[str, Any]:
     try:
         record = json.loads(path.read_text(encoding="utf-8"))
-    except OSError, json.JSONDecodeError, UnicodeDecodeError:
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
         return {}
     return record if isinstance(record, dict) else {}
 

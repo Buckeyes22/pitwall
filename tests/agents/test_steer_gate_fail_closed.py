@@ -45,7 +45,10 @@ class HookSandbox:
         target.chmod(0o755)
 
     def run(self, *, dispatched: bool = True, path: str | None = None) -> tuple[int, str]:
-        env = {"PATH": path if path is not None else f"{self.bin}:/usr/bin:/bin"}
+        env = {
+            "PATH": path if path is not None else f"{self.bin}:/usr/bin:/bin",
+            "HOME": str(self.root),
+        }
         if dispatched:
             env.update(DISPATCH)
         result = subprocess.run(
@@ -73,21 +76,22 @@ class SteerGateFailClosedTests(unittest.TestCase):
 
     def assert_recovery(self, reason: str) -> None:
         self.assertIn(
-            "! uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v",
+            "! uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v",
             reason,
         )
         self.assertIn("/plugin", reason)
         self.assertIn("pitwall doctor", reason)
         self.assertIn("Do not try to fix this with a tool call", reason)
 
-    def test_missing_cli_blocks_with_recovery_message(self) -> None:
-        for dispatched in (True, False):
-            with self.subTest(dispatched=dispatched):
-                code, stdout = self.sandbox.run(dispatched=dispatched, path="/nonexistent")
-                self.assertEqual(0, code)
-                reason = denial(stdout)
-                self.assertIn("`pitwall` command was not found", reason)
-                self.assert_recovery(reason)
+    def test_missing_cli_blocks_a_dispatched_harness_with_recovery_message(self) -> None:
+        code, stdout = self.sandbox.run(dispatched=True, path="/nonexistent")
+        self.assertEqual(0, code)
+        reason = denial(stdout)
+        self.assertIn("`pitwall` command was not found", reason)
+        self.assert_recovery(reason)
+
+    def test_missing_cli_never_blocks_a_harness_that_is_not_dispatched(self) -> None:
+        self.assertEqual((0, ""), self.sandbox.run(dispatched=False, path="/nonexistent"))
 
     def test_timeout_blocks(self) -> None:
         self.assertEqual(10, load_hook().TIMEOUT_SECONDS)

@@ -742,11 +742,14 @@ class DownloadAndInstallTests(unittest.TestCase):
         self.assertEqual("already-installed", results[0].status)
         downloader.assert_not_called()
 
-    def test_dry_run_performs_no_download_or_execution(self) -> None:
+    def test_dry_run_downloads_and_verifies_but_never_executes(self) -> None:
         spec = self.specs()[0]
+        digest = "a" * 64
+        downloader = mock.Mock(
+            return_value=setup.InstallerDownload(b"#!/bin/sh\n", "https://example.test/i.sh", digest)
+        )
+        runner = mock.Mock(side_effect=AssertionError("must not run"))
         with tempfile.TemporaryDirectory() as directory:
-            downloader = mock.Mock(side_effect=AssertionError("must not download"))
-            runner = mock.Mock(side_effect=AssertionError("must not run"))
             results = setup.install_selected(
                 [spec],
                 {"HOME": directory, "PATH": "/nonexistent"},
@@ -757,7 +760,28 @@ class DownloadAndInstallTests(unittest.TestCase):
             )
         self.assertEqual("dry-run", results[0].status)
         self.assertIn(spec.recipe.installer_url, results[0].message)
-        downloader.assert_not_called()
+        self.assertIn("verified", results[0].message)
+        self.assertIn(digest, results[0].message)
+        downloader.assert_called_once_with(spec)
+        runner.assert_not_called()
+
+    def test_dry_run_reports_a_hash_mismatch_as_a_failure(self) -> None:
+        spec = self.specs()[0]
+        downloader = mock.Mock(
+            side_effect=setup.InstallerDownloadError("installer SHA-256 did not match")
+        )
+        runner = mock.Mock(side_effect=AssertionError("must not run"))
+        with tempfile.TemporaryDirectory() as directory:
+            results = setup.install_selected(
+                [spec],
+                {"HOME": directory, "PATH": "/nonexistent"},
+                1,
+                dry_run=True,
+                downloader=downloader,
+                installer_runner=runner,
+            )
+        self.assertEqual("failed", results[0].status)
+        self.assertIn("did not match", results[0].message)
         runner.assert_not_called()
 
     def test_runner_uses_argv_and_never_shell_true(self) -> None:
@@ -876,9 +900,12 @@ class SetupOrchestrationTests(unittest.TestCase):
                 tty_path=str(Path(directory) / "missing-tty"),
             )
 
-    def test_full_dry_run_selection_uses_no_network(self) -> None:
+    def test_full_dry_run_selection_downloads_but_never_runs_an_installer(self) -> None:
         fake = FakeSession([" ", "\r", "y"])
-        downloader = mock.Mock(side_effect=AssertionError("must not download"))
+        downloader = mock.Mock(
+            return_value=setup.InstallerDownload(b"#!/bin/sh\n", "https://example.test/i.sh", "b" * 64)
+        )
+        runner = mock.Mock(side_effect=AssertionError("must not run"))
         with (
             tempfile.TemporaryDirectory() as directory,
             mock.patch.object(setup, "TtySession", return_value=fake),
@@ -887,11 +914,14 @@ class SetupOrchestrationTests(unittest.TestCase):
                 {"HOME": directory, "PATH": "/nonexistent", "TERM": "xterm"},
                 dry_run=True,
                 downloader=downloader,
+                installer_runner=runner,
             )
         self.assertEqual(0, result)
         self.assertIn("dry-run", fake.output)
+        self.assertIn("verifies", fake.output)
         self.assertTrue(fake.input_mode_restored)
-        downloader.assert_not_called()
+        downloader.assert_called()
+        runner.assert_not_called()
 
     def test_ctrl_c_maps_to_exit_130(self) -> None:
         fake = FakeSession([])

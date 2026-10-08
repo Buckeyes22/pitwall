@@ -5,7 +5,11 @@ from __future__ import annotations
 import os
 import re
 import shlex
-import tomllib
+
+try:  # tomllib is 3.11+; hooks run under the user's system python3 (3.9 on macOS)
+    import tomllib
+except ImportError:
+    tomllib = None
 
 CMD_MARKERS = ("command-name>/dag-routing", "command-name>/pitwall:dag-routing")
 SKILL_ATTRIBUTIONS = {"pitwall", "pitwall:subagent-model-routing"}
@@ -81,12 +85,14 @@ def second_account_route(spec):
     unreadable or unexpected answers False and the boundary applies as before.
     """
     name = str(spec).split("@", 1)[0]
+    if tomllib is None:
+        return False
     try:
         with open(routes_file(), "rb") as handle:
             value = tomllib.load(handle)["agents"]["profiles"]["models"][name]["env"][
                 "CLAUDE_CONFIG_DIR"
             ]
-    except OSError, ValueError, KeyError, TypeError:
+    except (OSError, ValueError, KeyError, TypeError):
         return False
     return isinstance(value, str) and bool(value.strip())
 

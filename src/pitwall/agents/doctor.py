@@ -25,6 +25,8 @@ from pathlib import Path
 from queue import Empty, Full, Queue
 from typing import Any
 
+from pitwall.install_hint import install_command
+
 from .broker import load_sync, pitwall_api_token_requirement, resolve_pitwall_api_token
 from .discovery import discover_models as run_model_discovery
 from .harnesses import adapter_ids, get_adapter
@@ -472,8 +474,7 @@ def _check_registered_hooks(repo_root: Path, env: Mapping[str, str]) -> DoctorCh
             summary=problems[0],
             remediation=(
                 "the steering gate blocks tool calls while its CLI cannot run: type "
-                "`! uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl` "  # noqa: E501  # reason: one-line URL so the release validator checks its version
-                "at the prompt, or disable the plugin with /plugin"
+                f"`! {install_command()}` at the prompt, or disable the plugin with /plugin"
             ),
             details={"problems": problems},
         )
