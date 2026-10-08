@@ -5,12 +5,13 @@ from __future__ import annotations
 import pytest
 
 from pitwall.mcp.registry import TOOL_NAMES, TOOL_REGISTRY, register_all
+from tests.mcp.test_registry_health import EXPECTED_TOOL_COUNT
 
 
 class TestToolRegistryStructure:
-    def test_registry_contains_exactly_78_tools(self) -> None:
-        assert len(TOOL_NAMES) == 81
-        assert len(TOOL_REGISTRY) == 81
+    def test_registry_contains_exactly_the_expected_tools(self) -> None:
+        assert len(TOOL_NAMES) == EXPECTED_TOOL_COUNT
+        assert len(TOOL_REGISTRY) == EXPECTED_TOOL_COUNT
         assert {"pitwall_models_list", "pitwall_models_fit"} <= TOOL_NAMES
         assert {
             "pitwall_preview_route",

@@ -45,7 +45,9 @@ def assert_engine_native_flags(catalogue: Catalogue) -> None:
 
 
 def test_shipped_variant_flags_are_engine_native() -> None:
-    assert_engine_native_flags(load_catalogue(Path("docs/models")))
+    assert_engine_native_flags(
+        load_catalogue(Path(__file__).resolve().parents[2] / "docs" / "models")
+    )
 
 
 def test_hygiene_rejects_bad_llama_flag_in_fixture(tmp_path: Path) -> None:

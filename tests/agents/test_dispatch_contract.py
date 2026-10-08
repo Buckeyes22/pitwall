@@ -32,6 +32,28 @@ from tests.hang_guard import HANG_GUARD_SECS, reap
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def _is_gone(pid: int) -> bool:
+    """True once *pid* no longer runs: absent, or a zombie waiting to be reaped.
+
+    ``os.kill(pid, 0)`` and ``ps -o stat=`` work on Linux and macOS alike; ``/proc`` exists on
+    Linux only, so polling it would pass vacuously elsewhere.
+    """
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return True
+    except PermissionError:
+        pass
+    state = subprocess.run(
+        ["ps", "-o", "stat=", "-p", str(pid)],
+        capture_output=True,
+        text=True,
+        timeout=HANG_GUARD_SECS,
+        check=False,
+    ).stdout.strip()
+    return not state or state.startswith("Z")
+
+
 class DispatchContractTests(unittest.TestCase):
     def setUp(self) -> None:
         self.sandboxes: list[ShimSandbox] = []
@@ -455,8 +477,7 @@ class DispatchContractTests(unittest.TestCase):
             self.assertEqual("cancelled", result["status"])
             deadline = time.monotonic() + HANG_GUARD_SECS
             while time.monotonic() < deadline:
-                stat = Path(f"/proc/{child_pid}/stat")
-                if not stat.exists() or stat.read_text(encoding="utf-8").split()[2] == "Z":
+                if _is_gone(child_pid):
                     break
                 time.sleep(0.02)
             else:
@@ -586,8 +607,7 @@ class DispatchContractTests(unittest.TestCase):
         child_pid = int(child_pid_file.read_text(encoding="ascii"))
         deadline = time.monotonic() + HANG_GUARD_SECS
         while time.monotonic() < deadline:
-            stat = Path(f"/proc/{child_pid}/stat")
-            if not stat.exists() or stat.read_text(encoding="utf-8").split()[2] == "Z":
+            if _is_gone(child_pid):
                 break
             time.sleep(0.02)
         else:

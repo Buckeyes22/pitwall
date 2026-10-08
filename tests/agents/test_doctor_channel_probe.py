@@ -240,12 +240,14 @@ def test_a_silent_server_costs_one_ceiling_across_all_four_probes(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     spawned = _fake_server_popen(monkeypatch, f"import time\ntime.sleep({2 * HANG_GUARD_SECS})\n")
-    monkeypatch.setattr(doctor, "CHANNEL_HANDSHAKE_TIMEOUT", 2.0)
+    ceiling = 2.0
+    monkeypatch.setattr(doctor, "CHANNEL_HANDSHAKE_TIMEOUT", ceiling)
     started = time.monotonic()
     checks = {c.id: c for c in doctor._channel_checks({"HOME": str(tmp_path), "PATH": ""}, {})}
     elapsed = time.monotonic() - started
     assert len(spawned) == 4
-    assert 2.0 <= elapsed < 5.0  # serial probes would take at least 8 s
+    # Each probe waits out its own ceiling (never less), and running them serially would cost four.
+    assert ceiling <= elapsed < 4 * ceiling
     check = checks["channel.mcp_server"]
     assert check.status == "WARN"
     assert "no reply within the 2 s ceiling" in check.summary

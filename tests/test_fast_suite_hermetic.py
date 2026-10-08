@@ -16,6 +16,7 @@ import asyncpg
 import pytest
 
 from tests import _hermetic_env
+from tests.hang_guard import HANG_GUARD_SECS
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -92,7 +93,7 @@ def test_every_db_module_is_integration_marked() -> None:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=180,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     collected = [line for line in result.stdout.splitlines() if "::" in line]
@@ -122,24 +123,37 @@ def test_marker_checks_ignore_a_checkout_directory_named_like_a_marker(tmp_path:
     shutil.copytree(
         _REPO_ROOT / "tests", checkout / "tests", ignore=shutil.ignore_patterns("__pycache__")
     )
-    result = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "pytest",
-            "--collect-only",
-            "-q",
-            "-p",
-            "no:randomly",
-            "-m",
-            "not integration",
-            "tests/db/test_repository.py",
-        ],
-        cwd=checkout,
-        capture_output=True,
-        text=True,
-        timeout=180,
-        check=False,
-    )
-    assert "deselected" in result.stdout, result.stdout[-2000:]
-    assert not [line for line in result.stdout.splitlines() if "::" in line]
+
+    def collect(marker_expression: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "--collect-only",
+                "-q",
+                "-p",
+                "no:randomly",
+                "-m",
+                marker_expression,
+                "tests/db/test_repository.py",
+            ],
+            cwd=checkout,
+            capture_output=True,
+            text=True,
+            timeout=HANG_GUARD_SECS,
+            check=False,
+        )
+
+    def collected(result: subprocess.CompletedProcess[str]) -> list[str]:
+        return [line for line in result.stdout.splitlines() if "::" in line]
+
+    # Exit 0 (something collected) or 5 (everything deselected) are the only clean outcomes; 2 or
+    # 4 would be a collection error, which must not read as "nothing leaked".
+    fast = collect("not integration")
+    assert fast.returncode in (0, 5), fast.stdout[-2000:] + fast.stderr[-2000:]
+    assert collected(fast) == []
+    # The module's tests are really there, and selected by the integration marker alone.
+    integration = collect("integration")
+    assert integration.returncode == 0, integration.stdout[-2000:] + integration.stderr[-2000:]
+    assert collected(integration)

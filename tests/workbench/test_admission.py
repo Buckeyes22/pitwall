@@ -9,14 +9,17 @@ import subprocess
 import sys
 import threading
 import time
+import types
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
 import pytest
 
+from pitwall.workbench import admission as admission_module
 from pitwall.workbench.admission import RequestAdmission, RequestCancelled, SharedRequestAdmission
 from pitwall.workbench.launcher import PiLaunchOptions, extension_path, launch_pi
 from pitwall.workbench.profile import compile_profile, configure_provider_profile
+from tests.hang_guard import HANG_GUARD_SECS
 from tests.workbench.pi_support import (
     FixtureServer,
     RpcClient,
@@ -93,12 +96,49 @@ async def test_a_waiter_cancelled_after_receiving_the_permit_passes_it_on() -> N
     (await asyncio.wait_for(survivor, 1))()
 
 
-def wait_until(check: object, timeout: float = 4.0) -> None:
+def wait_until(check: object, timeout: float = HANG_GUARD_SECS) -> None:
     assert callable(check)
     deadline = time.monotonic() + timeout
     while not check():
         assert time.monotonic() < deadline, "admission fixture deadline"
         time.sleep(0.02)
+
+
+class PollProbe:
+    """Count the times a queued ``acquire`` found the host lock held and slept before retrying.
+
+    A queued request is observably waiting once it has polled, so tests hold their negative
+    assertions until it has (twice, to show it keeps polling) instead of sleeping and hoping.
+    """
+
+    def __init__(self) -> None:
+        self.polls = 0
+        self._changed = threading.Condition()
+
+    def sleep(self, seconds: float) -> None:
+        with self._changed:
+            self.polls += 1
+            self._changed.notify_all()
+        time.sleep(seconds)
+
+    def wait_for_more_polls(self, count: int = 2) -> None:
+        with self._changed:
+            target = self.polls + count
+            assert self._changed.wait_for(lambda: self.polls >= target, HANG_GUARD_SECS), (
+                "the queued request never polled the held lock"
+            )
+
+
+@pytest.fixture
+def poll_probe(monkeypatch: pytest.MonkeyPatch) -> PollProbe:
+    probe = PollProbe()
+    monkeypatch.setattr(admission_module, "time", types.SimpleNamespace(sleep=probe.sleep))
+    return probe
+
+
+def join_thread(thread: threading.Thread) -> None:
+    thread.join(HANG_GUARD_SECS)
+    assert not thread.is_alive(), "the acquiring thread is still running after the hang guard"
 
 
 def acquire_in_thread(
@@ -120,6 +160,7 @@ def acquire_in_thread(
 @pytest.mark.parity
 def test_shared_host_lock_serializes_independent_instances_and_cancels_a_queued_request(
     tmp_path: Path,
+    poll_probe: PollProbe,
 ) -> None:
     """Source: shared-admission.test.ts 'shared host lock serializes independent instances and cancels a queued request'."""
     first = SharedRequestAdmission("same-endpoint", tmp_path)
@@ -127,17 +168,17 @@ def test_shared_host_lock_serializes_independent_instances_and_cancels_a_queued_
     release = first.acquire()
     cancel = threading.Event()
     thread, outcome = acquire_in_thread(second, cancel)
-    time.sleep(0.15)
+    poll_probe.wait_for_more_polls()
     cancel.set()
-    thread.join(2)
+    join_thread(thread)
     assert str(outcome["error"]) == "Request cancelled"
     entering, entered = acquire_in_thread(second)
-    time.sleep(0.15)
+    poll_probe.wait_for_more_polls()
     assert "release" not in entered
     release()
     release()  # idempotent
     wait_until(lambda: "release" in entered)
-    entering.join(2)
+    join_thread(entering)
     next_release = entered["release"]
     assert callable(next_release)
     next_release()
@@ -146,17 +187,18 @@ def test_shared_host_lock_serializes_independent_instances_and_cancels_a_queued_
 @pytest.mark.parity
 def test_abort_after_grant_does_not_release_the_permit_before_transport_settlement(
     tmp_path: Path,
+    poll_probe: PollProbe,
 ) -> None:
     """Source: shared-admission.test.ts 'abort after grant does not release the permit before transport settlement'."""
     cancel = threading.Event()
     release = SharedRequestAdmission("same-endpoint", tmp_path).acquire(cancel)
     cancel.set()
     waiting, entered = acquire_in_thread(SharedRequestAdmission("same-endpoint", tmp_path))
-    time.sleep(0.25)
+    poll_probe.wait_for_more_polls()
     assert "release" not in entered
     release()
     wait_until(lambda: "release" in entered)
-    waiting.join(2)
+    join_thread(waiting)
     next_release = entered["release"]
     assert callable(next_release)
     next_release()
@@ -175,18 +217,19 @@ time.sleep(60)
 @pytest.mark.parity
 def test_two_actual_host_processes_share_the_permit_and_a_killed_host_releases_ownership(
     tmp_path: Path,
+    poll_probe: PollProbe,
 ) -> None:
     """Source: shared-admission.test.ts 'two actual host processes share the permit and a killed host releases ownership'."""
     marker = tmp_path / "acquired"
     host = subprocess.Popen([sys.executable, "-c", HOLDER, str(tmp_path), str(marker)])
     try:
-        wait_until(lambda: marker.exists() and marker.read_text() == "held", 20)
+        wait_until(lambda: marker.exists() and marker.read_text() == "held")
         waiting, entered = acquire_in_thread(SharedRequestAdmission("endpoint", tmp_path))
-        time.sleep(0.25)
+        poll_probe.wait_for_more_polls()
         assert "release" not in entered
         host.kill()
         wait_until(lambda: "release" in entered)
-        waiting.join(2)
+        join_thread(waiting)
         next_release = entered["release"]
         assert callable(next_release)
         next_release()

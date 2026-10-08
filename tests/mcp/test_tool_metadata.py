@@ -6,6 +6,7 @@ import pytest
 
 from pitwall.mcp.registry import TOOL_NAMES
 from pitwall.mcp.tool_metadata import TOOL_METADATA
+from tests.mcp.test_registry_health import EXPECTED_TOOL_COUNT
 
 pytestmark = pytest.mark.anyio
 
@@ -46,7 +47,7 @@ async def test_listed_tools_carry_title_and_annotations() -> None:
     from pitwall.mcp import mcp
 
     tools = await mcp.list_tools()
-    assert len(tools) == 81
+    assert len(tools) == EXPECTED_TOOL_COUNT
     for tool in tools:
         assert tool.title == TOOL_METADATA[tool.name].title
         assert tool.annotations == TOOL_METADATA[tool.name].annotations

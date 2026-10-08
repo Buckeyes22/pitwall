@@ -32,6 +32,9 @@ import pytest
 pytestmark = [pytest.mark.release, pytest.mark.integration, pytest.mark.journey_harness]
 
 ROOT = Path(__file__).resolve().parents[2]
+# Tripwire: the number of CLI surfaces (commands plus arguments) the journey must exercise.
+# A new command or flag changes it; update this one number with the change.
+EXPECTED_CLI_SURFACES = 485
 FIXTURES: dict[str, dict[str, Any]] = json.loads(
     (Path(__file__).parent / "cli_fixtures.json").read_text()
 )
@@ -225,7 +228,7 @@ def test_every_argument_surface_is_registered_and_documented(
         registered.setdefault((file, line), []).append((names, help_text))
     seen = {(op, file, line) for op, file, line, _name in exploration["events"]}
     surfaces = cli_arguments.discover_with_issues(ROOT)["surfaces"]
-    assert len(surfaces) == 485
+    assert len(surfaces) == EXPECTED_CLI_SURFACES
     for surface in surfaces:
         file, line_text = surface["source"].rsplit(":", 1)
         line = int(line_text)
