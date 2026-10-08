@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import subprocess
+import tomllib
 from pathlib import Path
 from types import ModuleType
 
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 pytestmark = pytest.mark.release
 # Built from parts so this file's own text never trips the guard it tests.
 PACKAGE = "pit" + "wall"
+VERSION = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
 
 
 def _validator() -> ModuleType:
@@ -40,6 +42,7 @@ def _repo(tmp_path: Path, files: dict[str, str]) -> Path:
         f"uv tool install {PACKAGE}",
         f"pip install {PACKAGE}",
         f"pipx install {PACKAGE}`",
+        f"uv tool install --python 3.14 {PACKAGE}",
         f"uv tool install --python 3.14.7 {PACKAGE}",
         f"install {PACKAGE}[email] to enable email",
     ],
@@ -49,7 +52,7 @@ def test_bare_package_name_install_is_rejected(
 ) -> None:
     module = _validator()
     monkeypatch.setattr(module, "ROOT", _repo(tmp_path, {"docs/a.md": line + "\n"}))
-    assert module._install_reference_errors("0.3.0a1") == [
+    assert module._install_reference_errors(VERSION) == [
         "docs/a.md:1: bare `pitwall` package install; PyPI's pitwall is an unrelated project"
     ]
 
@@ -60,8 +63,9 @@ def test_bare_package_name_install_is_rejected(
         f"claude plugin install {PACKAGE}@pitwall-local --scope user",
         "copilot plugin install pitwall-copilot@pitwall-local",
         f"uv tool uninstall {PACKAGE}",
+        "uv tool install --python 3.14 .",
         "uv tool install --python 3.14.7 .",
-        f"uv tool install {PACKAGE}[email] @ https://example.invalid/pitwall-0.3.0a1-py3-none-any.whl",
+        f"uv tool install {PACKAGE}[email] @ https://example.invalid/pitwall-{VERSION}-py3-none-any.whl",
     ],
 )
 def test_non_package_installs_are_allowed(
@@ -69,7 +73,7 @@ def test_non_package_installs_are_allowed(
 ) -> None:
     module = _validator()
     monkeypatch.setattr(module, "ROOT", _repo(tmp_path, {"docs/a.md": line + "\n"}))
-    assert module._install_reference_errors("0.3.0a1") == []
+    assert module._install_reference_errors(VERSION) == []
 
 
 def test_wheel_url_must_match_candidate_version(
@@ -85,13 +89,13 @@ def test_wheel_url_must_match_candidate_version(
         "ROOT",
         _repo(tmp_path, {"README.md": stale, "docs/releases/v0.2.0a1.md": stale}),
     )
-    assert module._install_reference_errors("0.3.0a1") == [
-        "README.md:1: release wheel URL names 0.2.0a1, expected 0.3.0a1"
+    assert module._install_reference_errors(VERSION) == [
+        f"README.md:1: release wheel URL names 0.2.0a1, expected {VERSION}"
     ]
 
 
 def test_tracked_tree_has_no_bare_install_and_current_wheel_urls() -> None:
-    assert _validator()._install_reference_errors("0.3.0a1") == []
+    assert _validator()._install_reference_errors(VERSION) == []
 
 
 def test_outside_a_git_checkout_is_an_error_not_a_pass(
@@ -99,6 +103,6 @@ def test_outside_a_git_checkout_is_an_error_not_a_pass(
 ) -> None:
     module = _validator()
     monkeypatch.setattr(module, "ROOT", tmp_path)
-    assert module._install_reference_errors("0.3.0a1") == [
+    assert module._install_reference_errors(VERSION) == [
         f"{tmp_path}: install references can only be checked in a git checkout"
     ]

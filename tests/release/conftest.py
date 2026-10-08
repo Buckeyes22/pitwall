@@ -44,7 +44,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     if config.getoption("-m", default=None) in {"release", "release and not live"}:
         return
     for item in items:
-        if "release" in item.keywords:
+        if item.get_closest_marker("release") is not None:
             item.add_marker(pytest.mark.skip(reason="release tier: run with -m release"))
 
 

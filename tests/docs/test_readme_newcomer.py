@@ -3,18 +3,22 @@
 from __future__ import annotations
 
 import re
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
 BLOCKS = re.findall(r"```bash\n(.*?)```", README, flags=re.S)
+VERSION = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
 
 
 def test_install_uses_the_release_wheel() -> None:
-    assert (
-        "uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/"
-        "v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl"
-    ) in README
+    wheel = (
+        "https://github.com/Buckeyes22/pitwall/releases/download/"
+        f"v{VERSION}/pitwall-{VERSION}-py3-none-any.whl"
+    )
+    # Any Python 3.14 patch release satisfies the install; the minor version is what matters.
+    assert re.search(rf"uv tool install --python 3\.14(?:\.\d+)? {re.escape(wheel)}", README)
 
 
 def test_every_broker_terminal_loads_the_same_configuration() -> None:
