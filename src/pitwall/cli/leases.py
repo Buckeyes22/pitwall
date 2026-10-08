@@ -73,6 +73,7 @@ async def _leases_list_async(args: argparse.Namespace, out: Output) -> int:
                 ]
                 for row in snapshot.rows
             ],
+            keep_whole=("Lease",),
         )
     out.emit()
     return 0
