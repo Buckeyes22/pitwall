@@ -36,3 +36,16 @@ def test_the_stop_paths_the_guide_names_exist() -> None:
 def test_the_refusal_code_the_guide_names_is_the_one_the_api_raises() -> None:
     assert "lease_not_serving" in _code_spans()
     assert LeaseNotServing.reason == "lease_not_serving"
+
+
+def _flat() -> str:
+    return re.sub(r"\s+", " ", GUIDE.read_text(encoding="utf-8"))
+
+
+def test_the_guide_does_not_promise_that_a_new_serve_key_forces_a_new_pod() -> None:
+    # Guards the promise that a fresh idempotency key alone never replaces a serving pod: serve
+    # finds the active lease and returns it with `created: false`.
+    text = _flat()
+
+    assert "A new key always launches a new pod" not in text
+    assert "A new key alone does not replace a serving pod" in text

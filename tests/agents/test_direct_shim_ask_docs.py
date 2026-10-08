@@ -50,6 +50,17 @@ def test_skill_names_the_channel_server_and_ask_tool_the_code_serves(host: str) 
 
 
 @pytest.mark.parametrize("host", sorted(SKILLS))
+def test_direct_shim_asks_use_tier_one_on_a_registered_channel(host: str) -> None:
+    # Guards the promise that a direct shim with a registered channel asks through it (tier one)
+    # and only falls back to the file contract (exit 75) when no channel is registered.
+    text = re.sub(r"\s+", " ", SKILLS[host].read_text(encoding="utf-8"))
+
+    assert "it can then only pause on the file contract (exit 75)" not in text
+    assert "registered `pitwall-channel` server" in text
+    assert "Without a registered channel" in text
+
+
+@pytest.mark.parametrize("host", sorted(SKILLS))
 def test_skill_resume_command_is_a_real_agents_subcommand(host: str) -> None:
     resumes = [
         span.split()[2:]

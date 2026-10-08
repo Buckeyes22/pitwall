@@ -84,6 +84,23 @@ def test_selfhosted_guide_has_the_operator_warning_sections() -> None:
     } <= set(sections)
 
 
+def test_guide_warns_the_openai_models_oracle_is_weak() -> None:
+    # Guards the warning that presence in /models does not prove the model can serve.
+    body = _sections(GUIDE.read_text(encoding="utf-8"))["Readiness oracle"]
+
+    assert "`openai-models`" in body
+    assert "weak" in body
+
+
+def test_guide_warns_the_runaway_limits_do_not_stop_a_serial_retry_loop() -> None:
+    # Guards the warning that saturation limits bound parallel overload only.
+    body = _sections(GUIDE.read_text(encoding="utf-8"))["Runaway consumers"]
+    flat = re.sub(r"\s+", " ", body)
+
+    assert "parallel" in flat
+    assert "serial retry loop" in flat
+
+
 def test_tool_calling_section_shows_both_launch_flags_in_a_text_fence() -> None:
     body = _sections(GUIDE.read_text(encoding="utf-8"))["Tool-calling launch flags"]
     (fence,) = re.findall(r"```text\n(.*?)```", body, flags=re.DOTALL)

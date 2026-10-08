@@ -118,6 +118,22 @@ def test_serve_model_quickstart_stop_names_lease_mutate_scope() -> None:
     assert _curl_urls(sections["Stop"]) == ["<pitwall-api-url>/v1/leases/<lease-id>/stop"] * 2
 
 
+def test_quickstart_warns_that_serve_is_paid() -> None:
+    # Guards the promise that the operator is told the live serve is a paid launch.
+    assert "paid" in QUICKSTART.read_text(encoding="utf-8").lower()
+
+
+def test_quickstart_distinguishes_plan_dry_run_and_live() -> None:
+    # Guards what each mode does: previews need no database and start no pod, the live serve
+    # creates or replays a lease, and a preview is not proof that a real image starts.
+    text = re.sub(r"\s+", " ", QUICKSTART.read_text(encoding="utf-8"))
+
+    assert "does not require `DATABASE_URL`" in text
+    assert "not launch a pod" in text
+    assert "creates or replays a lease" in text
+    assert "not proof" in text.lower()
+
+
 def _documented_pitwall_argv(text: str) -> list[list[str]]:
     commands: list[list[str]] = []
     for block in text.split("```bash")[1:]:
