@@ -10,7 +10,7 @@ promise. The technical map, including which Pi version is pinned and why, is
 ## Install
 
 ```bash
-uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
+uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
 pitwall agents setup pi
 pitwall workbench doctor
 ```

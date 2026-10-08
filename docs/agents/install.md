@@ -8,7 +8,7 @@ not values.
 
 ## 1. Prerequisites and toolchain
 
-Pitwall needs Python 3.14.7, managed through `uv`. The registry path also needs Docker.
+Pitwall needs Python 3.14, managed through `uv`. The registry path also needs Docker.
 Install the pinned dependency set:
 
 ```bash
@@ -58,7 +58,7 @@ Each line has the form `[status] check.id: detail`, followed by `next: <step>` w
 is a next step to take. The last line is a summary, for example:
 
 ```text
-doctor: fail (3 ok, 1 warn, 1 fail, 2 skip), mode personal, pitwall 0.1.0a2
+doctor: fail (3 ok, 1 warn, 1 fail, 2 skip), mode personal, pitwall 0.3.0a1
 ```
 
 Read `next:` for any `fail` line, act on it, and rerun `pitwall doctor` until it reports no

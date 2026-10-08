@@ -3,7 +3,7 @@
 This matrix separates repository support from external verification. “Supported hermetically”
 means executable contracts, fixtures, security tests, and CI exist. “Countersign pending” means
 the code is complete but no provider credential, spend, or resource authorization was supplied for
-this release candidate.
+this release.
 
 | Surface or capability | Status | Boundary |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ this release candidate.
 | Production routing | Supported hermetically | Deterministic priority/weighted plans, hard constraints, conservative budget admission, persisted plan identity, bounded job events |
 | Structured pricing and cost truth-up | Supported hermetically | `zero`, `gpu_hour`, `per_request`, `per_second`, `per_token`, `per_vm_second`, `active_idle`, and `per_unit`; USD values are Decimal-authoritative |
 | Pre-spend guardrails | Supported hermetically | High-confidence secrets block; supported PII may redact; bounded/opaque content follows configured policy; preview does not persist |
-| RunPod serverless queue/LB and public OpenAI-compatible endpoints | Existing supported path | Operator supplies credentials and endpoint configuration; no live call was made for this candidate |
+| RunPod serverless queue/LB and public OpenAI-compatible endpoints | Existing supported path | Operator supplies credentials and endpoint configuration; no live call was made for this release |
 | RunPod market/catalogue and supported billing reads | Code-complete; countersign pending | Cached GPU/DC/availability/rate/bid/balance snapshot; billing categories remain explicitly unavailable when the captured contract cannot attribute an actual |
 | RunPod resource control | Code-complete; countersign pending | Pods, serverless endpoints, templates, volumes, registry auth, and read-only Hub browse/search/get; Hub deploy/publish is unavailable |
 | RunPod volume objects and bounded pod logs | Code-complete; countersign pending | Separate S3 credentials, path/checksum/byte/time limits, explicit overwrite/delete confirmation; no remote exec |
@@ -24,7 +24,7 @@ this release candidate.
 | Vast.ai | Code-complete; countersign pending | Compute and availability only; no fake inference or actual-cost capability |
 | Together | Code-complete; countersign pending | Synchronous inference and availability; bounded token pricing required before admission |
 | Lambda Cloud | Code-complete; countersign pending | Compute and availability only; no fake inference or actual-cost capability |
-| Alibaba Cloud Model Studio | Code-complete; countersign pending | Synchronous inference and availability in both halves from one committed catalog; Token Plan automation is gated behind an explicit acceptance; no live call was made for this candidate |
+| Alibaba Cloud Model Studio | Code-complete; countersign pending | Synchronous inference and availability in both halves from one committed catalog; Token Plan automation is gated behind an explicit acceptance; no live call was made for this release |
 | Self-hosted OpenAI-compatible endpoints | Alpha/limited | Authenticated, budgeted, probed/cooled down, capacity-aware, and fit-aware; no host orchestration or host telemetry |
 | RunPod pod leases and serve | Alpha/limited | vLLM, llama.cpp, and SGLang; operator remains responsible for model/image provenance, access, and capacity fit |
 | Model catalogue and guarded console launch | Alpha/limited | Dossier arithmetic is advisory; launch remains behind serve budget, guardrail, and kill-switch gates |
@@ -34,7 +34,7 @@ this release candidate.
 | Agent Routing on macOS | Hosted portable lane | Managed Python 3.14.7 Agent Routing smoke; broker images and Compose remain Linux-only |
 | Free-tier gateway catalog sync and drift gate | Supported hermetically | Pinned upstream release with SHA-256 provenance, regenerated seeds, and a catalog drift gate; upstream is data only |
 | Free-tier gateway fork and loopback supervisor | Supported component | Python gateway (`pitwall gateway serve`) in the one `pitwall` package; loopback-only sidecar supervised with bearer `PITWALL_GATEWAY_TOKEN` |
-| Pi Workbench | Limited component | `pitwall workbench` in the one `pitwall` package; pinned Pi installed by `pitwall agents setup pi`, so Node 22.22.1 or later, Linux, and `flock` (util-linux); optional Bubblewrap restricted mode requires permitted user namespaces and util-linux 2.41 or later for `setpriv --seccomp-filter`; no unfinished native-child resume, no network allowlist, and no per-child credential sandbox |
+| Pi Workbench | Limited component | `pitwall workbench` in the one `pitwall` package; pinned Pi installed by `pitwall agents setup pi`, so Node 22.22.1 or later, Linux, and `flock` (util-linux); the workbench runs on Linux only, and `pitwall workbench launch` refuses to start on other systems; optional Bubblewrap restricted mode requires permitted user namespaces and util-linux 2.41 or later for `setpriv --seccomp-filter`; no unfinished native-child resume, no network allowlist, and no per-child credential sandbox |
 | Free-pool quota state, lockouts, and zero-cost routing | Supported hermetically | Quota windows, per-model lockouts, strict zero-cost filter, and burn-down persistence; free routing stays behind the existing budget gate, guardrails, and kill switch |
 | `openai_gateway` provider adapter | Supported hermetically | Keyless or optional `PITWALL_GATEWAY_API_KEY` credential reference; availability from catalog evidence with no egress; typed 429 quota signals; no compute, async, or actual-cost capability |
 | In-repository GPU worker image | Deferred/unavailable | No image, workflow, default deployment, or successful worker entry point |

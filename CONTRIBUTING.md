@@ -1,13 +1,13 @@
 # Contributing to Pitwall
 
-Welcome! Pitwall is a self-hosted RunPod workload broker. This
+Welcome! Pitwall is a broker for GPU inference spend and AI coding-agent routing. This
 document covers everything you need to start contributing.
 
 ## Dev Environment
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-fork/pitwall.git
+git clone https://github.com/<your-github-user>/pitwall.git   # your fork of Buckeyes22/pitwall
 cd pitwall
 
 # Create the venv and install all dependencies (including dev)
@@ -57,8 +57,7 @@ The integration suite needs a running Postgres 5444 and Redis 6380. Use the
 testinfra compose to bring them up:
 
 ```bash
-make up            # docker compose -f docker-compose.testinfra.yml up -d
-# wait a moment for the databases to be ready
+make up            # docker compose -f docker-compose.testinfra.yml up -d --wait
 make test-int      # PITWALL_TEST_DATABASE_URL=... PITWALL_TEST_REDIS_URL=... pytest -q -m integration
 make down          # docker compose -f docker-compose.testinfra.yml down
 ```
