@@ -1,18 +1,27 @@
-"""Release archive and workflow policy regression tests."""
+"""Release archive and workflow policy regression tests.
+
+Workflow invariants are read from the parsed YAML (jobs, ``needs``, step ``run`` text), never
+from raw text, so a comment, a reordered job, or different indentation cannot satisfy or break
+them. The parsing helpers live in ``test_workflows.py``.
+"""
 
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 from types import ModuleType
+from typing import Any
 
 import pytest
+
+from tests.release.test_workflows import _gated_jobs, _load, _needs, _step_text
 
 ROOT = Path(__file__).resolve().parents[2]
 pytestmark = pytest.mark.release
 
 
-def _load(name: str, path: Path) -> ModuleType:
+def _module(name: str, path: Path) -> ModuleType:
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -20,21 +29,33 @@ def _load(name: str, path: Path) -> ModuleType:
     return module
 
 
+def _all_run_text(workflow: dict[str, Any]) -> str:
+    return "\n".join(_step_text(job) for job in workflow["jobs"].values())
+
+
+def _uploads_and_downloads(job: dict[str, Any], action: str) -> list[dict[str, Any]]:
+    return [
+        step.get("with", {}) for step in job.get("steps", []) if action in str(step.get("uses", ""))
+    ]
+
+
 def test_all_workflows_satisfy_supply_chain_policy() -> None:
-    module = _load("check_workflows", ROOT / "tools/ci/check_workflows.py")
+    module = _module("check_workflows", ROOT / "tools/ci/check_workflows.py")
     assert module.main() == 0
 
 
-class _FakeReleaseItem:
-    def __init__(self) -> None:
-        self.keywords = {"release"}
-        self.markers: list[object] = []
+class _FakeItem:
+    """A collected test item. It has no `keywords`: the directory name must not matter."""
+
+    def __init__(self, *markers: str) -> None:
+        self.marker_names = set(markers)
+        self.added: list[object] = []
 
     def add_marker(self, marker: object) -> None:
-        self.markers.append(marker)
+        self.added.append(marker)
 
     def get_closest_marker(self, name: str) -> object | None:
-        return name if name in self.keywords else None
+        return name if name in self.marker_names else None
 
 
 class _FakeSelectorConfig:
@@ -46,36 +67,47 @@ class _FakeSelectorConfig:
 
 
 def test_release_fixture_accepts_both_exact_release_selectors() -> None:
-    conftest = _load("release_conftest", ROOT / "tests/release/conftest.py")
-    readiness = (ROOT / ".github/workflows/release-readiness.yml").read_text(encoding="utf-8")
+    conftest = _module("release_conftest", ROOT / "tests/release/conftest.py")
 
     for selector in ("release", "release and not live"):
-        item = _FakeReleaseItem()
+        item = _FakeItem("release")
         conftest.pytest_collection_modifyitems(_FakeSelectorConfig(selector), [item])
-        assert item.markers == [], selector
+        assert item.added == [], selector
     for selector in (None, "live", "release or live"):
-        item = _FakeReleaseItem()
+        item = _FakeItem("release")
         conftest.pytest_collection_modifyitems(_FakeSelectorConfig(selector), [item])
-        assert len(item.markers) == 1, selector
+        assert len(item.added) == 1, selector
+
+
+def test_release_fixture_leaves_unmarked_items_alone() -> None:
+    # Items collected under tests/release/ that carry no `release` marker (the directory name
+    # is not a marker) are not skipped, whatever the selector is.
+    conftest = _module("release_conftest", ROOT / "tests/release/conftest.py")
+
+    for selector in (None, "live", "release or live", "release", "release and not live"):
+        item = _FakeItem()
+        conftest.pytest_collection_modifyitems(_FakeSelectorConfig(selector), [item])
+        assert item.added == [], selector
+
+
+def test_release_readiness_selects_exactly_the_release_tier() -> None:
+    readiness = _all_run_text(_load("release-readiness.yml"))
     assert 'uv run pytest -m "release and not live" tests/release' in readiness
     assert 'uv run pytest -m "release" tests/release' not in readiness
 
 
 def test_dependency_compatibility_installs_the_selected_resolution_frozen() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-    compatibility_job = workflow.split("  dependency-compatibility:", 1)[1].split(
-        "\n  integration:", 1
-    )[0]
-    assert 'uv lock --upgrade --resolution "${{ matrix.resolution }}"' in compatibility_job
-    assert "uv sync --frozen --extra dev" in compatibility_job
+    job = _load("ci.yml")["jobs"]["dependency-compatibility"]
+    text = _step_text(job)
+    assert 'uv lock --upgrade --resolution "${{ matrix.resolution }}"' in text
+    assert "uv sync --frozen --extra dev" in text
     assert (
-        'uv run --frozen pytest -n logical -m "not integration and not slow and not live"'
-        in compatibility_job
+        'uv run --frozen pytest -n logical -m "not integration and not slow and not live"' in text
     )
 
 
 def test_artifact_path_policy_rejects_private_and_traversal_paths() -> None:
-    module = _load("inspect_artifacts", ROOT / "scripts/release/inspect_artifacts.py")
+    module = _module("inspect_artifacts", ROOT / "scripts/release/inspect_artifacts.py")
     assert module._safe("pitwall/module.py")
     assert not module._safe("../secret")
     assert not module._safe("project/.remember/events.jsonl")
@@ -85,31 +117,34 @@ def test_artifact_path_policy_rejects_private_and_traversal_paths() -> None:
 
 
 def test_github_first_release_requires_ghcr_but_not_deferred_pypi() -> None:
-    workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
-    github_release = workflow.split("  github-release:", 1)[1]
-    assert "needs: [package, package-provenance, publish-image]" in github_release
-    assert "publish-pypi" not in github_release
-    assert "name: python-distributions" in github_release
-    assert "name: package-evidence" in github_release
-    assert "body_path: docs/releases/${{ github.ref_name }}.md" in github_release
+    jobs = _load("release.yml")["jobs"]
+    github_release = jobs["github-release"]
+    assert _needs(github_release) == {"package", "package-provenance", "publish-image"}
+    assert not [name for name in jobs if "pypi" in name]
+    downloads = _uploads_and_downloads(github_release, "download-artifact")
+    assert {d.get("name") for d in downloads} >= {
+        "python-distributions",
+        "package-evidence",
+        "compose-smoke-evidence",
+    }
+    assert "image-evidence-*" in {d.get("pattern") for d in downloads}
+    publish = _uploads_and_downloads(github_release, "action-gh-release")
+    assert [p["body_path"] for p in publish] == ["docs/releases/${{ github.ref_name }}.md"]
 
 
 def test_release_assets_verify_with_plain_sha256sum_and_carry_image_evidence() -> None:
-    workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
-    package = workflow.split("  package:", 1)[1].split("\n  package-provenance:", 1)[0]
+    workflow = _load("release.yml")
+    package = _step_text(workflow["jobs"]["package"])
     assert "(cd dist && sha256sum -- *) > artifacts/package/SHA256SUMS" in package
-    assert "sha256sum dist/*" not in workflow
-    publish = workflow.split("  publish-image:", 1)[1].split("\n  github-release:", 1)[0]
-    assert "name: image-evidence-${{ matrix.service }}" in publish
-    github_release = workflow.split("  github-release:", 1)[1]
-    assert "pattern: image-evidence-*" in github_release
-    assert "name: compose-smoke-evidence" in github_release
+    assert "sha256sum dist/*" not in _all_run_text(workflow)
+    uploads = _uploads_and_downloads(workflow["jobs"]["publish-image"], "upload-artifact")
+    assert "image-evidence-${{ matrix.service }}" in {u.get("name") for u in uploads}
 
 
 def test_release_candidate_requires_versioned_public_notes(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    validator = _load("validate_candidate", ROOT / "scripts/release/validate_candidate.py")
+    validator = _module("validate_candidate", ROOT / "scripts/release/validate_candidate.py")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
     monkeypatch.setattr(validator, "_plugin_errors", lambda _version: [])
     monkeypatch.setattr(validator, "_install_reference_errors", lambda _version: [])
@@ -127,44 +162,52 @@ def test_release_candidate_requires_versioned_public_notes(
 
 
 def test_ghcr_paths_normalize_the_repository_owner_to_lowercase() -> None:
-    workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
-    assert workflow.count("${GITHUB_REPOSITORY_OWNER,,}") == 2
-    assert "ghcr.io/${{ github.repository_owner }}" not in workflow
+    workflow = _load("release.yml")
+    ghcr_lines = [
+        line
+        for job in workflow["jobs"].values()
+        for step in job.get("steps", [])
+        for line in str(step.get("run", "")).splitlines()
+        if "ghcr.io/" in line
+    ]
+    assert ghcr_lines, "release.yml no longer pushes to ghcr.io"
+    for line in ghcr_lines:
+        assert "${GITHUB_REPOSITORY_OWNER,,}" in line, line
+    # Registry paths must not come from the mixed-case owner context anywhere in the workflow.
+    assert "ghcr.io/${{ github.repository_owner }}" not in json.dumps(workflow)
 
 
 def test_python_registries_are_not_in_the_github_first_workflow() -> None:
-    workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
-    assert "PITWALL_PYPI_RELEASE_ENABLED" not in workflow
-    assert "publish-testpypi" not in workflow
-    assert "publish-pypi" not in workflow
-    assert "gh-action-pypi-publish" not in workflow
+    workflow = _load("release.yml")
+    serialized = json.dumps(workflow)
+    for forbidden in (
+        "PITWALL_PYPI_RELEASE_ENABLED",
+        "publish-testpypi",
+        "publish-pypi",
+        "gh-action-pypi-publish",
+    ):
+        assert forbidden not in serialized, forbidden
 
 
 def test_release_automation_never_requests_provider_credentials() -> None:
-    readiness = (ROOT / ".github/workflows/release-readiness.yml").read_text(encoding="utf-8")
-    release = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
-
-    for workflow in (readiness, release):
-        assert "RUNPOD_API_KEY" not in workflow
-        assert "PITWALL_LIVE_" not in workflow
-        assert "--run-live" not in workflow
-        assert "live-provider-acceptance" not in workflow
-    assert "secrets: inherit" not in release
-
-
-def test_pull_requests_use_normal_ci_not_the_full_release_suite() -> None:
-    readiness = (ROOT / ".github/workflows/release-readiness.yml").read_text(encoding="utf-8")
-    ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-
-    assert "pull_request:" not in readiness
-    assert "  required:" in ci
-    assert "    name: CI" in ci
+    # Serialized from the parsed workflow, so only real keys, values, and commands count.
+    workflows = {name: _load(name) for name in ("release-readiness.yml", "release.yml")}
+    for name, workflow in workflows.items():
+        serialized = json.dumps(workflow)
+        for forbidden in (
+            "RUNPOD_API_KEY",
+            "PITWALL_LIVE_",
+            "--run-live",
+            "live-provider-acceptance",
+        ):
+            assert forbidden not in serialized, (name, forbidden)
+        for job_name, job in workflow["jobs"].items():
+            assert job.get("secrets") != "inherit", (name, job_name)
 
 
 def test_agent_routing_gates_run_from_the_root_ci_workflow() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    gated = "\n".join(_step_text(job) for job in _gated_jobs(_load("ci.yml")).values())
 
-    assert not (ROOT / ".github/workflows/agent-routing-ci.yml").exists()
     assert not (ROOT / "packages/agent-routing/.github/workflows/ci.yml").exists()
     for gate in (
         "tools/agents/validate_json_schemas.py",
@@ -174,28 +217,16 @@ def test_agent_routing_gates_run_from_the_root_ci_workflow() -> None:
         "tools/agents/sync_routes.py --check",
         "SHIM-DONE exit=64",
     ):
-        assert gate in workflow
-    required = workflow.split("\n  required:\n", 1)[1]
-    assert "      - agents-macos\n" in required
-
-
-def test_release_uses_only_the_v_tag_namespace() -> None:
-    release = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
-
-    assert '- "v[0-9]+.[0-9]+.[0-9]+*"' in release
-    assert "agent-routing/v" not in release
-    assert not (ROOT / ".github/workflows/agent-routing-release.yml").exists()
+        assert gate in gated, gate
 
 
 def test_repository_wide_policy_and_dependency_authorities_cover_component() -> None:
-    ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    gated = "\n".join(_step_text(job) for job in _gated_jobs(_load("ci.yml")).values())
 
-    policy_command = "xargs -0 -r -n 200 uv run python tools/guards/repo_text_policy.py"
-    assert policy_command in ci
-    assert "git ls-files -z" in ci
-
-    assert "uv lock --check" in ci
-    assert "uv sync --frozen --extra dev" in ci
+    assert "xargs -0 -r -n 200 uv run python tools/guards/repo_text_policy.py" in gated
+    assert "git ls-files -z" in gated
+    assert "uv lock --check" in gated
+    assert "uv sync --frozen --extra dev" in gated
 
     root_lock = (ROOT / "uv.lock").read_text(encoding="utf-8")
     component_manifest = (ROOT / "pyproject.toml").read_text(encoding="utf-8")

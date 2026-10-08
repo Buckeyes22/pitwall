@@ -1,13 +1,13 @@
 SHELL := /bin/bash
 
-.PHONY: pi-extensions-check test test-fast test-int test-db test-cov up down sec sec-baseline sec-semgrep sec-test sec-fuzz license-check openapi-check docs-check ci-tools mutation mutation-gate bench load load-smoke engine-smoke engine-smoke-declared
+.PHONY: pi-extensions-check pi-extensions-build sbom regen regen-bindings test test-fast test-int test-db test-cov up down sec sec-baseline sec-semgrep sec-test sec-fuzz license-check openapi-check docs-check ci-tools mutation mutation-gate bench load load-smoke engine-smoke engine-smoke-declared
 test: test-fast
-up:        ; docker compose -f docker-compose.testinfra.yml up -d
+up:        ; docker compose -f docker-compose.testinfra.yml up -d --wait
 down:      ; docker compose -f docker-compose.testinfra.yml down
-test-fast: ; uv run pytest -q -n auto -m "not integration and not slow"
+test-fast: ; uv run pytest -q -n auto -m "not integration and not slow and not live"
 test-int:  ; PITWALL_TEST_DATABASE_URL=postgresql://pitwall:pitwall@127.0.0.1:5444/pitwall_test PITWALL_TEST_REDIS_URL=redis://127.0.0.1:6380/0 uv run pytest -q -m integration
 test-db:   test-int
-test-cov:  ; uv run pytest -q -n auto -m "not integration and not slow" --cov=src/pitwall --cov-report=term-missing --cov-report=html
+test-cov:  ; uv run pytest -q -n auto -m "not integration and not slow and not live" --cov=src/pitwall --cov-report=term-missing --cov-report=html
 sec: ## SAST + dependency CVE + secrets scan (no network for bandit)
 	uv run bandit -c pyproject.toml -r src/pitwall -ll -ii \
 		-b tools/security/bandit-baseline.json
@@ -66,3 +66,20 @@ pi-extensions-check: ## Recompile the Pi extension sources with the recorded Typ
 	for f in "$$t"/*.js; do n=$$(basename "$$f"); cmp -s "$$f" "$$d/$$n" || { echo "pi-extensions-check: $$n differs from its compiled source"; exit 1; }; done; \
 	for f in $$d/*.js; do n=$$(basename "$$f"); [ -e "$$t/$$n" ] || { echo "pi-extensions-check: $$n has no TypeScript source"; exit 1; }; done; \
 	echo "pi-extensions-check: committed .js matches the compiler output"
+pi-extensions-build: ## Recompile the Pi extension sources with the recorded TypeScript version and write the .js next to them
+	@set -eu; d=src/pitwall/workbench/pi_extensions; \
+	npx --yes -p "typescript@$$(cat $$d/COMPILER)" tsc -p $$d/tsconfig.json --outDir "$$d"; \
+	echo "pi-extensions-build: wrote the compiled .js into $$d"
+sbom: ## Regenerate the committed CycloneDX SBOM from uv.lock (kept as is when only its serial number and timestamp would change)
+	@set -eu; t=$$(mktemp); trap 'rm -f "$$t"' EXIT; \
+	uv export --frozen --preview-features sbom-export --format cyclonedx1.5 \
+		--no-dev --no-emit-project --output-file "$$t" > /dev/null; \
+	uv run --frozen python docs/sbom/refresh_sbom.py "$$t" docs/sbom/pitwall-sbom.cdx.json
+regen: ## Regenerate every committed generated artifact, in dependency order
+	uv run --frozen python tools/agents/sync_model_facts.py
+	uv run --frozen python tools/agents/sync_routes.py
+	$(MAKE) pi-extensions-build
+	$(MAKE) sbom
+	uv run --frozen python tools/ci/export_openapi.py --output docs/api/openapi-baseline.json
+regen-bindings: ## Re-hash and re-line the reviewed surface bindings after re-reading each changed test
+	uv run --frozen python -m tools.release_acceptance.bind_surfaces --accept-reviewed
