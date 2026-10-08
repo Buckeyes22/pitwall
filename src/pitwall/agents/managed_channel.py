@@ -570,15 +570,18 @@ def start_dispatch(env: Mapping[str, str], request: LaunchRequest) -> dict[str, 
                 with contextlib.suppress(OSError):
                     os.close(descriptor)
 
-    record = {
-        "schemaVersion": 1,
-        "dispatchId": dispatch_id,
-        "pid": process.pid,
-        "pidStartIdentity": _process_identity(process.pid),
-        "startedAt": utc_now(),
-        "promptPath": str(prompt_path),
-    }
+    record: dict[str, Any] = {}
     try:
+        # A ps timeout raises (an OSError) rather than recording a None identity that
+        # would make the launcher unkillable; it takes the same cleanup path below.
+        record = {
+            "schemaVersion": 1,
+            "dispatchId": dispatch_id,
+            "pid": process.pid,
+            "pidStartIdentity": _process_identity(process.pid),
+            "startedAt": utc_now(),
+            "promptPath": str(prompt_path),
+        }
         atomic_write_json(launch_dir / "launcher.json", record)
     except OSError as exc:
         # Without launcher.json the child cannot be reattached or safely

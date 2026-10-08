@@ -13,12 +13,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field, replace
 from importlib.resources import files
@@ -337,6 +339,27 @@ def _plan_writes(source: Path, locations: InstallLocations) -> dict[Path, bytes]
     return planned
 
 
+def _write_atomic(path: Path, content: bytes, mode: int) -> None:
+    """Publish *content* at *path* via a temp file in the same directory and ``os.replace``.
+
+    The mode is set on the temp file first, so the file is never visible half-written or
+    with the wrong permissions, and a failed write leaves the previous file untouched.
+    """
+
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temp_path = Path(temporary)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            os.fchmod(handle.fileno(), mode)
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temp_path, path)
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            temp_path.unlink()
+
+
 def _executable(path: Path) -> bool:
     return path.suffix == ".sh" and path.parent.name == "scripts"
 
@@ -470,8 +493,7 @@ def install(
     result = InstallResult()
     for path, content in planned.items():
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(content)
-        path.chmod(0o755 if _executable(path) else 0o644)
+        _write_atomic(path, content, 0o755 if _executable(path) else 0o644)
         result.files.append(path)
     for plan in plans:
         existed = plan.path.exists()
@@ -507,7 +529,7 @@ def install(
         "mcpCommand": command,
     }
     locations.manifest.parent.mkdir(parents=True, exist_ok=True)
-    locations.manifest.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+    _write_atomic(locations.manifest, (json.dumps(document, indent=2) + "\n").encode(), 0o644)
     return result
 
 

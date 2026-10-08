@@ -9,6 +9,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from pitwall.agents.errors import UsageError
+from pitwall.agents.paths import xdg_dir
 
 from .base import HarnessAdapter, ParsedRequest, PreparedCommand
 
@@ -45,7 +46,7 @@ class GooseAdapter(HarnessAdapter):
         configured = env.get("GOOSE_MODEL")
         if configured:
             return configured
-        base = Path(env.get("XDG_CONFIG_HOME", str(home / ".config"))).expanduser()
+        base = xdg_dir(env, "XDG_CONFIG_HOME", ".config", home=home)
         try:
             text = (base / "goose" / "config.yaml").read_text(encoding="utf-8")
         except OSError:

@@ -746,7 +746,9 @@ class DownloadAndInstallTests(unittest.TestCase):
         spec = self.specs()[0]
         digest = "a" * 64
         downloader = mock.Mock(
-            return_value=setup.InstallerDownload(b"#!/bin/sh\n", "https://example.test/i.sh", digest)
+            return_value=setup.InstallerDownload(
+                b"#!/bin/sh\n", "https://example.test/i.sh", digest
+            )
         )
         runner = mock.Mock(side_effect=AssertionError("must not run"))
         with tempfile.TemporaryDirectory() as directory:
@@ -903,7 +905,9 @@ class SetupOrchestrationTests(unittest.TestCase):
     def test_full_dry_run_selection_downloads_but_never_runs_an_installer(self) -> None:
         fake = FakeSession([" ", "\r", "y"])
         downloader = mock.Mock(
-            return_value=setup.InstallerDownload(b"#!/bin/sh\n", "https://example.test/i.sh", "b" * 64)
+            return_value=setup.InstallerDownload(
+                b"#!/bin/sh\n", "https://example.test/i.sh", "b" * 64
+            )
         )
         runner = mock.Mock(side_effect=AssertionError("must not run"))
         with (
