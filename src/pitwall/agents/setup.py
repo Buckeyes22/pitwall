@@ -800,7 +800,10 @@ def confirm_selection(
         checksum = f"SHA-256 {(spec.recipe.sha256 or '')[:12]}… pinned"
         session.write(f"  - {spec.display_name} — official installer from {host}; {checksum}\n")
     if dry_run:
-        session.write("\nDry-run mode will not download or execute anything.\n")
+        session.write(
+            "\nDry-run mode downloads each installer and verifies its pinned SHA-256, "
+            "but executes nothing.\n"
+        )
     else:
         session.write(
             "\nThe installers download software and may update user-level PATH configuration.\n"
@@ -1057,11 +1060,21 @@ def install_selected(
             continue
         if dry_run:
             argv = [*spec.recipe.interpreter, "<downloaded-installer>"]
+            try:
+                downloaded = downloader(spec)
+            except InstallerDownloadError as exc:
+                results.append(
+                    InstallResult(spec.harness_id, "failed", f"{exc}; see {spec.documentation_url}")
+                )
+                continue
+            digest = downloaded.sha256 if isinstance(downloaded, InstallerDownload) else None
+            checked = f"verified installer sha256 {digest}" if digest else "installer fetched"
             results.append(
                 InstallResult(
                     spec.harness_id,
                     "dry-run",
-                    f"would download {spec.recipe.installer_url} and run {' '.join(argv)}",
+                    f"{checked}; would run {' '.join(argv)} from {spec.recipe.installer_url} "
+                    "(nothing was executed)",
                 )
             )
             continue

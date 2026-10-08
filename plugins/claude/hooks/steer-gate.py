@@ -18,8 +18,10 @@ import sys
 TIMEOUT_SECONDS = 10
 RECOVERY = (
     "Do not try to fix this with a tool call. Type "
-    "`! uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl` "  # noqa: E501  # reason: one-line URL so the release validator checks its version
-    "at the prompt to reinstall the CLI, or disable the Pitwall plugin with /plugin. "
+    "`! uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl` "  # noqa: E501  # reason: one-line URL so the release validator checks its version
+    "at the prompt to (re)install the CLI into ~/.local/bin, make sure ~/.local/bin is on the "
+    "PATH of the agent that runs this hook (`uv tool update-shell`), or disable the Pitwall "
+    "plugin with /plugin. "
     "Check the install afterwards with `pitwall doctor`."
 )
 
@@ -43,12 +45,23 @@ def block(cause):
     return 0
 
 
-def main():
+def find_pitwall():
+    """The CLI on PATH, else where `uv tool install` puts it (hook PATHs are often minimal)."""
     command = shutil.which("pitwall")
-    if command is None:
-        return block("the `pitwall` command was not found on PATH")
+    if command is not None:
+        return command
+    local = os.path.join(os.path.expanduser("~"), ".local", "bin", "pitwall")
+    if os.path.isfile(local) and os.access(local, os.X_OK):
+        return local
+    return None
+
+
+def main():
     if not os.environ.get("PITWALL_AGENTS_CHANNEL_DISPATCH_ID"):
         return 0  # not a dispatched harness: there is no steer to enforce
+    command = find_pitwall()
+    if command is None:
+        return block("the `pitwall` command was not found on PATH or in ~/.local/bin")
     payload = sys.stdin.buffer.read(1024 * 1024)
     try:
         completed = subprocess.run(

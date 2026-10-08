@@ -638,7 +638,14 @@ def _migrate_worktree_branches(
                 or changed
             )
             continue
-        has_old, has_new = _has_branch(common_dir, old), _has_branch(common_dir, new)
+        try:
+            has_old, has_new = _has_branch(common_dir, old), _has_branch(common_dir, new)
+        except FileNotFoundError:
+            err(
+                "pitwall agents migrate: git not found on PATH; the dispatch worktree branches "
+                "were not renamed. Install git and run `pitwall agents migrate` again."
+            )
+            return changed, True
         if has_old and has_new:
             err(
                 f"pitwall agents migrate: {dispatch_id}: branch {new} already exists in "

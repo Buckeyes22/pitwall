@@ -25,6 +25,8 @@ from pathlib import Path
 from queue import Empty, Full, Queue
 from typing import Any
 
+from pitwall.install_hint import install_command
+
 from .broker import load_sync, pitwall_api_token_requirement, resolve_pitwall_api_token
 from .discovery import discover_models as run_model_discovery
 from .harnesses import adapter_ids, get_adapter
@@ -472,8 +474,7 @@ def _check_registered_hooks(repo_root: Path, env: Mapping[str, str]) -> DoctorCh
             summary=problems[0],
             remediation=(
                 "the steering gate blocks tool calls while its CLI cannot run: type "
-                "`! uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl` "  # noqa: E501  # reason: one-line URL so the release validator checks its version
-                "at the prompt, or disable the plugin with /plugin"
+                f"`! {install_command()}` at the prompt, or disable the plugin with /plugin"
             ),
             details={"problems": problems},
         )
@@ -2645,9 +2646,6 @@ def _source_integrity_skip(check_id: str, category: str, summary: str) -> Doctor
         category=category,
         status="SKIP",
         summary=summary,
-        remediation=(
-            "run doctor from a complete Pitwall source clone to validate clone-only files"
-        ),
     )
 
 
@@ -2659,12 +2657,12 @@ def _artifact_plugin_skips(registry: Mapping[str, Any]) -> list[DoctorCheck]:
                 _source_integrity_skip(
                     f"plugin.{host_id}.marketplace_present",
                     PLUGIN_CATEGORY,
-                    f"{host_id} plugin package integrity requires a full source clone",
+                    f"{host_id} plugin package integrity is not applicable to an installed wheel",
                 ),
                 _source_integrity_skip(
                     f"plugin.{host_id}.native_host_exclusions",
                     PLUGIN_CATEGORY,
-                    f"{host_id} generated plugin routing requires a full source clone",
+                    f"{host_id} generated plugin routing is not applicable to an installed wheel",
                 ),
             ]
         )
@@ -2673,12 +2671,12 @@ def _artifact_plugin_skips(registry: Mapping[str, Any]) -> list[DoctorCheck]:
             _source_integrity_skip(
                 "plugin.runtime_reference_shared",
                 PLUGIN_CATEGORY,
-                "package-local runtime-reference bundle comparison requires a full source clone",
+                "package-local runtime-reference bundle comparison is not applicable to an installed wheel",
             ),
             _source_integrity_skip(
                 "plugin.version_alignment",
                 PLUGIN_CATEGORY,
-                "plugin manifest version alignment requires a full source clone",
+                "plugin manifest version alignment is not applicable to an installed wheel",
             ),
         ]
     )
@@ -2719,17 +2717,17 @@ def _runtime_checks(
                 _source_integrity_skip(
                     "runtime.source_registry_layout",
                     RUNTIME_CATEGORY,
-                    "prompt, capability-card, plugin, shim, and reference paths require a full source clone",
+                    "prompt, capability-card, plugin, shim, and reference paths are not applicable to an installed wheel",
                 ),
                 _source_integrity_skip(
                     "runtime.generated_routes",
                     RUNTIME_CATEGORY,
-                    "generated route and plugin parity requires a full source clone",
+                    "generated route and plugin parity is not applicable to an installed wheel",
                 ),
                 _source_integrity_skip(
                     "runtime.install_links",
                     RUNTIME_CATEGORY,
-                    "source install-entry inventory requires a full source clone",
+                    "source install-entry inventory is not applicable to an installed wheel",
                 ),
             ]
         )

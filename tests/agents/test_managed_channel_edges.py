@@ -14,7 +14,7 @@ import uuid
 from pathlib import Path
 from unittest import mock
 
-from pitwall.agents import managed_channel
+from pitwall.agents import managed_channel, pids
 from pitwall.agents.channel import ChannelConfig, resolve_with_default, write_channel_config
 from pitwall.agents.mailbox import Mailbox
 from pitwall.agents.managed_channel import (
@@ -572,14 +572,14 @@ class ManagedChannelEdgeTests(unittest.TestCase):
                     ["ps", "-p", "4242", "-o", "lstart="],
                     capture_output=True,
                     text=True,
-                    timeout=0.5,
+                    timeout=pids.PS_TIMEOUT_SECONDS,
                     check=False,
                 ),
                 mock.call(
                     ["ps", "-p", "4242", "-o", "stat="],
                     capture_output=True,
                     text=True,
-                    timeout=0.5,
+                    timeout=pids.PS_TIMEOUT_SECONDS,
                     check=False,
                 ),
             ],

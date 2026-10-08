@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from pitwall.agents.errors import ProfileSyncError
+from pitwall.agents.paths import xdg_dir
 from pitwall.agents.process import run_bounded_capture
 from pitwall.providers.model_studio import catalog as model_studio
 
@@ -31,7 +32,7 @@ class OpenCodeAdapter(HarnessAdapter):
 
     @staticmethod
     def config_path(env: Mapping[str, str], home: Path) -> Path:
-        base = Path(env.get("XDG_CONFIG_HOME", str(home / ".config"))).expanduser()
+        base = xdg_dir(env, "XDG_CONFIG_HOME", ".config", home=home)
         return base / "opencode" / "opencode.json"
 
     @staticmethod

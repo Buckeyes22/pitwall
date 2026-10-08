@@ -497,6 +497,8 @@ def linux_probe(**changes: Any) -> DoctorProbe:
         "platform": "linux",
         "architecture": "x64",
         "node_version": "22.22.1",
+        # Never spawn the host's real bwrap: whether it works is a property of the CI host.
+        "bubblewrap_failure": lambda _path: None,
         **changes,
     }
     return DoctorProbe(**values)

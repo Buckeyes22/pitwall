@@ -19,6 +19,18 @@ def codex_home(env: Mapping[str, str], home: Path) -> Path:
     return Path(configured)
 
 
+def xdg_dir(env: Mapping[str, str], variable: str, *default: str, home: Path | None = None) -> Path:
+    """``$variable``, or ``<home>/<default...>`` when it is unset *or empty* (the XDG rule).
+
+    An empty ``XDG_*`` value must never become a relative path under the current directory.
+    """
+    configured = env.get(variable, "").strip()
+    if configured:
+        return Path(configured).expanduser()
+    base = home if home is not None else Path(env.get("HOME") or "~").expanduser()
+    return base.joinpath(*default)
+
+
 def state_root(env: Mapping[str, str]) -> Path:
     """``$XDG_STATE_HOME/pitwall/agents`` (default ``~/.local/state/pitwall/agents``).
 
@@ -27,9 +39,7 @@ def state_root(env: Mapping[str, str]) -> Path:
     """
     if env.get(STATE_HOME_ENV):
         return Path(env[STATE_HOME_ENV]).expanduser()
-    base = Path(
-        env.get("XDG_STATE_HOME", str(Path(env.get("HOME", "~")).expanduser() / ".local" / "state"))
-    )
+    base = xdg_dir(env, "XDG_STATE_HOME", ".local", "state")
     return base / "pitwall" / "agents"
 
 
@@ -38,9 +48,7 @@ def config_root(env: Mapping[str, str]) -> Path:
 
     Holds ``hooks.json`` and ``harness-capabilities.json``.
     """
-    base = Path(
-        env.get("XDG_CONFIG_HOME", str(Path(env.get("HOME", "~")).expanduser() / ".config"))
-    )
+    base = xdg_dir(env, "XDG_CONFIG_HOME", ".config")
     return base / "pitwall" / "agents"
 
 

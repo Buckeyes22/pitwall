@@ -92,7 +92,7 @@ def _marker_is_present(payload: Mapping[str, Any]) -> bool:
         return False
     try:
         record = json.loads(marker_path(root, session_id).read_text(encoding="utf-8"))
-    except OSError, json.JSONDecodeError, UnicodeDecodeError:
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
         return False
     if not (
         isinstance(record, dict)
