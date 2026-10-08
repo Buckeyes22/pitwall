@@ -14,7 +14,6 @@ from unittest import mock
 from pitwall.agents import doctor
 from pitwall.agents.registry import load_registry
 
-
 CLONE_ONLY = (
     "runtime.source_registry_layout",
     "runtime.generated_routes",

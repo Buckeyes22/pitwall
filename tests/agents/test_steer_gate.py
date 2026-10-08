@@ -105,13 +105,19 @@ class GateCommandTests(unittest.TestCase):
 
     def test_wrappers_are_identical_and_block_without_the_command(self) -> None:
         self.assertEqual(WRAPPERS[0].read_bytes(), WRAPPERS[1].read_bytes())
-        result = subprocess.run(
-            [sys.executable, str(WRAPPERS[0])],
-            input=b"{}",
-            capture_output=True,
-            env={"PATH": "/nonexistent", "PITWALL_AGENTS_CHANNEL_DISPATCH_ID": DISPATCH_ID},
-            check=False,
-        )
+        with tempfile.TemporaryDirectory(prefix="pitwall-steer-gate-home-") as home:
+            # An empty HOME keeps the hook's ~/.local/bin fallback off the real install.
+            result = subprocess.run(
+                [sys.executable, str(WRAPPERS[0])],
+                input=b"{}",
+                capture_output=True,
+                env={
+                    "PATH": "/nonexistent",
+                    "HOME": home,
+                    "PITWALL_AGENTS_CHANNEL_DISPATCH_ID": DISPATCH_ID,
+                },
+                check=False,
+            )
         self.assertEqual(0, result.returncode)
         self.assertEqual(
             "deny", json.loads(result.stdout)["hookSpecificOutput"]["permissionDecision"]
