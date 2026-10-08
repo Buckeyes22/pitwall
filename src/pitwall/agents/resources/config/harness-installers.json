@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVerifiedOn": "2026-09-29",
+  "sourceVerifiedOn": "2026-10-08",
   "harnesses": {
     "codex": {
       "documentationUrl": "https://github.com/openai/codex",
@@ -158,14 +158,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "0c6b44f4f43cf9632479dbd55ef29030f3ebf27106ff980d351343fae9ceef39"
+          "sha256": "11a6e94eda9b8ac1c03a9172cd54ed02e7e0a0d1b76081d1cdc813be26b53487"
         },
         "linux": {
           "installerUrl": "https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "0c6b44f4f43cf9632479dbd55ef29030f3ebf27106ff980d351343fae9ceef39"
+          "sha256": "11a6e94eda9b8ac1c03a9172cd54ed02e7e0a0d1b76081d1cdc813be26b53487"
         }
       },
       "allowedRedirectHosts": [
