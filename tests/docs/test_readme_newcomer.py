@@ -29,10 +29,16 @@ def test_every_broker_terminal_loads_the_same_configuration() -> None:
         assert "set -a; . ./.env.quickstart.local; set +a" in block
 
 
-def test_dispatch_examples_run_from_path_with_a_shipped_prompt() -> None:
-    assert "pitwall agents dispatch codex examples/prompts/first-dispatch.md" in README
+def test_every_readme_dispatch_uses_a_prompt_the_reader_has() -> None:
+    # The quick start installs a wheel, which ships no examples/; every dispatch must use a
+    # prompt file the README itself writes before that dispatch.
+    dispatches = list(re.finditer(r"pitwall agents dispatch (?:route \S+|\S+) (\S+)", README))
+    assert dispatches
+    for match in dispatches:
+        prompt = match.group(1)
+        created = README.rfind(f"> {prompt}\n", 0, match.start())
+        assert created != -1, f"{prompt} is dispatched before the README creates it"
     assert "codex-shim.sh prompt.md" not in README
-    assert (ROOT / "examples/prompts/first-dispatch.md").is_file()
 
 
 def test_disclosures_precede_the_first_dispatch_and_serve() -> None:
