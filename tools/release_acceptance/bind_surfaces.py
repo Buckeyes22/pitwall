@@ -8,6 +8,10 @@ test that drives it and derive the oracle from that test's pinned fixture. Run i
 a bound test file changes: a binding whose file hash no longer matches is stale, and the
 matrix refuses it until the rules have been re-read against the edited test.
 
+The source-review records (``discovery-review.json``, ``cli-source-review.json``) are
+refreshed in the same run by ``review_records`` (line numbers and definition hashes follow
+unchanged code; changed definitions are listed and need ``--accept-reviewed``).
+
 A hand-reviewed binding keeps its oracle, but its ``source`` line follows the bound test's
 current definition line whenever its file hash is current (or accepted). The per-family
 review records (``reviewed-bindings-*.json``) get the same treatment.
@@ -24,7 +28,7 @@ from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import Any
 
-from tools.release_acceptance import discovery, test_index
+from tools.release_acceptance import discovery, review_records, test_index
 
 ROOT = Path(__file__).resolve().parents[2]
 BINDINGS = ROOT / "release_acceptance" / "reviewed-bindings.json"
@@ -335,6 +339,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  unmapped: {surface}")
     for binding in stale:
         print(f"  reviewed binding's test changed; re-read it, then --accept-reviewed: {binding}")
+    pending, written = review_records.refresh(accept_reviewed=accept)
+    for item in pending:
+        print(f"  source-review record needs human review: {item}")
+    for path in written:
+        print(f"updated {path.relative_to(ROOT)}")
+    stale += pending
     if unmapped:
         print("bind each unmapped surface (fixture rule or surface-test-map.json), then rerun")
     if stale:

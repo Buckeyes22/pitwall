@@ -6,7 +6,7 @@
       "issue_code": "deferred-scope",
       "domain": "cli",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The CLI inventory is J36's: every command path and argument surface through the entry points.",
       "evidence": [
@@ -18,7 +18,7 @@
       "issue_code": "aliased_constructors",
       "domain": "cli_arguments",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "J36's explorer instruments argparse.ArgumentParser at runtime, so parsers built through aliases or factories register every command and argument at its source line.",
       "evidence": [
@@ -30,7 +30,7 @@
       "issue_code": "dynamic_command_name",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/routing.py:59",
-      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "span_sha256": "122ada0fb15e44d11be4e30d9807adeb89250bd045b819c90925125641dad2a7",
       "reviewer": "root",
       "interpretation": "The loop names exactly `jobs status`, `jobs result`, and `jobs follow`; follow alone adds --max-polls and --interval.",
       "evidence": [
@@ -42,7 +42,7 @@
       "issue_code": "dynamic_command_name",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/runpod_resources.py:178",
-      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "span_sha256": "5d579911f2fdaa500330bc047bfa41a086758f0aff7caa2d9580769412e07253",
       "reviewer": "root",
       "interpretation": "_payload_mutation is called with the literal name \"create\" for pods, endpoints, templates, volumes, and registry.",
       "evidence": [
@@ -54,7 +54,7 @@
       "issue_code": "dynamic_command_name",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/runpod_resources.py:192",
-      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "span_sha256": "5586bb1d0a2a87cbea9c42d119c6c13a61f6909f7ca5d9160db1e706fc2c2a26",
       "reviewer": "root",
       "interpretation": "_identified_payload_mutation is called with the literal names \"update\" (pods, endpoints, templates), \"grow\" (volumes), and \"replace\" (registry).",
       "evidence": [
@@ -66,7 +66,7 @@
       "issue_code": "helper_added_arguments",
       "domain": "cli_arguments",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Options added through helper functions are attributed at runtime by J36 to the command that owns each parser; the helper sites carry their own unresolved_parser_binding entries.",
       "evidence": [
@@ -78,7 +78,7 @@
       "issue_code": "non_target_files",
       "domain": "cli_arguments",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "J36 walks every command path from both entry points, so surfaces defined outside the listed target files are registered and exercised.",
       "evidence": [
@@ -90,7 +90,7 @@
       "issue_code": "runtime_behavior",
       "domain": "cli_arguments",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "J36 runs every command path through the installed entry points and pins its exit code and JSON keys; J44 does the same for the installed wheel and sdist.",
       "evidence": [
@@ -103,7 +103,7 @@
       "issue_code": "scope",
       "domain": "cli_arguments",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The static unit reads literal argparse only; J36 is the exhaustive runtime inventory (442 argument surfaces).",
       "evidence": [
@@ -115,7 +115,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/output.py:138",
-      "source_sha256": "07f808a5fa18caf3470e6022e946aa8a787116b892089b73410ae7a2861c1289",
+      "span_sha256": "5b81e0d682f1b19e10f1395f2c0711c2a62bea82e327a4f5d68729e7a6fda19e",
       "reviewer": "root",
       "interpretation": "add_json_argument adds --json (store_true) to each parser it is given; every command that calls it owns its own --json surface.",
       "evidence": [
@@ -127,7 +127,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/routing.py:74",
-      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "span_sha256": "f7d992d8f772a317e510a81b398e072dc25e2e42b6d84defaefb89d4076e5c76",
       "reviewer": "root",
       "interpretation": "_request_args adds the capability_id positional to `jobs plan` and `jobs submit`.",
       "evidence": [
@@ -139,7 +139,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/routing.py:75",
-      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "span_sha256": "43630557a408c0ec8e1d4e3b5d668d2a2177e0a79926ff0487fa1478983cda7a",
       "reviewer": "root",
       "interpretation": "_request_args adds --provider-id to `jobs plan` and `jobs submit`.",
       "evidence": [
@@ -151,7 +151,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/routing.py:76",
-      "source_sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101",
+      "span_sha256": "ef214d430aa8ee98f3b5d430e13e677ca354170190fc5aeb746ebdb4a3143d4d",
       "reviewer": "root",
       "interpretation": "_request_args adds --input-json (default \"{}\") to `jobs plan` and `jobs submit`.",
       "evidence": [
@@ -163,7 +163,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/runpod_market.py:34",
-      "source_sha256": "e57c4ff488ef8fa7c88693416cd33ceaf0d36eed8524d67a78a24e4c16db7dc2",
+      "span_sha256": "0dd3f94714ec1d454c15c51ab820275fb84644cd7d6f421355484acb0481e26c",
       "reviewer": "root",
       "interpretation": "_add_runpod_catalogue_arguments adds --refresh to both `runpod catalogue` parsers (the subcommand and the standalone prog).",
       "evidence": [
@@ -175,7 +175,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/runpod_resources.py:209",
-      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "span_sha256": "d546cfb0698a6718267ca508631c6dad4cdd8a4509f87a0bec3d07f7e7a5c93a",
       "reviewer": "root",
       "interpretation": "_mutation_flags adds the required --idempotency-key to every create, update, grow, replace, and delete resource command.",
       "evidence": [
@@ -187,7 +187,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/runpod_resources.py:210",
-      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "span_sha256": "9defc91bf1c2d4210476abc7006426ae1e20d1e355be1ed697df9d81d5c12ec4",
       "reviewer": "root",
       "interpretation": "_mutation_flags adds --dry-run (store_true) to every create, update, grow, replace, and delete resource command.",
       "evidence": [
@@ -199,7 +199,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/runpod_resources.py:215",
-      "source_sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa",
+      "span_sha256": "1840254441e6dac8cb40c39705e19301f0c73af6b3f0c1c15b84a67079d6a483",
       "reviewer": "root",
       "interpretation": "_mutation_flags adds --confirm to every create, update, grow, replace, and delete resource command.",
       "evidence": [
@@ -211,7 +211,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/volume_files.py:100",
-      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "span_sha256": "d889bd005e7a5f85786f244ed04a4d2f2d5f8d0059c2b67010e2d1a10b0b0df5",
       "reviewer": "root",
       "interpretation": "_add_volume_context adds the volume_id positional to volume-files list, upload, download, and delete.",
       "evidence": [
@@ -223,7 +223,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/volume_files.py:101",
-      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "span_sha256": "440ca97b7f39bbea4311f3a2cce6b1f6e6752d944ae2a5a60c01c282d94f4082",
       "reviewer": "root",
       "interpretation": "_add_volume_context adds the data_center_id positional to volume-files list, upload, download, and delete.",
       "evidence": [
@@ -235,7 +235,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/volume_files.py:103",
-      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "span_sha256": "037bee40c7b304c221f96f86deebcb6f283cb9b33c64957564f9a0a79abb9e86",
       "reviewer": "root",
       "interpretation": "_add_volume_context(object_key=True) adds the object_key positional to volume-files upload, download, and delete.",
       "evidence": [
@@ -247,7 +247,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/volume_files.py:107",
-      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "span_sha256": "794a0e9aedc4d4037d0b74c26318c912766d55ce3c53c95c7ba803fdbf3e6748",
       "reviewer": "root",
       "interpretation": "_add_local_path adds the local_path positional to volume-files upload and download.",
       "evidence": [
@@ -259,7 +259,7 @@
       "issue_code": "unresolved_parser_binding",
       "domain": "cli_arguments",
       "source": "src/pitwall/cli/volume_files.py:108",
-      "source_sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7",
+      "span_sha256": "42c38eba0f5790bd1909407f53dc610afa037334f90d5e447da04a3d031d58b3",
       "reviewer": "root",
       "interpretation": "_add_local_path adds --root (default \".\") to volume-files upload and download.",
       "evidence": [
@@ -271,7 +271,7 @@
       "issue_code": "confirmation",
       "domain": "cli_dispatch",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "CLI confirmation is a typed --confirm flag: a wrong value stops before any service or pool is opened, an exact value proceeds, and --dry-run previews without writing.",
       "evidence": [
@@ -286,7 +286,7 @@
       "issue_code": "options",
       "domain": "cli_dispatch",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Per-command options are registered and documented by J36 at runtime.",
       "evidence": [
@@ -298,7 +298,7 @@
       "issue_code": "output_modes",
       "domain": "cli_dispatch",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "J36 pins each command's --json keys; the human mode is exercised by the same command runs.",
       "evidence": [
@@ -309,7 +309,7 @@
       "issue_code": "scope",
       "domain": "cli_dispatch",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The static unit reads root commands and literal entry points; J36 walks the full command tree and tests/test_service_entry_points.py covers the service entry points.",
       "evidence": [
@@ -322,7 +322,7 @@
       "issue_code": "subcommands",
       "domain": "cli_dispatch",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "J36 enumerates nested subcommands by walking the live parser tree and requires a fixture for every command path (145).",
       "evidence": [
@@ -334,7 +334,7 @@
       "issue_code": "config_files",
       "domain": "config",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "pitwall.toml (./pitwall.toml or PITWALL_CONFIG_FILE) applies every settings field and the environment overrides it.",
       "evidence": [
@@ -345,7 +345,7 @@
       "issue_code": "deferred-scope",
       "domain": "config",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The configuration inventory is J37's.",
       "evidence": [
@@ -356,7 +356,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:226",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "77e7cb2fb0548af54424b337b46c2d9b17865cfde007592d935f70a70a5a7e0e",
       "reviewer": "root",
       "interpretation": "PitwallSettings.r2_temp_credential_ttl_s defaults to DEFAULT_R2_TEMP_CREDENTIAL_TTL_S = 21600; the environment and pitwall.toml override it.",
       "evidence": [
@@ -368,7 +368,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:230",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "dfd58230840db7a7d8740861a0037337ecda0cda2433a88f15b6484c080968bf",
       "reviewer": "root",
       "interpretation": "PitwallSettings.r2_temp_credential_permission defaults to DEFAULT_R2_TEMP_CREDENTIAL_PERMISSION = \"object-read-write\"; the environment and pitwall.toml override it.",
       "evidence": [
@@ -380,7 +380,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:302",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "c71836c17c2d8270f22d9b1988a6aa6c04c3d505c78478cf4b42b086aede81fb",
       "reviewer": "root",
       "interpretation": "PitwallSettings.pitwall_routing_weights defaults to default_factory=dict -> {}; the environment and pitwall.toml override it.",
       "evidence": [
@@ -392,7 +392,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:323",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "b771741aa56d9d7127174a1ce84fd66533905f5025d04c3ce7d3392be38ef59e",
       "reviewer": "root",
       "interpretation": "PitwallSettings.pitwall_monthly_budget_usd defaults to Decimal(\"50.0\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -404,7 +404,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:327",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "e8811aaa8b48805bf86b65ab75debabaf63db34b01917c6ad0ae09b7f6d8ae28",
       "reviewer": "root",
       "interpretation": "PitwallSettings.pitwall_per_request_max_usd defaults to Decimal(\"10.0\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -416,7 +416,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:343",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "7e4811057b001d2a6a184bb6ca22146a96ad68bfd1fc9f41f65fbca4329d1dc4",
       "reviewer": "root",
       "interpretation": "PitwallSettings.pitwall_budget_breach_kill_headroom_floor_usd defaults to Decimal(\"0.0\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -428,7 +428,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:486",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "3bd8633c9a3a0eb28eac8ee9de427c1c34f084b360946f02fb7b3c07bdffc274",
       "reviewer": "root",
       "interpretation": "AgentProfilesSettings.defaults defaults to default_factory=AgentProfileDefaults -> an empty defaults table; pitwall.toml [agents.profiles.defaults] overrides it.",
       "evidence": [
@@ -440,7 +440,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:487",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "ec6735910d7df1bce0f6ca7b3f9a6a9a2511d98b73d9d9c0f362549e2100e5ae",
       "reviewer": "root",
       "interpretation": "AgentProfilesSettings.endpoints defaults to default_factory=dict -> {}; pitwall.toml [agents.profiles.endpoints] overrides it.",
       "evidence": [
@@ -452,7 +452,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:488",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "b73062be6f2ba5e5be0ba11422b06912c14dbb6af88dd76b60b454eea56b9fc4",
       "reviewer": "root",
       "interpretation": "AgentProfilesSettings.harnesses defaults to default_factory=dict -> {}; pitwall.toml [agents.profiles.harnesses] overrides it.",
       "evidence": [
@@ -464,7 +464,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:489",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "4432524834509679003ef8e3263695eda0e4a22de644cb7a45ae7e0f6108c3e2",
       "reviewer": "root",
       "interpretation": "AgentProfilesSettings.models defaults to default_factory=dict -> {}; pitwall.toml [agents.profiles.models] overrides it.",
       "evidence": [
@@ -476,7 +476,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:496",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "7ddead5b17fefbf44f02aaf7044fb9f4b9ca67d449807ed554999a61e6c604c1",
       "reviewer": "root",
       "interpretation": "AgentsSettings.profiles defaults to default_factory=AgentProfilesSettings -> an empty profiles table; pitwall.toml [agents.profiles] overrides it.",
       "evidence": [
@@ -488,7 +488,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:62",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "6d4e1921957a67fcc7564e8866d7c94691eb60016154877d8c59572cbea1466c",
       "reviewer": "root",
       "interpretation": "RoutingWeights.cost defaults to Decimal(\"1\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -500,7 +500,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:63",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "a583a978df08f162174876ac25fb7e75fc3e857594f367fb917732c12f325bd4",
       "reviewer": "root",
       "interpretation": "RoutingWeights.latency defaults to Decimal(\"0.001\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -512,7 +512,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:64",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "400c7bcf800300cf6806544904fd3cbe39ae7558313f8c7780cb28cdab119a35",
       "reviewer": "root",
       "interpretation": "RoutingWeights.w_quota defaults to Decimal(\"10\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -524,7 +524,7 @@
       "issue_code": "dynamic_default",
       "domain": "config",
       "source": "src/pitwall/config.py:65",
-      "source_sha256": "c42722c7c359533f4d517bfc4ac26fafcbbae138f14acfcbc6ae3103889708d2",
+      "span_sha256": "6c4e4f27e2ec5ddee87ad87ffe9fe410124fcf45028bfbc6160fa9f86cd0f564",
       "reviewer": "root",
       "interpretation": "RoutingWeights.w_reset defaults to Decimal(\"2.5\"); the environment and pitwall.toml override it.",
       "evidence": [
@@ -536,7 +536,7 @@
       "issue_code": "other_projects",
       "domain": "config",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Agent Routing's configuration is routes.json, driven end to end by J39 (add, list, probe, doctor, replace, remove).",
       "evidence": [
@@ -548,7 +548,7 @@
       "issue_code": "runtime_env_binding",
       "domain": "config",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Environment binding, TOML precedence, and validation are J37's; keys services read directly are validated by name before start.",
       "evidence": [
@@ -561,7 +561,7 @@
       "issue_code": "scope",
       "domain": "config",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The static unit reads annotated settings fields and .env.example names; J37 binds all 186 configuration surfaces.",
       "evidence": [
@@ -572,7 +572,7 @@
       "issue_code": "deferred-scope",
       "domain": "gateway",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The Python gateway (pitwall gateway serve) and its provider routes are exercised by J32 (supervised gateway, per-route upstreams, typed quota signals) and J33 (the Messages route), and by tests/gateway.",
       "evidence": [
@@ -585,7 +585,7 @@
       "issue_code": "compose_include",
       "domain": "ops",
       "source": "docker-compose.prod.yml:3",
-      "source_sha256": "1454f6927550d013d4aedaec504a9492d3d3e991eecbcdf835139273d66724ef",
+      "span_sha256": "37c019a6537d3cbceb22f7118eb92341e6af86ca78be60725a6dbf682d85870f",
       "reviewer": "root",
       "interpretation": "docker-compose.prod.yml only includes docker-compose.yml and renders to the identical service set.",
       "evidence": [
@@ -596,7 +596,7 @@
       "issue_code": "deferred-scope",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Operations are J42 (restore drill), J43 (upgrade from the last release), and J44 (installed artifacts).",
       "evidence": [
@@ -609,7 +609,7 @@
       "issue_code": "docs_runbooks",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The backup and restore runbook procedure is the drill J42 runs; retention archive and purge are covered by the retention suite.",
       "evidence": [
@@ -622,7 +622,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.testinfra.yml:10",
-      "source_sha256": "9997fda35fa5c0598c6c53ecd846847c9635fc5bafc167f294db70348768bbb6",
+      "span_sha256": "693a0e862b32d139056137c89a6fa56c1a01d226fe3e05ca460d7d755c8df864",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -634,7 +634,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.testinfra.yml:27",
-      "source_sha256": "9997fda35fa5c0598c6c53ecd846847c9635fc5bafc167f294db70348768bbb6",
+      "span_sha256": "528710cb8c8545b0ee113ab03c9076c98536469c64e6a9ac2cb1cc17d94f3d6a",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -646,7 +646,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:109",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "7854f7fcf1bdc18eb6df3bad4f4fa4910d48d661736a9a567b6a25dd5faeab89",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -658,7 +658,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:146",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "352ecc77d1e41f2e3f7c7bd0700039beb943183a00904750c74aa0035df5679f",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -670,7 +670,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:15",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "e768132e91dae3efc4d6f0240773679f55b70afc34250f68900fa816a8438482",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -682,7 +682,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:176",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "fdba9d8c32a781faaa6d20fbc7407ac0b1726d00748915e660ab21bd699c2bc7",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -694,7 +694,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:33",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "ffa90b0d9604f6a8f5f9c1805b16d51baca17f074b4694d312b06b5ab442a4ba",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -706,7 +706,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:53",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "d727b62cf5d4aec6d0252df691f1b3f5c6db195903c80fde49de8eff18b1581a",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -718,7 +718,7 @@
       "issue_code": "dynamic_compose_expression",
       "domain": "ops",
       "source": "docker-compose.yml:69",
-      "source_sha256": "ca339bb3711baf0444e866792f15870931ba0d197e3bdbd3bb3983c9682dbb01",
+      "span_sha256": "fa273efc208005a7c015dbeac9bc1f4e49a4e183ed4b979652e15f9828228409",
       "reviewer": "root",
       "interpretation": "Every flagged expression renders in the canonical environment to the value pinned in tests/release/compose_rendered.json.",
       "evidence": [
@@ -730,7 +730,7 @@
       "issue_code": "other_inventories",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Every other inventory unit carries its own entries in this file; operations here cover Compose, images, migrations, and release scripts.",
       "evidence": [
@@ -742,7 +742,7 @@
       "issue_code": "runtime_execution",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Images run `python -m pitwall.<service>`; the service entry points answer --help and refuse unknown arguments before starting, and J44 runs the installed services (API, MCP) from the wheel and sdist.",
       "evidence": [
@@ -755,7 +755,7 @@
       "issue_code": "runtime_substitution",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Compose substitution is evaluated by `docker compose config` in the canonical environment and every flagged expression is pinned.",
       "evidence": [
@@ -766,7 +766,7 @@
       "issue_code": "scope",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The static unit reads Dockerfiles, Compose, migrations, and release scripts literally; their rendered and executed behavior is pinned by the Compose render test, J43, and J44.",
       "evidence": [
@@ -779,7 +779,7 @@
       "issue_code": "secret_values",
       "domain": "ops",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Secrets are required Compose variables with no default (${VAR:?}); rendering with distinct placeholders proves each reaches exactly the services that read it and the connection URLs that embed it.",
       "evidence": [
@@ -790,7 +790,7 @@
       "issue_code": "deferred-scope",
       "domain": "routing",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Routing policy is the production planner: deterministic plans, explicit constraints, weighted objectives, and fallback order.",
       "evidence": [
@@ -803,7 +803,7 @@
       "issue_code": "unresolved-adapter-class-contracts",
       "domain": "routing",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Each adapter's argv contract is pinned by the adapter suite and, through every shim, by J40.",
       "evidence": [
@@ -815,7 +815,7 @@
       "issue_code": "unresolved-channel-routing-mcp-tools",
       "domain": "routing",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The channel MCP tools (dispatch, inbox, answer, steer) are covered by the orchestrator and subagent tool suites and J41's scripted exits.",
       "evidence": [
@@ -828,7 +828,7 @@
       "issue_code": "unresolved-plugin-manifests-and-marketplaces",
       "domain": "routing",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Plugin manifests and marketplace entries are pinned by the marketplace and plugin identity suites.",
       "evidence": [
@@ -840,7 +840,7 @@
       "issue_code": "deferred-scope",
       "domain": "tui",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The console inventory is J38's: every view in every source state at two sizes, and every app and view binding.",
       "evidence": [
@@ -852,7 +852,7 @@
       "issue_code": "unresolved-handler-behaviour",
       "domain": "tui",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Handler effects are asserted behaviorally: J38 presses every binding and checks the view change, the source reload, or the action reaching its source.",
       "evidence": [
@@ -865,7 +865,7 @@
       "issue_code": "unresolved-runtime-construction",
       "domain": "tui",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "Runtime-built widgets are observed in the running app: J38 asserts each view's rows and text in every source state.",
       "evidence": [
@@ -876,7 +876,7 @@
       "issue_code": "unresolved-textual-base-bindings",
       "domain": "tui",
       "source": null,
-      "source_sha256": null,
+      "span_sha256": null,
       "reviewer": "root",
       "interpretation": "The inherited Textual App bindings that matter to an operator (q and ctrl+c quit) are pressed by J38; the help overlay lists and dismisses the rest.",
       "evidence": [
