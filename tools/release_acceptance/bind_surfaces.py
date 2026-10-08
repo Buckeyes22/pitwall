@@ -41,6 +41,9 @@ J37 = "tests/release/test_config_keys_journey.py"
 J43 = "tests/integration/test_upgrade_from_release.py"
 AR_JOURNEYS = "tests/agents/test_journeys.py"
 
+REGEN_COMMAND = "uv run --frozen python -m tools.release_acceptance.bind_surfaces --accept-reviewed"
+REGEN_HINT = f"run `{REGEN_COMMAND}` (or `make regen-bindings`)"
+
 Rule = tuple[str, str, str, str]  # (test node id, framework, proof lane, oracle)
 
 
@@ -237,8 +240,8 @@ def _refresh_reviewed(
         raise SystemExit(
             "reviewed bindings name a missing test. Point each binding's test_node_id at the"
             " test that now covers the surface (in reviewed-bindings.json and its per-family"
-            " record), re-read that test, then rerun with --accept-reviewed:\n  "
-            + "\n  ".join(gone)
+            " record), re-read that test, then rerun with --accept-reviewed"
+            f" ({REGEN_HINT}):\n  " + "\n  ".join(gone)
         )
     return stale
 
@@ -332,6 +335,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  unmapped: {surface}")
     for binding in stale:
         print(f"  reviewed binding's test changed; re-read it, then --accept-reviewed: {binding}")
+    if unmapped:
+        print("bind each unmapped surface (fixture rule or surface-test-map.json), then rerun")
+    if stale:
+        print(f"after re-reading the listed tests: {REGEN_HINT}")
     return 1 if unmapped or stale else 0
 
 
