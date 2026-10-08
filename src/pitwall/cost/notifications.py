@@ -107,17 +107,11 @@ class ResendNotifier:
             return NotificationResult(ok=True, email_id=email_id)
         except ModuleNotFoundError as exc:
             if exc.name == "resend" or "resend" in str(exc):
-                # Inline version-derived URL; the integrator switches this to the shared
-                # install_hint helper that lane agents adds (pitwall.install_hint).
-                from pitwall import __version__
+                from pitwall.install_hint import wheel_url
 
-                wheel = (
-                    "https://github.com/Buckeyes22/pitwall/releases/download/"
-                    f"v{__version__}/pitwall-{__version__}-py3-none-any.whl"
-                )
                 error = (
                     "resend package is not installed; reinstall Pitwall with the email extra: "
-                    f"uv tool install --python 3.14 'pitwall[email] @ {wheel}'"
+                    f"uv tool install --python 3.14 'pitwall[email] @ {wheel_url()}'"
                 )
             else:
                 error = NOTIFICATION_DELIVERY_FAILED

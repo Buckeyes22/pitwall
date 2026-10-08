@@ -882,11 +882,21 @@ class _LegacyDispatch:
             )
             _emit_sentinel(64, leading_newline=False)
             return 64
-        self.store = RunStore.create(env, self.dispatch_id)
-        if self.resume_mode:
-            self.store.rotate_attempt_logs(self.context.attempt - 1)
-        self.store.touch_artifact("stdout.log")
-        self.store.touch_artifact("stderr.log")
+        try:
+            self.store = RunStore.create(env, self.dispatch_id)
+            if self.resume_mode:
+                self.store.rotate_attempt_logs(self.context.attempt - 1)
+            self.store.touch_artifact("stdout.log")
+            self.store.touch_artifact("stderr.log")
+        except OSError as exc:
+            print(
+                f"{harness_id}-shim: cannot write run state ({exc.strerror or exc}: "
+                f"{exc.filename or 'run directory'}); set XDG_STATE_HOME or HOME to a "
+                "writable directory",
+                file=sys.stderr,
+            )
+            _emit_sentinel(73, leading_newline=False)
+            return 73
         self.emitter = EventEmitter(
             self.store,
             harness=harness_id,

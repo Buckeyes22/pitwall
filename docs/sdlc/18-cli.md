@@ -522,7 +522,7 @@ Argument parser: `_parse_init_args`. Manual-path defaults come from `_DEFAULT_IN
 | `--gpu-class` | No | `"NVIDIA L4"` on manual path | `str` |
 | `--per-second-active` | No | `"0.001"` on manual path | `str` |
 | `--priority` | No | `1` | `int` |
-| `--smoke-base-url` | No | `"http://127.0.0.1:8080"` | `str` |
+| `--smoke-base-url` | No | `PITWALL_API_URL`, else `PITWALL_BASE_URL`, else `http://127.0.0.1:$PITWALL_API_PORT` (port 8080 when unset) | `str` |
 | `--smoke-text` | No | `"hello"` | `str` |
 
 Seed inputs: `--from-seed` accepts a YAML/JSON file or directory; without `--manual`, `./seed` is used when it exists (`pitwall.cli.capabilities`, `pitwall.seed`). Seed outputs are capability/provider registry writes plus a `SeedApplyResult` countable as `capabilities` and `providers` (`pitwall.seed`).

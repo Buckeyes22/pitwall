@@ -485,13 +485,18 @@ def workbench_section() -> DoctorSection:
     )
     flock = runtime["flock"]
     flock_ok = flock["status"] == "available"
+    linux_only = flock["status"] == "unsupported-platform"
     checks.append(
         DoctorCheck(
             "workbench.flock",
             phase,
-            "ok" if flock_ok else "warn",
-            f"flock at {flock['path']}" if flock_ok else f"flock: {flock['status']}",
-            None if flock_ok else "install util-linux so shared admission can lock",
+            "ok" if flock_ok else "skip" if linux_only else "warn",
+            f"flock at {flock['path']}"
+            if flock_ok
+            else "workbench launch needs Linux (flock)"
+            if linux_only
+            else f"flock: {flock['status']}",
+            None if flock_ok or linux_only else "install util-linux so shared admission can lock",
         )
     )
     restricted = runtime["restricted"]

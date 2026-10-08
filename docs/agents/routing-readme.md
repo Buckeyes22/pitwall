@@ -378,7 +378,7 @@ It reads the install manifest and removes exactly what `install` wrote: the shim
 ## Troubleshooting
 
 - Smoke test returns nothing or no pong → the provider is not authenticated or named wrong; run `kimi login`, `opencode models`, `codex login`, `claude auth status`, or `grok login` for the selected route and retry.
-- Provider setup partially failed → rerun `pitwall agents setup harnesses`; successful installs are detected and disabled, so only missing CLIs remain selectable. Use `--dry-run` to review sources without downloading.
+- Provider setup partially failed → rerun `pitwall agents setup harnesses`; successful installs are detected and disabled, so only missing CLIs remain selectable. Use `--dry-run` to download each installer and check its pinned SHA-256 without running it.
 - Provider setup was skipped in CI or a pipe → this is expected without `/dev/tty`; run `pitwall agents setup harnesses` later from a terminal.
 - A same-version local Claude refresh still loads an older skill → run the scoped uninstall/install sequence in the Claude Code section; an update that reports no change does not prove the cached files came from the new source.
 - Codex marketplace add reports a same-name/different-source conflict → remove only `pitwall-codex@pitwall-local` and `pitwall-local`, add the intended marketplace, and reinstall as shown in the Codex section.
