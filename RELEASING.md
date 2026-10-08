@@ -79,7 +79,7 @@ There is no project GPU worker image in the alpha. See ADR 0002.
   `gh attestation verify pitwall-0.3.0a1-py3-none-any.whl --repo Buckeyes22/pitwall`.
   For each image, run `gh attestation verify oci://"$(cat api.digest)" --repo Buckeyes22/pitwall`.
 - Install: in a clean `python:3.14.7-slim` container, run the release-wheel install string
-  (`uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl`),
+  (`uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl`),
   then `pitwall --version` prints `0.3.0a1`.
 
 ## Verification and rollback

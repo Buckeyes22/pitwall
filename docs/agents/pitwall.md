@@ -35,9 +35,23 @@ then dispatch its prompt. For example, this creates and uses a route named
 `glimmer` for capability `llm.glimmer`:
 
 ```bash
+pitwall serve --model meta-models/Muse-Glimmer-30B --gpu-class "<gpu-class>" --ttl-minutes <minutes> --max-usd-per-hour <usd> --route glimmer
+pitwall agents dispatch route glimmer prompt.md
+```
+
+That is the default personal flow: `pitwall setup` once and `PITWALL_MONTHLY_BUDGET_USD` set first
+(see [personal serving](../operator/personal-serving.md)). It needs no database, and `--route`
+creates the route for you.
+
+### Registry backend
+
+With `[personal] backend = "registry"` in `pitwall.toml` (and `DATABASE_URL` set), `pitwall serve`
+takes a capability name, and you turn the capability into a route yourself:
+
+```bash
 pitwall serve --capability llm.glimmer --model meta-models/Muse-Glimmer-30B --gpu-class <gpu-class> --ttl <ttl>
 pitwall agents profiles add glimmer --from-pitwall llm.glimmer
-route-shim.sh glimmer prompt.md
+pitwall agents dispatch route glimmer prompt.md
 ```
 
 `pitwall agents profiles add --from-pitwall` reads the capability metadata, sets the endpoint to

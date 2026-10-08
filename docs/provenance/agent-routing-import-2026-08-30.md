@@ -2,7 +2,7 @@
 
 This record documents the behavior-neutral Agent Routing snapshot imported on 2026-08-30.
 
-- Public source remote: `https://github.com/Buckeyes22/subagent-model-routing.git`
+- Source remote: a private repository
 - `ROUTING_SOURCE_SHA`: `c0c5888a1c1315a8b29e4ca63aceb81e91de475c`
 - `ROUTING_READINESS_SHA`: `6b45a9569fc4f9a74ad75c0b8585baaacedaaa50`
 - Source allowlist SHA-256: `31520b4043d13ca376f87a0f8dd28a98bbd3d0a1d6d5c1e6dc4bbbe9e0de5068`

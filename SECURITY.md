@@ -17,8 +17,7 @@ Pitwall is pre-1.0. The API may change in backwards-incompatible ways between mi
 
 Private disclosure is preferred and expected. You can report vulnerabilities through:
 
-- **GitHub Private Vulnerability Reporting** — use the _Security_ tab on the repository, then "Report a vulnerability". This routes directly to the maintainers without exposing the details publicly.
-- **Email** — no public security mailbox has been approved yet; use GitHub Private Vulnerability Reporting until one is listed here
+- **GitHub Private Vulnerability Reporting** — use the _Security_ tab on the repository, then "Report a vulnerability". This routes directly to the maintainers without exposing the details publicly. No public security mailbox has been approved yet, so use this channel until one is listed here.
 
 The project targets acknowledgement within 72 hours and a substantive update
 within 14 days. These are best-effort targets, not an SLA.
