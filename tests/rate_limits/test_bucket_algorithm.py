@@ -60,10 +60,10 @@ def test_seconds_until_available_validates_inputs_and_defaults_to_one_token() ->
         seconds_until_available(tokens=0, capacity=1, refill_window_s=0)
 
     assert seconds_until_available(tokens=1, capacity=10) == 0
-    assert seconds_until_available.__kwdefaults__ == {
-        "tokens_needed": 1.0,
-        "refill_window_s": 10.0,
-    }
+    # The defaults are one token and a 10 s window: 4 tokens refill at 0.4/s, so an empty bucket
+    # waits 2.5 s (2 tokens would wait 5 s; an 11 s window 2.75 s). Checked by behaviour, not by
+    # __kwdefaults__, which a wrapper such as mutmut's trampoline hides.
+    assert seconds_until_available(tokens=0, capacity=4) == pytest.approx(2.5)
     assert (
         seconds_until_available(
             tokens=0,

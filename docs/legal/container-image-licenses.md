@@ -1,7 +1,7 @@
 # Container image license obligations
 
 Each published image (`api`, `reconciler`, `webhook`, `cost-exporter`, `mcp`) is built on
-`python:3.14.7-slim@sha256:caaf356f40667c496d405780745b9ac25771c189a51dfcc42430d531ea09f8a2`
+`python:3.14.7-slim@sha256:51dafde81dbdb6ebde285137a295cf18a47ca95234fe388a343719cb97305b3d`
 (Debian). The reconciler adds `postgresql-client-<major>` from apt.postgresql.org.
 
 - **Python packages:** the base license profile (`tools/security/check_licenses.py`, no extras).

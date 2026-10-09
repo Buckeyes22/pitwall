@@ -573,7 +573,6 @@
           "max_usd_per_hour": {
             "anyOf": [
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
                 "type": "string"
               },
               {
@@ -796,7 +795,6 @@
             "type": "object"
           },
           "discovered_rate_per_hour_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Discovered Rate Per Hour Usd",
             "type": "string"
           },
@@ -2265,7 +2263,6 @@
           "cost_accrued_usd": {
             "anyOf": [
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,13}0*$)\\d{0,6}\\.\\d{0,6}0*$)",
                 "type": "string"
               },
               {
@@ -2580,22 +2577,18 @@
         "description": "Explicit apply-time cost boundary from the confirmed request.",
         "properties": {
           "discovered_rate_per_hour_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Discovered Rate Per Hour Usd",
             "type": "string"
           },
           "endpoint_maximum_hourly_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Endpoint Maximum Hourly Usd",
             "type": "string"
           },
           "endpoint_minimum_hourly_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Endpoint Minimum Hourly Usd",
             "type": "string"
           },
           "execution_ceiling_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Execution Ceiling Usd",
             "type": "string"
           },
@@ -2623,7 +2616,6 @@
             "type": "boolean"
           },
           "provider_rate_per_hour_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Provider Rate Per Hour Usd",
             "type": "string"
           }
@@ -2692,7 +2684,6 @@
             ]
           },
           "estimated_ceiling_usd": {
-            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
             "title": "Estimated Ceiling Usd",
             "type": "string"
           },
@@ -3015,7 +3006,6 @@
                 "type": "number"
               },
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,13}0*$)\\d{0,6}\\.\\d{0,6}0*$)",
                 "type": "string"
               },
               {
@@ -3131,7 +3121,6 @@
           "cost_per_hour": {
             "anyOf": [
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
                 "type": "string"
               },
               {
@@ -4938,7 +4927,6 @@
                 "type": "number"
               },
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,6}|(?=[\\d.]{1,13}0*$)\\d{0,6}\\.\\d{0,6}0*$)",
                 "type": "string"
               }
             ],
@@ -5103,7 +5091,6 @@
                 "type": "number"
               },
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*(?:\\d{0,8}|(?=[\\d.]{1,13}0*$)\\d{0,8}\\.\\d{0,4}0*$)",
                 "type": "string"
               },
               {
@@ -5131,7 +5118,6 @@
                 "type": "number"
               },
               {
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
                 "type": "string"
               },
               {

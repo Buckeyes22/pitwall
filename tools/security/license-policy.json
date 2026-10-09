@@ -12,7 +12,7 @@
   ],
   "review_required_packages": {
     "certifi": {
-      "version": "2026.5.20",
+      "version": "2026.7.22",
       "license": "MPL-2.0"
     },
     "paramiko": {
@@ -20,17 +20,17 @@
       "license": "LGPL-2.1"
     },
     "tqdm": {
-      "version": "4.67.3",
+      "version": "4.70.1",
       "license": "MPL-2.0 AND MIT"
     }
   },
   "profile_review_required": {
     "dev": {
       "bidict": {
-        "version": "0.23.1",
-        "license": "MPL 2.0",
+        "version": "0.24.1",
+        "license": "MPL-2.0",
         "distributed": false,
-        "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license MPL-2.0 (PyPI classifier Mozilla Public License 2.0)"
+        "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license MPL-2.0 (PyPI License-Expression MPL-2.0)"
       },
       "defusedxml": {
         "version": "0.7.1",
@@ -44,41 +44,17 @@
         "distributed": false,
         "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license Apache-2.0 (PyPI classifier Apache Software License (installed metadata carries none))"
       },
-      "fqdn": {
-        "version": "1.5.1",
-        "license": "MPL 2.0",
-        "distributed": false,
-        "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license MPL-2.0 (PyPI classifier Mozilla Public License 2.0)"
-      },
       "hypothesis": {
-        "version": "6.155.1",
+        "version": "6.168.5",
         "license": "MPL-2.0",
         "distributed": false,
         "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license MPL-2.0 (PyPI License-Expression MPL-2.0)"
-      },
-      "hypothesis-jsonschema": {
-        "version": "0.23.1",
-        "license": "MPL 2.0",
-        "distributed": false,
-        "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license MPL-2.0 (PyPI classifier Mozilla Public License 2.0)"
-      },
-      "isoduration": {
-        "version": "20.11.0",
-        "license": "UNKNOWN",
-        "distributed": false,
-        "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license ISC (PyPI classifier ISC License (installed metadata carries none))"
       },
       "pathspec": {
         "version": "1.1.1",
         "license": "MPL-2.0",
         "distributed": false,
         "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license MPL-2.0 (PyPI classifier Mozilla Public License 2.0)"
-      },
-      "rfc3987": {
-        "version": "1.3.8",
-        "license": "GNU GPLv3+",
-        "distributed": false,
-        "reason": "test-only, via schemathesis[format] -> jsonschema[format]; absent from the wheel, sdist, and images (uv export --frozen --no-dev has no rfc3987; dev is an extra, so --all-extras includes it)"
       },
       "zope-event": {
         "version": "6.2",
@@ -87,50 +63,22 @@
         "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license ZPL-2.1 (PyPI License-Expression ZPL-2.1 (permissive Zope Public License))"
       },
       "zope-interface": {
-        "version": "8.5",
+        "version": "8.6",
         "license": "ZPL-2.1",
         "distributed": false,
         "reason": "dev-only test/tooling dependency, not in the wheel, sdist, or images; verified license ZPL-2.1 (PyPI License-Expression ZPL-2.1 (permissive Zope Public License))"
       }
     },
     "npm": {
-      "@anthropic-ai/sdk@0.91.1": {
-        "version": "0.91.1",
+      "@anthropic-ai/sdk@0.129.0": {
+        "version": "0.129.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@aws-crypto/sha256-browser@5.2.0": {
-        "version": "5.2.0",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@aws-crypto/sha256-js@5.2.0": {
-        "version": "5.2.0",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@aws-crypto/supports-web-crypto@5.2.0": {
-        "version": "5.2.0",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@aws-crypto/util@5.2.0": {
-        "version": "5.2.0",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@aws-sdk/client-bedrock-runtime@3.1048.0": {
-        "version": "3.1048.0",
+      "@aws-sdk/client-bedrock-runtime@3.1127.0": {
+        "version": "3.1127.0",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -234,8 +182,8 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
       },
-      "@aws-sdk/token-providers@3.1048.0": {
-        "version": "3.1048.0",
+      "@aws-sdk/token-providers@3.1127.0": {
+        "version": "3.1127.0",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -250,13 +198,6 @@
       },
       "@aws-sdk/types@3.974.6": {
         "version": "3.974.6",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@aws-sdk/util-locate-window@3.965.10": {
-        "version": "3.965.10",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -283,36 +224,246 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@earendil-works/pi-ai@0.84.4": {
-        "version": "0.84.4",
+      "@earendil-works/chord@1.1.0": {
+        "version": "1.1.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@earendil-works/pi-coding-agent@0.84.4": {
-        "version": "0.84.4",
+      "@earendil-works/pi-agent-core@1.1.0": {
+        "version": "1.1.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@earendil-works/pi-telemetry@0.84.4": {
-        "version": "0.84.4",
+      "@earendil-works/pi-ai@1.1.0": {
+        "version": "1.1.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@earendil-works/pi-tui@0.84.4": {
-        "version": "0.84.4",
+      "@earendil-works/pi-codemode@1.1.0": {
+        "version": "1.1.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@google/genai@1.52.0": {
-        "version": "1.52.0",
+      "@earendil-works/pi-coding-agent@1.1.0": {
+        "version": "1.1.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "@earendil-works/pi-mcp@1.1.0": {
+        "version": "1.1.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "@earendil-works/pi-telemetry@1.1.0": {
+        "version": "1.1.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "@earendil-works/pi-tui@1.1.0": {
+        "version": "1.1.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "@esbuild/aix-ppc64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/android-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/android-arm@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/android-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/darwin-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/darwin-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/freebsd-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/freebsd-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-arm@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-ia32@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-loong64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-mips64el@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-ppc64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-riscv64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-s390x@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/linux-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "@esbuild/netbsd-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/netbsd-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/openbsd-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/openbsd-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/openharmony-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/sunos-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/win32-arm64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/win32-ia32@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@esbuild/win32-x64@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the published package.json from the npm registry (optional platform binary, not installed on this platform)"
+      },
+      "@google/genai@2.21.0": {
+        "version": "2.21.0",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -388,8 +539,8 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "@smithy/core@3.35.1": {
-        "version": "3.35.1",
+      "@smithy/core@3.35.2": {
+        "version": "3.35.2",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -409,22 +560,8 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
       },
-      "@smithy/is-array-buffer@2.2.0": {
-        "version": "2.2.0",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
       "@smithy/node-http-handler@4.12.1": {
         "version": "4.12.1",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@smithy/node-http-handler@4.7.3": {
-        "version": "4.7.3",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -444,19 +581,12 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
       },
-      "@smithy/util-buffer-from@2.2.0": {
-        "version": "2.2.0",
+      "@stablelib/base64@1.0.1": {
+        "version": "1.0.1",
         "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
+        "verified_license": "MIT",
         "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
-      },
-      "@smithy/util-utf8@2.3.0": {
-        "version": "2.3.0",
-        "license": "UNKNOWN",
-        "verified_license": "Apache-2.0",
-        "distributed": false,
-        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
       "@tintinweb/pi-subagents@0.19.0": {
         "version": "0.19.0",
@@ -486,6 +616,20 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
+      "agent-base@9.0.0": {
+        "version": "9.0.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "balanced-match@4.0.4": {
+        "version": "4.0.4",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
       "base64-js@1.5.1": {
         "version": "1.5.1",
         "license": "UNKNOWN",
@@ -507,6 +651,13 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
+      "brace-expansion@5.0.12": {
+        "version": "5.0.12",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
       "buffer-equal-constant-time@1.0.1": {
         "version": "1.0.1",
         "license": "UNKNOWN",
@@ -514,8 +665,22 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified BSD-3-Clause from the installed package's package.json"
       },
+      "chalk@6.0.0": {
+        "version": "6.0.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
       "croner@10.0.1": {
         "version": "10.0.1",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "cross-spawn@7.0.6": {
+        "version": "7.0.6",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
@@ -535,6 +700,13 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
+      "diff@8.0.4": {
+        "version": "8.0.4",
+        "license": "UNKNOWN",
+        "verified_license": "BSD-3-Clause",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified BSD-3-Clause from the installed package's package.json"
+      },
       "ecdsa-sig-formatter@1.0.11": {
         "version": "1.0.11",
         "license": "UNKNOWN",
@@ -542,12 +714,26 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
       },
+      "esbuild@0.28.2": {
+        "version": "0.28.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
       "extend@3.0.2": {
         "version": "3.0.2",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "fast-sha256@1.3.0": {
+        "version": "1.3.0",
+        "license": "UNKNOWN",
+        "verified_license": "Unlicense",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Unlicense from the installed package's package.json"
       },
       "fetch-blob@3.2.0": {
         "version": "3.2.0",
@@ -598,8 +784,15 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
       },
-      "http-proxy-agent@7.0.2": {
-        "version": "7.0.2",
+      "grok-mermaid@0.2.3": {
+        "version": "0.2.3",
+        "license": "UNKNOWN",
+        "verified_license": "Apache-2.0",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified Apache-2.0 from the installed package's package.json"
+      },
+      "http-proxy-agent@9.1.0": {
+        "version": "9.1.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
@@ -611,6 +804,27 @@
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "https-proxy-agent@9.1.0": {
+        "version": "9.1.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "ignore@7.0.8": {
+        "version": "7.0.8",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "isexe@2.0.0": {
+        "version": "2.0.0",
+        "license": "UNKNOWN",
+        "verified_license": "ISC",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified ISC from the installed package's package.json"
       },
       "json-bigint@1.0.0": {
         "version": "1.0.0",
@@ -654,19 +868,19 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; verified permissive Blue Oak Model License 1.0.0 (OSI-approved) from the lock entry"
       },
-      "marked@18.0.5": {
-        "version": "18.0.5",
+      "marked@18.0.11": {
+        "version": "18.0.11",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "minimatch@10.2.5": {
-        "version": "10.2.5",
-        "license": "BlueOak-1.0.0",
+      "minimatch@10.2.6": {
+        "version": "10.2.6",
+        "license": "UNKNOWN",
         "verified_license": "BlueOak-1.0.0",
         "distributed": false,
-        "reason": "CI test dependency; not shipped; verified permissive Blue Oak Model License 1.0.0 (OSI-approved) from the lock entry"
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified BlueOak-1.0.0 from the installed package's package.json"
       },
       "ms@2.1.3": {
         "version": "2.1.3",
@@ -696,8 +910,8 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
-      "openai@6.40.0": {
-        "version": "6.40.0",
+      "openai@7.19.0": {
+        "version": "7.19.0",
         "license": "UNKNOWN",
         "verified_license": "Apache-2.0",
         "distributed": false,
@@ -717,12 +931,33 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
+      "path-key@3.1.1": {
+        "version": "3.1.1",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
       "protobufjs@7.6.6": {
         "version": "7.6.6",
         "license": "UNKNOWN",
         "verified_license": "BSD-3-Clause",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified BSD-3-Clause from the installed package's package.json"
+      },
+      "proxy-agent-negotiate@1.1.0": {
+        "version": "1.1.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "quickjs-wasi@3.6.2": {
+        "version": "3.6.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
       "retry@0.13.1": {
         "version": "0.13.1",
@@ -733,6 +968,34 @@
       },
       "safe-buffer@5.2.1": {
         "version": "5.2.1",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "semver@7.8.5": {
+        "version": "7.8.5",
+        "license": "UNKNOWN",
+        "verified_license": "ISC",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified ISC from the installed package's package.json"
+      },
+      "shebang-command@2.0.0": {
+        "version": "2.0.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "shebang-regex@3.0.0": {
+        "version": "3.0.0",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "standardwebhooks@1.1.1": {
+        "version": "1.1.1",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
@@ -752,8 +1015,8 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified 0BSD from the installed package's package.json"
       },
-      "typebox@1.3.7": {
-        "version": "1.3.7",
+      "typebox@1.3.27": {
+        "version": "1.3.27",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
@@ -766,6 +1029,13 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
+      "undici@8.10.2": {
+        "version": "8.10.2",
+        "license": "UNKNOWN",
+        "verified_license": "MIT",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
       "web-streams-polyfill@3.3.3": {
         "version": "3.3.3",
         "license": "UNKNOWN",
@@ -773,12 +1043,26 @@
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
       },
+      "which@2.0.2": {
+        "version": "2.0.2",
+        "license": "UNKNOWN",
+        "verified_license": "ISC",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified ISC from the installed package's package.json"
+      },
       "ws@8.22.0": {
         "version": "8.22.0",
         "license": "UNKNOWN",
         "verified_license": "MIT",
         "distributed": false,
         "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified MIT from the installed package's package.json"
+      },
+      "yaml@2.9.0": {
+        "version": "2.9.0",
+        "license": "UNKNOWN",
+        "verified_license": "ISC",
+        "distributed": false,
+        "reason": "CI test dependency; not shipped; the lock entry carries no license field; verified ISC from the installed package's package.json"
       }
     }
   },

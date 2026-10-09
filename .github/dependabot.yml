@@ -1,23 +1,31 @@
 version: 2
+# One grouped pull request per ecosystem per month, at most one open at a time; security updates
+# are not limited by open-pull-requests-limit and still arrive as soon as an advisory is published.
 updates:
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
+    # Refresh uv.lock only: the lower bounds in pyproject.toml are what Pitwall supports, and
+    # raising them to the newest release would force every installer onto it.
+    versioning-strategy: "lockfile-only"
     groups:
-      python-minor-and-patch:
-        update-types: ["minor", "patch"]
+      python:
+        patterns: ["*"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
     groups:
       actions:
         patterns: ["*"]
   - package-ecosystem: "docker"
     directory: "/docker"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
     # The Python minor is chosen with .python-version (tests/test_toolchain_pins.py); the images
     # follow it, so only digest and patch updates are proposed.
     ignore:
@@ -29,7 +37,8 @@ updates:
   - package-ecosystem: "docker-compose"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
     # postgres and redis are pinned to a major on purpose: a data directory written by one major
     # does not start under another, and the reconciler image installs the matching pg_dump.
     ignore:
@@ -43,7 +52,12 @@ updates:
   - package-ecosystem: "npm"
     directory: "/tools/pi-deps"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
+    # The Pi packages are pinned to the exact version `pitwall workbench doctor` requires
+    # (harness-installers.json); moving that pin is a product change, so only the lock's
+    # transitive dependencies are refreshed here.
+    versioning-strategy: "lockfile-only"
     groups:
       pi:
         patterns: ["*"]

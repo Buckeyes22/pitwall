@@ -105,7 +105,7 @@ The installer sources were re-verified against first-party documentation on 2026
 | Kimi Code | `https://code.kimi.com/kimi-code/install.sh` | unavailable from the verification network; explicit warning | [Kimi Code setup](https://moonshotai.github.io/kimi-code/en/guides/getting-started.html) |
 | OpenCode | `https://opencode.ai/install` | reviewed SHA-256 pinned | [OpenCode setup](https://opencode.ai/docs/) |
 | Qwen Code | `https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh` | unavailable from the verification network; explicit warning | [Qwen Code](https://github.com/QwenLM/qwen-code) |
-| Pi | npm `@earendil-works/pi-coding-agent@0.84.4` and `@tintinweb/pi-subagents@0.19.0` | no reviewed checksum; `--ignore-scripts` | [Pi coding agent](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md) |
+| Pi | npm `@earendil-works/pi-coding-agent@1.1.0` and `@tintinweb/pi-subagents@0.19.0` | no reviewed checksum; `--ignore-scripts` | [Pi coding agent](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md) |
 | Hermes Agent | `https://hermes-agent.nousresearch.com/install.sh` | reviewed SHA-256 pinned | [Hermes Agent](https://github.com/NousResearch/hermes-agent) |
 | Cline CLI | npm `cline@3.0.60` | no reviewed checksum; `--ignore-scripts` | [Cline CLI reference](https://docs.cline.bot/cli/cli-reference) |
 | Muse Code | `https://dev.meta.ai/install.sh` | reviewed SHA-256 pinned | [Meta Muse Code](https://developer.meta.com/ai/products/muse-code/) |
@@ -126,7 +126,7 @@ Static source review on the verification date observed these delivery details wi
 | Kimi Code | The exact Bash installer URL is present in MoonshotAI's current repository and guide. The endpoint was not reachable from the release-review network, so its response and any redirect could not be independently inspected there; setup permits only `code.kimi.com` and fails closed if delivery differs. |
 | OpenCode | Bash; about 14 KiB; redirects to `raw.githubusercontent.com`; uses the user-level `~/.opencode/bin` location |
 | Qwen Code | Bash; the upstream `scripts/installation/install-qwen-standalone.sh` source installs a standalone archive with an npm fallback and writes its `qwen` wrapper under the user-level `~/.local/bin` location. The Aliyun OSS endpoint was not reachable from the review network, so the served bytes could not be digest-pinned; setup permits only `qwen-code-assets.oss-cn-hangzhou.aliyuncs.com` and fails closed if delivery differs. |
-| Pi | Pinned npm recipe: `npm install -g --ignore-scripts @earendil-works/pi-coding-agent@0.84.4 @tintinweb/pi-subagents@0.19.0` (the Workbench backend rides along); `pitwall agents setup pi` runs just this recipe, and `--dry-run` prints it. The npm packages have no reviewed checksum. |
+| Pi | Pinned npm recipe: `npm install -g --ignore-scripts @earendil-works/pi-coding-agent@1.1.0 @tintinweb/pi-subagents@0.19.0` (the Workbench backend rides along); `pitwall agents setup pi` runs just this recipe, and `--dry-run` prints it. The npm packages have no reviewed checksum. |
 | Hermes Agent | Bash installer at `hermes-agent.nousresearch.com`, with the reviewed manifest digest and no redirect host allowed. |
 | Cline CLI | Pinned npm recipe: `npm install -g --ignore-scripts cline@3.0.60`; the npm package has no reviewed checksum. |
 | Muse Code | POSIX `sh` installer at `dev.meta.ai`, with the reviewed manifest digest and no redirect host allowed. |
