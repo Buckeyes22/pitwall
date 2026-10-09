@@ -681,67 +681,67 @@
     {
       "path": "src/pitwall/cli/__init__.py",
       "role": "top-level dispatch into routing, RunPod resources, volume-files, and shared output",
-      "sha256": "61b96046f2f2047a9a91a576fc858b066fe4ae0b3788450da1b26d7ee9b3e5d8"
+      "normalized_sha256": "b061fcb6e98cb4bcd7213796cc61bfe15840329bd0b9529517a065f652cd5223"
     },
     {
       "path": "src/pitwall/cli/output.py",
       "role": "shared --json argument helper and Output JSON/human rendering contract",
-      "sha256": "07f808a5fa18caf3470e6022e946aa8a787116b892089b73410ae7a2861c1289"
+      "normalized_sha256": "35576a0a0e09c71da819c28995f8c3128925b8f24082d2bf0c01c2225e7ec808"
     },
     {
       "path": "src/pitwall/cli/routing.py",
       "role": "routing parser, literal command loop, request helper, confirmation, and output calls",
-      "sha256": "41f9e16e1b98fb44847e56a58ddf725c43d74e2a975bd096f58eac470a35c101"
+      "normalized_sha256": "27d04f10e241cd52355cbb3e30a47802b8544d6ad7df8e169e6c29ff8cc892a1"
     },
     {
       "path": "src/pitwall/cli/runpod_market.py",
       "role": "catalogue parser and shared catalogue argument helper",
-      "sha256": "e57c4ff488ef8fa7c88693416cd33ceaf0d36eed8524d67a78a24e4c16db7dc2"
+      "normalized_sha256": "6d77d51c668af62ef0927f1d45422001e6a5da4bd5e2c07b917b59546eae437b"
     },
     {
       "path": "src/pitwall/cli/runpod_resources.py",
       "role": "RunPod resource hierarchy, literal helper call sites, mutation flags, and confirmation",
-      "sha256": "466a9b649415818ea5a28e22b886ec5e4a3502d7c8c69de46079f4120391e9aa"
+      "normalized_sha256": "200b4111ee8eaab2ce2e9a95a6f8b8ba2748f12a75ab2b3c672ab5040b994857"
     },
     {
       "path": "src/pitwall/cli/volume_files.py",
       "role": "volume-files hierarchy, context/path helpers, confirmations, and output calls",
-      "sha256": "a8d71933b8ab8308e5fc9a4ac40931a81c1c29a3021938b6a3703dec9064bda7"
+      "normalized_sha256": "f5a19937e728904ab145578e397c614ed5cce568abefad6e8ba7a60b49c66ec8"
     },
     {
       "path": "tests/cli/test_cli_dispatch.py",
       "role": "top-level dispatch and JSON routing tests",
-      "sha256": "c6ac41b268e9e4eb54b558c30db618f2167730daac1f4201e2bb13aa0e64a927"
+      "normalized_sha256": "b63c3694013c39b76496cadef5074499810f29af539fa36c2f6aa64ba2b8d15c"
     },
     {
       "path": "tests/cli/test_cli_output.py",
       "role": "shared --json parser and output tests",
-      "sha256": "3dfd6ed9e11abf7c3631371dcd704b74cc32cdbf797e4e3ccf585a1606fc5f14"
+      "normalized_sha256": "a558c56330636a82091b0e3e7a25adf90a0f1290acbc90bfda538bdcbcf13f7d"
     },
     {
       "path": "tests/cli/test_routing_cli_command.py",
       "role": "routing parser, confirmation, stable JSON, and error tests",
-      "sha256": "d04c463120791a7b1d185dbf8fd0c19213570195782c9857693df28c8b284e0e"
+      "normalized_sha256": "97247e26ec2233051410e8fa61bcf7500cb8a5af0d161447351754fd6dfcd9bb"
     },
     {
       "path": "tests/cli/test_runpod_resources.py",
       "role": "RunPod hierarchy, dry-run, confirmation, and catalogue tests",
-      "sha256": "010a0ecbaca62093b5914d95b8e4822d382c0f66fff97d1f96d225360e21754a"
+      "normalized_sha256": "125301d17c83326f9730381c91ace2ae032c5f39046d61646ce82fa0eb9ec586"
     },
     {
       "path": "tests/cli/test_volume_files.py",
       "role": "volume-files parser, dry-run, confirmation, path, and stable JSON tests",
-      "sha256": "e2abf4dc92962f11c28c532c90932230546e680b609cc3d4508a7808e73fd4eb"
+      "normalized_sha256": "3f5b7f5c6284164d7f1498aca7394a7e2dd8668f2fc3c6298d13b6270219377a"
     },
     {
       "path": "tests/release_acceptance/test_cli_arguments.py",
       "role": "hermetic extractor fixtures, drift, dynamic-name, and scope tests",
-      "sha256": "dd2b1a99425384d6330b3350c3dfb8bfaf328f7567fde6e22daeff51747f257b"
+      "normalized_sha256": "9383d0f15f39a85cb3d1ba9c067179d2e598234b30a675fd2413147b476d3c0f"
     },
     {
       "path": "tools/release_acceptance/cli_arguments.py",
       "role": "AST-only CLI declaration extractor under review",
-      "sha256": "4ee6e0ec31a0854b39a501dc8f470a8f79d7a0e6cae85da200dac2cd741cb95b"
+      "normalized_sha256": "00effaee96d5a5cf86aa5a1a434aea65ea0517dd1a8f17b4fa8594e842426ffa"
     }
   ],
   "helper_reviews": [

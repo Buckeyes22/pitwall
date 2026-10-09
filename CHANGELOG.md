@@ -87,6 +87,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Installing from the release wheel uses `uv tool install --python 3.14`, so any 3.14 patch
+  works, and the README states the uv floor (0.12.2). The CLI's install hints come from one
+  module, so the README, release notes, and in-product hints give the same command.
+- The pinned installer scripts for codex, claude, grok, hermes, agy, and qwen are re-verified against
+  what the vendors serve today; codex may redirect to `releases.openai.com`. `pitwall agents setup
+  --dry-run` downloads and checks each script's sha256 instead of only printing the plan.
+- `pitwall agents dispatch` exits 73 with one line naming `XDG_STATE_HOME`/`HOME` when it cannot
+  write run state, instead of a traceback. Empty `XDG_*` variables fall back to the defaults.
+- `pitwall agents doctor` reports the exit code of a channel server that dies before the first
+  request, instead of a protocol error. Process checks give up on a `ps` that does not answer
+  within 5 s. A missing harness binary names how to install it, `pitwall agents migrate` runs
+  without git, and installs write their files atomically.
+- The plugin hooks run on Python 3.9, so a system `python3` older than the project's can run them,
+  and the steer gate finds `pitwall` in `~/.local/bin` when that directory is not on `PATH`.
+- Broker CLI commands that cannot reach Postgres, Redis, or the API print one line naming the
+  endpoint and the fix, instead of a traceback. Clients find the API through `PITWALL_API_URL`,
+  then `PITWALL_BASE_URL`, then `PITWALL_API_PORT` on loopback, so moving the API's port moves
+  every client. The API and cost exporter exit with one line at startup when the database is
+  unreachable or (for the exporter) no monthly budget is configured.
+- `pitwall doctor` reports an invalid `pitwall.toml` as a failure. Personal-mode setup writes the
+  `PATH` line to the profile of the shell in use. Stopping personal mode recognises the gateway it
+  started on macOS, where there is no `/proc`. On a narrow terminal, tables keep identifier
+  columns whole and wrap the others instead of cutting them off.
+- The workbench keeps its state under `$XDG_STATE_HOME/pitwall`, `pitwall workbench launch` says it
+  needs Linux on other systems, and the workbench doctor's `flock` row is a skip off Linux. The
+  doctor's Node floor (22.22.1) is the one CI tests and the docs state.
 - README: the broker quick start keeps its configuration in `.env.quickstart.local`, which both
   terminals load, and the README states where workload data goes, what the budget checks do and do
   not cap, and the RunPod prerequisites and charges for `serve`.

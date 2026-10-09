@@ -127,7 +127,7 @@ def evaluate(
     }
     seen_review: set[str] = set()
     for row in rows:
-        name = canonicalize_name(row["name"])
+        name: str = canonicalize_name(row["name"])
         if npm:
             name = f"{row['name'].lower()}@{row['version']}"
         license_value = row["license"]
@@ -172,13 +172,22 @@ def main() -> int:
         rows = npm_lock_rows(json.loads(args.npm_lock.read_text(encoding="utf-8")))
     else:
         profile = "+".join(sorted(args.extra)) or "base"
+        try:
+            graph = runtime_graph(args.root, frozenset(args.extra))
+        except RuntimeError as exc:
+            print(
+                f"license policy failed: {exc}; install the checked extras first with "
+                "`uv sync --frozen --all-extras`",
+                file=sys.stderr,
+            )
+            return 2
         rows = [
             {
                 "name": dist.metadata["Name"],
                 "version": dist.version,
                 "license": _license(dist),
             }
-            for dist in runtime_graph(args.root, frozenset(args.extra))
+            for dist in graph
         ]
     errors = evaluate(rows, policy, profile)
     report = {

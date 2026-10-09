@@ -13,6 +13,8 @@ from pathlib import Path
 import asyncpg
 import pytest
 
+pytestmark = pytest.mark.integration
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 

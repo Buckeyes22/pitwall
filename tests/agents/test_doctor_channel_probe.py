@@ -159,12 +159,37 @@ def test_probe_waits_for_a_server_that_starts_slower_than_five_seconds(
 def test_probe_warns_at_once_when_the_server_exits_before_replying(
     monkeypatch: pytest.MonkeyPatch, modern: bool
 ) -> None:
-    _fake_server_popen(monkeypatch, "import sys\nsys.exit(3)\n")
+    # The server takes the probe's first request and then dies without replying. Exiting before
+    # reading it would race the probe's write (a scheduling delay between spawn and write turns
+    # the exit into a broken pipe, which is reported as an unreadable reply, not an exit code).
+    _fake_server_popen(monkeypatch, "import sys\nsys.stdin.readline()\nsys.exit(3)\n")
+    ceiling = HANG_GUARD_SECS
+    monkeypatch.setattr(doctor, "CHANNEL_HANDSHAKE_TIMEOUT", ceiling)
     started = time.monotonic()
     failure: list[str] = []
     assert _probe_channel_server({}, None, modern=modern, failure=failure) is None
-    assert time.monotonic() - started < doctor.CHANNEL_HANDSHAKE_TIMEOUT / 3
+    assert (
+        time.monotonic() - started < ceiling / 3
+    )  # the exit was noticed, the ceiling not waited out
     assert failure == ["exited with code 3 before replying"]  # not the ceiling wording
+
+
+@pytest.mark.parametrize("modern", [False, True])
+def test_probe_names_the_exit_code_when_the_server_dies_before_the_first_write(
+    monkeypatch: pytest.MonkeyPatch, modern: bool
+) -> None:
+    # The server is already gone when the probe writes, so the write hits a closed pipe.
+    real_popen = subprocess.Popen
+
+    def exited_popen(_argv: object, **kwargs: Any) -> Any:
+        process = real_popen([sys.executable, "-c", "import sys\nsys.exit(3)\n"], **kwargs)
+        process.wait(timeout=HANG_GUARD_SECS)
+        return process
+
+    monkeypatch.setattr(doctor.subprocess, "Popen", exited_popen)
+    failure: list[str] = []
+    assert _probe_channel_server({}, None, modern=modern, failure=failure) is None
+    assert failure == ["exited with code 3 before replying"]
 
 
 @pytest.mark.parametrize("modern", [False, True])
@@ -240,12 +265,14 @@ def test_a_silent_server_costs_one_ceiling_across_all_four_probes(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     spawned = _fake_server_popen(monkeypatch, f"import time\ntime.sleep({2 * HANG_GUARD_SECS})\n")
-    monkeypatch.setattr(doctor, "CHANNEL_HANDSHAKE_TIMEOUT", 2.0)
+    ceiling = 2.0
+    monkeypatch.setattr(doctor, "CHANNEL_HANDSHAKE_TIMEOUT", ceiling)
     started = time.monotonic()
     checks = {c.id: c for c in doctor._channel_checks({"HOME": str(tmp_path), "PATH": ""}, {})}
     elapsed = time.monotonic() - started
     assert len(spawned) == 4
-    assert 2.0 <= elapsed < 5.0  # serial probes would take at least 8 s
+    # Each probe waits out its own ceiling (never less), and running them serially would cost four.
+    assert ceiling <= elapsed < 4 * ceiling
     check = checks["channel.mcp_server"]
     assert check.status == "WARN"
     assert "no reply within the 2 s ceiling" in check.summary

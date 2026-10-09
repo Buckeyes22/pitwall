@@ -4,9 +4,12 @@
 for `pitwall`. Generate it with the exact release lock:
 
 ```bash
-uv export --frozen --preview-features sbom-export --format cyclonedx1.5 \
-  --no-dev --no-emit-project --output-file docs/sbom/pitwall-sbom.cdx.json
+make sbom
 ```
+
+`make sbom` runs `uv export --frozen --preview-features sbom-export --format cyclonedx1.5
+--no-dev --no-emit-project` and keeps the committed file when only the serial number and
+timestamp would change. `make regen` runs it together with the other generated files.
 
 Regenerate whenever `uv.lock` or the version changes;
 `tests/legal/test_notice_and_sbom.py` fails when the snapshot drifts.

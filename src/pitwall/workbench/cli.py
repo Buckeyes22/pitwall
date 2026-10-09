@@ -44,6 +44,7 @@ from pitwall.workbench.profile import (
     profile_from_config,
 )
 from pitwall.workbench.runtime_settings import enforce_runtime_settings
+from pitwall.workbench.state_dir import workbench_state_dir
 
 USAGE = (
     "usage: pitwall workbench <command>\n"
@@ -112,7 +113,7 @@ def parse_launch_args(raw: Sequence[str]) -> LaunchArgs:
 
 
 def default_state_root() -> Path:
-    return Path.home() / ".local" / "state" / "pitwall" / "pi-workbench"
+    return workbench_state_dir()
 
 
 def default_agent_dir(
@@ -192,7 +193,17 @@ def _cmd_usage(args: Sequence[str]) -> int:
     return 0
 
 
+def _require_linux() -> None:
+    """The Pi extension serialises admission with ``flock(1)``, which only Linux provides."""
+    if sys.platform != "linux":
+        raise CliError(
+            "pitwall workbench launch needs Linux: its admission extension uses flock, which "
+            f"{sys.platform} does not provide. Run the workbench on a Linux host."
+        )
+
+
 def _cmd_launch(raw: Sequence[str]) -> int:
+    _require_linux()
     parsed = parse_launch_args(raw)
     args = parsed.positional
     if not args or len(args) > 3 or any(arg.startswith("--") for arg in args):

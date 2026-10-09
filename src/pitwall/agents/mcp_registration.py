@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from pitwall.install_hint import install_command
+
 from . import yaml_channel
 from .capability_inventory import (
     CHANNEL_HARNESSES,
@@ -122,8 +124,7 @@ def channel_server_command(env: Mapping[str, str]) -> str:
     found = shutil.which(CHANNEL_COMMAND, path=env.get("PATH"))
     if found is None:
         raise RegistrationError(
-            "pitwall is not on PATH; install it "
-            "(`uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl`) "  # noqa: E501  # reason: one-line URL so the release validator checks its version
+            f"pitwall is not on PATH; install it (`{install_command()}`) "
             "before registering the channel server"
         )
     return str(Path(found).resolve())

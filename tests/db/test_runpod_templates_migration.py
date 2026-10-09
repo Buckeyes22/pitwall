@@ -8,6 +8,10 @@ from urllib.parse import urlparse
 
 import pytest
 
+from tests.hang_guard import HANG_GUARD_SECS
+
+pytestmark = pytest.mark.integration
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
@@ -56,7 +60,7 @@ def _run_sql_test(database_url: str) -> subprocess.CompletedProcess[str]:
             cwd=_REPO_ROOT,
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=HANG_GUARD_SECS,
             check=False,
         )
 
@@ -85,7 +89,7 @@ def _run_sql_test(database_url: str) -> subprocess.CompletedProcess[str]:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=30,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
 
@@ -107,7 +111,7 @@ def _real_host_psql(database_url: str) -> str | None:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     if probe.returncode == 0 and "pitwall_psql_probe" in probe.stdout:
@@ -127,7 +131,7 @@ def _test_postgres_container_running(docker: str) -> bool:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     return result.returncode == 0 and result.stdout.strip() == "true"

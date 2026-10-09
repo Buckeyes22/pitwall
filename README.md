@@ -93,8 +93,9 @@ to a named route profile such as the pod served above. See
 [Agent Routing](docs/agents/routing-readme.md) for the shims, profiles, and worktree isolation.
 
 ```bash
-pitwall agents dispatch codex examples/prompts/first-dispatch.md
-pitwall agents dispatch route ornith examples/prompts/first-dispatch.md
+printf 'List the files in the current directory and summarize what this project does in three sentences.\nDo not modify any files.\n' > first-dispatch.md
+pitwall agents dispatch codex first-dispatch.md
+pitwall agents dispatch route ornith first-dispatch.md
 ```
 
 `pitwall agents install` also writes `codex-shim.sh` and the other shims to `~/.claude/scripts/`,
@@ -106,8 +107,12 @@ routed to a harness and model, with ordering, retries, and verification. It runs
 and a stopped run can be resumed. See [workflows](docs/agents/workflows.md) for the
 document format.
 
+The example below runs from a clone of this repository, where
+[`examples/agents/dependency-workflow/`](examples/agents/dependency-workflow) lives. The wheel does
+not ship it.
+
 ```bash
-pitwall agents workflow run workflow.json --host copilot
+pitwall agents workflow run examples/agents/dependency-workflow/workflow.json --host copilot
 pitwall agents workflow list
 pitwall agents runs list
 ```
@@ -167,17 +172,22 @@ plan, and the cost exporter publishes Prometheus metrics with Grafana dashboards
 
 ## Quick Start
 
-Install the CLI with [`uv`](https://docs.astral.sh/uv/). This puts `pitwall` and the service
-commands on your `PATH`:
+Prerequisites: `git`, [`uv`](https://docs.astral.sh/uv/), and Docker (only for the local broker
+path below). Requires uv 0.12.2 or newer (`uv self update`).
+
+Install the CLI with `uv`. This puts `pitwall` and the service commands on your `PATH`:
 
 ```bash
-uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
+uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
 ```
+
+If uv warns that `~/.local/bin` is not on your PATH, run `uv tool update-shell` and restart your
+shell.
 
 To install from a checkout instead:
 
 ```bash
-git clone --branch v0.3.0a1 https://github.com/Buckeyes22/pitwall.git && cd pitwall && uv tool install --python 3.14.7 .
+git clone --branch v0.3.0a1 https://github.com/Buckeyes22/pitwall.git && cd pitwall && uv tool install --python 3.14 .
 ```
 
 ### Route work to other models
@@ -201,7 +211,8 @@ Then install a harness CLI, sign in to it yourself, and send a first prompt. Cod
 pitwall agents setup harnesses      # installs missing harness CLIs after you confirm; never logs in
 codex login                         # authenticate Codex yourself
 pitwall agents doctor --harness codex --live-auth
-pitwall agents dispatch codex examples/prompts/first-dispatch.md
+printf 'List the files in the current directory and summarize what this project does in three sentences.\nDo not modify any files.\n' > first-dispatch.md
+pitwall agents dispatch codex first-dispatch.md
 ```
 
 The doctor prints `codex read-only auth probe succeeded` (PASS) when Codex is signed in. The probe
@@ -288,6 +299,12 @@ provider and structured cost. For a complete RunPod topology, use the default-pl
 [`runpod-onboard` workflow](docs/operator/runpod-onboarding.md). Applying resources or sending real
 inference remains an explicitly authorized live operation.
 
+When you are done, stop the API with Ctrl-C and remove the local services:
+
+```bash
+docker compose -f docker-compose.testinfra.yml down
+```
+
 ## Services
 
 Pitwall has five console entry points in [pyproject.toml](pyproject.toml). The MCP servers and the
@@ -324,7 +341,7 @@ and the other gates are listed in [CONTRIBUTING.md](CONTRIBUTING.md#quality-gate
 
 ```bash
 uv run pytest -q -n auto -m "not integration and not slow"
-docker compose -f docker-compose.testinfra.yml up -d
+docker compose -f docker-compose.testinfra.yml up -d --wait
 PITWALL_TEST_DATABASE_URL=postgresql://pitwall:pitwall@127.0.0.1:5444/pitwall_test \
 PITWALL_TEST_REDIS_URL=redis://127.0.0.1:6380/0 \
   uv run pytest -q -m integration

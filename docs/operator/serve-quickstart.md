@@ -17,7 +17,7 @@ the pod when finished:
 pitwall serve --model ornith-ai/Ornith-1.5-35B-A3B-GGUF --gpu-class "NVIDIA GeForce RTX 3090" \
   --ttl-minutes 45 --max-usd-per-hour 1.00 --route ornith
 pitwall status
-route-shim.sh ornith prompt.md
+pitwall agents dispatch route ornith prompt.md
 pitwall stop ornith
 ```
 

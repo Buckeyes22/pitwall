@@ -87,6 +87,12 @@ class FakeChild:
         return 0
 
 
+@pytest.fixture(autouse=True)
+def _linux_host(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These cases exercise launch itself, which is Linux-only; the host may be macOS."""
+    monkeypatch.setattr(cli.sys, "platform", "linux")
+
+
 @pytest.fixture
 def launched(monkeypatch: pytest.MonkeyPatch) -> list[Any]:
     """Replace ``launch_pi`` and record the options it was called with."""
@@ -497,6 +503,8 @@ def linux_probe(**changes: Any) -> DoctorProbe:
         "platform": "linux",
         "architecture": "x64",
         "node_version": "22.22.1",
+        # Never spawn the host's real bwrap: whether it works is a property of the CI host.
+        "bubblewrap_failure": lambda _path: None,
         **changes,
     }
     return DoctorProbe(**values)

@@ -8,6 +8,7 @@ from collections.abc import Awaitable, Callable
 from typing import Any
 
 from pitwall.cli.output import Output, add_json_argument, json_mode
+from pitwall.cli.runtime_errors import report_failure
 from pitwall.db import get_pool
 from pitwall.providers.service import ProviderOperationsService
 
@@ -106,10 +107,7 @@ def cmd_provider_ops(
         output.emit()
         return 2
     except Exception as exc:  # reason: provider/database exceptions can include secret material
-        del exc
-        output.set_json({"error": "provider_operations_unavailable"})
-        if not output.json_mode:
-            output.print_error("provider_operations_unavailable")
+        report_failure(output, "provider_operations_unavailable", exc)
         output.emit()
         return 1
 

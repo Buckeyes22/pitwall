@@ -6,9 +6,46 @@ import os
 import subprocess
 from pathlib import Path
 
+#: ``ps`` can be slow on a loaded host (macOS has no procfs); a probe that merely timed out
+#: must not be mistaken for "no such process", so wait generously and retry once.
+PS_TIMEOUT_SECONDS = 5.0
+PS_ATTEMPTS = 2
+
+
+class ProcessProbeTimeout(OSError):
+    """``ps`` did not answer in time: the process may well exist, its state is unknown."""
+
+
+def _ps_field(pid: int, column: str) -> str | None:
+    """One ``ps`` column for *pid*, or None when ps is missing or reports no such process.
+
+    Raises ProcessProbeTimeout when ps itself timed out, so callers can tell that apart.
+    """
+
+    for _attempt in range(PS_ATTEMPTS):
+        try:
+            result = subprocess.run(
+                ["ps", "-p", str(pid), "-o", f"{column}="],
+                capture_output=True,
+                text=True,
+                timeout=PS_TIMEOUT_SECONDS,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            continue
+        except OSError, subprocess.SubprocessError:
+            return None
+        value = result.stdout.strip()
+        return value if result.returncode == 0 and value else None
+    raise ProcessProbeTimeout(f"ps did not answer within {PS_TIMEOUT_SECONDS:g} s for pid {pid}")
+
 
 def process_identity(pid: int) -> str | None:
-    """Return an OS process start identity where the host exposes one."""
+    """Return an OS process start identity where the host exposes one.
+
+    None means the process is gone or the host exposes no identity; ProcessProbeTimeout means
+    the probe timed out and nothing is known.
+    """
 
     proc_stat = Path(f"/proc/{pid}/stat")
     try:
@@ -22,20 +59,8 @@ def process_identity(pid: int) -> str | None:
         pass
     # macOS does not expose procfs.  ``ps lstart`` is stable for the lifetime
     # of a process and is available on the supported Darwin hosts.
-    try:
-        result = subprocess.run(
-            ["ps", "-p", str(pid), "-o", "lstart="],
-            capture_output=True,
-            text=True,
-            timeout=0.5,
-            check=False,
-        )
-        started = result.stdout.strip()
-        if result.returncode == 0 and started:
-            return f"ps:{started}"
-    except OSError, subprocess.SubprocessError:
-        pass
-    return None
+    started = _ps_field(pid, "lstart")
+    return f"ps:{started}" if started else None
 
 
 def _process_state(pid: int) -> str | None:
@@ -46,19 +71,10 @@ def _process_state(pid: int) -> str | None:
     except OSError, UnicodeDecodeError, IndexError:
         pass
     try:
-        result = subprocess.run(
-            ["ps", "-p", str(pid), "-o", "stat="],
-            capture_output=True,
-            text=True,
-            timeout=0.5,
-            check=False,
-        )
-        state = result.stdout.strip()
-        if result.returncode == 0 and state:
-            return state[:1]
-    except OSError, subprocess.SubprocessError:
-        pass
-    return None
+        state = _ps_field(pid, "stat")
+    except ProcessProbeTimeout:
+        return None
+    return state[:1] if state else None
 
 
 def pid_alive(pid: int, identity: str | None) -> bool:
@@ -78,7 +94,10 @@ def pid_alive(pid: int, identity: str | None) -> bool:
         return False
     if _process_state(pid) == "Z":
         return False
-    current = process_identity(pid)
+    try:
+        current = process_identity(pid)
+    except ProcessProbeTimeout:
+        return True  # the pid exists and its identity is unknown: treat it as live
     return current == identity if identity is not None and current is not None else True
 
 
@@ -93,8 +112,11 @@ def terminate_process_group(pgid: int, identity: str | None, grace_seconds: floa
 
     if identity is None or pgid <= 1 or pgid == os.getpgrp() or not pid_alive(pgid, identity):
         return False
-    if process_identity(pgid) != identity:
-        return False
+    try:
+        if process_identity(pgid) != identity:
+            return False
+    except ProcessProbeTimeout:
+        return False  # cannot prove this is the recorded process, so never signal it
     try:
         if os.getpgid(pgid) != pgid:
             return False

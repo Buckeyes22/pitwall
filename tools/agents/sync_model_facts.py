@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+REGEN_COMMAND = "uv run --frozen python tools/agents/sync_model_facts.py"
 sys.path.insert(0, str(ROOT))
 
 from tools.agents.model_facts_common import (  # noqa: E402  # reason: module setup (ROOT or sys.path) must run before the package imports
@@ -541,6 +542,10 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     for path in changed:
         verb = "stale" if args.check else "generated"
         print(f"{verb} {path.relative_to(base)}", file=sys.stderr if args.check else sys.stdout)
+    if changed and args.check:
+        print(
+            f"fix: run `{REGEN_COMMAND}` (or `make regen`) and commit the result", file=sys.stderr
+        )
     if not changed:
         print("model facts outputs are current")
     return 1 if changed and args.check else 0

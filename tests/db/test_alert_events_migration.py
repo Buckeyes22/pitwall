@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 
 import pytest
 
+from tests.db.schema_catalog import Catalog
 from tests.hang_guard import HANG_GUARD_SECS
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -15,14 +16,17 @@ _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
 
 
-def test_alert_events_migration_matches_spec_columns() -> None:
-    sql = (_MIGRATION_DIR / "0012_alert_events.sql").read_text()
+pytestmark = pytest.mark.integration
 
-    assert "CREATE TABLE pitwall.alert_events" in sql
-    assert "month          TEXT NOT NULL" in sql
-    assert "threshold_pct  INTEGER NOT NULL" in sql
-    assert "sent_at        TIMESTAMPTZ NOT NULL DEFAULT now()" in sql
-    assert "PRIMARY KEY (month, threshold_pct)" in sql
+
+async def test_alert_events_table_matches_spec(db_catalog: Catalog) -> None:
+    await db_catalog.expect_columns(
+        "alert_events",
+        month="text not null",
+        threshold_pct="int4 not null",
+        sent_at="timestamptz not null default now()",
+    )
+    assert await db_catalog.primary_key("alert_events") == ("month", "threshold_pct")
 
 
 def test_alert_events_insert_and_constraints() -> None:

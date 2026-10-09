@@ -25,6 +25,7 @@ from pitwall.agents.run_store import (
     reconcile_run,
     state_root,
 )
+from tests.hang_guard import HANG_GUARD_SECS
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -205,7 +206,7 @@ class RunStoreTests(unittest.TestCase):
                     env, "00000000-0000-4000-8000-0000000000b5", harness, identity
                 )
                 self.assertIsNotNone(reconcile_run(env, store.path))
-                self.assertEqual(-signal.SIGTERM, harness.wait(timeout=10))
+                self.assertEqual(-signal.SIGTERM, harness.wait(timeout=HANG_GUARD_SECS))
                 abandoned = json.loads(store.artifact("abandoned.json").read_text(encoding="utf-8"))
                 self.assertIs(True, abandoned["harnessTerminated"])
                 state = json.loads(store.artifact("run.json").read_text(encoding="utf-8"))

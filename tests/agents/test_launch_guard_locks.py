@@ -51,14 +51,14 @@ class LaunchGuardLockTests(unittest.TestCase):
         )
 
     def _hold(
-        self, session_id: str, entered: threading.Event, release: threading.Event
+        self, session_id: str, entered: threading.Event, release: threading.Event, name: str = ""
     ) -> threading.Thread:
         def run() -> None:
             with self.markers.marker_lock(self.root, session_id):
                 entered.set()
                 self.assertTrue(release.wait(HANG_GUARD_SECS))
 
-        thread = threading.Thread(target=run, daemon=True)
+        thread = threading.Thread(target=run, daemon=True, name=name or None)
         thread.start()
         return thread
 
@@ -71,12 +71,35 @@ class LaunchGuardLockTests(unittest.TestCase):
         self.markers.sweep_stale_locks(self.root, time.time())
         self.assertTrue((self.root / ".s.lock").exists())
 
+        # The second caller must reach its lock request while the first still holds the lock, and
+        # that request must not be granted before the holder lets go. Observing the grant at the
+        # moment flock returns checks this without waiting on a timer.
         second_entered, second_release = threading.Event(), threading.Event()
-        second = self._hold("s", second_entered, second_release)
-        self.assertFalse(second_entered.wait(0.3), "second caller acquired a held lock")
-        release.set()
-        holder.join(HANG_GUARD_SECS)
-        self.assertTrue(second_entered.wait(HANG_GUARD_SECS))
+        second_requesting = threading.Event()
+        granted_while_held: list[bool] = []
+        real_fcntl = self.markers.fcntl
+
+        def observing_flock(fd: int, operation: int) -> None:
+            is_second = threading.current_thread().name == "second"
+            if is_second and operation == real_fcntl.LOCK_EX:
+                second_requesting.set()
+            real_fcntl.flock(fd, operation)
+            if is_second and operation == real_fcntl.LOCK_EX:
+                granted_while_held.append(not release.is_set())
+
+        fcntl_double = SimpleNamespace(
+            flock=observing_flock,
+            LOCK_EX=real_fcntl.LOCK_EX,
+            LOCK_NB=real_fcntl.LOCK_NB,
+            LOCK_UN=real_fcntl.LOCK_UN,
+        )
+        with mock.patch.object(self.markers, "fcntl", fcntl_double):
+            second = self._hold("s", second_entered, second_release, name="second")
+            self.assertTrue(second_requesting.wait(HANG_GUARD_SECS), "second never asked for it")
+            release.set()
+            holder.join(HANG_GUARD_SECS)
+            self.assertTrue(second_entered.wait(HANG_GUARD_SECS))
+        self.assertEqual([False], granted_while_held, "second caller acquired a held lock")
         second_release.set()
         second.join(HANG_GUARD_SECS)
 

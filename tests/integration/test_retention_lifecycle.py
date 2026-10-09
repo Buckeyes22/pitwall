@@ -18,6 +18,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 import pitwall.retention.archive as archive_module
 from pitwall.retention.archive import archive_workloads_to_jsonl
+from tests.hang_guard import HANG_GUARD_SECS
 from tests.integration.conftest import requires_pg
 
 pytestmark = [pytest.mark.asyncio, pytest.mark.integration, requires_pg]
@@ -280,7 +281,7 @@ async def test_retention_cli_skips_object_references_without_deletion_adapter(
         },
         capture_output=True,
         text=True,
-        timeout=20,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     assert completed.returncode == 0, completed.stderr

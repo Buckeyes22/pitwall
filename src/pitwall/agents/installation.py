@@ -13,11 +13,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field, replace
 from importlib.resources import files
@@ -88,6 +91,8 @@ class InstallResult:
     removed: list[Path] = field(default_factory=list)
     mcp_harnesses: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    #: Hosts and channel targets left out because their CLI was not found (auto-detect only).
+    skipped: list[str] = field(default_factory=list)
 
 
 def shim_names() -> tuple[str, ...]:
@@ -336,6 +341,27 @@ def _plan_writes(source: Path, locations: InstallLocations) -> dict[Path, bytes]
     return planned
 
 
+def _write_atomic(path: Path, content: bytes, mode: int) -> None:
+    """Publish *content* at *path* via a temp file in the same directory and ``os.replace``.
+
+    The mode is set on the temp file first, so the file is never visible half-written or
+    with the wrong permissions, and a failed write leaves the previous file untouched.
+    """
+
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temp_path = Path(temporary)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            os.fchmod(handle.fileno(), mode)
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temp_path, path)
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            temp_path.unlink()
+
+
 def _executable(path: Path) -> bool:
     return path.suffix == ".sh" and path.parent.name == "scripts"
 
@@ -372,6 +398,44 @@ def _mcp_targets(
     return tuple(found)
 
 
+def _channel_command(env: Mapping[str, str], home: Path, *, required: bool) -> str:
+    """The absolute ``pitwall`` path to register for the channel server.
+
+    ``pitwall`` on PATH wins; otherwise the running executable (or its venv sibling, or
+    ``~/.local/bin/pitwall``). A bare ``pitwall`` is never written: a host CLI launched with
+    a minimal PATH could not start the server. With nothing to register the name is only
+    recorded, so an install that registers no channel harness still succeeds.
+    """
+
+    from pitwall.install_hint import install_command
+
+    from .mcp_registration import RegistrationError, channel_server_command
+
+    try:
+        return channel_server_command(env)
+    except RegistrationError:
+        pass
+    for candidate in (
+        Path(sys.argv[0]) if sys.argv else None,
+        Path(sys.executable).parent / "pitwall",
+        home / ".local" / "bin" / "pitwall",
+    ):
+        if (
+            candidate is not None
+            and candidate.name == "pitwall"
+            and candidate.is_file()
+            and os.access(candidate, os.X_OK)
+        ):
+            return str(candidate.resolve())
+    if not required:
+        return "pitwall"
+    raise InstallationError(
+        "pitwall is not on PATH and its executable could not be located, so the channel "
+        f"server cannot be registered with an absolute command; install it (`{install_command()}`) "
+        "and run `pitwall agents install` again"
+    )
+
+
 def install(
     env: Mapping[str, str],
     home: Path,
@@ -391,7 +455,7 @@ def install(
     host CLI's stdout (default: the real one when no *runner* is injected, otherwise none).
     """
 
-    from .mcp_registration import RegistrationError, channel_server_command, plan_registration
+    from .mcp_registration import RegistrationError, plan_registration
 
     locations = InstallLocations.for_home(home, env)
     run = runner or run_command(env)
@@ -411,11 +475,8 @@ def install(
         raise InstallationError(
             "refusing to overwrite files that Pitwall did not write: " + ", ".join(conflicts)
         )
-    try:
-        command = channel_server_command(env)
-    except RegistrationError:
-        command = "pitwall"
     targets = _mcp_targets(harnesses, env, home)
+    command = _channel_command(env, home, required=bool(targets))
     plans = []
     for harness in targets:
         try:
@@ -432,10 +493,17 @@ def install(
         previous["mcpRegistrations"] if previous else {}
     )
     result = InstallResult()
+    if harnesses is None:
+        from .capability_inventory import CHANNEL_HARNESSES
+
+        result.skipped.extend(
+            f"channel server: {harness} (CLI not found)"
+            for harness in CHANNEL_HARNESSES
+            if harness not in targets
+        )
     for path, content in planned.items():
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(content)
-        path.chmod(0o755 if _executable(path) else 0o644)
+        _write_atomic(path, content, 0o755 if _executable(path) else 0o644)
         result.files.append(path)
     for plan in plans:
         existed = plan.path.exists()
@@ -454,6 +522,7 @@ def install(
     registered: list[str] = []
     for host in hosts:
         if plugin_hosts is None and shutil.which(host, path=env.get("PATH")) is None:
+            result.skipped.append(f"plugins: {host} (CLI not found)")
             continue
         failed = _failed_registration(host, locations.plugins, run, lister)
         if failed:
@@ -471,7 +540,7 @@ def install(
         "mcpCommand": command,
     }
     locations.manifest.parent.mkdir(parents=True, exist_ok=True)
-    locations.manifest.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+    _write_atomic(locations.manifest, (json.dumps(document, indent=2) + "\n").encode(), 0o644)
     return result
 
 

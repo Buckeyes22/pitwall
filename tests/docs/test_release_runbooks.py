@@ -40,8 +40,9 @@ def test_tag_signatures_are_not_described_as_a_ruleset_check() -> None:
 
 
 def test_policies_name_dco_supported_version_and_conduct_mailbox() -> None:
+    version = tomllib.loads(_read("pyproject.toml"))["project"]["version"]
     assert "https://developercertificate.org/" in _read("CONTRIBUTING.md")
     assert "signed off" in _read("CONTRIBUTING.md")
-    assert "`v0.3.0a1`" in _read("SECURITY.md")
+    assert f"`v{version}`" in _read("SECURITY.md")
     assert "chris@lateapexllc.com" in _read("CODE_OF_CONDUCT.md")
     assert "PITWALL_AGENTS_UNRESTRICTED=1` setting bypasses" not in _read("SECURITY.md")

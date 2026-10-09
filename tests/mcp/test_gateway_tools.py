@@ -65,10 +65,11 @@ async def test_quota_list_uses_quota_repository(monkeypatch: pytest.MonkeyPatch)
     assert result["quotas"][0]["headroom"] == pytest.approx(0.8)
 
 
-def test_registry_has_81_tools_including_gateway() -> None:
+def test_registry_has_expected_tools_including_gateway() -> None:
     from pitwall.mcp.registry import TOOL_NAMES
+    from tests.mcp.test_registry_health import EXPECTED_TOOL_COUNT
 
-    assert len(TOOL_NAMES) == 81
+    assert len(TOOL_NAMES) == EXPECTED_TOOL_COUNT
     assert {"pitwall_gateway_catalog_read", "pitwall_quota_list"} <= TOOL_NAMES
 
 

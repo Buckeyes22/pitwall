@@ -13,6 +13,8 @@ from pathlib import Path
 
 import pytest
 
+from tests.hang_guard import HANG_GUARD_SECS
+
 pytestmark = pytest.mark.release
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -44,7 +46,7 @@ def _run_j27(
         env=env,
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     recorded = calls.read_text().splitlines() if calls.exists() else []

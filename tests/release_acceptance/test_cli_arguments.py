@@ -18,11 +18,12 @@ import hashlib
 import json
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from tools.release_acceptance import cli_arguments as ca
-from tools.release_acceptance import test_index
+from tools.release_acceptance import review_records, test_index
 
 NESTED = """import argparse
 
@@ -324,18 +325,32 @@ def test_cli_source_review_and_bindings_are_current_and_not_run() -> None:
     bindings = json.loads(bindings_path.read_text(encoding="utf-8"))
 
     assert review["status"] == "source_review_only"
-    assert review["inventory"]["issue_count"] == 21
-    assert review["inventory"]["reviewed_issue_count"] == 16
+    # The retained inventory is checked against the live discovery and against its own review
+    # lists, so these counts move with the source instead of being pinned here.
+    live = ca.discover_with_issues(ca.ROOT)["issues"]
+    inventory = review["inventory"]
+    assert inventory["issue_count"] == len(live)
+    assert inventory["issue_topics"] == dict(Counter(str(issue["topic"]) for issue in live))
+    assert inventory["reviewed_issue_count"] == len(review["issue_reviews"])
+    assert inventory["retained_unresolved_scope_count"] == len(review["unresolved_scope"])
+    assert inventory["issue_count"] == (
+        inventory["reviewed_issue_count"] + inventory["retained_unresolved_scope_count"]
+    )
     assert {item["topic"] for item in review["unresolved_scope"]} == {
-        "aliased_constructors",
-        "helper_added_arguments",
-        "non_target_files",
-        "runtime_behavior",
-        "scope",
+        str(issue["topic"])
+        for issue in live
+        if issue["topic"] not in {review_["issue_topic"] for review_ in review["issue_reviews"]}
     }
-    for dependency in review["dependencies"]:
-        path = ca.ROOT / dependency["path"]
-        assert dependency["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+    stale = [
+        dependency["path"]
+        for dependency in review["dependencies"]
+        if dependency["normalized_sha256"]
+        != review_records.file_digest(ca.ROOT, dependency["path"])
+    ]
+    assert stale == [], (
+        f"reviewed files changed in content: {stale}; re-read them, then "
+        f"{review_records.ACCEPT_HINT}"
+    )
 
     assert bindings["candidate_id"] is None
     assert bindings["bindings"]

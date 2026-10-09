@@ -9,11 +9,11 @@ broker's web, database, or queue dependencies.
 ## Install
 
 ```bash
-uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
+uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
 pitwall agents install
 ```
 
-`pitwall agents install` writes the thirteen harness shims and `route-shim.sh` under
+`pitwall agents install` writes the fourteen harness shims and `route-shim.sh` under
 `~/.claude/scripts/`, copies the Claude Code, Codex, and GitHub Copilot CLI plugins with one
 `pitwall-local` marketplace per host, registers them with each host CLI on `PATH`, and registers the
 `pitwall-channel` MCP server. `pitwall agents uninstall` removes exactly that.

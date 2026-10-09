@@ -14,6 +14,7 @@ from urllib.parse import parse_qsl, urlsplit
 from pitwall.providers.model_studio import catalog as model_studio
 
 from . import profiles_toml
+from .paths import xdg_dir
 from .run_store import atomic_write_bytes
 
 
@@ -140,9 +141,7 @@ def profiles_path(env: Mapping[str, str]) -> Path:
     local = Path.cwd() / "pitwall.toml"
     if local.is_file():
         return local
-    base = Path(
-        env.get("XDG_CONFIG_HOME", str(Path(env.get("HOME", "~")).expanduser() / ".config"))
-    )
+    base = xdg_dir(env, "XDG_CONFIG_HOME", ".config")
     return base / "pitwall" / "pitwall.toml"
 
 

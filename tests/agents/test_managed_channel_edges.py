@@ -14,8 +14,13 @@ import uuid
 from pathlib import Path
 from unittest import mock
 
-from pitwall.agents import managed_channel
-from pitwall.agents.channel import ChannelConfig, resolve_with_default, write_channel_config
+from pitwall.agents import managed_channel, pids
+from pitwall.agents.channel import (
+    ChannelConfig,
+    epoch_of,
+    resolve_with_default,
+    write_channel_config,
+)
 from pitwall.agents.mailbox import Mailbox
 from pitwall.agents.managed_channel import (
     LaunchRequest,
@@ -38,6 +43,7 @@ from pitwall.agents.run_store import (
     ensure_private_directory,
     reconcile_run,
 )
+from tests.hang_guard import HANG_GUARD_SECS
 
 
 class ManagedChannelEdgeTests(unittest.TestCase):
@@ -268,7 +274,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
         ) -> dict[str, object]:
             if answered_by == "orchestrator":
                 entered_write.set()
-                if not release_write.wait(3):
+                if not release_write.wait(HANG_GUARD_SECS):
                     raise AssertionError("explicit writer was not released")
             return original_write_answer(
                 box,
@@ -295,11 +301,14 @@ class ManagedChannelEdgeTests(unittest.TestCase):
         ):
             worker = threading.Thread(target=answer_worker)
             worker.start()
-            self.assertTrue(entered_write.wait(1))
-            time.sleep(1.1)
+            self.assertTrue(entered_write.wait(HANG_GUARD_SECS))
+            # Let the ask's one-second deadline pass on the wall clock the mailbox checks.
+            expires_at = epoch_of(ask["created_at"]) + 1
+            while time.time() <= expires_at:
+                time.sleep(0.01)
             default = resolve_with_default(run, ask, emitter=None)
             release_write.set()
-            worker.join(3)
+            worker.join(HANG_GUARD_SECS)
 
         self.assertFalse(worker.is_alive())
         self.assertEqual([], errors)
@@ -370,7 +379,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
 
         self.assertEqual("orphan", event["event"])
         self.assertIn("exited without recording a terminal state", event["error"])
-        self.assertEqual(-signal.SIGTERM, harness.wait(timeout=10))
+        self.assertEqual(-signal.SIGTERM, harness.wait(timeout=HANG_GUARD_SECS))
         document = json.loads(store.artifact("run.json").read_text(encoding="utf-8"))
         self.assertEqual("failed", document["state"])
         abandoned = json.loads(store.artifact("abandoned.json").read_text(encoding="utf-8"))
@@ -405,7 +414,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
         self.assertEqual(1, exit_code)
         self.assertIn("abandoned", err.getvalue())
         self.assertNotIn("aborted", out.getvalue())
-        self.assertIsNotNone(harness.wait(timeout=10))
+        self.assertIsNotNone(harness.wait(timeout=HANG_GUARD_SECS))
         self.assertFalse((store.path / "mailbox").exists())
 
     def test_cleanup_ends_the_harness_of_a_dead_managed_supervisor(self) -> None:
@@ -422,7 +431,7 @@ class ManagedChannelEdgeTests(unittest.TestCase):
             {"pgid": harness.pid, "pidStartIdentity": identity},
         )
         cleanup_runs(self.env, older_than_seconds=None, remove_all=True)
-        self.assertIsNotNone(harness.wait(timeout=10))
+        self.assertIsNotNone(harness.wait(timeout=HANG_GUARD_SECS))
         self.assertFalse(store.path.exists())
 
     def test_a_stale_launch_sidecar_does_not_orphan_a_live_resumed_supervisor(self) -> None:
@@ -572,14 +581,14 @@ class ManagedChannelEdgeTests(unittest.TestCase):
                     ["ps", "-p", "4242", "-o", "lstart="],
                     capture_output=True,
                     text=True,
-                    timeout=0.5,
+                    timeout=pids.PS_TIMEOUT_SECONDS,
                     check=False,
                 ),
                 mock.call(
                     ["ps", "-p", "4242", "-o", "stat="],
                     capture_output=True,
                     text=True,
-                    timeout=0.5,
+                    timeout=pids.PS_TIMEOUT_SECONDS,
                     check=False,
                 ),
             ],

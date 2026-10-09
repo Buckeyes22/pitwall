@@ -29,6 +29,7 @@ async def test_tool_returns_the_cli_report_schema(monkeypatch: pytest.MonkeyPatc
 
 def test_tool_is_registered() -> None:
     from pitwall.mcp.registry import TOOL_NAMES, TOOL_REGISTRY
+    from tests.mcp.test_registry_health import EXPECTED_TOOL_COUNT
 
     assert "pitwall_doctor" in TOOL_NAMES
-    assert len(TOOL_NAMES) == len(TOOL_REGISTRY) == 81
+    assert len(TOOL_NAMES) == len(TOOL_REGISTRY) == EXPECTED_TOOL_COUNT

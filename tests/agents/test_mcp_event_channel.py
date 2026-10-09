@@ -181,11 +181,11 @@ class ManagedEventChannelTests(unittest.TestCase):
             ["ps", "-o", "pid=,ppid=,stat=,etime=,command=", "-p", f"{launcher_pid},{server_pid}"],
             capture_output=True,
             text=True,
-            timeout=5,
+            timeout=HANG_GUARD_SECS,
             check=False,
         ).stdout
         return (
-            f"launcher {launcher_pid} still a zombie; server pid {server_pid} "
+            f"launcher {launcher_pid} not reaped or no exit.json; server pid {server_pid} "
             f"(returncode {self.client.process.poll()}); launch dir {listing}; ps:\n{ps}"
         )
 
@@ -234,13 +234,19 @@ class ManagedEventChannelTests(unittest.TestCase):
         self.assertTrue(launcher_path.is_file())
         launcher = json.loads(launcher_path.read_text(encoding="utf-8"))
         launcher_pid = int(launcher["pid"])
-        # The managed request has already received its terminal receipt, but
-        # the independent launcher still needs to be reaped by its monitor.
-        # The monitor reaps as soon as the child exits, so the poll is a hang guard for a slow
-        # scheduler or a slow `ps`, not a latency bound.
+        # The managed request has already received its terminal receipt, but the independent
+        # launcher may still be exiting. Its monitor writes launches/<id>/exit.json only after it
+        # has reaped the child, so wait for that record (a hang guard, not a latency bound), then
+        # check once that nothing is left behind. Sampling the process state while it exits would
+        # race the reaper: on macOS every sample spawns `ps`, long enough for the launcher to exit
+        # between two samples and look like a zombie for the moment before it is reaped.
+        exit_record = (
+            self.sandbox.state / "pitwall" / "agents" / "launches" / dispatch_id / "exit.json"
+        )
         deadline = time.monotonic() + HANG_GUARD_SECS
-        while time.monotonic() < deadline and _process_state(launcher_pid) == "Z":
+        while not exit_record.is_file() and time.monotonic() < deadline:
             time.sleep(0.05)
+        self.assertTrue(exit_record.is_file(), self._reaper_diagnostics(dispatch_id, launcher_pid))
         self.assertNotEqual(
             "Z", _process_state(launcher_pid), self._reaper_diagnostics(dispatch_id, launcher_pid)
         )

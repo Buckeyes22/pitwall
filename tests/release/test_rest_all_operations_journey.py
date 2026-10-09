@@ -159,7 +159,7 @@ def _seed(env: dict[str, str], kind: str, record_id: str, state: str = "") -> No
         env=env,
         check=True,
         capture_output=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
     )
 
 
@@ -317,7 +317,7 @@ def _running_api(journey_env: dict[str, str], *, budget: bool) -> Iterator[Api]:
     )
     base = f"http://127.0.0.1:{port}"
     try:
-        with httpx.Client(base_url=base, timeout=60, trust_env=False) as client:
+        with httpx.Client(base_url=base, timeout=HANG_GUARD_SECS, trust_env=False) as client:
             deadline = time.monotonic() + HANG_GUARD_SECS
             while True:
                 try:

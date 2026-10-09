@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 from pitwall.mcp.registry import TOOL_NAMES, TOOL_REGISTRY
-
-DOCUMENTED_TOOL_COUNT = 81
+from tests.mcp.test_registry_health import EXPECTED_TOOL_COUNT as DOCUMENTED_TOOL_COUNT
 
 
 def test_registry_has_documented_tool_count() -> None:

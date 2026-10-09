@@ -30,7 +30,7 @@ from pitwall.core.idempotency import (
 # ("got Future attached to a different loop" / "another operation is in
 # progress"), crashing the whole integration job. One marker keeps the entire
 # integration collection on a single AnyIO loop.
-pytestmark = pytest.mark.anyio
+pytestmark = [pytest.mark.anyio, pytest.mark.integration]
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"

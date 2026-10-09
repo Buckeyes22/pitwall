@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import sys
+from collections.abc import Sequence
 from typing import Any
 
 from rich.console import Console
@@ -22,6 +23,10 @@ def safe_json(value: Any) -> Any:
     if hasattr(value, "__dict__"):
         return value.__dict__
     return value
+
+
+_FOLDED_COLUMN_FLOOR = 12
+"""Narrowest a folding column is squeezed to before the table outgrows the terminal."""
 
 
 class Output:
@@ -67,18 +72,38 @@ class Output:
         rows: list[list[Any]],
         *,
         caption: str | None = None,
+        keep_whole: Sequence[str] = (),
     ) -> None:
-        """Render a table or record data for JSON."""
+        """Render a table or record data for JSON.
+
+        On a narrow terminal the *keep_whole* columns (identifiers a reader copies) are never
+        truncated or wrapped; every other column folds onto more lines instead of ending in an
+        ellipsis.
+        """
         if self.json_mode:
             key = title.lower().replace(" ", "_").replace("-", "_")
             self._result[key] = [dict(zip(columns, row, strict=False)) for row in rows]
             return
         table = Table(title=title, caption=caption)
-        for col in columns:
-            table.add_column(col)
-        for row in rows:
-            table.add_row(*(str(cell) if cell is not None else "" for cell in row))
-        self._stdout.print(table)
+        cells = [[str(cell) if cell is not None else "" for cell in row] for row in rows]
+        needed = len(columns) * 3 + 1  # cell padding plus the vertical rules
+        for index, col in enumerate(columns):
+            natural = max([len(col), *(len(row[index]) for row in cells if index < len(row))])
+            if col in keep_whole:
+                table.add_column(col, no_wrap=True, overflow="fold", min_width=natural)
+                needed += natural
+            else:
+                table.add_column(col, overflow="fold")
+                needed += min(natural, _FOLDED_COLUMN_FLOOR)
+        for row in cells:
+            table.add_row(*row)
+        # Rich crops a table whose columns cannot fit; a table with identifiers that must stay
+        # whole is rendered wider than the terminal instead, so no column is lost.
+        if keep_whole and needed > self._stdout.width:
+            wide = Console(file=self._stdout.file, width=needed, markup=False, highlight=False)
+            wide.print(table)
+        else:
+            self._stdout.print(table)
 
     def print_panel(
         self,
@@ -101,6 +126,15 @@ class Output:
             self._result["error"] = message
             return
         self._stderr.print(Panel(message, title="Error", border_style="red"))
+
+    def print_error_line(self, message: str) -> None:
+        """Print one unwrapped line to stderr (no-op in JSON mode).
+
+        A boxed panel wraps at the terminal width and splits the remedy; use this for a
+        failure whose one sentence tells the reader what to do.
+        """
+        if not self.json_mode:
+            self._stderr.print(message, soft_wrap=True)
 
     def print_warning(self, message: str) -> None:
         """Render a warning panel or record warning for JSON."""

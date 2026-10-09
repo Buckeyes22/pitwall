@@ -20,6 +20,9 @@ import pytest
 from pitwall import db
 from pitwall.db import cmd_reset
 from tests.conftest import make_asyncpg_pool
+from tests.hang_guard import HANG_GUARD_SECS
+
+pytestmark = pytest.mark.integration
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
@@ -29,51 +32,38 @@ def _fail_if_reset_sql_runs(database_url: str, sql: str) -> subprocess.Completed
     raise AssertionError(f"reset SQL should not run for {database_url}: {sql}")
 
 
+def _reset_statements() -> list[str]:
+    """Every ``DROP SCHEMA`` statement literal in the real ``pitwall.db`` source."""
+    source = (_REPO_ROOT / "src" / "pitwall" / "db" / "__init__.py").read_text()
+    statements = [
+        re.sub(r"\s+", " ", match).strip()
+        for match in re.findall(r'"(DROP\s+SCHEMA[^"]*)"', source, re.IGNORECASE)
+    ]
+    assert statements, "pitwall.db no longer contains a DROP SCHEMA statement to check"
+    return statements
+
+
 class TestResetSqlStaticSafety:
-    """Static analysis of the reset SQL — no database required."""
+    """Static analysis of the reset SQL the command really executes — no database required."""
+
+    def test_cmd_reset_is_a_function_of_the_module_checked_here(self) -> None:
+        assert cmd_reset.__module__ == "pitwall.db"
 
     def test_reset_sql_targets_only_pitwall_schema(self) -> None:
-        reset_sql = "DROP SCHEMA IF EXISTS pitwall CASCADE;"
-        drop_schema_matches = re.findall(
-            r"DROP\s+SCHEMA\s+IF\s+EXISTS\s+(\S+)", reset_sql, re.IGNORECASE
-        )
-        assert drop_schema_matches == ["pitwall"], (
-            f"reset SQL must only DROP SCHEMA pitwall, got: {drop_schema_matches}"
-        )
+        for statement in _reset_statements():
+            targets = re.findall(r"DROP\s+SCHEMA\s+IF\s+EXISTS\s+(\S+)", statement, re.IGNORECASE)
+            assert targets == ["pitwall"], f"reset SQL must only DROP SCHEMA pitwall: {statement}"
 
-    def test_reset_sql_never_mentions_public(self) -> None:
-        reset_sql = "DROP SCHEMA IF EXISTS pitwall CASCADE;"
-        assert "public" not in reset_sql.lower() or "pitwall" in reset_sql.lower()
-
-    def test_reset_sql_never_mentions_neighbor(self) -> None:
-        reset_sql = "DROP SCHEMA IF EXISTS pitwall CASCADE;"
-        assert "neighbor" not in reset_sql.lower()
-
-    def test_cmd_reset_emits_single_drop(self) -> None:
-        source = Path(cmd_reset.__module__.replace(".", "/") + "/__init__.py")
-        if not source.exists():
-            source = (
-                _REPO_ROOT / "src" / Path(cmd_reset.__module__.replace(".", "/")) / "__init__.py"
-            )
-        db_source = source.read_text()
-        drop_schema_statements = re.findall(r"DROP\s+SCHEMA[^\"]*", db_source, re.IGNORECASE)
-        for stmt in drop_schema_statements:
-            cleaned = re.sub(r"\s+", " ", stmt).strip()
-            assert "pitwall" in cleaned.lower(), (
-                f"DROP SCHEMA must only target pitwall, found: {cleaned}"
-            )
-            assert "public" not in cleaned.lower(), (
-                f"DROP SCHEMA must never target public, found: {cleaned}"
-            )
-            assert "neighbor" not in cleaned.lower(), (
-                f"DROP SCHEMA must never target neighbor, found: {cleaned}"
-            )
+    def test_reset_sql_never_mentions_public_or_neighbor(self) -> None:
+        for statement in _reset_statements():
+            assert "public" not in statement.lower(), statement
+            assert "neighbor" not in statement.lower(), statement
 
     def test_reset_sql_is_not_wildcard(self) -> None:
-        reset_sql = "DROP SCHEMA IF EXISTS pitwall CASCADE;"
-        assert "*" not in reset_sql
-        assert "%" not in reset_sql
-        assert "ALL" not in reset_sql.upper().split("DROP")[0] if "DROP" in reset_sql else True
+        for statement in _reset_statements():
+            assert "*" not in statement
+            assert "%" not in statement
+            assert "ALL" not in statement.upper().split("DROP")[0]
 
 
 class TestResetCommandGuard:
@@ -196,7 +186,7 @@ def _run_sql(database_url: str, sql: str) -> subprocess.CompletedProcess[str]:
             cwd=_REPO_ROOT,
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=HANG_GUARD_SECS,
             check=False,
         )
 
@@ -225,7 +215,7 @@ def _run_sql(database_url: str, sql: str) -> subprocess.CompletedProcess[str]:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=30,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
 
@@ -247,7 +237,7 @@ def _real_host_psql(database_url: str) -> str | None:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     if probe.returncode == 0 and "pitwall_psql_probe" in probe.stdout:
@@ -261,7 +251,7 @@ def _test_postgres_container_running(docker: str) -> bool:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     return result.returncode == 0 and result.stdout.strip() == "true"

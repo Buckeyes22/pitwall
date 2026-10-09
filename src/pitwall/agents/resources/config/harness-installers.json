@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVerifiedOn": "2026-09-29",
+  "sourceVerifiedOn": "2026-10-08",
   "harnesses": {
     "codex": {
       "documentationUrl": "https://github.com/openai/codex",
@@ -10,18 +10,19 @@
           "interpreter": [
             "sh"
           ],
-          "sha256": "1154e9daf713aacd1534efca8042bfd6665ad24bc1d1dfd86b8f439fe60a7a5d"
+          "sha256": "150e3cf675682efeaac115aa3747add3f27887896d04ce6d0b56478d8b428bf6"
         },
         "linux": {
           "installerUrl": "https://chatgpt.com/codex/install.sh",
           "interpreter": [
             "sh"
           ],
-          "sha256": "1154e9daf713aacd1534efca8042bfd6665ad24bc1d1dfd86b8f439fe60a7a5d"
+          "sha256": "150e3cf675682efeaac115aa3747add3f27887896d04ce6d0b56478d8b428bf6"
         }
       },
       "allowedRedirectHosts": [
         "chatgpt.com",
+        "releases.openai.com",
         "github.com",
         "release-assets.githubusercontent.com"
       ],
@@ -40,14 +41,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "b3f79015b54c751440a6488f07b1b64f9088742b9052bc1bd356d13108320d2a"
+          "sha256": "3a68d3406cf674e17bed1733a4dcf37805e2e47d87417700007d7e1aa766a944"
         },
         "linux": {
           "installerUrl": "https://claude.ai/install.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "b3f79015b54c751440a6488f07b1b64f9088742b9052bc1bd356d13108320d2a"
+          "sha256": "3a68d3406cf674e17bed1733a4dcf37805e2e47d87417700007d7e1aa766a944"
         }
       },
       "allowedRedirectHosts": [
@@ -70,14 +71,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "0465d810453bbf18608ccae310fa79f4c59ae4a0538bd8a3a374ebce749be952"
+          "sha256": "7fd6fdc75d9418b2e58356726fcbf1ae849416f773925da07d0ccc7a60d3e791"
         },
         "linux": {
           "installerUrl": "https://x.ai/cli/install.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "0465d810453bbf18608ccae310fa79f4c59ae4a0538bd8a3a374ebce749be952"
+          "sha256": "7fd6fdc75d9418b2e58356726fcbf1ae849416f773925da07d0ccc7a60d3e791"
         }
       },
       "allowedRedirectHosts": [
@@ -157,14 +158,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "0c6b44f4f43cf9632479dbd55ef29030f3ebf27106ff980d351343fae9ceef39"
+          "sha256": "11a6e94eda9b8ac1c03a9172cd54ed02e7e0a0d1b76081d1cdc813be26b53487"
         },
         "linux": {
           "installerUrl": "https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "0c6b44f4f43cf9632479dbd55ef29030f3ebf27106ff980d351343fae9ceef39"
+          "sha256": "11a6e94eda9b8ac1c03a9172cd54ed02e7e0a0d1b76081d1cdc813be26b53487"
         }
       },
       "allowedRedirectHosts": [
@@ -185,14 +186,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "c0380bc1f78d3d662a77663ce20cc17e14cbc4bec35e61ab7a33bac5f3afed2d"
+          "sha256": "14b4c89518cf0e4e71841708dd5d8a28f1f494d22cd20e12f4d5eeb29c7d2fdb"
         },
         "linux": {
           "installerUrl": "https://hermes-agent.nousresearch.com/install.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "c0380bc1f78d3d662a77663ce20cc17e14cbc4bec35e61ab7a33bac5f3afed2d"
+          "sha256": "14b4c89518cf0e4e71841708dd5d8a28f1f494d22cd20e12f4d5eeb29c7d2fdb"
         }
       },
       "allowedRedirectHosts": [
@@ -361,14 +362,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "ee1ea43ce4e9e56356c4ab6dad907ef357ae4bdfcaadb682735909fb57c9c640"
+          "sha256": "62966c07365423bd4dc209355060744058fb30d60f5323e2d360e39de64e5042"
         },
         "linux": {
           "installerUrl": "https://antigravity.google/cli/install.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "ee1ea43ce4e9e56356c4ab6dad907ef357ae4bdfcaadb682735909fb57c9c640"
+          "sha256": "62966c07365423bd4dc209355060744058fb30d60f5323e2d360e39de64e5042"
         }
       },
       "allowedRedirectHosts": [

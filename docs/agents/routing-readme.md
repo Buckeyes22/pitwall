@@ -34,7 +34,7 @@ It's built for **Claude Code, Codex, and GitHub Copilot CLI users** who want to 
 Install Pitwall once, then let it wire the hosts:
 
 ```bash
-uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
+uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
 pitwall agents install
 ```
 
@@ -206,7 +206,7 @@ The receipt is the exact `finished` ledger record for that `dispatch_id`. Only a
 
 The receipt proves transport completion and reports the policy profile the child actually ran under. It does not prove the requested files are correct or that project checks passed. Failures before dispatch begins — usage errors and a missing process supervisor — write no ledger record and so emit only `SHIM-DONE`.
 
-A usage error exits `64`, prints the reason and the harness's usage line to stderr, and ends stdout with `SHIM-DONE exit=64`. A word that begins with `-` in the prompt-source position (or, for OpenCode, in the `<provider/model>` position) is a usage error, not a prompt file: `codex-shim.sh -m gpt-6-sol prompt.md` fails with `'-m' is a flag, not a prompt source`, because the prompt source comes first. Pass a file whose name begins with `-` as `./-name`, and stdin as `-`. A leading `-h` or `--help` prints the harness's usage line and `SHIM-DONE exit=0` for every harness, creating no run record and no ledger row. The `SHIM-DONE` line is always the last line on stdout, including after `--help` text and usage errors.
+A usage error exits `64`, prints the reason and the harness's usage line to stderr, and ends stdout with `SHIM-DONE exit=64`. A word that begins with `-` in the prompt-source position (or, for OpenCode, in the `<provider/model>` position) is a usage error, not a prompt file: `codex-shim.sh -m gpt-6.1-sol prompt.md` fails with `'-m' is a flag, not a prompt source`, because the prompt source comes first. Pass a file whose name begins with `-` as `./-name`, and stdin as `-`. A leading `-h` or `--help` prints the harness's usage line and `SHIM-DONE exit=0` for every harness, creating no run record and no ledger row. The `SHIM-DONE` line is always the last line on stdout, including after `--help` text and usage errors.
 
 ### 2. First routed dispatch from Claude Code
 
@@ -229,6 +229,7 @@ For multi-step delegated work that should run as a dependency graph:
 Write a prompt to a file and dispatch it:
 
 ```bash
+export PATH="$HOME/.claude/scripts:$PATH"   # pitwall agents install writes the shims there
 opencode-shim.sh <provider/model> prompt.md
 kimi-shim.sh prompt.md --model kimi-code/k3
 grok-shim.sh prompt.md --effort medium
@@ -277,7 +278,7 @@ pitwall agents setup inventory
 pitwall agents profiles add glimmer --model meta-models/Muse-Glimmer-30B --base-url http://gpu-1:8000/v1 --api-key-env GLIMMER_API_KEY --seat local
 pitwall agents profiles add sol --model gpt-6.1-sol --seat critical --effort high
 pitwall agents profiles list
-route-shim.sh glimmer prompt.md
+pitwall agents dispatch route glimmer prompt.md
 ```
 
 See **[Agent profiles](routes.md)** for harness overrides, endpoint syncing, and validation details.
@@ -347,7 +348,7 @@ OpenCode's $10/month [Go plan](https://opencode.ai/docs/go/) serves a curated mo
 
 For a model served on a leased GPU through Pitwall, use the explicit serve →
 route → dispatch flow instead: `pitwall agents profiles add <name> --from-pitwall
-<capability>`, then `route-shim.sh <name> prompt.md`. The [Pitwall handoff
+<capability>`, then `pitwall agents dispatch route <name> prompt.md`. The [Pitwall handoff
 guide](pitwall.md) covers its environment, liveness probe, lease expiry,
 and no-silent-reroute failure behavior.
 
@@ -377,7 +378,7 @@ It reads the install manifest and removes exactly what `install` wrote: the shim
 ## Troubleshooting
 
 - Smoke test returns nothing or no pong → the provider is not authenticated or named wrong; run `kimi login`, `opencode models`, `codex login`, `claude auth status`, or `grok login` for the selected route and retry.
-- Provider setup partially failed → rerun `pitwall agents setup harnesses`; successful installs are detected and disabled, so only missing CLIs remain selectable. Use `--dry-run` to review sources without downloading.
+- Provider setup partially failed → rerun `pitwall agents setup harnesses`; successful installs are detected and disabled, so only missing CLIs remain selectable. Use `--dry-run` to download each installer and check its pinned SHA-256 without running it.
 - Provider setup was skipped in CI or a pipe → this is expected without `/dev/tty`; run `pitwall agents setup harnesses` later from a terminal.
 - A same-version local Claude refresh still loads an older skill → run the scoped uninstall/install sequence in the Claude Code section; an update that reports no change does not prove the cached files came from the new source.
 - Codex marketplace add reports a same-name/different-source conflict → remove only `pitwall-codex@pitwall-local` and `pitwall-local`, add the intended marketplace, and reinstall as shown in the Codex section.

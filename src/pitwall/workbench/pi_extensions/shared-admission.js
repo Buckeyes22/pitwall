@@ -8,7 +8,7 @@ import { constants } from 'node:fs';
 export class SharedRequestAdmission {
     resourceGroup;
     directory;
-    constructor(resourceGroup, directory = process.env.PITWALL_WORKBENCH_RESOURCE_DIR ?? join(homedir(), '.local/state/pitwall/pi-workbench/admission')) {
+    constructor(resourceGroup, directory = process.env.PITWALL_WORKBENCH_RESOURCE_DIR ?? join(process.env.XDG_STATE_HOME?.trim() || join(homedir(), '.local/state'), 'pitwall/pi-workbench/admission')) {
         this.resourceGroup = resourceGroup;
         this.directory = directory;
         if (!resourceGroup.trim() || resourceGroup.length > 200)

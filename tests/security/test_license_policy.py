@@ -136,3 +136,19 @@ def test_npm_reviews_are_keyed_by_version_and_accept_the_verified_license() -> N
         "dup@1.0.1 1.0.1: unknown or unapproved license 'UNKNOWN'",
         "review-required package missing from npm graph: dup@1.0.0",
     ]
+
+
+def test_a_missing_extra_is_one_line_naming_the_sync_command(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    module = _module()
+
+    def missing(_root: str, _extras: frozenset[str]) -> list[object]:
+        raise RuntimeError("dependency is not installed: resend")
+
+    monkeypatch.setattr(module, "runtime_graph", missing)
+    monkeypatch.setattr(module.sys, "argv", ["check_licenses.py", "--extra", "email"])
+    assert module.main() == 2
+    err = capsys.readouterr().err
+    assert err.count("\n") == 1
+    assert "resend" in err and "uv sync --frozen --all-extras" in err

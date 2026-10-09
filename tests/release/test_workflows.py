@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,17 @@ def _step_text(job: dict[str, Any]) -> str:
     return "\n".join(str(step.get("run", "")) for step in job.get("steps", []))
 
 
+def _needs(job: dict[str, Any]) -> set[str]:
+    needs = job.get("needs", [])
+    return {needs} if isinstance(needs, str) else set(needs)
+
+
+def _gated_jobs(workflow: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """The jobs the `required` gate waits for, found from its `needs`."""
+    jobs = workflow["jobs"]
+    return {name: jobs[name] for name in _needs(jobs["required"])}
+
+
 def test_single_ci_workflow() -> None:
     names = {path.name for path in WORKFLOWS.glob("*.y*ml")}
     assert names == {"ci.yml", "model-facts.yml", "release.yml", "release-readiness.yml"}
@@ -40,20 +52,27 @@ def test_single_ci_workflow() -> None:
         # Only ci.yml runs on pull requests, so nothing else is a second CI.
         assert ("pull_request" in triggers) == (workflow == "ci.yml"), workflow
     ci = _load("ci.yml")
-    for job in (
-        "lint",
-        "format",
-        "typecheck",
-        "docs",
-        "security-sast",
-        "security-secrets",
-        "security-fuzz",
-        "test",
-        "integration",
-        "gateway-catalog-drift",
-        "pi-extensions",
+    gated = _gated_jobs(ci)
+    assert set(gated) <= set(ci["jobs"])
+    # Every gate runs inside a job the `required` check waits for, whatever the job is named.
+    gated_text = "\n".join(_step_text(job) for job in gated.values())
+    for command in (
+        "ruff check",
+        "ruff format --check",
+        "mypy --strict src/",
+        "check_markdown_links.py",
+        "bandit",
+        "semgrep",
+        "check_secrets.py",
+        "check_catalog_drift.py",
+        "check_workflows.py",
+        "check_dco.py",
+        "make pi-extensions-check",
+        'pytest -m "fuzz',
+        'pytest -m "integration',
+        '-m "not integration and not slow and not live"',
     ):
-        assert job in ci["jobs"], job
+        assert command in gated_text, command
     # The journey harness is a local release tool, not a pull-request check.
     assert "journeys" not in ci["jobs"]
     selector = '-m "not integration and not slow and not live"'
@@ -72,6 +91,10 @@ def test_required_lists_every_non_scheduled_job() -> None:
     }
     assert set(required["needs"]) == gated
     assert required["if"] == "always()"
+    # Branch protection requires the status check named `CI`.
+    assert required["name"] == "CI"
+    # The macOS Agent Routing job is a pull-request gate, not an optional extra.
+    assert "agents-macos" in gated
 
 
 def test_coverage_combined_reuses_the_suites_coverage_data() -> None:
@@ -96,18 +119,42 @@ def test_coverage_combined_reuses_the_suites_coverage_data() -> None:
         assert artifact in uploads, producer
 
 
+def _node_versions(workflow: dict[str, Any]) -> dict[str, str]:
+    """Every `setup-node` version in the workflow, keyed by `job/step index`."""
+    versions: dict[str, str] = {}
+    for name, job in workflow["jobs"].items():
+        for index, step in enumerate(job.get("steps", [])):
+            if "setup-node" in str(step.get("uses", "")):
+                versions[f"{name}/{index}"] = str(step["with"]["node-version"])
+    return versions
+
+
 def test_pi_extensions_job_pins_node_and_runner_with_a_reason() -> None:
     text = (WORKFLOWS / "ci.yml").read_text(encoding="utf-8")
-    job = _load("ci.yml")["jobs"]["pi-extensions"]
-    assert job["runs-on"] == "ubuntu-26.04"
-    setup_node = next(s for s in job["steps"] if "setup-node" in str(s.get("uses", "")))
-    assert setup_node["with"]["node-version"] == "22.22.1"
+    ci = _load("ci.yml")
+    job = ci["jobs"]["pi-extensions"]
+    # A floating label would change the util-linux (setpriv --seccomp-filter needs 2.41, Ubuntu
+    # 25.10 and later) and the compiler output under the byte-for-byte comparison.
+    label = re.fullmatch(r"ubuntu-(\d+)\.(\d+)", str(job["runs-on"]))
+    assert label is not None, "pi-extensions needs an explicit Ubuntu release label"
+    assert (int(label[1]), int(label[2])) >= (25, 10)
+    # One Node pin everywhere, so the extension check and the tests run on the same toolchain.
+    versions = _node_versions(ci)
+    assert any(key.startswith("pi-extensions/") for key in versions)
+    assert len(set(versions.values())) == 1, versions
+    (pinned,) = set(versions.values())
+    assert re.fullmatch(r"\d+\.\d+\.\d+", pinned), "pin an exact Node version"
+    # CI tests the floor `pitwall workbench doctor` enforces, not some other Node.
+    from pitwall.workbench.doctor import MIN_NODE
+
+    assert pinned == MIN_NODE, f"ci.yml pins Node {pinned}; workbench doctor requires {MIN_NODE}"
     assert "make pi-extensions-check" in _step_text(job)
     header = text.split("\n  pi-extensions:\n", 1)[1].split("steps:", 1)[0]
     assert "# " in header, "the runner and Node pins need an explanatory comment"
     assert "PITWALL_PI_MODULES" in _step_text(job)
-    # A skipped sandbox test would hide a broken restricted mode, so the job fails on it.
-    assert "SKIPPED" in _step_text(job)
+    # A skipped sandbox or extension test would hide a missing prerequisite, so any skip fails
+    # the job (a keyword filter missed "pinned Pi packages are not installed").
+    assert "grep -E '^SKIPPED' " in _step_text(job)
 
 
 def test_release_triggers_only_v_tags() -> None:

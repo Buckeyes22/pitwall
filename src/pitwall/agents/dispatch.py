@@ -396,6 +396,13 @@ class Lifecycle:
         self._write()
 
 
+def _missing_binary_hint(harness_id: str) -> str:
+    return (
+        f"{harness_id}-shim: install it with `pitwall agents setup harnesses` (select {harness_id}), "
+        "then check the setup with `pitwall agents doctor`"
+    )
+
+
 def _supervisor_record() -> dict[str, Any]:
     """This process's pid and start identity, computed once per lifecycle (it may spawn ``ps``)."""
     return {"pid": os.getpid(), "pidStartIdentity": process_identity(os.getpid())}
@@ -875,11 +882,21 @@ class _LegacyDispatch:
             )
             _emit_sentinel(64, leading_newline=False)
             return 64
-        self.store = RunStore.create(env, self.dispatch_id)
-        if self.resume_mode:
-            self.store.rotate_attempt_logs(self.context.attempt - 1)
-        self.store.touch_artifact("stdout.log")
-        self.store.touch_artifact("stderr.log")
+        try:
+            self.store = RunStore.create(env, self.dispatch_id)
+            if self.resume_mode:
+                self.store.rotate_attempt_logs(self.context.attempt - 1)
+            self.store.touch_artifact("stdout.log")
+            self.store.touch_artifact("stderr.log")
+        except OSError as exc:
+            print(
+                f"{harness_id}-shim: cannot write run state ({exc.strerror or exc}: "
+                f"{exc.filename or 'run directory'}); set XDG_STATE_HOME or HOME to a "
+                "writable directory",
+                file=sys.stderr,
+            )
+            _emit_sentinel(73, leading_newline=False)
+            return 73
         self.emitter = EventEmitter(
             self.store,
             harness=harness_id,
@@ -945,6 +962,7 @@ class _LegacyDispatch:
         self.binary = adapter.resolve_binary(env, self.home)
         if adapter.preflight_binary and self.binary is None:
             print(adapter.missing_binary_message(), file=sys.stderr)
+            print(_missing_binary_hint(self.harness_id), file=sys.stderr)
             terminal_record = None
             if adapter.missing_binary_ledger == "finished":
                 terminal_record = self._ledger(
@@ -1222,6 +1240,8 @@ class _LegacyDispatch:
                 )
         except OSError as exc:
             print(f"{self.harness_id}-shim: cannot execute {self.binary}: {exc}", file=sys.stderr)
+            if isinstance(exc, FileNotFoundError):
+                print(_missing_binary_hint(self.harness_id), file=sys.stderr)
             self.process_result = ProcessResult(127, None, False, False, 0, 0, 0)
 
     def apply_soft_denial(self) -> None:

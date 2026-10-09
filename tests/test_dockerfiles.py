@@ -26,9 +26,14 @@ IMAGES = {
 }
 
 
+# The base image is a digest-pinned python:X.Y.Z-slim; the version itself is pinned once in
+# `.python-version` and checked against every Dockerfile by tests/test_toolchain_pins.py.
+_BASE_STAGE = r"^FROM python:\d+\.\d+\.\d+-slim@sha256:[0-9a-f]{64} AS (\w+)\n"
+
+
 def _stages(name: str) -> dict[str, str]:
     text = (ROOT / "docker" / f"Dockerfile.{name}").read_text(encoding="utf-8")
-    parts = re.split(r"^FROM python:3\.14\.7-slim@sha256:[0-9a-f]{64} AS (\w+)\n", text, flags=re.M)
+    parts = re.split(_BASE_STAGE, text, flags=re.M)
     assert parts[0].strip() == ""
     return dict(zip(parts[1::2], parts[2::2], strict=True))
 
@@ -112,9 +117,21 @@ def test_images_install_the_base_license_profile_only(name: str) -> None:
     assert "--extra" not in builder and "--all-extras" not in builder
 
 
+def _base_reference(name: str) -> str:
+    text = (ROOT / "docker" / f"Dockerfile.{name}").read_text(encoding="utf-8")
+    references = set(re.findall(r"^FROM (python:\S+-slim@sha256:[0-9a-f]{64}) AS ", text, re.M))
+    assert len(references) == 1, f"docker/Dockerfile.{name} must use one base image: {references}"
+    return references.pop()
+
+
+def test_every_image_uses_the_same_base_image() -> None:
+    assert len({_base_reference(name) for name in IMAGES}) == 1
+
+
 def test_container_license_doc_names_the_current_base_digest() -> None:
-    dockerfile = (ROOT / "docker" / "Dockerfile.api").read_text(encoding="utf-8")
-    match = re.search(r"sha256:[0-9a-f]{64}", dockerfile)
-    assert match is not None
+    reference = _base_reference("api")
     doc = (ROOT / "docs/legal/container-image-licenses.md").read_text(encoding="utf-8")
-    assert match.group(0) in doc
+    assert reference in doc, (
+        "docs/legal/container-image-licenses.md must name the base image the Dockerfiles use. "
+        f"Replace the python:...-slim@sha256:... reference in its first paragraph with `{reference}`."
+    )

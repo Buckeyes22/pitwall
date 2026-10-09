@@ -11,6 +11,7 @@ import pytest
 
 import pitwall.reconciler.__main__ as reconciler_main
 from pitwall.reconciler import WorkerSettings
+from tests.hang_guard import HANG_GUARD_SECS
 
 
 def test_main_runs_arq_worker(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -74,7 +75,7 @@ def test_check_reports_bad_redis_url_without_a_traceback(
         env=env,
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
 

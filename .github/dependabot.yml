@@ -18,6 +18,11 @@ updates:
     directory: "/docker"
     schedule:
       interval: "weekly"
+    # The Python minor is chosen with .python-version (tests/test_toolchain_pins.py); the images
+    # follow it, so only digest and patch updates are proposed.
+    ignore:
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     groups:
       base-images:
         patterns: ["*"]
@@ -25,6 +30,13 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # postgres and redis are pinned to a major on purpose: a data directory written by one major
+    # does not start under another, and the reconciler image installs the matching pg_dump.
+    ignore:
+      - dependency-name: "postgres"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "redis"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     groups:
       compose-images:
         patterns: ["*"]

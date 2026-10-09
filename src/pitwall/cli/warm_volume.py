@@ -9,6 +9,7 @@ from decimal import Decimal
 from typing import Literal
 
 from pitwall.cli.args import guard_cli_pre_spend, normalize_model_id
+from pitwall.cli.base_url import configured_base_url
 from pitwall.cli.output import Output, add_json_argument
 from pitwall.cli.output import json_mode as _json_mode
 from pitwall.models.catalogue import load_catalogue
@@ -121,7 +122,7 @@ async def _warm_volume_async(args: argparse.Namespace, out: Output) -> int:
             gated=args.gated,
             dry_run=args.dry_run,
         ),
-        base_url=settings.pitwall_base_url.strip().rstrip("/") or "http://127.0.0.1:8080",
+        base_url=configured_base_url(settings.pitwall_base_url),
         settings=settings,
         catalogue=catalogue,
         warm_only=True,

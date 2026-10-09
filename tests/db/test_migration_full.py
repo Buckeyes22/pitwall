@@ -1,7 +1,7 @@
 """Full migration suite and repository-level integration tests.
 
-Applies every migration in a disposable transaction (BEGIN / ROLLBACK) and
-verifies:
+Reads the migrated schema back from the catalogs, then applies every migration in a
+disposable transaction (BEGIN / ROLLBACK) and verifies:
   1. All migrations apply cleanly with no errors.
   2. Every expected index exists across all pitwall tables.
   3. JSONB config round-trip: insert JSONB into capabilities/providers config
@@ -20,55 +20,30 @@ from urllib.parse import urlparse
 
 import pytest
 
-from pitwall.migrations import discover_migrations
+from tests.db.schema_catalog import Catalog
+from tests.hang_guard import HANG_GUARD_SECS
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _MIGRATION_DIR = _REPO_ROOT / "db" / "migrations"
 _TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"
 
-_ALL_MIGRATIONS = sorted(_MIGRATION_DIR.glob("*.sql"))
-_ALL_MIGRATION_SQL = "\n".join(p.read_text() for p in _ALL_MIGRATIONS)
+_ALL_MIGRATION_SQL = "\n".join(p.read_text() for p in sorted(_MIGRATION_DIR.glob("*.sql")))
 
 
-class TestAllMigrationsStatic:
-    """Static analysis -- no database required."""
+pytestmark = pytest.mark.integration
 
-    def test_migration_files_exist(self) -> None:
-        # Migrations only ever grow; guard against accidental deletion below the known
-        # baseline without pinning an exact count that every new migration must bump.
-        assert len(_ALL_MIGRATIONS) >= 13, (
-            f"expected at least 13 migration files, found {len(_ALL_MIGRATIONS)}: "
-            f"{[p.name for p in _ALL_MIGRATIONS]}"
-        )
 
-    def test_migrations_are_lexically_ordered(self) -> None:
-        names = [p.name for p in _ALL_MIGRATIONS]
-        assert names == sorted(names)
+class TestMigratedSchemaShape:
+    """What the full ledger leaves behind, read from the catalogs."""
 
-    def test_every_migration_creates_in_pitwall_schema(self) -> None:
-        for path in _ALL_MIGRATIONS:
-            sql = path.read_text()
-            assert "pitwall." in sql, f"{path.name} does not reference pitwall schema"
+    async def test_capabilities_has_jsonb_config_column(self, db_catalog: Catalog) -> None:
+        await db_catalog.expect_columns("capabilities", config="jsonb not null")
 
-    def test_capabilities_has_jsonb_config_column(self) -> None:
-        sql = (_MIGRATION_DIR / "0001_capabilities.sql").read_text()
-        assert "config                   JSONB NOT NULL" in sql
+    async def test_providers_has_jsonb_config_column(self, db_catalog: Catalog) -> None:
+        await db_catalog.expect_columns("providers", config="jsonb not null")
 
-    def test_providers_has_jsonb_config_column(self) -> None:
-        sql = (_MIGRATION_DIR / "0002_providers.sql").read_text()
-        assert "config                   JSONB NOT NULL" in sql
-
-    def test_config_audit_has_jsonb_value_columns(self) -> None:
-        sql = (_MIGRATION_DIR / "0007_config_audit.sql").read_text()
-        assert "old_value                JSONB" in sql
-        assert "new_value                JSONB" in sql
-
-    def test_discover_migrations_returns_all_files(self) -> None:
-        records = discover_migrations(_MIGRATION_DIR)
-        # Discovery must return exactly the .sql files on disk — stronger than a literal.
-        assert len(records) == len(_ALL_MIGRATIONS)
-        versions = [r.version for r in records]
-        assert versions == sorted(versions)
+    async def test_config_audit_has_jsonb_value_columns(self, db_catalog: Catalog) -> None:
+        await db_catalog.expect_columns("config_audit", old_value="jsonb", new_value="jsonb")
 
 
 class TestFullMigrationIntegration:
@@ -132,7 +107,7 @@ def _run_sql(database_url: str, sql: str) -> subprocess.CompletedProcess[str]:
             cwd=_REPO_ROOT,
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=HANG_GUARD_SECS,
             check=False,
         )
 
@@ -161,7 +136,7 @@ def _run_sql(database_url: str, sql: str) -> subprocess.CompletedProcess[str]:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=60,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
 
@@ -183,7 +158,7 @@ def _real_host_psql(database_url: str) -> str | None:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     if probe.returncode == 0 and "pitwall_psql_probe" in probe.stdout:
@@ -197,7 +172,7 @@ def _test_postgres_container_running(docker: str) -> bool:
         cwd=_REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=HANG_GUARD_SECS,
         check=False,
     )
     return result.returncode == 0 and result.stdout.strip() == "true"

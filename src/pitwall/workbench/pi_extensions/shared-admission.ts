@@ -7,7 +7,7 @@ import { constants } from 'node:fs';
 
 /** Host-local, kernel-owned request lease. Never held while a tool or child is awaited. */
 export class SharedRequestAdmission {
-  constructor(readonly resourceGroup: string, readonly directory = process.env.PITWALL_WORKBENCH_RESOURCE_DIR ?? join(homedir(), '.local/state/pitwall/pi-workbench/admission')) {
+  constructor(readonly resourceGroup: string, readonly directory = process.env.PITWALL_WORKBENCH_RESOURCE_DIR ?? join(process.env.XDG_STATE_HOME?.trim() || join(homedir(), '.local/state'), 'pitwall/pi-workbench/admission')) {
     if (!resourceGroup.trim() || resourceGroup.length > 200) throw new Error('invalid admission resource group');
   }
 

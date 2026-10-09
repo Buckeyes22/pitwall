@@ -8,6 +8,7 @@ from pathlib import Path
 
 from pitwall.agents import doctor
 from pitwall.agents.installation import install
+from pitwall.install_hint import install_command
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -56,7 +57,7 @@ class DoctorHookTests(unittest.TestCase):
                 check = doctor._check_registered_hooks(ROOT, env)
                 self.assertEqual("FAIL", check.status)
                 self.assertIn(
-                    "! uv tool install --python 3.14.7 https://github.com/Buckeyes22/pitwall/releases/download/v",
+                    "! " + install_command(),
                     check.remediation or "",
                 )
                 report = doctor.run_doctor(None, env, installation_only=True)

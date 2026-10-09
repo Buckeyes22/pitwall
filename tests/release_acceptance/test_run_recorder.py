@@ -52,6 +52,17 @@ def source_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
 #: long enough for interpreter start-up on a loaded machine, far below the programs' 30 s sleep.
 _SETUP_SAFE_TIMEOUT_S = 3.0
 
+#: How long the recorded programs that must be torn down sleep. Tests that assert the recorder
+#: did not wait for such a program compare against this, not against a margin over the timeout.
+_PROGRAM_SLEEP_S = 30
+
+#: The recorder's grace windows are ceilings (a child killed by SIGTERM is gone at once), but
+#: 0.2 s was shorter than the scheduling delay of a loaded machine: 6 of 72 runs of the repeat
+#: test lost the pipes. The sigint wrappers use this generous ceiling instead.
+_SIGINT_GRACE_S = 2.0
+#: A wrapper spawns an interpreter that imports the recorder; far below the real hang bound.
+_SIGINT_WRAPPER_TIMEOUT_S = 120
+
 
 def _run(
     source_repo: Path,
@@ -304,7 +315,7 @@ time.sleep(30)
         saved = _read_record(record)
         assert ready_file.exists(), "the descendant had not escaped before the timeout fired"
         # Cleanup must not wait out the escaped descendant's 30 s sleep.
-        assert elapsed < _SETUP_SAFE_TIMEOUT_S + 2.0
+        assert elapsed < _PROGRAM_SLEEP_S / 2
         assert record["outcome"] == "timeout"
         assert saved["process"]["termination"]["cleanup_unresolved"] is True
         assert saved["process"]["termination"]["pipes_closed"] is True
@@ -350,15 +361,25 @@ def test_keyboard_interrupt_finalizes_receipt_then_preserves_interrupt(
 
 
 def _run_sigint_wrapper(
-    source_repo: Path, output_root: Path, *, signals: int = 1
+    source_repo: Path,
+    output_root: Path,
+    *,
+    signals: int = 1,
+    exit_after_s: float | None = None,
 ) -> subprocess.CompletedProcess[bytes]:
-    """Run record_run in a child interpreter whose recorded child SIGINTs it."""
+    """Run record_run in a child interpreter whose recorded child SIGINTs it.
+
+    The recorded child sleeps until the recorder terminates it, or, with ``exit_after_s``,
+    exits by itself that long after its last signal. The recorder polls in 0.1 s slices and
+    only notices a pending interrupt when a slice expires, so ``exit_after_s`` above 0.1 s
+    keeps the interrupt on the path that raises ``KeyboardInterrupt`` mid-collection.
+    """
     child_code = (
         "import os, signal, sys, time; "
         "print('interrupt-stdout', flush=True); "
         "print('interrupt-stderr', file=sys.stderr, flush=True); "
         f"[(os.kill(os.getppid(), signal.SIGINT), time.sleep(0.05)) for _ in range({signals})]; "
-        "time.sleep(30)"
+        f"time.sleep({_PROGRAM_SLEEP_S if exit_after_s is None else exit_after_s})"
     )
     candidate_record = {
         "candidate_id": "sha256:test-candidate",
@@ -375,7 +396,8 @@ def _run_sigint_wrapper(
         "try:\n"
         f"    run_recorder.record_run([{sys.executable!r}, '-c', {child_code!r}], "
         f"cwd=Path({str(source_repo)!r}), candidate_root=Path({str(source_repo)!r}), "
-        f"output_root=Path({str(output_root)!r}), timeout_s=5, terminate_grace_s=0.2)\n"
+        f"output_root=Path({str(output_root)!r}), timeout_s={_PROGRAM_SLEEP_S}, "
+        f"terminate_grace_s={_SIGINT_GRACE_S})\n"
         "except KeyboardInterrupt:\n"
         "    sys.exit(130)\n"
     )
@@ -389,7 +411,7 @@ def _run_sigint_wrapper(
             + os.environ.get("PYTHONPATH", ""),
         },
         capture_output=True,
-        timeout=20,
+        timeout=_SIGINT_WRAPPER_TIMEOUT_S,
         check=False,
     )
 
@@ -416,15 +438,16 @@ def test_real_sigint_retain_flushed_output_before_re_raise(
 def test_sigint_never_loses_flushed_output_across_repeats(
     source_repo: Path, tmp_path: Path
 ) -> None:
-    # The race needs many attempts to show; 30 is enough to fail the old code.
+    # The race needs many attempts to show; 30 is enough to fail the old code. The recorded
+    # child exits by itself so each attempt costs its linger time, not a full grace window.
     for attempt in range(30):
         output_root = tmp_path / f"sigint-{attempt}"
-        completed = _run_sigint_wrapper(source_repo, output_root)
+        completed = _run_sigint_wrapper(source_repo, output_root, exit_after_s=0.25)
         assert completed.returncode != 0
         [run_dir] = list(output_root.glob("run-*"))
         saved = json.loads((run_dir / "run.json").read_text())
         assert saved["outcome"] == "interrupted"
-        assert saved["output"]["complete"] is True
+        assert saved["output"]["complete"] is True, (attempt, saved["output"]["loss_reason"])
         assert b"interrupt-stdout" in Path(saved["output"]["stdout"]).read_bytes(), attempt
 
 

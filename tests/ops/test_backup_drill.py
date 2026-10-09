@@ -10,6 +10,8 @@ from pathlib import Path
 
 import pytest
 
+from tests.hang_guard import HANG_GUARD_SECS
+
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
@@ -215,7 +217,7 @@ class TestBackupDrillCLI:
             cwd=str(_REPO_ROOT),
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=HANG_GUARD_SECS,
         )
         assert result.returncode == 0, f"stdout: {result.stdout}\nstderr: {result.stderr}"
 
@@ -235,7 +237,7 @@ class TestBackupDrillCLI:
             cwd=str(_REPO_ROOT),
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=HANG_GUARD_SECS,
         )
         assert "PIT Restore Drill Plan" in result.stdout
         assert "Schema: pitwall" in result.stdout
@@ -258,7 +260,7 @@ class TestBackupDrillCLI:
             cwd=str(_REPO_ROOT),
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=HANG_GUARD_SECS,
         )
         for table in [
             "capabilities",
@@ -336,7 +338,7 @@ class TestBackupDrillGrepAC:
             ],
             capture_output=True,
             text=True,
-            timeout=10,
+            timeout=HANG_GUARD_SECS,
         )
 
         matches = result.stdout.strip().splitlines()

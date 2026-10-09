@@ -103,8 +103,13 @@ def test_run_bound_tests_requires_one_new_output_directory(tmp_path: Path) -> No
     usage = _run([sys.executable, str(script)])
     assert usage.returncode == 2 and "Usage: run_bound_tests.py OUTPUT_DIR" in usage.stderr
     (tmp_path / "results").mkdir()
+    marker = tmp_path / "results" / "keep.txt"
+    marker.write_text("earlier run\n", encoding="utf-8")
     reused = _run([sys.executable, str(script), str(tmp_path)])
-    assert reused.returncode != 0 and "FileExistsError" in reused.stderr
+    # A reused directory is refused with a failing exit status and left untouched.
+    assert reused.returncode not in (0, 2)
+    assert marker.read_text(encoding="utf-8") == "earlier run\n"
+    assert [p.name for p in (tmp_path / "results").iterdir()] == ["keep.txt"]
 
 
 HARNESS_ONLY = (

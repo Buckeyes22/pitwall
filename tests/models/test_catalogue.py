@@ -15,6 +15,8 @@ from pitwall.models.lookup import CatalogueLookup, VariantInfo
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _SHIPPED = sorted((_REPO_ROOT / "docs" / "models").glob("*.md"))
 _SHIPPED_DOSSIERS = [path for path in _SHIPPED if path.name != "README.md"]
+# Tripwire: total variants across the shipped catalogue; adding a variant changes this one number.
+_EXPECTED_VARIANT_COUNT = 36
 
 
 def write_dossier(
@@ -392,5 +394,5 @@ def test_shipped_catalogue_inventory_and_variant_count() -> None:
         "zai-org/GLM-5.3",
         "zai-org/GLM-5.3-Flash",
     ]
-    assert sum(len(model.variants) for model in catalogue.models()) == 36
+    assert sum(len(model.variants) for model in catalogue.models()) == _EXPECTED_VARIANT_COUNT
     assert catalogue.get("MiniMaxAI/MiniMax-Music3") is None

@@ -175,6 +175,10 @@ markers = [
 line-length = 100
 target-version = "py314"
 
+# Plugin hook scripts run under the user's system python3 (3.9 on macOS), not the
+# project interpreter; keep their syntax 3.9-compatible so ruff does not rewrite it.
+per-file-target-version = { "plugins/**/*.py" = "py39" }
+
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
 ignore = ["E501"]

@@ -2,7 +2,9 @@
 
 A new REST route, MCP tool, CLI command, configuration key, or any other discovered surface
 fails this test until a fixture rule or an entry in ``release_acceptance/surface-test-map.json``
-binds it to the test that proves it and ``bind_surfaces`` has been rerun. File hashes are
+binds it to the test that proves it and ``bind_surfaces`` has been rerun
+(``make regen-bindings``, or ``uv run --frozen python -m
+tools.release_acceptance.bind_surfaces --accept-reviewed``). File hashes are
 not compared for ``reviewed-bindings.json``: the harness's matrix gate refuses a stale binding.
 The per-family review records (``reviewed-bindings-*.json``) feed no gate, so their hashes,
 definition lines, and test nodes are pinned here instead.
@@ -30,16 +32,19 @@ def test_every_surface_is_bound_to_the_committed_tests() -> None:
     payload, unmapped, _stale = bind_surfaces.build()
     assert unmapped == [], "bind these surfaces (fixture rule or surface-test-map.json)"
     committed = json.loads(bind_surfaces.BINDINGS.read_text(encoding="utf-8"))["bindings"]
-    assert _pairs(payload["bindings"]) == _pairs(committed), "rerun bind_surfaces (re-lines too)"
+    assert _pairs(payload["bindings"]) == _pairs(committed), (
+        f"committed bindings are stale; {bind_surfaces.REGEN_HINT} and commit "
+        "release_acceptance/reviewed-bindings*.json"
+    )
 
 
 def test_family_review_records_match_the_current_tests() -> None:
     payloads, stale = bind_surfaces.build_families()
     assert payloads, "no reviewed-bindings-*.json review record was found"
-    assert stale == [], "re-read each listed test, then rerun bind_surfaces --accept-reviewed"
+    assert stale == [], f"re-read each listed test, then {bind_surfaces.REGEN_HINT}: {stale}"
     for path, payload in payloads.items():
         committed = json.loads(path.read_text(encoding="utf-8"))
-        assert payload == committed, f"rerun bind_surfaces to re-line {path.name}"
+        assert payload == committed, f"{bind_surfaces.REGEN_HINT} to re-line {path.name}"
 
 
 def test_every_current_main_binding_names_its_tests_definition_line() -> None:
@@ -55,7 +60,7 @@ def test_every_current_main_binding_names_its_tests_definition_line() -> None:
             and binding["source"] != f"{path}:{lines[base]}"
         ):
             drifted.append(f"{binding['source']} -> {path}:{lines[base]}")
-    assert drifted == [], "rerun bind_surfaces to re-line these bindings"
+    assert drifted == [], f"{bind_surfaces.REGEN_HINT} to re-line: {drifted}"
 
 
 def _reviewed(node: str, source: str, sha: str = "0" * 64) -> dict[str, Any]:

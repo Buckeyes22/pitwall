@@ -141,9 +141,16 @@ def cmd_create_capability(argv: list[str]) -> int:
     except (
         Exception
     ) as exc:  # reason: CLI boundary: report a fixed code and the class, never the text
-        out.set_json({"error": "create_capability_failed", "exception": type(exc).__name__})
-        if not out.json_mode:
-            out.print_error(f"Error: create_capability_failed ({type(exc).__name__})")
+        from pitwall.cli.runtime_errors import report_failure
+
+        name = type(exc).__name__
+        report_failure(
+            out,
+            "create_capability_failed",
+            exc,
+            extra={"exception": name},
+            fallback=f"Error: create_capability_failed ({name})",
+        )
         out.emit()
         return 1
 
@@ -220,8 +227,15 @@ def cmd_seed(argv: list[str]) -> int:
     except (
         Exception
     ) as exc:  # reason: CLI boundary: report a fixed code and the class, never the text
-        out.set_json({"error": "seed_failed", "exception": type(exc).__name__})
-        if not out.json_mode:
-            out.print_error(f"Error: seed_failed ({type(exc).__name__})")
+        from pitwall.cli.runtime_errors import report_failure
+
+        name = type(exc).__name__
+        report_failure(
+            out,
+            "seed_failed",
+            exc,
+            extra={"exception": name},
+            fallback=f"Error: seed_failed ({name})",
+        )
         out.emit()
         return 1

@@ -1,6 +1,5 @@
-# Test infrastructure for autonomous Pitwall orchestrator AC verification.
-# Postgres + Redis bound to 127.0.0.1 only — Tailnet-style boundary.
-# Workers' AC commands hit these (DATABASE_URL=postgresql://...:5444, REDIS_URL=redis://...:6380).
+# Local Postgres and Redis for development, tests, and the README quick start. Bound to 127.0.0.1 only.
+# Tests reach them at DATABASE_URL=postgresql://...:5444 and REDIS_URL=redis://...:6380.
 #
 #   docker compose -f docker-compose.testinfra.yml up -d
 #   docker compose -f docker-compose.testinfra.yml down       (preserve volumes)

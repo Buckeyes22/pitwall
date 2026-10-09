@@ -8,9 +8,11 @@ from pitwall import serve
 from pitwall.models.catalogue import load_catalogue
 from pitwall.models.lookup import CatalogueLookup
 
+MODELS_DIR = Path(__file__).resolve().parents[2] / "docs" / "models"
+
 
 def _catalogue_variants() -> list[object]:
-    catalogue = load_catalogue(Path("docs/models"))
+    catalogue = load_catalogue(MODELS_DIR)
     return [
         pytest.param(dossier.model_id, variant.id, id=f"{dossier.model_id}/{variant.id}")
         for dossier in catalogue.models()
@@ -23,7 +25,7 @@ def test_catalogue_variant_renders_serve_launch_shape(
     model_id: str,
     variant_id: str,
 ) -> None:
-    catalogue: CatalogueLookup = load_catalogue(Path("docs/models"))
+    catalogue: CatalogueLookup = load_catalogue(MODELS_DIR)
     info = catalogue.variant(model_id, variant_id)
     assert info is not None
 
