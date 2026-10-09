@@ -285,6 +285,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- The Pi workbench pins Pi 1.1.0 (`@earendil-works/pi-coding-agent`, `pi-ai`, `pi-tui`); Pi 0.84.4
+  pinned `undici` 8.9.0, which has published advisories including a TLS certificate-validation
+  bypass. `pitwall agents setup pi` installs 1.1.0 and `pitwall workbench doctor` requires it. Pi 1.x
+  reports a failed bash command as an error result instead of throwing; the restricted-mode network
+  boundary is unchanged.
+- The locked dependencies are refreshed, which moves werkzeug to 3.1.9 and virtualenv to 21.14.6
+  (both have published advisories at the old versions), and the container base images and Redis
+  test image move to their current digests.
 - Streaming `POST /v1/messages` requests (`stream: true`) now run pre-spend payload inspection and
   budget admission before reaching a provider, and record a workload that settles as completed,
   failed, or cancelled when the stream ends or the client disconnects. They went straight to a paid

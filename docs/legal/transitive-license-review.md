@@ -51,7 +51,7 @@ and the denied list includes the `GPLv` classifier spelling.
 | base (wheel runtime and all five images) | `check_licenses.py` | 119 | `certifi`, `paramiko`, `tqdm` (above) |
 | extras | `check_licenses.py --extra storage --extra email --extra tracing` | 123 | the base three |
 | dev | `check_licenses.py --extra dev` | 210 | the base three, plus seven MPL-2.0, PSF-2.0, Apache-2.0, and ZPL-2.1 packages whose installed metadata spells the license in a form outside the allowlist |
-| npm (CI only) | `check_licenses.py --npm-lock tools/pi-deps/package-lock.json` | 232 | 98 package versions whose lock entry carries no `license` field (or the permissive `BlueOak-1.0.0`); each entry records the license verified in the installed package's `package.json` (Apache-2.0, MIT, BSD-3-Clause, 0BSD, BlueOak-1.0.0) |
+| npm (CI only) | `check_licenses.py --npm-lock tools/pi-deps/package-lock.json` | 150 | 142 package versions whose lock entry carries no `license` field (or the permissive `BlueOak-1.0.0`); each entry records the license verified in the package's own `package.json` (MIT, Apache-2.0, BSD-3-Clause, ISC, BlueOak-1.0.0, Unlicense, 0BSD) |
 
 The dev exceptions are `bidict`, `hypothesis`, `pathspec` (MPL-2.0), `defusedxml`
 (PSF-2.0), `detect-secrets` (Apache-2.0), and `zope-event`, `zope-interface` (ZPL-2.1).
