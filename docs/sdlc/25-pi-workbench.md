@@ -18,19 +18,19 @@ version in `pi_extensions/COMPILER` and fails if the committed `.js` differs.
 The pin comes from `pitwall/agents/resources/config/harness-installers.json`, which also drives
 `pitwall agents setup pi`; the workbench Python constants are read from it, and
 `tests/workbench/test_pi_pin.py` checks that the CI install steps and these docs state the same
-versions. Workbench targets `@earendil-works/pi-coding-agent@0.84.4` and the stock
+versions. Workbench targets `@earendil-works/pi-coding-agent@1.1.0` and the stock
 `pi` executable, with `@tintinweb/pi-subagents@0.19.0` as the native child backend
 (`pitwall.workbench.doctor:PINNED_PI_VERSION`, `pitwall.workbench.doctor:PINNED_SUBAGENTS_VERSION`).
 `pitwall agents setup pi` installs exactly those two packages (`npm install -g --ignore-scripts`), and
 every Pi-launching command checks them first, before it creates a worktree, an agent directory, or any
 other state (`pitwall.workbench.doctor:require_pinned_toolchain`). A different Pi version is refused.
 
-The version that runs is the installed 0.84.4, selected deliberately. The architecture plan's mention
-of 0.85.1 is not evidence that Workbench runs that release. The supported capability is the tested
-0.84.4 stock CLI and its pinned Workbench integrations: exact profile launch, supported `--continue`
-session continuation, bounded RPC measurement, and the explicitly loaded native child and steering
-interfaces. It does not assert support for Pi 0.85.1, unreleased source, or extension APIs outside
-those acceptance results; such a claim requires a new pin and a rerun of the pinned-runtime checks.
+The version that runs is the installed 1.1.0, selected deliberately. The supported capability is the
+tested 1.1.0 stock CLI and its pinned Workbench integrations: exact profile launch, supported
+`--continue` session continuation, bounded RPC measurement, and the explicitly loaded native child and
+steering interfaces. It does not assert support for any other Pi release, unreleased source, or
+extension APIs outside those acceptance results; such a claim requires a new pin and a rerun of the
+pinned-runtime checks.
 
 Pi itself declares MIT licensing. Pitwall, including Workbench, is Apache-2.0.
 

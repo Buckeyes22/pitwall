@@ -944,7 +944,7 @@ class PinnedPiToolchainTests(unittest.TestCase):
     """``pitwall agents setup pi`` installs the pinned Pi and its subagents backend."""
 
     PINNED = (
-        "@earendil-works/pi-coding-agent@0.84.4",
+        "@earendil-works/pi-coding-agent@1.1.0",
         "@tintinweb/pi-subagents@0.19.0",
     )
 
@@ -958,7 +958,7 @@ class PinnedPiToolchainTests(unittest.TestCase):
     def test_the_pi_recipe_pins_both_packages(self) -> None:
         recipe = self.pi_spec().recipe
         self.assertEqual(
-            ("npm", "@earendil-works/pi-coding-agent", "0.84.4"),
+            ("npm", "@earendil-works/pi-coding-agent", "1.1.0"),
             (recipe.kind, recipe.package, recipe.version),
         )
         self.assertEqual((("@tintinweb/pi-subagents", "0.19.0"),), recipe.extra_packages)
