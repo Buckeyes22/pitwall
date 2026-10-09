@@ -1736,9 +1736,8 @@ def _self_hosted_state(
         None,
     )
     state = self_hosted_state(prior)
-    readiness = cast(
-        Literal["ready", "starting", "absent"],
-        observation.state if observation.state in {"ready", "starting", "absent"} else "absent",
+    readiness = (
+        observation.state if observation.state in {"ready", "starting", "absent"} else "absent"
     )
     state.update(
         {
