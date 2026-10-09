@@ -39,5 +39,5 @@ The demo capability and provider, with the provider marked healthy.
 
 ## Go deeper
 
-- [README Quick Start](../../README.md#quick-start)
+- [README local broker setup](../../README.md#run-the-broker-locally)
 - [Routing and resolution](../../docs/sdlc/04-routing.md)

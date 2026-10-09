@@ -38,7 +38,7 @@ OpenCode always prints its answer, so a run that exits `0` with nothing, or only
 
 ## Run or rerun it manually
 
-After installing the release wheel (see the [Quick Start](../../README.md#quick-start)):
+After installing the release wheel (see the [install steps](../../README.md#install-pitwall)):
 
 ```bash
 pitwall agents setup harnesses

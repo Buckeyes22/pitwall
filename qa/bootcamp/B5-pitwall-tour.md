@@ -51,7 +51,7 @@ If different: read [the missions README](../missions/README.md#the-tiers) togeth
 
 ### Step 4 — Start the stack
 
-Coach: rule R13 says always check `docker ps` first so no old container holds ports 5444 or 6380. Then bring up the test stack, set the five `export` lines from the README Quick Start in this terminal, migrate, and run `init`. The five lines are the placeholder values from the [README Quick Start](../../README.md#quick-start); never invent your own values.
+Coach: rule R13 says always check `docker ps` first so no old container holds ports 5444 or 6380. Then bring up the test stack, load the five `.env.quickstart.local` settings from the README local broker setup in this terminal, migrate, and run `init`. The five lines are the placeholder values from the [README local broker setup](../../README.md#run-the-broker-locally); never invent your own values.
 Tester does in terminal 1:
 ```bash
 docker ps

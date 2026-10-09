@@ -7,7 +7,7 @@ conflicts with a rule, the rule wins. Stop and tell the tester why.
 
 **R1 — No real credentials in tiers 0–4.** Never use, ask for, create, print, or store a real
 provider key, token, or endpoint secret. Use only the placeholder values in the
-[README Quick Start](../../README.md#quick-start).
+[README local broker setup](../../README.md#run-the-broker-locally).
 
 **R2 — The never-run list.** Outside tier 5, never run these and never help the tester run them:
 

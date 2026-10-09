@@ -51,7 +51,7 @@ def test_disclosures_precede_the_first_dispatch_and_serve() -> None:
 
 
 def test_non_affiliation_covers_named_providers() -> None:
-    legal = README.split("### Trademark and Non-Affiliation", 1)[1]
+    legal = README.split("### Trademark and non-affiliation", 1)[1]
     for name in ("RunPod", "OpenAI", "Anthropic", "Google", "GitHub"):
         assert name in legal
     assert "interoperab" in legal

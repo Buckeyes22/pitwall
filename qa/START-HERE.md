@@ -49,8 +49,8 @@ Git ignores `qa/.work/`. It is the tester's private space. Never delete it.
 
 - Run every command from the repository root unless a lesson says otherwise.
 - Run Python through `uv run`. Never run bare `python`.
-- The placeholder settings for local testing are the `export` lines in the
-  [README Quick Start](../README.md#quick-start). A new terminal needs them again. Never use real
+- The placeholder settings for local testing are the `.env.quickstart.local` lines in the
+  [README local broker setup](../README.md#run-the-broker-locally). A new terminal needs them again. Never use real
   credentials.
 - Never start `pitwall` with no arguments, or `pitwall dashboard`, in a terminal that does not
   have those `export` lines. It would start `pitwall setup` ([rule R2](coach/rules.md#safety)).
