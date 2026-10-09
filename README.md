@@ -4,46 +4,111 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.14-blue.svg)](pyproject.toml)
 
-Pitwall is one broker for the GPU and inference spend of AI-assisted development. For requests it
-brokers, it estimates the cost and checks it against a monthly budget and a per-request cap before
-the provider call. It routes inference to a provider that can serve it. It also routes your coding
-work to the model and agent harness that suits the task, and tracks what all of it costs.
+Pitwall provides GPU provisioning, inference routing, and coding-agent dispatch in a single
+Python distribution. It is designed for a single operator managing cloud compute, model access,
+and agent execution across multiple providers and harnesses.
 
-These limits are Pitwall's own admission checks, not a spending ceiling on your provider accounts.
-Coding harnesses bill their own subscriptions or API keys directly. Serving a model personally keeps
-a separate local ledger. Automatic kill-switch escalation on a budget breach is off by default
-(`PITWALL_BUDGET_BREACH_KILL_MODE=disabled`; see [Configuration](#configuration)).
+The broker checks estimated costs against monthly budgets and per-request limits before
+authorizing paid work. Agent Routing dispatches tasks to configured model and harness profiles
+and maintains execution records. Personal model serving uses a separate RunPod workflow with
+local budget and lease controls.
 
-One install and one command, `pitwall`, carry five parts:
+> **Project status:** Pre-1.0, preparing for the first public alpha. APIs and configuration may
+> change between minor versions. The [support matrix](docs/support-matrix.md) identifies supported
+> capabilities, deferred features, and provider paths verified with live services.
 
-- **Broker.** A capability API for inference, embeddings, and compute over RunPod, Vast.ai,
-  Together, and Lambda Cloud, with pre-spend cost gates, routing with fallbacks, pod leases, and an
-  emergency kill-switch. The [support matrix](docs/support-matrix.md) lists exactly what each
-  adapter does and which paths have been verified live.
-- **Agent Routing** (`pitwall agents`). Dispatches a prompt or a dependency graph of prompts to
-  fourteen agent harnesses, including Codex, Claude Code, Kimi, OpenCode, Grok Build, and Qwen Code,
-  and keeps a run record of each dispatch.
-- **MCP servers.** A broker server (81 tools) and an orchestrator channel server, both over local
-  stdio. A dispatched subagent can ask the orchestrator a blocking question, and the orchestrator
-  can steer a running dispatch.
-- **Pi workbench** (`pitwall workbench`). Launches the pinned Pi coding agent with exact profiles
-  and isolated state.
-- **Free-tier gateway** (`pitwall gateway`). A quota-aware catalog of free model pools and a
-  loopback sidecar, so coding runs can use pools you hold keys for before paid compute.
+[Capabilities](#capabilities) · [Architecture](#architecture) · [Getting started](#getting-started) ·
+[Configuration](#configuration) · [Security](#security-and-trust-model) · [Documentation](#documentation)
 
-Pitwall is pre-1.0 software preparing for its first public alpha. APIs and configuration may change
-between minor versions. The [support matrix](docs/support-matrix.md) lists the supported and
-deferred surfaces. The public history starts at a single commit, so commit hashes and pull request
-numbers cited in plans, evidence, and changelogs refer to earlier development history that is not
-published.
+## Capabilities
 
-### Before you dispatch
+The distribution includes five components:
 
-Agent Routing runs the harness CLIs you have installed, as you, with your files, credentials, and
-network. By default each CLI keeps its own sandbox and approval prompts. For unattended runs,
-`export PITWALL_AGENTS_UNRESTRICTED=1` passes each CLI's bypass flag (for Codex,
-`--dangerously-bypass-approvals-and-sandbox`), so the child can run commands without asking. Kimi
-Code and dsh run only with that setting. See [Agent Routing security](docs/agents/SECURITY.md).
+| Component | Interface | Responsibilities |
+| --- | --- | --- |
+| **Broker** | REST API, CLI, Textual console, broker MCP | Capability-based inference, embeddings, and compute; cost admission, provider routing and fallbacks, pod leases, audit records, and an emergency kill switch. |
+| **Agent Routing** | `pitwall agents` | Dispatch individual prompts or dependency-ordered workflows to 14 agent harnesses; manage profiles, isolated worktrees, and run records. |
+| **MCP servers** | `pitwall mcp serve broker` and `pitwall mcp serve channel` | Expose 81 broker tools and a separate orchestrator channel for subagent questions, answers, and steering. Both servers use local stdio. |
+| **Pi workbench** | `pitwall workbench` | Launch the pinned Pi coding agent with configured profiles and isolated state. |
+| **Free-tier gateway** | `pitwall gateway` | Provide a quota-aware catalog and loopback sidecar for free model pools configured with the operator's credentials. |
+
+Provider adapters cover RunPod, Vast.ai, Together, and Lambda Cloud. Capabilities and live
+verification vary by adapter; consult the [support matrix](docs/support-matrix.md) before choosing
+a provider. The gateway makes configured free pools available to coding runs so they can use
+available quota before paid compute.
+
+## Architecture
+
+### Broker
+
+Requests reach the broker through REST, the CLI, the Textual console, or broker MCP. These
+interfaces share the broker's request inspection, budget admission, routing, cost accounting,
+audit, and execution layers.
+
+```mermaid
+flowchart TB
+    clients["REST · CLI · console · broker MCP"] --> broker["Broker"]
+    broker --> providers["Provider services"]
+    broker --- postgres[("Postgres state")]
+    broker --- redis["Redis queues"]
+    reconciler["Reconciler"] --- postgres
+    reconciler -.-> providers
+```
+
+Postgres stores operational state. Redis supports background job queues. The reconciler
+converges workload state, runs health probes, expires leases, and aggregates costs. Solid
+arrows show request routing; the dotted arrow shows reconciliation activity. Plain connections
+indicate supporting infrastructure.
+
+See the [architecture reference](docs/sdlc/01-architecture.md) for subsystem details and the
+[reconciler lifecycle](docs/sdlc/10-reconciler-lifecycle.md) for background processing.
+
+### Agent Routing
+
+Agent Routing launches local harness CLIs through shims and configured profiles. Supported
+harnesses include Codex, Claude Code, Kimi, OpenCode, Grok Build, and Qwen Code. Workflows add
+dependency ordering, retries, verification, and resumable execution.
+
+```mermaid
+flowchart TB
+    host["Orchestrating coding-agent host"] --> routing["Agent Routing"]
+    routing --> harnesses["Dispatched harnesses"]
+    routing -->|HTTP| broker["Broker API"]
+    host <-->|Local stdio| channel["Orchestrator channel (MCP)"]
+    channel <-->|Supported MCP clients| harnesses
+```
+
+The orchestrator channel supports communication during a dispatch: a subagent can ask a
+blocking question, the orchestrator can answer it, and the orchestrator can steer a running task.
+The channel is separate from broker MCP.
+
+Agent Routing is part of the same distribution but communicates with the broker only over HTTP.
+Its shim and hook entry points do not load the broker's web, database, or queue dependencies.
+The HTTP connection shown above does not make a broker deployment a prerequisite for installing
+Agent Routing.
+
+There are **14 dispatch harnesses** and **13 channel registrations**. Channel support includes
+the dispatch harnesses other than Pi and dsh, which have no MCP client, plus GitHub Copilot CLI.
+The channel connection in the diagram applies only to supported MCP clients.
+
+| Term | Meaning |
+| --- | --- |
+| **Harness** | An agent CLI that executes a task. |
+| **Agent profile** | A `name@harness` binding configured in `pitwall.toml`. |
+| **Dispatch** | One execution of a harness. |
+| **Workflow** | A dependency-ordered set of dispatches. |
+
+See [Agent Routing](docs/agents/routing-readme.md),
+[workflows](docs/agents/workflows.md), and the
+[orchestrator channel](docs/agents/orchestrator-channel.md).
+
+### Cost and usage visibility
+
+| Interface | Information |
+| --- | --- |
+| `pitwall cost`, `pitwall burn-rate`, `pitwall budget` | Persisted workload costs, spending rate, and budget consumption. |
+| `pitwall usage` | Subscription usage for routed plans. |
+| `pitwall-cost-exporter` | Prometheus cost and health metrics, with Grafana definitions in [`dashboards/`](dashboards). |
 
 ## Where your data goes
 
@@ -63,21 +128,124 @@ Code and dsh run only with that setting. See [Agent Routing security](docs/agent
   forwarding (`R2_ENDPOINT`, `R2_ACCESS_KEY`, `R2_SECRET_KEY`), and the signed outbound webhooks
   described in [webhooks](docs/webhooks.md), which go to URLs you register.
 
-## What you can do with it
+## Getting started
 
-**Check what a model costs on a GPU before you rent one.** The catalogue lists the models Pitwall
-can serve, and `fit` shows which GPUs hold a model and what a lease of a given length costs. With a
-RunPod key set, prices are live. Without one, the table shows `unpriced`.
+### Install Pitwall
+
+Install the release wheel with [`uv`](https://docs.astral.sh/uv/) 0.12.2 or newer to add
+`pitwall` and the service commands to your `PATH`. The `pitwall` package on PyPI is an
+unrelated project; install from the release URL below:
+
+```bash
+uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
+```
+
+If uv warns that `~/.local/bin` is not on your `PATH`, run `uv tool update-shell` and restart
+your shell.
+
+Alternatively, install from a source checkout:
+
+```bash
+git clone --branch v0.3.0a1 https://github.com/Buckeyes22/pitwall.git
+cd pitwall
+uv tool install --python 3.14 .
+```
+
+Choose the setup path that matches the work you want to run:
+
+| Path | Runtime requirements | State and control scope |
+| --- | --- | --- |
+| [Agent Routing](#set-up-agent-routing) | Local agent harnesses and their configuration; no database required for installation. | Local dispatch and workflow records; routed-plan usage. |
+| [Personal model serving](#serve-a-model-on-runpod) | RunPod credentials and local configuration; the default backend requires no database. | Local monthly budget, per-lease cap, lease deadline, and audit log. Inference goes directly to the pod. |
+| [Broker services](#run-the-broker-locally) | Postgres, Redis, and broker runtime credentials. | Broker admission, routing, audit, reconciliation, and persisted workload costs. |
+
+### Set up Agent Routing
+
+Install the shims and host integrations:
+
+```bash
+pitwall agents install
+```
+
+The installer writes one shim per harness and `route-shim.sh` under `~/.claude/scripts/`,
+installs the Claude Code, Codex, and GitHub Copilot CLI plugins, and registers the channel MCP
+server. `pitwall agents uninstall` removes the files and integrations installed by this command.
+
+The [installation guide](docs/agents/install.md) provides an agent-guided setup procedure and
+uses `pitwall doctor` to report readiness. The
+[Agent Routing overview](docs/agent-routing/README.md) introduces the available workflows.
+
+#### Before you dispatch
+
+Agent Routing runs the harness CLIs you have installed, as you, with your files, credentials,
+and network. By default each CLI keeps its own sandbox and approval prompts. For unattended
+runs, `export PITWALL_AGENTS_UNRESTRICTED=1` passes each CLI's bypass flag (for Codex,
+`--dangerously-bypass-approvals-and-sandbox`), so the child can run commands without asking.
+Kimi Code and dsh run only with that setting. See
+[Agent Routing security](docs/agents/SECURITY.md).
+
+#### Dispatch a prompt
+
+Install a harness CLI, sign in to it yourself, write a prompt file, and dispatch it. Codex is
+the example:
+
+```bash
+pitwall agents setup harnesses      # installs missing harness CLIs after you confirm; never logs in
+codex login                         # authenticate Codex yourself
+pitwall agents doctor --harness codex --live-auth
+printf 'List the files in the current directory and summarize what this project does in three sentences.\nDo not modify any files.\n' > first-dispatch.md
+pitwall agents dispatch codex first-dispatch.md
+```
+
+The doctor prints `codex read-only auth probe succeeded` (PASS) when Codex is signed in. The
+probe runs `codex login status` and makes no inference request. Each dispatch ends its output
+with `SHIM-DONE exit=<n>`.
+
+To use a named profile, configure it as described in the
+[routing guide](docs/agents/routing-readme.md), then dispatch to it by name. For a profile
+named `ornith`:
+
+```bash
+pitwall agents dispatch route ornith first-dispatch.md
+```
+
+#### Execute a workflow
+
+A workflow is a JSON document that assigns tasks to harnesses and models and defines their
+dependencies, retries, and verification. Runs execute in the foreground, and stopped runs can
+be resumed. See the [workflow format](docs/agents/workflows.md).
+
+```bash
+pitwall agents workflow run workflow.json --host copilot
+pitwall agents workflow list
+pitwall agents runs list
+```
+
+If the workstation previously used the standalone Agent Routing tool, run
+`pitwall agents migrate` once. See the [migration guide](docs/operator/agents-migration.md).
+
+### Serve a model on RunPod
+
+The default personal-serving path provisions a RunPod model endpoint using local state. Set
+`RUNPOD_API_KEY` before provisioning; this path does not require Postgres or Redis.
+
+RunPod starts charging when the pod is created, before the model answers, and charges until the
+pod is terminated. `pitwall stop <route>` terminates it. The pod also carries its own deadline
+from `--ttl-minutes`, and RunPod treats that deadline as best effort. If `pitwall status` or the
+RunPod console still shows a pod you did not expect, follow
+[orphan cleanup](docs/operator/troubleshooting.md#orphaned-pods-a-pod-with-no-working-owner).
+
+First, inspect the model catalog and estimate GPU fit and lease cost:
 
 ```bash
 pitwall models list
 pitwall models fit ornith-ai/Ornith-1.5-35B-A3B-GGUF --ttl-minutes 45
 ```
 
-**Serve a model with hard limits.** The pod carries its own self-termination deadline, `serve`
-refuses to launch without a monthly budget, and every serve, refusal, and stop lands in a local
-audit log. You need a RunPod account with billing and an API key in `RUNPOD_API_KEY`, and RunPod
-charges while the pod exists. See [personal serving](docs/operator/personal-serving.md).
+With a RunPod key configured, `fit` uses live prices. Without a key, the pricing table displays
+`unpriced`.
+
+Initialize the local endpoint key, set a monthly budget, and provision a model endpoint:
 
 ```bash
 pitwall setup
@@ -88,168 +256,45 @@ pitwall status
 pitwall stop ornith
 ```
 
-**Send a prompt to another model.** `pitwall agents dispatch` sends a prompt file to a harness, or
-to a named route profile such as the pod served above. See
-[Agent Routing](docs/agents/routing-readme.md) for the shims, profiles, and worktree isolation.
+Personal serving applies the following controls:
 
-```bash
-printf 'List the files in the current directory and summarize what this project does in three sentences.\nDo not modify any files.\n' > first-dispatch.md
-pitwall agents dispatch codex first-dispatch.md
-pitwall agents dispatch route ornith first-dispatch.md
+- A monthly budget is required before a lease can launch.
+- A lease's maximum spend counts against that budget until the lease stops.
+- `PITWALL_PER_REQUEST_MAX_USD` caps an individual lease and defaults to USD 10.
+- The pod receives its own self-termination deadline.
+- Serve requests, refusals, stops, and failures are appended to an owner-only `audit.jsonl`
+  in the local state directory.
+
+Harnesses send inference directly to the pod. Broker payload inspection, broker budget
+admission, and broker configuration auditing do not apply to this local serving path.
+
+Setting `DATABASE_URL` alone does not select the registry backend. To select that backend for
+`serve`, `status`, and `stop`, configure `pitwall.toml` explicitly:
+
+```toml
+[personal]
+backend = "registry"
 ```
 
-`pitwall agents install` also writes `codex-shim.sh` and the other shims to `~/.claude/scripts/`,
-which is not on `PATH`. Coding-agent hosts call them by full path. To run them yourself,
-`export PATH="$HOME/.claude/scripts:$PATH"`.
-
-**Run a dependency graph of tasks across models.** A workflow is a JSON document of tasks, each
-routed to a harness and model, with ordering, retries, and verification. It runs in the foreground,
-and a stopped run can be resumed. See [workflows](docs/agents/workflows.md) for the
-document format.
-
-The example below runs from a clone of this repository, where
-[`examples/agents/dependency-workflow/`](examples/agents/dependency-workflow) lives. The wheel does
-not ship it.
-
-```bash
-pitwall agents workflow run examples/agents/dependency-workflow/workflow.json --host copilot
-pitwall agents workflow list
-pitwall agents runs list
-```
-
-**Give your coding agent the broker.** Register the broker MCP server with Claude Code, Codex, or
-OpenCode. `--dry-run` prints what would change and writes nothing. The broker server needs
-`DATABASE_URL`, `REDIS_URL`, and `RUNPOD_API_KEY` where the harness runs, and `pitwall doctor`
-checks them.
-
-```bash
-pitwall mcp install claude-code --dry-run
-pitwall doctor
-```
-
-## Architecture
-
-```text
-  your agent / terminal                 coding-agent hosts
-  REST - CLI - Textual console - MCP    (Claude Code, Codex, Copilot CLI)
-              |                                    |
-              v                                    v
-  +-----------------------------+      +--------------------------------+
-  | Broker                      |      | Agent Routing                  |
-  | pre-spend inspection        |      | shims + route-shim.sh          |
-  | routing + fallbacks         |      | profiles (name@harness)        |
-  | budget and cap admission    |      | workflows, run records,        |
-  | audit, kill-switch          |      | isolated worktrees             |
-  +--------------+--------------+      +----------------+---------------+
-                 |                                      |
-                 v                                      v
-  RunPod - Vast.ai - Together -         14 agent harnesses (codex, claude,
-  Lambda Cloud - free-tier gateway      kimi, opencode, grok, qwen, pi, ...)
-                 |                                      |
-                 v                                      v
-  Postgres + Redis + reconciler         orchestrator channel (MCP): ask,
-  cost rollups, Prometheus metrics      answer, steer
-```
-
-The broker is a layered control plane. Requests enter through REST, MCP, the CLI, or the Textual
-console, then pass through shared guardrail, routing, cost, audit, execution, and reconciliation
-layers. Postgres holds state, Redis feeds the background workers, and the reconciler converges
-workload state, runs health probes, expires leases, and rolls up cost.
-
-Agent Routing is a subpackage of the same distribution. It talks to the broker only over
-HTTP, and its shim and hook entry points do not load the broker's web, database, or queue
-dependencies. A **harness** is an agent CLI, an **agent profile** is a `name@harness` binding in
-`pitwall.toml`, a **dispatch** is one harness run, and a **workflow** is a dependency-ordered set
-of dispatches. The channel server registers with thirteen channel harnesses: the dispatch harnesses
-except Pi and dsh, which have no MCP client, plus GitHub Copilot CLI. See the
-[architecture](docs/sdlc/01-architecture.md) and the
-[orchestrator channel](docs/agents/orchestrator-channel.md).
-
-Spend is visible in three places: `pitwall cost`, `pitwall burn-rate`, and `pitwall budget` read
-persisted workload costs and budget use, `pitwall usage` shows subscription usage for every routed
-plan, and the cost exporter publishes Prometheus metrics with Grafana dashboards under
-[`dashboards/`](dashboards).
-
-## Quick Start
-
-Prerequisites: `git`, [`uv`](https://docs.astral.sh/uv/), and Docker (only for the local broker
-path below). Requires uv 0.12.2 or newer (`uv self update`).
-
-Install the CLI with `uv`. This puts `pitwall` and the service commands on your `PATH`:
-
-```bash
-uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
-```
-
-If uv warns that `~/.local/bin` is not on your PATH, run `uv tool update-shell` and restart your
-shell.
-
-To install from a checkout instead:
-
-```bash
-git clone --branch v0.3.0a1 https://github.com/Buckeyes22/pitwall.git && cd pitwall && uv tool install --python 3.14 .
-```
-
-### Route work to other models
-
-Install the shims and plugins once so a coding-agent host can dispatch work through Pitwall:
-
-```bash
-pitwall agents install
-```
-
-This writes one shim per harness and `route-shim.sh` under `~/.claude/scripts/`, installs the Claude
-Code, Codex, and GitHub Copilot CLI plugins, and registers the channel MCP server. It needs no
-database. `pitwall agents uninstall` removes exactly what it wrote. A coding agent can do the whole
-setup itself by following [`docs/agents/install.md`](docs/agents/install.md), which runs
-`pitwall doctor` for a readiness report. Start with the
-[Agent Routing landing page](docs/agent-routing/README.md).
-
-Then install a harness CLI, sign in to it yourself, and send a first prompt. Codex is the example:
-
-```bash
-pitwall agents setup harnesses      # installs missing harness CLIs after you confirm; never logs in
-codex login                         # authenticate Codex yourself
-pitwall agents doctor --harness codex --live-auth
-printf 'List the files in the current directory and summarize what this project does in three sentences.\nDo not modify any files.\n' > first-dispatch.md
-pitwall agents dispatch codex first-dispatch.md
-```
-
-The doctor prints `codex read-only auth probe succeeded` (PASS) when Codex is signed in. The probe
-runs `codex login status` and makes no inference request. A WARN means the status is unknown, not
-that you are logged out.
-
-### Serve a model on a RunPod pod
-
-You need a RunPod account with billing set up and an API key in `RUNPOD_API_KEY`
-(`pitwall setup` checks for it). RunPod starts charging when the pod is created, before the model
-answers, and charges until the pod is terminated. `pitwall stop <route>` terminates it. The pod
-also carries its own deadline from `--ttl-minutes`, and RunPod treats that deadline as best effort.
-If `pitwall status` or the RunPod console still shows a pod you did not expect, follow
-[orphan cleanup](docs/operator/troubleshooting.md#orphaned-pods-a-pod-with-no-working-owner).
-
-For a personal RunPod-backed model server, initialize the local endpoint key with `pitwall setup`,
-then follow the serve example above. This path needs no database. It keeps local state, enforces a
-local monthly budget (a lease's maximum spend counts until it stops, and
-`PITWALL_PER_REQUEST_MAX_USD`, default 10 USD, caps one lease), and appends every serve, refusal,
-stop, and failure to an owner-only `audit.jsonl` in the state directory. See
-[personal serving](docs/operator/personal-serving.md) for what `pitwall setup` changes on your
-machine, where state lives, and how to clean up. Setting `DATABASE_URL` does not switch this path.
-The registry backend for `serve`, `status`, and `stop` is chosen with `[personal] backend =
-"registry"` in `pitwall.toml`.
+The [personal-serving guide](docs/operator/personal-serving.md) documents setup changes,
+state locations, backend configuration, and cleanup.
 
 ### Run the broker locally
 
-This path uses `uv`, Docker, and the first-class CLI. It creates local Postgres and Redis services,
-applies migrations, seeds a demo capability and provider from [`seed/`](seed), and finishes with a
-dry-run `POST /v1/inference`. A dry run exercises registry lookup and routing without live GPU
-discovery or paid RunPod work. The values below are fake placeholders, written to
-`.env.quickstart.local`, which Git ignores (`.env.*.local`):
+This example starts Postgres and Redis, applies migrations, loads demo configuration, and
+exercises a dry-run inference request. It requires `git`, `uv`, and Docker.
+
+The API keys and secrets below are **local development placeholders**, written to
+`.env.quickstart.local`, which Git ignores (`.env.*.local`). The dry run performs registry
+lookup and routing without live GPU discovery or paid RunPod work.
+
+#### 1. Initialize the environment
 
 ```bash
 git clone --branch v0.3.0a1 https://github.com/Buckeyes22/pitwall.git
 cd pitwall
 uv sync --frozen --extra dev --python 3.14.7
+
 docker compose -f docker-compose.testinfra.yml up -d --wait
 
 cat > .env.quickstart.local <<'EOF'
@@ -265,11 +310,15 @@ uv run pitwall db migrate
 uv run pitwall init --non-interactive
 ```
 
-`pitwall init` creates or updates the `embedding.demo` capability and the `demo-runpod-lb` provider
-from the committed [`seed/capabilities.yaml`](seed/capabilities.yaml) and
-[`seed/providers.yaml`](seed/providers.yaml), then marks the provider `healthy`. To seed different
-values, use `pitwall init --from-seed path/to/seed-dir` or flags such as `--capability-name`,
-`--endpoint-id`, `--provider-type`, `--region`, `--gpu-class`, and `--per-second-active`.
+`pitwall init` creates or updates the `embedding.demo` capability and `demo-runpod-lb` provider
+from [`seed/capabilities.yaml`](seed/capabilities.yaml) and
+[`seed/providers.yaml`](seed/providers.yaml), then marks the provider `healthy`.
+
+For different seed data, use `pitwall init --from-seed path/to/seed-dir` or options such as
+`--capability-name`, `--endpoint-id`, `--provider-type`, `--region`, `--gpu-class`, and
+`--per-second-active`. The committed seed directory is [`seed/`](seed).
+
+#### 2. Start the API
 
 In a second terminal, start the API from the same checkout. It loads the same file:
 
@@ -279,13 +328,15 @@ set -a; . ./.env.quickstart.local; set +a
 uv run pitwall-api
 ```
 
-With `PITWALL_API_TOKEN` exported, every route except the health checks needs
-`Authorization: Bearer $PITWALL_API_TOKEN`, including the `/docs` page. To browse `/docs` on
-loopback, start the API with `env -u PITWALL_API_TOKEN uv run pitwall-api` instead. The API listens
-on `127.0.0.1:8080`; if that port is taken, start it with `PITWALL_API_PORT=<port>` and use that
-port in the command below.
+When `PITWALL_API_TOKEN` is set, all routes except health checks require
+`Authorization: Bearer $PITWALL_API_TOKEN`. This includes `/docs`. For loopback-only
+development, start the API with `env -u PITWALL_API_TOKEN uv run pitwall-api` instead if you
+need to browse `/docs` without bearer authentication. The API listens on `127.0.0.1:8080`; if
+that port is taken, start it with `PITWALL_API_PORT=<port>` and use that port below.
 
-Then run the smoke command printed by `pitwall init`, or this equivalent command:
+#### 3. Submit a dry-run request
+
+From the first terminal, run the smoke command printed by `pitwall init`, or use this equivalent:
 
 ```bash
 curl -s -X POST http://127.0.0.1:8080/v1/inference \
@@ -294,172 +345,217 @@ curl -s -X POST http://127.0.0.1:8080/v1/inference \
   -d '{"capability":"embedding.demo","texts":["hello"],"dry_run":true}'
 ```
 
-The response contains `result.dry_run=true` plus a payload-free route plan with the selected
-provider and structured cost. For a complete RunPod topology, use the default-plan
-[`runpod-onboard` workflow](docs/operator/runpod-onboarding.md). Applying resources or sending real
-inference remains an explicitly authorized live operation.
+The response contains `result.dry_run=true` and a route plan with the selected provider and
+structured cost information. The plan does not include the request payload.
 
-When you are done, stop the API with Ctrl-C and remove the local services:
+For a complete RunPod topology, follow the default-plan
+[`runpod-onboard` workflow](docs/operator/runpod-onboarding.md). Applying resources and sending
+live inference are separate operations that require explicit authorization.
+
+#### 4. Connect a coding agent to broker MCP
+
+Register broker MCP with Claude Code, Codex, or OpenCode. Use `--dry-run` to inspect the proposed
+configuration changes without writing them:
 
 ```bash
-docker compose -f docker-compose.testinfra.yml down
+pitwall mcp install claude-code --dry-run
+pitwall doctor
 ```
+
+To apply the configuration after reviewing the preview, run the install command without
+`--dry-run`. Broker MCP requires `DATABASE_URL`, `REDIS_URL`, and `RUNPOD_API_KEY` in the
+environment where the harness launches the server. `pitwall doctor` checks these prerequisites.
 
 ## Services
 
-Pitwall has five console entry points in [pyproject.toml](pyproject.toml). The MCP servers and the
-gateway start from the `pitwall` command. `pitwall --help` lists every command, and the
-[CLI reference](docs/sdlc/18-cli.md) documents each one.
+The distribution defines five console entry points in [pyproject.toml](pyproject.toml).
+MCP servers, the gateway, Agent Routing, and the workbench are subcommands of `pitwall`.
 
-| Command | Role | Docs |
+| Command | Responsibility | Reference |
 | --- | --- | --- |
-| `pitwall-api` | REST API for capabilities, inference, leases, jobs, OpenAI proxy, and admin routes | [REST API](docs/sdlc/02-api-rest.md) |
-| `pitwall-reconciler` | Workload, lease, health, idempotency, and cost convergence loop | [Reconciler](docs/sdlc/10-reconciler-lifecycle.md) |
-| `pitwall-webhook` | Inbound RunPod webhook receiver | [Webhooks](docs/sdlc/09-webhooks.md) |
-| `pitwall-cost-exporter` | Prometheus cost and health metrics | [Observability](docs/sdlc/13-observability.md) |
-| `pitwall` | The operational CLI: database, RunPod resources, MCP servers (`pitwall mcp serve broker`, `pitwall mcp serve channel`), gateway, workbench, and agents | [CLI](docs/sdlc/18-cli.md) |
+| `pitwall` | Operational CLI for database management, RunPod resources, MCP servers, gateway, workbench, and agents. | [CLI](docs/sdlc/18-cli.md) |
+| `pitwall-api` | REST API for capabilities, inference, leases, jobs, the OpenAI proxy, and administration. | [REST API](docs/sdlc/02-api-rest.md) |
+| `pitwall-reconciler` | Background convergence of workload, lease, health, idempotency, and cost state. | [Reconciler](docs/sdlc/10-reconciler-lifecycle.md) |
+| `pitwall-webhook` | Inbound RunPod webhook receiver. | [Webhooks](docs/sdlc/09-webhooks.md) |
+| `pitwall-cost-exporter` | Prometheus cost and health metrics. | [Observability](docs/sdlc/13-observability.md) |
 
-Container and deployment details are in [deployment](docs/sdlc/19-deployment.md).
+Run `pitwall --help` for the command list. See [deployment](docs/sdlc/19-deployment.md) for
+container and service deployment details.
+
+## Configuration
+
+The API, broker MCP server, and reconciler fail closed when required runtime variables are
+missing. Requirements depend on the selected operating path; the channel MCP server is separate
+from broker MCP.
+
+### Runtime and model serving
+
+| Variable | Applies to | Purpose or default |
+| --- | --- | --- |
+| `RUNPOD_API_KEY` | Broker API, broker MCP, reconciler, RunPod operations | Required RunPod credential for outbound provider calls. |
+| `DATABASE_URL` | Broker API, broker MCP, database CLI, reconciler, exporter | Required Postgres connection string. |
+| `REDIS_URL` | Broker API, broker MCP, reconciler | Required Redis/arq queue connection string. |
+| `PITWALL_MONTHLY_BUDGET_USD` | Personal serving | Required monthly budget for the local serving path. |
+| `PITWALL_PER_REQUEST_MAX_USD` | Personal serving | Maximum cost of an individual lease; defaults to USD 10. |
+| `PITWALL_ENDPOINT_KEY` | Authenticated registry pod serving | Independent model-endpoint credential required for serving pod launches; injected only at launch time. |
+| `PITWALL_CLOUD_WORKER_IMAGE` | Warm-volume and generated-template flows | Operator-supplied, independently reviewed RunPod pod image. Pitwall does not publish one. |
+
+### API access and request limits
+
+| Variable | Applies to | Purpose or default |
+| --- | --- | --- |
+| `PITWALL_API_TOKEN` | Required for non-loopback API binding; recommended locally | Operator bearer token with all scopes. When enabled, authentication is required on every non-health route. |
+| `PITWALL_API_SCOPED_TOKENS` | Delegated API callers | JSON mapping from opaque tokens to `read`, `spend`, `lease:mutate`, `webhook:admin`, and/or `server:admin` scopes. |
+| `PITWALL_ADMIN_SECRET` | Administrative routes and non-loopback API binding | Shared secret checked in constant time for `/v1/admin/*`. Missing configuration causes admin routes to return `401`. |
+| `PITWALL_INBOUND_RATE_LIMIT` | API request limiting | Defaults to `120/60s`; throttled requests receive `429` and `Retry-After`. Use `off` only for loopback development. |
+| `PITWALL_API_MAX_BODY_BYTES` | REST API | Defaults to 8 MiB; limits both fixed-length and chunked request bodies. |
+| `PITWALL_API_MAX_CONCURRENCY` | API process | Defaults to 100 in-flight Uvicorn connections/tasks. |
+
+### Webhooks and metrics
+
+| Variable | Applies to | Purpose or default |
+| --- | --- | --- |
+| `PITWALL_WEBHOOK_SECRET` | Inbound webhook receiver | Required HMAC secret for RunPod webhook verification. The receiver refuses to start without it. |
+| `PITWALL_WEBHOOK_ENCRYPTION_KEYS` | Outbound webhook subscriptions | JSON mapping from key versions to URL-safe base64 32-byte AES-GCM keys. |
+| `PITWALL_WEBHOOK_ENCRYPTION_CURRENT_KEY` | Outbound webhook subscriptions | Key version used for new and rotated signing secrets. |
+| `PITWALL_WEBHOOK_MAX_CONCURRENCY` | Webhook process | Defaults to 50 in-flight Uvicorn connections/tasks. |
+| `PITWALL_COST_EXPORTER_MAX_CONCURRENCY` | Metrics process | Defaults to 20 in-flight Uvicorn connections/tasks. |
+
+Additional settings cover budgets, tracing, R2 log staging, lease TTLs, RunPod registry
+authentication, audit parameters, and service ports. See [.env.example](.env.example) and
+[core models and configuration](docs/sdlc/16-core-config.md).
+
+## Security and trust model
+
+Pitwall is a **single-operator control plane**: one operator, one RunPod key, and one shared
+budget. It does not implement tenancy or resource ownership. The project security policy is
+maintained in [SECURITY.md](SECURITY.md).
+
+### API authentication and authorization
+
+Non-loopback API startup requires both `PITWALL_API_TOKEN` and `PITWALL_ADMIN_SECRET`.
+The operator token grants all scopes. Delegated callers can use tokens from
+`PITWALL_API_SCOPED_TOKENS` with narrower permissions. Missing credentials return `401`;
+a valid token without the required scope returns `403`.
+
+When bearer authentication is enabled, administrative operations require both:
+
+- A bearer token granting `server:admin`.
+- An `X-Pitwall-Secret` header matching `PITWALL_ADMIN_SECRET`.
+
+Loopback-only development may run without bearer authentication and logs an explicit warning.
+The inbound rate limiter defaults to `120/60s` and requires an explicit setting to disable it.
+
+### Network deployment and webhooks
+
+Bind services to a private interface; the default is `127.0.0.1`. Terminate TLS at a trusted
+reverse proxy before network exposure. Do not expose the webhook receiver or cost exporter
+directly to the public internet.
+
+The inbound webhook receiver requires `PITWALL_WEBHOOK_SECRET` at startup and verifies RunPod
+webhook signatures. The canonical Compose stack requires both admin and webhook secrets.
+
+### Personal-serving boundary
+
+The default `pitwall serve` path uses local state and does not require a database. Its local
+monthly budget, per-lease cap, deadline, and audit log are separate from broker controls.
+Harnesses send inference directly to the pod, so the broker does not inspect those payloads or
+apply its budget gate and configuration audit to that path. See
+[personal-serving security](SECURITY.md#personal-serving).
+
+### MCP transport and local execution
+
+Both MCP servers use local stdio. Network MCP transports are rejected, and authenticated HTTP
+MCP is outside the alpha scope. See [MCP server security](SECURITY.md#mcp-server).
+
+Agent Routing launches harness CLIs with the operator's user privileges. Treat generated code,
+child output, profile and workflow documents, and lifecycle hooks as local command-execution
+inputs that require review. The [Agent Routing threat model](docs/agents/SECURITY.md) covers
+these risks in more detail. Broker and Agent Routing reports use the same
+[private security reporting policy](SECURITY.md).
 
 ## Documentation
 
-- [System overview](docs/sdlc/00-overview.md) and [architecture](docs/sdlc/01-architecture.md) are
-  the place to start. The [SDLC index](docs/sdlc/README.md) lists all 26 source-grounded subsystem
-  docs, from the REST API and MCP server to routing, cost and budget, leases, security, and testing.
-- [Agent Routing](docs/agents/routing-readme.md): shims, profiles, workflows, run records, and
-  doctor. The [orchestrator channel](docs/agents/orchestrator-channel.md) covers ask, answer, and
-  steer.
-- [Operator guides](docs/operator/personal-serving.md): personal serving, RunPod onboarding,
-  budget limits, troubleshooting, and the [Pi workbench](docs/operator/pi-workbench.md).
-- [Support matrix](docs/support-matrix.md): what each provider adapter supports and what has been
-  verified live.
+| Topic | References |
+| --- | --- |
+| System design | [Overview](docs/sdlc/00-overview.md), [architecture](docs/sdlc/01-architecture.md), and the [SDLC index](docs/sdlc/README.md), which lists 26 subsystem documents. |
+| Provider support | [Support matrix](docs/support-matrix.md), including adapter capabilities and live verification. |
+| Agent setup and routing | [Agent Routing overview](docs/agent-routing/README.md), [installation](docs/agents/install.md), and [routing reference](docs/agents/routing-readme.md). |
+| Workflows and communication | [Workflows](docs/agents/workflows.md) and [orchestrator channel](docs/agents/orchestrator-channel.md). |
+| Model serving and onboarding | [Personal serving](docs/operator/personal-serving.md) and [RunPod onboarding](docs/operator/runpod-onboarding.md). |
+| Workbench and migration | [Pi workbench](docs/operator/pi-workbench.md) and [standalone Agent Routing migration](docs/operator/agents-migration.md). |
+| Operations | [CLI reference](docs/sdlc/18-cli.md), [configuration](docs/sdlc/16-core-config.md), [observability](docs/sdlc/13-observability.md), and [deployment](docs/sdlc/19-deployment.md). |
 
-## Testing and Quality
+The public repository history begins with a single commit. Commit hashes and pull request
+numbers in plans, evidence, and changelogs may refer to earlier development history that is
+not included in the public repository.
 
-The common local checks are below. `make test`, `make test-int` after `make up`, `make docs-check`,
-and the other gates are listed in [CONTRIBUTING.md](CONTRIBUTING.md#quality-gates).
+## Testing and quality
+
+Common local checks are shown below. Additional commands, including `make test`, `make test-int`
+after `make up`, and `make docs-check`, are documented in
+[Contributing: quality gates](CONTRIBUTING.md#quality-gates).
 
 ```bash
+# Unit and other fast tests
 uv run pytest -q -n auto -m "not integration and not slow"
-docker compose -f docker-compose.testinfra.yml up -d --wait
+
+# Integration tests with local Postgres and Redis
+docker compose -f docker-compose.testinfra.yml up -d
 PITWALL_TEST_DATABASE_URL=postgresql://pitwall:pitwall@127.0.0.1:5444/pitwall_test \
 PITWALL_TEST_REDIS_URL=redis://127.0.0.1:6380/0 \
   uv run pytest -q -m integration
+
+# Security and fuzz tests
 uv run pytest -q -m "security and not fuzz" tests/security
 uv run pytest -q -m fuzz tests/security
 ```
 
-The test program covers unit, property, integration, API contract, concurrency, chaos, security,
-mutation, performance, and release-readiness lanes. See the
-[testing strategy](docs/sdlc/17-testing-strategy.md) for markers, gates, and release tiers.
-[ci.yml](.github/workflows/ci.yml) runs linting, type checks, security checks, tests, and
-integration coverage on GitHub Actions, and
-[release-readiness.yml](.github/workflows/release-readiness.yml) runs the public-alpha readiness
-lane.
+The test program includes unit, property, integration, API contract, concurrency, chaos,
+security, mutation, performance, and release-readiness checks. The
+[testing strategy](docs/sdlc/17-testing-strategy.md) defines markers, gates, and release tiers.
 
-## Configuration
+[CI](.github/workflows/ci.yml) runs linting, type checks, security checks, tests, and integration
+coverage on GitHub Actions. The
+[release-readiness workflow](.github/workflows/release-readiness.yml) runs the public-alpha
+readiness checks.
 
-The API, MCP server, and reconciler fail closed when required runtime variables
-are missing.
+## Project layout
 
-| Env var | Required for | Purpose |
-| --- | --- | --- |
-| `RUNPOD_API_KEY` | API, MCP, reconciler, RunPod operations | RunPod credential used for outbound calls |
-| `DATABASE_URL` | API, MCP, DB CLI, reconciler, exporter | Postgres connection string |
-| `REDIS_URL` | API, MCP, reconciler | Redis/arq queue connection string |
-| `PITWALL_ADMIN_SECRET` | Admin routes; any non-loopback API bind | Constant-time shared secret for `/v1/admin/*`; without it admin routes answer 401, and a non-loopback API bind also needs `PITWALL_API_TOKEN` |
-| `PITWALL_WEBHOOK_SECRET` | Webhook receiver (always) | HMAC secret for inbound RunPod webhook verification; the receiver refuses to start without it |
-| `PITWALL_WEBHOOK_ENCRYPTION_KEYS` | Outbound webhook subscriptions | JSON mapping key versions to URL-safe base64 32-byte AES-GCM keys |
-| `PITWALL_WEBHOOK_ENCRYPTION_CURRENT_KEY` | Outbound webhook subscriptions | Key version used for new and rotated signing secrets |
-| `PITWALL_API_TOKEN` | Non-loopback API; recommended locally | All-scopes operator bearer token required on every non-health route |
-| `PITWALL_ENDPOINT_KEY` | Authenticated registry pod serving | Independent model endpoint credential; required for `serve` pod launches, injected only at launch time |
-| `PITWALL_API_SCOPED_TOKENS` | Delegated API callers | JSON object mapping opaque tokens to `read`, `spend`, `lease:mutate`, `webhook:admin`, and/or `server:admin` scopes |
-| `PITWALL_INBOUND_RATE_LIMIT` | API abuse control | Defaults to `120/60s`; throttles callers with `429` + `Retry-After`; set `off` only for loopback development |
-| `PITWALL_API_MAX_BODY_BYTES` | REST API | Defaults to 8 MiB and bounds fixed-length and chunked request bodies |
-| `PITWALL_API_MAX_CONCURRENCY` | REST API process | Defaults to 100 in-flight Uvicorn connections/tasks |
-| `PITWALL_WEBHOOK_MAX_CONCURRENCY` | Webhook process | Defaults to 50 in-flight Uvicorn connections/tasks |
-| `PITWALL_COST_EXPORTER_MAX_CONCURRENCY` | Metrics process | Defaults to 20 in-flight Uvicorn connections/tasks |
-| `PITWALL_CLOUD_WORKER_IMAGE` | Warm-volume and generated template flows | Operator-supplied and independently reviewed RunPod pod image; Pitwall does not publish one |
-
-Optional settings cover budgets, tracing, R2 log staging, lease TTLs, RunPod registry auth, audit
-parameters, and service ports. See [.env.example](.env.example) and
-[core models and config](docs/sdlc/16-core-config.md).
-
-## Security and Trust Model
-
-Read the project security policy in [SECURITY.md](SECURITY.md).
-
-Pitwall is a **single-operator** control plane. There is no tenancy or ownership model: one
-operator, one RunPod key, one shared budget.
-
-**Non-loopback API startup fails unless API and admin credentials are configured.**
-`PITWALL_API_TOKEN` is the all-scopes operator token. Delegated clients can instead receive tokens
-from `PITWALL_API_SCOPED_TOKENS`, restricted to read, spend, lease mutation, webhook administration,
-or server administration. Missing credentials return 401, and a valid token without the required
-scope returns 403. Loopback-only development may run without bearer auth and logs an explicit
-warning. The inbound limiter defaults to `120/60s` and can be disabled only by an explicit setting.
-
-**Administrative operations use two gates when API bearer auth is enabled:** the bearer token must
-grant `server:admin`, and `X-Pitwall-Secret` must match `PITWALL_ADMIN_SECRET`. Inbound webhook HMAC
-is required whenever its receiver binds beyond loopback. The canonical Compose stack requires both
-admin and webhook secrets.
-
-**Bind to a private interface** (`127.0.0.1` default). Terminate TLS at a trusted reverse proxy
-before any network exposure. Do not expose the webhook receiver or cost exporter directly to the
-public internet.
-
-**Personal serving is outside the broker's controls.** `pitwall serve` has no database, so the
-broker's budget gate, pre-spend payload scan, and config audit do not apply. It enforces a local
-monthly budget and per-lease cap and keeps a local audit log instead. There is no payload to scan,
-because harnesses send requests to the pod directly and never through Pitwall. See
-[SECURITY.md](SECURITY.md#personal-serving).
-
-**Unauthenticated MCP is restricted to local stdio.** Pitwall rejects every network MCP transport,
-and authenticated HTTP MCP is not an alpha feature. See [SECURITY.md](SECURITY.md#mcp-server).
-
-**Agent Routing starts local harness CLIs with your user authority.** Review generated code, child
-output, profile and workflow documents, and lifecycle hooks as local command-execution inputs.
-Security reports for the broker and Agent Routing use this repository's single
-[private reporting policy](SECURITY.md). The [agent threat model](docs/agents/SECURITY.md) adds the
-Agent Routing specifics.
-
-## Project Layout
-
-```text
-src/pitwall/          api, mcp, routing, cost, leases, db, reconciler, gateway, agents, workbench
-db/migrations/        ordered SQL migrations
-tests/                unit, integration, API, property, security, chaos, perf, release tests
-docs/sdlc/            source-grounded technical documentation
-docs/agents/          Agent Routing documentation
-plugins/              Claude Code, Codex, and GitHub Copilot CLI plugin bundles
-docker/  config/      service images; Prometheus configuration and the gateway catalog
-dashboards/           Grafana dashboard definitions
-scripts/  tools/      release and mutation-score tooling; policy guards
-```
-
-A workstation that ran the standalone Agent Routing tool runs `pitwall agents migrate` once. See
-the [migration guide](docs/operator/agents-migration.md).
-
-## License
-
-Pitwall, including Agent Routing, is licensed under [Apache-2.0](LICENSE). The MIT terms under which
-Agent Routing was released before it joined Pitwall are reproduced in [NOTICE](NOTICE).
-[docs/agents/LICENSE](docs/agents/LICENSE) keeps the historical MIT file.
+| Path | Contents |
+| --- | --- |
+| `src/pitwall/` | API, MCP, routing, cost, leases, database, reconciler, gateway, agents, and workbench packages. |
+| `db/migrations/` | Ordered SQL migrations. |
+| `tests/` | Unit, integration, API, property, security, chaos, performance, and release tests. |
+| `docs/sdlc/` | Technical subsystem documentation. |
+| `docs/agents/` | Agent Routing documentation. |
+| `docs/operator/` | Operator guides. |
+| `plugins/` | Claude Code, Codex, and GitHub Copilot CLI plugin bundles. |
+| `docker/`, `config/` | Service images, Prometheus configuration, and the gateway catalog. |
+| `dashboards/` | Grafana dashboard definitions. |
+| `scripts/`, `tools/` | Release tooling, mutation-score tooling, and policy guards. |
 
 ## Contributing
 
-Contributions are welcome under the guidelines in [CONTRIBUTING.md](CONTRIBUTING.md). Testers start
-with the agent-guided QA program in [qa/README.md](qa/README.md). This project follows the
-[Code of Conduct](CODE_OF_CONDUCT.md), and the [Agent Routing contribution
-guide](docs/agents/CONTRIBUTING.md) adds the specifics for that area.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution requirements and quality gates.
+Testers can start with the [agent-guided QA program](qa/README.md). This project follows the
+[Code of Conduct](CODE_OF_CONDUCT.md); the
+[Agent Routing contribution guide](docs/agents/CONTRIBUTING.md) provides additional guidance
+for that component.
+
+## License
+
+Pitwall, including Agent Routing, is licensed under [Apache-2.0](LICENSE). The MIT terms under
+which Agent Routing was released before joining Pitwall are reproduced in [NOTICE](NOTICE).
+The historical MIT license is retained in [docs/agents/LICENSE](docs/agents/LICENSE).
 
 ## Legal
 
-### Trademark and Non-Affiliation
+### Trademark and non-affiliation
 
-Pitwall is an independent open-source project. It is not affiliated with, endorsed by, sponsored
-by, or approved by RunPod, Vast.ai, Together AI, Lambda, OpenAI, Anthropic, Google, GitHub, or any
-other provider, model vendor, or tool named in this repository. Those names are trademarks of their
-respective owners and are used only as interoperability references, to identify the services and
-CLIs Pitwall works with. The Apache-2.0 license grants no rights to any third-party trademark. See
-[NOTICE](NOTICE).
+Pitwall is an independent open-source project. It is not affiliated with, endorsed by,
+sponsored by, or approved by RunPod, Vast.ai, Together AI, Lambda, OpenAI, Anthropic, Google,
+GitHub, or any other provider, model vendor, or tool named in this repository. Those names are
+trademarks or registered trademarks of their respective owners and are used only as
+interoperability references, to identify the services and CLIs Pitwall works with. The
+Apache-2.0 license grants no rights to any third-party trademark. See [NOTICE](NOTICE).

@@ -56,7 +56,7 @@ In order, it:
    status warning below.
 5. **Checks for the routing command.** If `pitwall agents` (or the command in
    `PITWALL_ROUTING_CLI`) isn't on `PATH`, it tells you to install Pitwall
-   (install the release wheel, see the [Quick Start](../../README.md#quick-start)) and run `pitwall agents install` so `--route`
+   (install the release wheel, see the [install steps](../../README.md#install-pitwall)) and run `pitwall agents install` so `--route`
    has something to attach to.
 
 It also prints which backend is active (`personal` or `registry`, from
@@ -277,7 +277,7 @@ read before the pod is terminated; afterwards they are gone.
 | `per_request_cap` | This lease's maximum spend (hourly price times `--ttl-minutes`) exceeds `PITWALL_PER_REQUEST_MAX_USD` (default 10). Shorten the TTL or raise the cap. |
 | `monthly_budget` | This month's settled spend, plus the maximum spend of leases still running, plus this lease would exceed `PITWALL_MONTHLY_BUDGET_USD`. Stop a lease or raise the budget. |
 | `route_exists` | That route name is already in use (or already launching/ready). Choose another `--route` or stop the existing one first. |
-| `routing_cli_missing` | `pitwall agents` (or the `PITWALL_ROUTING_CLI` override) isn't on `PATH`, so the route could never attach. Install the release wheel (see the [Quick Start](../../README.md#quick-start)) and run `pitwall agents install`, then retry. |
+| `routing_cli_missing` | `pitwall agents` (or the `PITWALL_ROUTING_CLI` override) isn't on `PATH`, so the route could never attach. Install the release wheel (see the [install steps](../../README.md#install-pitwall)) and run `pitwall agents install`, then retry. |
 | `does_not_fit` | The model doesn't fit on the requested `--gpu-class`. |
 | `ttl_below_startup` | `--ttl-minutes` is at or within the model's startup budget (its dossier's `startup_min`), so the in-pod deadline would end the pod before the model answers. Choose a longer TTL. |
 | `unpriced` | No live price for that GPU/cloud combination; pass `--rate-per-second`. |

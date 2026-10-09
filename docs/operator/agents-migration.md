@@ -79,7 +79,7 @@ old arguments and fails to start; change them to `pitwall mcp serve broker` in e
 | `~/.local/state/subagent-model-routing/` | `~/.local/state/pitwall/agents/` |
 | `~/.claude/subagent-model-routing/ledger/observations.jsonl` | `~/.local/state/pitwall/agents/ledger/observations.jsonl` |
 | marketplace `subagent-model-routing-local` (and Claude's `pitwall`) | `pitwall-local` |
-| `bootstrap.sh`, `install.sh`, the `curl \| bash` installer | install the release wheel (see the [Quick Start](../../README.md#quick-start)), then `pitwall agents install` |
+| `bootstrap.sh`, `install.sh`, the `curl \| bash` installer | install the release wheel (see the [install steps](../../README.md#install-pitwall)), then `pitwall agents install` |
 | `pitwall-agent-routing/<id>` and `model-routing/<id>` worktree branches | `pitwall-agents/<id>` |
 
 The Claude plugin id (`pitwall`), the Codex plugin id (`pitwall-codex`), the Copilot plugin id
