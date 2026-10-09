@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVerifiedOn": "2026-10-08",
+  "sourceVerifiedOn": "2026-10-09",
   "harnesses": {
     "codex": {
       "documentationUrl": "https://github.com/openai/codex",
@@ -212,7 +212,7 @@
         "darwin": {
           "kind": "npm",
           "package": "@earendil-works/pi-coding-agent",
-          "version": "0.84.4",
+          "version": "1.1.0",
           "extraPackages": [
             {
               "package": "@tintinweb/pi-subagents",
@@ -223,7 +223,7 @@
         "linux": {
           "kind": "npm",
           "package": "@earendil-works/pi-coding-agent",
-          "version": "0.84.4",
+          "version": "1.1.0",
           "extraPackages": [
             {
               "package": "@tintinweb/pi-subagents",
