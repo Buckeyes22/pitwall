@@ -397,7 +397,7 @@
     "env": "PITWALL_COST_EXPORTER_HOST",
     "valid": "127.0.0.8",
     "probe": "uvicorn_kwargs('pitwall.cost')['host']",
-    "with": {},
+    "with": {"PITWALL_MONTHLY_BUDGET_USD": "100"},
     "expect": "127.0.0.8",
     "expect_unset": "127.0.0.1",
     "no_invalid_reason": "a URL or host used verbatim; an unusable one fails where it is first used and never falls back to a default"
@@ -407,7 +407,7 @@
     "env": "PITWALL_COST_EXPORTER_MAX_CONCURRENCY",
     "valid": "5",
     "probe": "uvicorn_kwargs('pitwall.cost')['limit_concurrency']",
-    "with": {},
+    "with": {"PITWALL_MONTHLY_BUDGET_USD": "100"},
     "invalid": "-1",
     "expect": 5,
     "expect_unset": 20
@@ -877,7 +877,7 @@
     "probe": "m('tests.release.config_probes').workbench_account_budget_dir()",
     "with": {},
     "expect": "{tmp}/budgets",
-    "expect_unset": "{tmp}/.local/state/pitwall/pi-workbench/account-budgets",
+    "expect_unset": "{tmp}/xdg/pitwall/pi-workbench/account-budgets",
     "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
   },
   "config:env:PITWALL_WORKBENCH_AGENT_DIR": {
@@ -888,7 +888,7 @@
     "with": {},
     "expect": "{tmp}/agent-state",
     "expect_unset": {
-      "root": "{tmp}/.local/state/pitwall/pi-workbench",
+      "root": "{tmp}/xdg/pitwall/pi-workbench",
       "mode": "agent"
     },
     "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
@@ -964,7 +964,7 @@
     "probe": "m('tests.release.config_probes').workbench_admission_dir()",
     "with": {},
     "expect": "{tmp}/admission",
-    "expect_unset": "{tmp}/.local/state/pitwall/pi-workbench/admission",
+    "expect_unset": "{tmp}/xdg/pitwall/pi-workbench/admission",
     "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
   },
   "config:env:PITWALL_WORKBENCH_RESTRICTED": {
@@ -1009,7 +1009,7 @@
     "probe": "m('tests.release.config_probes').workbench_runtime_base()",
     "with": {},
     "expect": "{tmp}/runtime",
-    "expect_unset": "{tmp}/.local/state/pitwall/pi-workbench/runtime",
+    "expect_unset": "{tmp}/xdg/pitwall/pi-workbench/runtime",
     "no_invalid_reason": "a filesystem path or directory used as given; the consumer creates or reads it when it is used, so no path is invalid at configuration time"
   },
   "config:env:PITWALL_WORKBENCH_TINTIN_EXTENSION": {

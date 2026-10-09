@@ -44,6 +44,7 @@ from pitwall.workbench.profile import (
     profile_from_config,
 )
 from pitwall.workbench.runtime_settings import enforce_runtime_settings
+from pitwall.workbench.state_dir import workbench_state_dir
 
 USAGE = (
     "usage: pitwall workbench <command>\n"
@@ -112,7 +113,7 @@ def parse_launch_args(raw: Sequence[str]) -> LaunchArgs:
 
 
 def default_state_root() -> Path:
-    return Path.home() / ".local" / "state" / "pitwall" / "pi-workbench"
+    return workbench_state_dir()
 
 
 def default_agent_dir(

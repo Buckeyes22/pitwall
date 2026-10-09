@@ -27,6 +27,9 @@ def uvicorn_kwargs(module):
 
     captured = {}
     uvicorn.run = lambda *args, **kwargs: captured.update(kwargs)
+    # The probe reads where configuration lands, not whether a database answers; the startup
+    # database check has its own tests (tests/test_entrypoint_bind_hosts.py).
+    m("pitwall.cli.runtime_errors").database_preflight = lambda *args, **kwargs: None
     m(module + ".__main__").main([])
     return captured
 
