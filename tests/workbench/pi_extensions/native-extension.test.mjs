@@ -117,7 +117,10 @@ piTest("wraps a restricted native child bash tool with the network-denying secco
         const record = { session: { agent: { state: { tools: [tool] } } } };
         assert.strictEqual(installTintinChildToolDeadline(record, undefined, dir), true);
         const output = [];
-        await await assert.rejects(tool.execute("network", { command: "node -e \"fetch('http://127.0.0.1:1').then(()=>process.exit(0)).catch(()=>{require('node:fs').writeFileSync(1,'NETWORK_DENIED\\n');process.exit(7)})\"" }, undefined, (update) => output.push(Buffer.from(update.content?.[0]?.text ?? "")), { cwd: dir, sessionManager: { getSessionId: () => "native-test", getSessionFile: () => undefined } }), errorLike("Command exited with code 7"));
+        const result = await tool.execute("network", { command: "node -e \"fetch('http://127.0.0.1:1').then(()=>process.exit(0)).catch(()=>{require('node:fs').writeFileSync(1,'NETWORK_DENIED\\n');process.exit(7)})\"" }, undefined, (update) => output.push(Buffer.from(update.content?.[0]?.text ?? "")), { cwd: dir, sessionManager: { getSessionId: () => "native-test", getSessionFile: () => undefined } });
+        // Pi 1.x reports a non-zero exit as an error result instead of throwing.
+        assert.strictEqual(result.isError, true);
+        assert.ok(result.content[0].text.includes("Command exited with code 7"));
         assert.ok((Buffer.concat(output).toString()).includes("NETWORK_DENIED"));
     }
     finally {

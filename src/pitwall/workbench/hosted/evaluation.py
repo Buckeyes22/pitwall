@@ -117,9 +117,10 @@ def evaluate_model_command(
     """Verify that the model itself executed the exact acceptance command.
 
     Pi emits the arguments on ``tool_execution_start`` and the outcome on the correlated
-    ``tool_execution_end``. The pinned bash tool throws on a non-zero exit, so a paired end with
-    ``isError`` false is the native success signal. Every completed invocation of an allowed command
-    is evaluated and the last one is the final state; earlier ones are kept in ``earlier``.
+    ``tool_execution_end``. The pinned bash tool returns an error result on a non-zero exit, so a
+    paired end with ``isError`` false is the native success signal. Every completed invocation of an
+    allowed command is evaluated and the last one is the final state; earlier ones are kept in
+    ``earlier``.
     Host-side fixture checks remain a separate effect check.
     """
     commands = [expected] if isinstance(expected, str) else list(expected)
