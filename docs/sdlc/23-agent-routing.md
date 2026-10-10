@@ -231,3 +231,16 @@ registered `minimax/...` model, stdin prompt delivery, the prepared workspace, a
 default and the only registered route with effort selection. A smart-mode
 `HOST_CAPABILITY_UNAVAILABLE` refusal is reported as exit `77`. User-scope channel registration is
 stored in `~/.minimax/mcp.json` under `mcpServers`. See [MiniMax Code](../agents/mcode.md).
+
+### Project-control recovery
+
+The opt-in `project_control` MCP operation (`PITWALL_AGENTS_PROJECT_CONTROL=1`) is implemented in
+`src/pitwall/agents/project_control.py` and documented in `docs/agents/architecture.md`. It uses a
+per-controller kernel lock and persistent ownership epochs to fence dispatch and mailbox-answer
+admission. Caller keys correlate lost replies with deterministic native dispatch IDs. An incomplete
+reservation is unknown, not an invitation to relaunch. This is a single-host trusted-orchestrator
+interface and does not claim distributed locking or infer task completion from process exit.
+
+Hermetic coverage in `tests/agents/test_project_control.py` includes duplicate/conflicting keys,
+lost response lookup, interrupted reservation, ownership replacement during launch, stale owners
+using new keys, binding/cwd mismatch, answer replay, and default/opt-in/specialist MCP visibility.

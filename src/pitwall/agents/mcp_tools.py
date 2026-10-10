@@ -456,6 +456,12 @@ def build_server(env: Mapping[str, str], stdin: BinaryIO, stdout: BinaryIO) -> C
         server.register(ANSWER_AND_WAIT_TOOL, orchestrator.answer_and_wait)
         server.register(WAIT_DISPATCH_TOOL, orchestrator.wait_dispatch)
         server.register(STEER_AND_WAIT_TOOL, orchestrator.steer_and_wait)
+        if env.get("PITWALL_AGENTS_PROJECT_CONTROL") == "1":
+            from .project_control import PROJECT_CONTROL_TOOL, ProjectControl
+
+            server.register(
+                PROJECT_CONTROL_TOOL, ProjectControl(orchestrator.env, orchestrator).call
+            )
     return server
 
 
