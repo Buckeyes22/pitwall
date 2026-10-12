@@ -27,7 +27,10 @@ None recorded.
 
 ## Pending sources
 
-None.
+- pi-cli: changed since it was reviewed
+- pi-settings: changed since it was reviewed
+- pi-security: changed since it was reviewed
+- pi-custom-provider: changed since it was reviewed
 
 ## Not published
 

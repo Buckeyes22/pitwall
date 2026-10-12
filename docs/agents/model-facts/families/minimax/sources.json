@@ -9,8 +9,8 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:16dcfc3b9baf20edd0fb89cb2e669963ce032fe114d04981814c2bd811c77503",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:20592a38a0cf876d8e226cba70d5ad549b331e94f93ac38cfb515a1912dd3f1d",
+      "observedAt": "2026-10-12",
       "reviewedHash": "sha256:16dcfc3b9baf20edd0fb89cb2e669963ce032fe114d04981814c2bd811c77503",
       "reviewedAt": "2026-09-28"
     },
@@ -21,8 +21,8 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:3ab006d968aa0c53b0b1ee6fcd54f98df6901ef99dac5e35a5cecc0a0f6fb2c6",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:9c655c4f4a7e6dbd8144c37219dd67ab3d3008132a3bfde7487a851231ccbac7",
+      "observedAt": "2026-10-12",
       "reviewedHash": "sha256:3ab006d968aa0c53b0b1ee6fcd54f98df6901ef99dac5e35a5cecc0a0f6fb2c6",
       "reviewedAt": "2026-09-28"
     },
@@ -33,8 +33,8 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:8ebaa626b1ee2000f9a400b79d61e606245e73c87bd5bc1a9594a7ffc9197a6d",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:81cdd9f6390eeba6f100a53564eaa54736e59e529f9eb964d000d0c79e73a41c",
+      "observedAt": "2026-10-12",
       "reviewedHash": "sha256:8ebaa626b1ee2000f9a400b79d61e606245e73c87bd5bc1a9594a7ffc9197a6d",
       "reviewedAt": "2026-09-28"
     },
@@ -45,8 +45,8 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:6ce462ebc56773055a48ee530bd62588b66c0811c5a8c6cfa40259242641d93a",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:7b0f85b6cf733b341119ea6731e344bb091d07c6823698ee6e8710e9e45700c9",
+      "observedAt": "2026-10-12",
       "reviewedHash": "sha256:6ce462ebc56773055a48ee530bd62588b66c0811c5a8c6cfa40259242641d93a",
       "reviewedAt": "2026-09-28"
     },

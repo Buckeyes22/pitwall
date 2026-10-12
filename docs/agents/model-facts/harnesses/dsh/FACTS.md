@@ -24,7 +24,7 @@ None recorded.
 
 ## Pending sources
 
-None.
+- dsh-readme: changed since it was reviewed
 
 ## Not published
 

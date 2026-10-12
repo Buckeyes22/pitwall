@@ -28,7 +28,9 @@ None recorded.
 
 ## Pending sources
 
-None.
+- opencode-cli: changed since it was reviewed
+- opencode-agents: changed since it was reviewed
+- opencode-permissions: changed since it was reviewed
 
 ## Not published
 

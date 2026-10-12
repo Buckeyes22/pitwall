@@ -24,7 +24,7 @@ None recorded.
 
 ## Pending sources
 
-None.
+- goose-cli-commands: changed since it was reviewed
 
 ## Not published
 

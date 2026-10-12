@@ -27,7 +27,8 @@ None recorded.
 
 ## Pending sources
 
-None.
+- meta-models: changed since it was reviewed
+- muse-code-changelog: changed since it was reviewed
 
 ## Not published
 

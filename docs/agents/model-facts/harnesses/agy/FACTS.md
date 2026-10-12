@@ -29,7 +29,13 @@ None recorded.
 
 ## Pending sources
 
-None.
+- agy-headless: changed since it was reviewed
+- agy-reference: changed since it was reviewed
+- agy-permissions: changed since it was reviewed
+- agy-sandbox: changed since it was reviewed
+- agy-rules: changed since it was reviewed
+- agy-subagents: changed since it was reviewed
+- agy-best-practices: changed since it was reviewed
 
 ## Not published
 

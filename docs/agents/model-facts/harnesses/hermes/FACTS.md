@@ -27,7 +27,8 @@ None recorded.
 
 ## Pending sources
 
-None.
+- hermes-configuration: changed since it was reviewed
+- hermes-security: changed since it was reviewed
 
 ## Not published
 

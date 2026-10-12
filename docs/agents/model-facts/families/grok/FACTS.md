@@ -23,7 +23,10 @@ None recorded.
 
 ## Pending sources
 
-None.
+- xai-grok-4-7: changed since it was reviewed
+- xai-models: changed since it was reviewed
+- xai-reasoning: changed since it was reviewed
+- xai-release-notes: changed since it was reviewed
 
 ## Not published
 

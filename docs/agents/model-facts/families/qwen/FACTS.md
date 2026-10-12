@@ -27,7 +27,9 @@ None recorded.
 
 ## Pending sources
 
-None.
+- alibaba-text-models: changed since it was reviewed
+- alibaba-deep-thinking: changed since it was reviewed
+- alibaba-prompt-guide: changed since it was reviewed
 
 ## Not published
 

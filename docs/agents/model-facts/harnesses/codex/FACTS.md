@@ -29,7 +29,10 @@ None recorded.
 
 ## Pending sources
 
-None.
+- codex-sandboxing: changed since it was reviewed
+- codex-permissions: changed since it was reviewed
+- codex-subagents: changed since it was reviewed
+- codex-config-reference: changed since it was reviewed
 
 ## Not published
 

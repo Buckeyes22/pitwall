@@ -46,8 +46,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
-      "observedHash": "revision:dba1be0a40aa45a94ad051997016db3960a90277",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:2cba9e42aa026125f3ed06c6d98c1db82f7ca027",
+      "observedAt": "2026-10-12",
       "reviewedHash": "revision:dba1be0a40aa45a94ad051997016db3960a90277",
       "reviewedAt": "2026-09-28"
     },

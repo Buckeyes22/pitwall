@@ -27,7 +27,11 @@ None recorded.
 
 ## Pending sources
 
-None.
+- qwen-code-headless: changed since it was reviewed
+- qwen-code-approval: changed since it was reviewed
+- qwen-code-sandbox: changed since it was reviewed
+- qwen-code-sub-agents: changed since it was reviewed
+- qwen-code-providers: changed since it was reviewed
 
 ## Not published
 

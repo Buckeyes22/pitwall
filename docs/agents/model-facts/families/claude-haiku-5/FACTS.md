@@ -33,7 +33,16 @@
 
 ## Pending sources
 
-None.
+- anthropic-haiku-5-5: changed since it was reviewed
+- anthropic-models-overview: changed since it was reviewed
+- anthropic-effort: changed since it was reviewed
+- anthropic-thinking-models: changed since it was reviewed
+- anthropic-haiku-5-5-prompting: changed since it was reviewed
+- anthropic-haiku-5-5-whats-new: changed since it was reviewed
+- anthropic-haiku-5-5-migration: changed since it was reviewed
+- anthropic-deprecations: changed since it was reviewed
+- anthropic-release-notes: changed since it was reviewed
+- cc-model-config: changed since it was reviewed
 
 ## Not published
 

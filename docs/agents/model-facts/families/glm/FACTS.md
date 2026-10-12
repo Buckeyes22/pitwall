@@ -24,7 +24,13 @@ None recorded.
 
 ## Pending sources
 
-None.
+- zai-glm-5-3: changed since it was reviewed
+- zai-glm-5-2: changed since it was reviewed
+- zai-glm-5-3-flash: changed since it was reviewed
+- zai-thinking-mode: changed since it was reviewed
+- zai-coding-best-practice: changed since it was reviewed
+- zai-migrate: changed since it was reviewed
+- zai-release-notes: changed since it was reviewed
 
 ## Not published
 

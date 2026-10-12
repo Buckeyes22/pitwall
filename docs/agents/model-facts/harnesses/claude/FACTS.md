@@ -26,7 +26,14 @@ None recorded.
 
 ## Pending sources
 
-None.
+- cc-headless: changed since it was reviewed
+- cc-cli-reference: changed since it was reviewed
+- cc-permissions: changed since it was reviewed
+- cc-sandboxing: changed since it was reviewed
+- cc-memory: changed since it was reviewed
+- cc-sub-agents: changed since it was reviewed
+- cc-model-config: changed since it was reviewed
+- cc-changelog: changed since it was reviewed
 
 ## Not published
 
