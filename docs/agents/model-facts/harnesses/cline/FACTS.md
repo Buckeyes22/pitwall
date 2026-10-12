@@ -25,7 +25,8 @@ None recorded.
 
 ## Pending sources
 
-None.
+- cline-overview: changed since it was reviewed
+- cline-cli-reference: changed since it was reviewed
 
 ## Not published
 

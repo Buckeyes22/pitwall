@@ -26,7 +26,7 @@ None recorded.
 
 ## Pending sources
 
-None.
+- model-studio-deepseek-v4-1-flash: changed since it was reviewed
 
 ## Not published
 

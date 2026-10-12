@@ -30,7 +30,7 @@ None recorded.
 
 ## Pending sources
 
-None.
+- muse-code-changelog: changed since it was reviewed
 
 ## Not published
 

@@ -27,7 +27,13 @@
 
 ## Pending sources
 
-None.
+- google-gemini-3-7-flash: changed since it was reviewed
+- google-gemini-3-5-flash: changed since it was reviewed
+- google-gemini-3-1-pro: changed since it was reviewed
+- google-thinking: changed since it was reviewed
+- google-latest-model: changed since it was reviewed
+- google-changelog: changed since it was reviewed
+- antigravity-models: changed since it was reviewed
 
 ## Not published
 

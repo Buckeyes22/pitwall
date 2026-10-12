@@ -28,7 +28,7 @@
 
 ## Pending sources
 
-None.
+- hf-deepseek-v4.1-flash: changed since it was reviewed
 
 ## Not published
 

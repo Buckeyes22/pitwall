@@ -29,7 +29,8 @@ None recorded.
 
 ## Pending sources
 
-None.
+- opencode-go-docs: changed since it was reviewed
+- opencode-go-models: changed since it was reviewed
 
 ## Not published
 

@@ -27,7 +27,10 @@
 
 ## Pending sources
 
-None.
+- minimax-models: changed since it was reviewed
+- minimax-invocation: changed since it was reviewed
+- minimax-anthropic-api: changed since it was reviewed
+- minimax-m3-tool-use: changed since it was reviewed
 
 ## Not published
 
