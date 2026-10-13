@@ -82,8 +82,8 @@ the only possible proof. A lane being required does not mean it was run.
   rows; the all-adapter contract note is separate metadata so consumers cannot count it
   as a sixth adapter).
 - Separate Python, plugin, source, and image artifact forms.
-- Current release-channel exclusions (PyPI, TestPyPI, component image/registry, stable
-  promotion, GPU worker image).
+- Current release-channel exclusions (component image/registry, stable promotion, GPU
+  worker image).
 - Network-MCP rejection and the absent worker image.
 - Native host exclusions and the Pi continuation/delegation and sandbox limits.
 

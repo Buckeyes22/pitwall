@@ -15290,8 +15290,8 @@
     {
       "surface_id": "ops:script:scripts/release/validate_candidate.py",
       "framework": "pytest",
-      "source": "tests/release/test_release_policy.py:144",
-      "test_source_sha256": "a8874a69e757c9023b318957591ad9d63c0150e9e7166c8edcd90ae7ca08c8de",
+      "source": "tests/release/test_release_policy.py:143",
+      "test_source_sha256": "d5e2aad7cd033962231cd416d524138de2cce12377ae9c639b5296bdcec95fcb",
       "reviewed_oracle": "candidate validation requires versioned public notes",
       "proof_lane": "release",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",

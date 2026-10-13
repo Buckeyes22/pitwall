@@ -158,8 +158,7 @@ The release workflow:
 8. creates GitHub artifact attestations and publishes checksums with the GitHub release.
 
 GitHub environment protection, branch rules, and the publication rehearsal are
-verified on the canonical repository before tagging a release. PyPI and
-TestPyPI are not part of the first public release.
+verified on the canonical repository before tagging a release.
 
 ## 8. Test infrastructure
 

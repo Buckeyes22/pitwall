@@ -968,18 +968,6 @@
   ],
   "release_channel_exclusions": [
     {
-      "channel": "PyPI",
-      "state": "excluded_from_current_release_workflow",
-      "source": "docs/release/external-release-gates.md:21-22",
-      "wording": "PyPI and TestPyPI are optional future channels and are not present in the current release workflow."
-    },
-    {
-      "channel": "TestPyPI",
-      "state": "excluded_from_current_release_workflow",
-      "source": "docs/release/external-release-gates.md:21-22",
-      "wording": "PyPI and TestPyPI are optional future channels and are not present in the current release workflow."
-    },
-    {
       "channel": "In-repository GPU worker image",
       "state": "no_artifact_exists",
       "source": "docs/support-matrix.md:40",

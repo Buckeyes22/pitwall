@@ -1,4 +1,4 @@
-"""Install instructions never name the unrelated PyPI `pitwall` and track the release version."""
+"""Release wheel URLs in install instructions track the release version."""
 
 from __future__ import annotations
 
@@ -12,8 +12,6 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 pytestmark = pytest.mark.release
-# Built from parts so this file's own text never trips the guard it tests.
-PACKAGE = "pit" + "wall"
 VERSION = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
 
 
@@ -36,46 +34,6 @@ def _repo(tmp_path: Path, files: dict[str, str]) -> Path:
     return tmp_path
 
 
-@pytest.mark.parametrize(
-    "line",
-    [
-        f"uv tool install {PACKAGE}",
-        f"pip install {PACKAGE}",
-        f"pipx install {PACKAGE}`",
-        f"uv tool install --python 3.14 {PACKAGE}",
-        f"uv tool install --python 3.14.7 {PACKAGE}",
-        f"install {PACKAGE}[email] to enable email",
-    ],
-)
-def test_bare_package_name_install_is_rejected(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, line: str
-) -> None:
-    module = _validator()
-    monkeypatch.setattr(module, "ROOT", _repo(tmp_path, {"docs/a.md": line + "\n"}))
-    assert module._install_reference_errors(VERSION) == [
-        "docs/a.md:1: bare `pitwall` package install; PyPI's pitwall is an unrelated project"
-    ]
-
-
-@pytest.mark.parametrize(
-    "line",
-    [
-        f"claude plugin install {PACKAGE}@pitwall-local --scope user",
-        "copilot plugin install pitwall-copilot@pitwall-local",
-        f"uv tool uninstall {PACKAGE}",
-        "uv tool install --python 3.14 .",
-        "uv tool install --python 3.14.7 .",
-        f"uv tool install {PACKAGE}[email] @ https://example.invalid/pitwall-{VERSION}-py3-none-any.whl",
-    ],
-)
-def test_non_package_installs_are_allowed(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, line: str
-) -> None:
-    module = _validator()
-    monkeypatch.setattr(module, "ROOT", _repo(tmp_path, {"docs/a.md": line + "\n"}))
-    assert module._install_reference_errors(VERSION) == []
-
-
 def test_wheel_url_must_match_candidate_version(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -94,7 +52,7 @@ def test_wheel_url_must_match_candidate_version(
     ]
 
 
-def test_tracked_tree_has_no_bare_install_and_current_wheel_urls() -> None:
+def test_tracked_tree_has_only_current_wheel_urls() -> None:
     assert _validator()._install_reference_errors(VERSION) == []
 
 

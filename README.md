@@ -133,8 +133,7 @@ See [Agent Routing](docs/agents/routing-readme.md),
 ### Install Pitwall
 
 Install the release wheel with [`uv`](https://docs.astral.sh/uv/) 0.12.2 or newer to add
-`pitwall` and the service commands to your `PATH`. The `pitwall` package on PyPI is an
-unrelated project; install from the release URL below:
+`pitwall` and the service commands to your `PATH`:
 
 ```bash
 uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl
