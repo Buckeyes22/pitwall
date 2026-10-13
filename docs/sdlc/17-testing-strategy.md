@@ -150,8 +150,7 @@ checks using credentials and resources owned by the deploying operator.
 
 The release workflow publishes only after readiness succeeds. It rebuilds Python artifacts twice,
 checks byte identity, validates wheel/sdist contents, signs artifact/image provenance through
-GitHub attestations, generates SBOMs, scans images, and promotes the exact tested digests. The
-PyPI and TestPyPI are outside the current release workflow.
+GitHub attestations, generates SBOMs, scans images, and promotes the exact tested digests.
 
 ## 8. Commands
 

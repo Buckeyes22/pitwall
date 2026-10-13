@@ -59,9 +59,7 @@ The tag-triggered release workflow performs the GitHub-first state machine:
 7. A prerelease GitHub Release containing the wheel, sdist, checksums, SBOM, and
    evidence, created only after GHCR publication succeeds.
 
-PyPI and TestPyPI are not part of this release workflow. A future decision may
-add them after accounts and trusted publishing are configured. The first alpha
-publishes Python artifacts on the GitHub Release and service images on GHCR.
+The first alpha publishes Python artifacts on the GitHub Release and service images on GHCR.
 
 There is no project GPU worker image in the alpha. See ADR 0002.
 
@@ -91,11 +89,10 @@ GHCR image by digest, confirm non-root operation, and verify documented health
 behavior. Record the results in the release evidence bundle.
 
 If a GitHub release artifact is defective, mark the prerelease withdrawn and
-publish a corrected version; never reuse the version or tag. If a later PyPI
-package is defective, yank it and publish a new version. If an image is
+publish a corrected version; never reuse the version or tag. If an image is
 defective, mark its tag unsupported and move consumers to a new digest; never
-replace an immutable digest. Stop GHCR publication, or a later optional Python
-registry channel, when its rehearsal or any earlier gate fails. Follow
+replace an immutable digest. Stop GHCR publication when its rehearsal or any
+earlier gate fails. Follow
 `docs/operator/upgrade-recovery.md` for database-aware rollback.
 
 For a security hotfix, branch from the last acceptable tag, make the smallest

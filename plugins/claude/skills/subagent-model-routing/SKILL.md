@@ -232,17 +232,37 @@ If your CLI has MCP tools configured, prompts may direct their use.
 
 - **Route:** `agy-shim.sh` defaults to `gemini-3.8-flash` with medium effort and always adds the dispatch workspace.
 - **Prompt shape:** be direct and precise; state the goal, constraints, success criteria, and output shape. Use consistent Markdown headings or XML-style delimiters. For long context, put the context first and the exact task last.
-- **Reasoning control:** use `--effort low|medium|high` with a base Gemini ID. Do not combine `--effort` with an effort-suffixed live slug. Gemini 3.1 Pro supports low and high in the verified catalog.
-- **Sampling:** retain Gemini 3.x defaults; Google warns that changing temperature/top-p/top-k can degrade complex reasoning.
+- **Reasoning control:** use `--effort low|medium|high` with a base Gemini ID. Do not combine `--effort` with an effort-suffixed live slug. Gemini 3.1 Pro supports low and high in the verified catalog. Gemini 4 Argon (`--model gemini-4-argon`) needs a Google AI Ultra or Enterprise plan in Antigravity.
+- **Sampling:** leave temperature, top-p, and top-k unset; Google deprecated them in July 2026.
 - **Failure contract:** `authentication required` means sign in interactively or configure Gemini API-key mode. A stderr line beginning `jetski: no output produced` is a soft-denied command tool; the shim converts such runs to exit `77` (EX_NOPERM) — re-run unrestricted or add a permissions.allow rule.
 <!-- MODEL-FACTS:gemini START (generated from docs/agents/model-facts/families/gemini; edit facts.json, not this block) -->
-- **Models:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`
-- **Context:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
-- **Effort:** `gemini-3.8-flash`, `gemini-3.7-flash`: low, medium, high (default medium); `gemini-3.6-flash`, `gemini-3.5-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
+- **Models:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`
+- **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
+- **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 - Full reference: `references/model-prompting.md#gemini-through-antigravity`
+
+### Muse Code
+
+- **Route:** `muse-shim.sh` runs Meta's model-bound Muse Code with a private prompt file and defaults to Muse Wonder (`muse-wonder-1.0`); pass `--model muse-spark-1.3` for cheaper, high-volume work.
+- **Reasoning control:** `--reasoning-effort minimal|low|medium|high|xhigh|max|ultra`; `none` is rejected by Meta's API.
+<!-- MODEL-FACTS:muse-spark START (generated from docs/agents/model-facts/families/muse-spark; edit facts.json, not this block) -->
+- **Models:** `muse-spark-1.2`, `muse-spark-1.3`
+- **Context:** 1,048,576 tokens.
+- **Effort:** minimal, low, medium, high, xhigh.
+- **Effort on other values:** other values are rejected.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
+<!-- MODEL-FACTS:muse-spark END -->
+<!-- MODEL-FACTS:muse-wonder START (generated from docs/agents/model-facts/families/muse-wonder; edit facts.json, not this block) -->
+- **Models:** `muse-wonder-1.0`, `muse-wonder-full`
+- **Context:** `muse-wonder-1.0`: 1,048,576 tokens.
+- **Effort:** `muse-wonder-1.0`: minimal, low, medium, high, xhigh, max.
+- **Effort on other values:** `muse-wonder-1.0`: other values are rejected.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-wonder/FACTS.md`.
+<!-- MODEL-FACTS:muse-wonder END -->
+- Full reference: `references/model-prompting.md#muse-code` and `references/model-prompting.md#muse-wonder`
 
 ---
 
@@ -251,7 +271,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 The ledger keeps routing opinions from freezing into folklore. It has two tiers, with one-way flow: hot -> warm.
 
 - **Hot -- machine-local observations.** `~/.local/state/pitwall/agents/ledger/observations.jsonl`, append-only JSONL. The repo-installed shims log quantitative records automatically with `"source":"shim"`: `event:"started"` at dispatch start and `event:"finished"` at terminal with `model`, `wall_s`, `exit`, and `outcome`. Override the path with `PITWALL_AGENTS_LEDGER`.
-- **Warm -- repo-committed knowledge.** `ledger/{claude-fable-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,kimi,minimax,muse-glimmer,muse-spark,qwen}.md` capability cards plus the marked rankings block at the top of Picking the model. The three Claude cards record Codex/Copilot-only shim targets; this Claude-hosted skill still uses native `Agent` calls for Claude work. These are seed examples -- maintain them via `/pitwall:distill` and your own ledger.
+- **Warm -- repo-committed knowledge.** `ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` capability cards plus the marked rankings block at the top of Picking the model. The three Claude cards record Codex/Copilot-only shim targets; this Claude-hosted skill still uses native `Agent` calls for Claude work. These are seed examples -- maintain them via `/pitwall:distill` and your own ledger.
 
 Distill counts finished shim records for quality/rate math; started records are for orphan visibility.
 

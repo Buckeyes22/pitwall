@@ -39,6 +39,8 @@ CARD_MARKERS = {
         "longcat",
         "mimo",
         "minimax",
+        "muse-spark",
+        "muse-wonder",
         "qwen",
     ],
     "codex": [
@@ -55,6 +57,7 @@ CARD_MARKERS = {
         "mimo",
         "minimax",
         "muse-spark",
+        "muse-wonder",
         "qwen",
     ],
     "copilot": [
@@ -72,6 +75,7 @@ CARD_MARKERS = {
         "mimo",
         "minimax",
         "muse-spark",
+        "muse-wonder",
         "qwen",
     ],
 }
@@ -93,6 +97,7 @@ FAMILIES = [
     "minimax",
     "muse-glimmer",
     "muse-spark",
+    "muse-wonder",
     "qwen",
 ]
 

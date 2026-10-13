@@ -12,7 +12,7 @@
       "observedHash": "sha256:67aff60c35fc443368513d1800392065e4fe72bc2856775b5be89c0d6d6847d1",
       "observedAt": "2026-09-28",
       "reviewedHash": "sha256:67aff60c35fc443368513d1800392065e4fe72bc2856775b5be89c0d6d6847d1",
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-configuration",
@@ -21,10 +21,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:a43998535617ac19ecb45a39e9ba1c7565d51b6825ae88c4479a1a385dade504",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:a43998535617ac19ecb45a39e9ba1c7565d51b6825ae88c4479a1a385dade504",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-permissions",
@@ -33,10 +33,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:1013ccb88a47a1ce41aca6f928a8b1c1d3253029a03f482a00775dfb8362fd5d",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:1013ccb88a47a1ce41aca6f928a8b1c1d3253029a03f482a00775dfb8362fd5d",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:6a2d87938e4aab3e23119ab8252e12b00bf45dd33507dc132376950deb1a9c39",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:6a2d87938e4aab3e23119ab8252e12b00bf45dd33507dc132376950deb1a9c39",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-extending",
@@ -45,10 +45,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:03b031831b275de180bae0e1eb6e27e2abae2746d89c640663811061741a17ef",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:03b031831b275de180bae0e1eb6e27e2abae2746d89c640663811061741a17ef",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:050c645d0406e74a776d133e840f7a79a2325b0d7489b426631d5b6589fff4b2",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:050c645d0406e74a776d133e840f7a79a2325b0d7489b426631d5b6589fff4b2",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-changelog",
@@ -57,10 +57,10 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:7f1278b4689c958c5d30ad4dcd403f7b5afb85f2f76927e542e1ee76f9ffbfba",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:7f1278b4689c958c5d30ad4dcd403f7b5afb85f2f76927e542e1ee76f9ffbfba",
+      "reviewedAt": "2026-10-13"
     }
   ],
   "notPublished": [],

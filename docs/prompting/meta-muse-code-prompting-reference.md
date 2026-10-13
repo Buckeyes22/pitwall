@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Vendor | Meta |
-| Models in scope | Muse Spark 1.3 (and 1.2) via Muse Code |
+| Models in scope | Muse Spark 1.3 (and 1.2) and Muse Wonder (`muse-wonder-1.0`) via Muse Code; Wonder's model guidance is in [meta-muse-wonder-prompting-reference.md](meta-muse-wonder-prompting-reference.md) |
 | Primary access | Meta Model API / Muse Code CLI |
 | Official guidance | dev.meta.ai docs |
 | Compiled | 2026-08-26 |
@@ -18,7 +18,7 @@ Use `muse exec "<prompt>"` for a one-shot prompt, or `--prompt-file` to deliver 
 
 ## 3. Model and reasoning
 
-Select a model with `--model`; the default is `muse-spark-1.3`. `--reasoning-effort` accepts `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, or `ultra`, with default `high`. Use `/models` to inspect available models.
+Select a model with `--model`; the shim's default is `muse-wonder-1.0`. `--reasoning-effort` accepts `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, or `ultra`, with default `high`. Use `/models` to inspect available models.
 
 ## 4. Permissions
 

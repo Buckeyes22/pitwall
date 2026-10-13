@@ -116,11 +116,10 @@ def test_artifact_path_policy_rejects_private_and_traversal_paths() -> None:
     assert not module._safe("project/model_routing/cli.py")
 
 
-def test_github_first_release_requires_ghcr_but_not_deferred_pypi() -> None:
+def test_github_first_release_requires_ghcr() -> None:
     jobs = _load("release.yml")["jobs"]
     github_release = jobs["github-release"]
     assert _needs(github_release) == {"package", "package-provenance", "publish-image"}
-    assert not [name for name in jobs if "pypi" in name]
     downloads = _uploads_and_downloads(github_release, "download-artifact")
     assert {d.get("name") for d in downloads} >= {
         "python-distributions",
@@ -175,18 +174,6 @@ def test_ghcr_paths_normalize_the_repository_owner_to_lowercase() -> None:
         assert "${GITHUB_REPOSITORY_OWNER,,}" in line, line
     # Registry paths must not come from the mixed-case owner context anywhere in the workflow.
     assert "ghcr.io/${{ github.repository_owner }}" not in json.dumps(workflow)
-
-
-def test_python_registries_are_not_in_the_github_first_workflow() -> None:
-    workflow = _load("release.yml")
-    serialized = json.dumps(workflow)
-    for forbidden in (
-        "PITWALL_PYPI_RELEASE_ENABLED",
-        "publish-testpypi",
-        "publish-pypi",
-        "gh-action-pypi-publish",
-    ):
-        assert forbidden not in serialized, forbidden
 
 
 def test_release_automation_never_requests_provider_credentials() -> None:

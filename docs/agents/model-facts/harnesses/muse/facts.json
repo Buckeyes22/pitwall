@@ -95,7 +95,7 @@
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-exec-exit-code",
@@ -109,7 +109,7 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-sandbox-needs-bubblewrap",
@@ -123,7 +123,7 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-disable-sandbox-widens",
@@ -137,7 +137,7 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-trust-gates-project-rules",
@@ -151,21 +151,21 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-ultra-effort-delegates",
-      "text": "The ultra effort level is a client-side setting that can make Muse Code delegate more aggressively and defaults the agent tree to 64 slots; unsupported providers run it at xhigh.",
+      "text": "The ultra effort level is a client-side setting that maps to the provider's highest level and can make Muse Code delegate more aggressively; unsupported providers run it at xhigh.",
       "applies": [
         "*"
       ],
       "class": "harness",
       "source": "muse-code-configuration",
-      "locator": "Set reasoning effort, Premium reasoning tiers note",
+      "locator": "Set reasoning effort, Premium reasoning levels note",
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-settings-schema-version",
@@ -179,7 +179,7 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     }
   ]
 }

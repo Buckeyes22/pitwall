@@ -1,7 +1,7 @@
 # Public release checklist
 
 Pitwall is a solo-maintained, self-hosted project. Publishing does not depend on
-another maintainer, an outside reviewer, a PyPI account, or the project owner's
+another maintainer, an outside reviewer, or the project owner's
 RunPod credentials.
 
 Before creating a release tag:
@@ -17,9 +17,6 @@ The tag-triggered workflow then builds and verifies the wheel, source archive,
 SBOMs, checksums, attestations, and five GHCR images before creating the GitHub
 prerelease. It uses GitHub's short-lived workflow token for GHCR; it never reads
 or requests a RunPod API key.
-
-PyPI and TestPyPI are optional future channels and are not present in the
-current release workflow.
 
 After publication, install the GitHub artifacts in a clean environment and pull
 each image by digest. If a release is bad, publish a new version instead of

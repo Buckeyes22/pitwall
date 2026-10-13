@@ -356,7 +356,7 @@ class ProviderAdapterTests(unittest.TestCase):
         adapter = get_adapter("muse")
         default = adapter.parse(["prompt.md"], {}, Path("/tmp"))
         override = adapter.parse(["prompt.md", "--model=muse-spark-test"], {}, Path("/tmp"))
-        self.assertEqual(("muse-spark-1.3", False), (default.model, default.has_model_override))
+        self.assertEqual(("muse-wonder-1.0", False), (default.model, default.has_model_override))
         self.assertEqual(("muse-spark-test", True), (override.model, override.has_model_override))
         for flag in ("--json", "--prompt-file=other.md", "--session-id"):
             with self.subTest(flag=flag), self.assertRaisesRegex(UsageError, "managed by the shim"):
@@ -374,7 +374,7 @@ class ProviderAdapterTests(unittest.TestCase):
                 "exec",
                 "--yolo",
                 "--model",
-                "muse-spark-1.3",
+                "muse-wonder-1.0",
                 "--prompt-file",
                 "/run/prompt.deliver.md",
             ],

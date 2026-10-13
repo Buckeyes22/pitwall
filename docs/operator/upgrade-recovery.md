@@ -37,7 +37,6 @@ If a release is defective, stop publication, revoke compromised credentials,
 mark the affected releases withdrawn or deprecated in their release notes, and
 deprecate the affected image references so consumers move to a new digest.
 Publish an advisory and a new version; never replace published artifacts, tags,
-or digests in place. PyPI and TestPyPI are not current release channels, so
-current remediation acts on the immutable GitHub release assets and GHCR images
-described in `docs/release/external-release-gates.md`. See `RELEASING.md` and
+or digests in place. Remediation acts on the immutable GitHub release assets and
+GHCR images described in `docs/release/external-release-gates.md`. See `RELEASING.md` and
 `docs/operator/incident-response.md`.

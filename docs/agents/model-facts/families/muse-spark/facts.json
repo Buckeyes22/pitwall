@@ -29,7 +29,7 @@
           "evidence": [
             {
               "source": "meta-models",
-              "locator": "Available Muse Spark models table, muse-spark-1.2 row"
+              "locator": "Muse Spark, versions list, Muse Spark 1.2"
             }
           ]
         },
@@ -45,7 +45,7 @@
           "evidence": [
             {
               "source": "meta-models",
-              "locator": "Available Muse Spark models table, muse-spark-1.2 row"
+              "locator": "Muse Spark, versions list, Muse Spark 1.2"
             }
           ]
         },
@@ -111,7 +111,7 @@
           "evidence": [
             {
               "source": "meta-models",
-              "locator": "Available Muse Spark models table, muse-spark-1.3-contributor row"
+              "locator": "Muse Spark availability table, muse-spark-1.3-contributor row"
             }
           ]
         },
@@ -127,7 +127,7 @@
           "evidence": [
             {
               "source": "meta-models",
-              "locator": "Available Muse Spark models table, muse-spark-1.3-contributor row"
+              "locator": "Muse Spark availability table, muse-spark-1.3-contributor row"
             }
           ],
           "note": "The vendor marks audio understanding in 1.3 as not fully supported; quality may be degraded."
@@ -148,7 +148,7 @@
             },
             {
               "source": "muse-code-configuration",
-              "locator": "Set reasoning effort, Premium reasoning tiers note"
+              "locator": "Set reasoning effort, Premium reasoning levels note"
             }
           ],
           "note": "The Contributor variant is the recorded host route, so max (Standard-tier only) is not listed here; none is rejected. The muse route serves the Standard tier and adds max and ultra (Muse Code's client-side level)."
@@ -182,7 +182,7 @@
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-spark-max-standard-only",
@@ -197,7 +197,7 @@
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-spark-no-logprobs",
@@ -211,7 +211,7 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-spark-1-3-audio",
@@ -221,12 +221,12 @@
       ],
       "class": "vendor",
       "source": "meta-models",
-      "locator": "Available Muse Spark models, footnote on audio",
+      "locator": "Muse Spark, note on audio after the versions list",
       "surfaces": [
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-spark-contributor-trains",
@@ -236,12 +236,12 @@
       ],
       "class": "vendor",
       "source": "meta-models",
-      "locator": "Tiers",
+      "locator": "Muse Spark availability, Standard and Contributor mode paragraph",
       "surfaces": [
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-reminders-below-max",
@@ -255,7 +255,7 @@
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-ultra-effort",
@@ -265,12 +265,12 @@
       ],
       "class": "harness",
       "source": "muse-code-configuration",
-      "locator": "Set reasoning effort, Premium reasoning tiers note",
+      "locator": "Set reasoning effort, Premium reasoning levels note",
       "surfaces": [
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-13-needs-model-flag",
@@ -280,12 +280,12 @@
       ],
       "class": "harness",
       "source": "muse-code-configuration",
-      "locator": "Select a model; Set reasoning effort, Premium reasoning tiers note",
+      "locator": "Select a model; Set reasoning effort, Premium reasoning levels note",
       "surfaces": [
         "reference",
         "ledger"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
     }
   ]
 }

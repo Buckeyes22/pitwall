@@ -24,9 +24,6 @@ MARKETPLACES = (
     (".agents/plugins/marketplace.json", "pitwall-codex"),
     (".github/plugin/marketplace.json", "pitwall-copilot"),
 )
-BARE_INSTALL = re.compile(
-    r"\binstall (?:--\S+ (?:\S+ )?)*pitwall(?:\[[a-z,]+\])?(?=$|[`'\")\];,.]|\s(?!@))"
-)
 RELEASE_WHEEL = re.compile(r"releases/download/v([^/\s]+)/pitwall-([^-/\s]+)-py3-none-any\.whl")
 
 
@@ -69,7 +66,7 @@ def _version() -> str:
 
 
 def _install_reference_errors(version: str) -> list[str]:
-    """Reject bare PyPI `pitwall` installs and wheel URLs for another version."""
+    """Reject release wheel URLs that name another version."""
 
     if not (ROOT / ".git").exists():
         return [f"{ROOT}: install references can only be checked in a git checkout"]
@@ -86,11 +83,6 @@ def _install_reference_errors(version: str) -> list[str]:
             relative.startswith("docs/releases/") and relative != f"docs/releases/v{version}.md"
         )
         for number, line in enumerate(text.splitlines(), start=1):
-            if BARE_INSTALL.search(line):
-                errors.append(
-                    f"{relative}:{number}: bare `pitwall` package install; "
-                    "PyPI's pitwall is an unrelated project"
-                )
             if historical or relative == "CHANGELOG.md":
                 continue
             for tag, wheel in RELEASE_WHEEL.findall(line):

@@ -18,6 +18,7 @@ This is the self-contained runtime reference bundled with the installed skill. R
 - [MiniMax](#minimax)
 - [Qwen](#qwen)
 - [Muse Code](#muse-code)
+- [Muse Wonder](#muse-wonder)
 - [Gemini through Antigravity](#gemini-through-antigravity)
 - [Muse Glimmer](#muse-glimmer)
 - [DeepSeek V4](#deepseek-v4)
@@ -422,7 +423,7 @@ For small-context local models, omit unnecessary tool schemas so context remains
 
 ## Muse Code
 
-Meta's Muse Code runs Meta-hosted Muse Spark (`muse-spark-1.3` by default) and accepts no custom endpoint, so it is a model-bound harness: `muse-shim.sh <prompt-file> [--model <id>] [--reasoning-effort none|minimal|low|medium|high|xhigh|max|ultra]`. The shim delivers the prompt with `--prompt-file` (stdin sources go through a private file in the run directory), passes `--yolo` when unrestricted, and never forwards `--json`, `--prompt-file`, or `--session-id`.
+Meta's Muse Code runs Meta-hosted Muse models (`muse-wonder-1.0` by default, `muse-spark-1.3` for cheaper work) and accepts no custom endpoint, so it is a model-bound harness: `muse-shim.sh <prompt-file> [--model <id>] [--reasoning-effort none|minimal|low|medium|high|xhigh|max|ultra]`. The shim delivers the prompt with `--prompt-file` (stdin sources go through a private file in the run directory), passes `--yolo` when unrestricted, and never forwards `--json`, `--prompt-file`, or `--session-id`.
 
 State goal, authorization boundary, validation commands, and completion criteria in the prompt file as for any agentic harness; Muse Code reads `AGENTS.md`/`CLAUDE.md` on its own. Authenticate with `META_API_KEY`; exit `2` means a usage error and `130`/`143` an interrupted run.
 
@@ -444,28 +445,62 @@ State goal, authorization boundary, validation commands, and completion criteria
 - **Stated by harness:** On Linux the sandbox needs a working bubblewrap and a non-musl build; without it every shell command fails as an environment error. It also keeps .git, .muse, and .agents read-only.
 - **Stated by harness:** --disable-sandbox also lets the file tools write anywhere and forces full network egress, overriding --sandbox-network. Prefer --disable-approval when only prompts are the problem.
 - **Stated by harness:** Project AGENTS.md, rules, skills, and hooks load only in a trusted workspace; --trust-workspace or --yolo grants that. Committed project memory loads even when untrusted.
-- **Stated by harness:** The ultra effort level is a client-side setting that can make Muse Code delegate more aggressively and defaults the agent tree to 64 slots; unsupported providers run it at xhigh.
+- **Stated by harness:** The ultra effort level is a client-side setting that maps to the provider's highest level and can make Muse Code delegate more aggressively; unsupported providers run it at xhigh.
 - **Stated by harness:** A ~/.config/muse/settings.json without "schema_version": 1 fails every command at startup; a missing file is fine.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
 <!-- MODEL-FACTS:muse-spark END -->
+
+## Muse Wonder
+
+Muse Wonder (`muse-wonder-1.0`, preview) is Meta's most capable model and runs through the same model-bound Muse Code harness: `muse-shim.sh <prompt-file> --model muse-wonder-1.0 [--reasoning-effort minimal|low|medium|high|xhigh|max|ultra]`. It is the shim's default model. Use it for long multi-file changes and multi-hour agent runs; keep Muse Spark for high-volume or cost-sensitive work. Muse Wonder Full is available only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it.
+
+Prompt it as for Muse Code: goal, authorization boundary, validation commands, and completion criteria in the prompt file. Start at `high` effort and keep `max` for problems where correctness outweighs time. Contributor mode is on by default in Muse Code subscriptions; turn it off before sensitive work.
+
+<!-- MODEL-FACTS:muse-wonder START (generated from docs/agents/model-facts/families/muse-wonder; edit facts.json, not this block) -->
+- **Models:** `muse-wonder-1.0`, `muse-wonder-full`
+- **Context:** `muse-wonder-1.0`: 1,048,576 tokens.
+- **Effort:** `muse-wonder-1.0`: minimal, low, medium, high, xhigh, max.
+- **Effort on other values:** `muse-wonder-1.0`: other values are rejected.
+- **Stated by vendor (`muse-wonder-1.0`):** Muse Wonder is a preview aimed at long multi-file coding, multi-hour agent runs and sub-agent orchestration. Meta points high-volume, latency- or cost-sensitive work at Muse Spark instead.
+- **Stated by vendor (`muse-wonder-full`):** Muse Wonder Full exists only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it. Max effort on muse-wonder-1.0 does not select it.
+- **Stated by vendor (`muse-wonder-1.0`):** Never send reasoning effort none to Muse Wonder; Meta's API answers HTTP 400.
+- **Stated by vendor (`muse-wonder-1.0`):** Keep max effort on Muse Wonder for problems where a right answer beats speed, such as a concurrency bug or a large migration plan; it reasons longer and bills more tokens.
+- **Stated by vendor:** Reasoning tokens count against max_tokens or max_output_tokens and bill as output, so leave room for reasoning when sizing an output limit.
+- **Stated by vendor (`muse-wonder-1.0`):** Meta's coding-agent setup runs Muse Wonder at high effort as a sound default and keeps xhigh and max for deeper reasoning.
+- **Stated by vendor:** Muse Code subscriptions turn Contributor mode on by default, which lets Meta train on your prompts and code; switch it off in settings before sensitive work.
+- **Stated by harness (`muse-wonder-1.0`):** Muse Code's configuration page still names muse-spark-1.2 as the default and does not list Muse Wonder yet; pass --model muse-wonder-1.0 to reach it.
+- **Stated by harness:** A headless muse exec run cannot answer approval prompts. Choose --disable-approval (sandbox stays on) or --yolo (no guardrails, isolated container only) before it starts.
+- **Stated by harness:** The muse exec exit code reports how the run ended, not whether the work is right: 0 means the turn finished. Gate on your own test command.
+- **Stated by harness:** On Linux the sandbox needs a working bubblewrap and a non-musl build; without it every shell command fails as an environment error. It also keeps .git, .muse, and .agents read-only.
+- **Stated by harness:** --disable-sandbox also lets the file tools write anywhere and forces full network egress, overriding --sandbox-network. Prefer --disable-approval when only prompts are the problem.
+- **Stated by harness:** Project AGENTS.md, rules, skills, and hooks load only in a trusted workspace; --trust-workspace or --yolo grants that. Committed project memory loads even when untrusted.
+- **Stated by harness:** The ultra effort level is a client-side setting that maps to the provider's highest level and can make Muse Code delegate more aggressively; unsupported providers run it at xhigh.
+- **Stated by harness:** A ~/.config/muse/settings.json without "schema_version": 1 fails every command at startup; a missing file is fine.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-wonder/FACTS.md`.
+<!-- MODEL-FACTS:muse-wonder END -->
 
 ## Gemini through Antigravity
 
-Route Gemini with `agy-shim.sh <prompt-file> [flags]`. The shim defaults to `gemini-3.8-flash` at medium effort, always adds the dispatch workspace with `--add-dir`, and requests text output. Use `--model <base-id> --effort low|medium|high`, or pass an effort-suffixed live slug without `--effort`; Gemini 3.1 Pro supports only low and high in the verified catalog.
+Route Gemini with `agy-shim.sh <prompt-file> [flags]`. The shim defaults to `gemini-3.8-flash` at medium effort, always adds the dispatch workspace with `--add-dir`, and requests text output. Use `--model <base-id> --effort low|medium|high`, or pass an effort-suffixed live slug without `--effort`; Gemini 3.1 Pro supports only low and high in the verified catalog. Pin Gemini 4 Argon with `--model gemini-4-argon`; Antigravity offers it only on Google AI Ultra and Enterprise plans, so check `agy models` first.
 
-Use direct, precise instructions with the goal, constraints, success criteria, and output shape. Put critical behavior and formatting requirements first. Separate instructions, context, examples, and source material with consistent Markdown headings or XML-style tags. For long context, supply context first and put the exact task at the end. Add consistently formatted examples when the desired output is difficult to specify. Gemini 3 is concise by default, so request detail explicitly when needed. Retain the model's default sampling parameters; Google warns that changing Gemini 3.x temperature/top-p/top-k can degrade reasoning.
+Use direct, precise instructions with the goal, constraints, success criteria, and output shape. Put critical behavior and formatting requirements first. Separate instructions, context, examples, and source material with consistent Markdown headings or XML-style tags. For long context, supply context first and put the exact task at the end. Add consistently formatted examples when the desired output is difficult to specify. Gemini is concise by default, so request detail explicitly when needed. Leave temperature, top-p, and top-k unset; Google deprecated them in July 2026 and Gemini 4 Argon ignores them.
 
 Authentication is interactive unless Gemini API-key configuration is supplied, and model availability is tier-dependent. In restricted headless mode, a command tool can be auto-denied; the shim detects the `jetski: no output produced` diagnostic and converts the run to exit 77 (EX_NOPERM). Prefer an unrestricted run or a permissions.allow rule, and verify requested artifacts after every run.
 
 <!-- MODEL-FACTS:gemini START (generated from docs/agents/model-facts/families/gemini; edit facts.json, not this block) -->
-- **Models:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`
-- **Context:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
-- **Effort:** `gemini-3.8-flash`, `gemini-3.7-flash`: low, medium, high (default medium); `gemini-3.6-flash`, `gemini-3.5-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
+- **Models:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`
+- **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
+- **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
 - **Stated by vendor:** Leave temperature, top_p, and top_k out of Gemini requests; Google deprecated all three in July 2026.
-- **Stated by vendor (`gemini-3.7-flash`):** Do not ask Gemini 3.7 Flash for minimal thinking; the API rejects it. Use low, medium, or high.
-- **Stated by harness:** Antigravity's picker offers low, medium, and high for the Flash models but only low and high for 3.1 Pro.
+- **Stated by harness:** Antigravity serves Gemini 4 Argon only on Google AI Ultra and Enterprise plans, and not in its IDE; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.
 - **Stated by vendor:** Gemini models think dynamically by default and scale effort to the request; set thinking_level only to cap cost or force depth.
+- **Stated by vendor (`gemini-4-argon`):** Medium is Gemini 4 Argon's default and Google's pick for most code and agent work. Keep high for the hardest reasoning, and test all three levels before settling on the lowest that passes.
+- **Stated by vendor (`gemini-4-argon`):** On Gemini 4 Argon, thinking and the answer share max_output_tokens. Keep that limit at 32,768 or more, and lower thinking_level rather than the limit when tokens must be saved.
+- **Stated by vendor (`gemini-4-argon`):** A synchronous Gemini 4 Argon request is capped at 65,536 output tokens, and a higher max_output_tokens returns a 400. Longer answers need background execution (long decode).
+- **Stated by vendor (`gemini-4-argon`):** Gemini 4 Argon does not support explicit context caching. Remove cachedContents use; implicit caching covers prompts of 4,096 tokens or more.
+- **Stated by vendor (`gemini-4-argon`):** Hard Gemini 4 Argon prompts can take several minutes. Give the client at least a 15-minute timeout, or run the request in the background.
+- **Stated by vendor (`gemini-3.7-flash`):** Do not ask Gemini 3.7 Flash for minimal thinking; the API rejects it. Use low, medium, or high.
 - **Stated by vendor (`gemini-3.8-flash`):** Gemini 3.8 Flash spends more tokens on long agentic tasks by design; lower thinking_level to low for everyday work to cut cost.
 - **Stated by vendor (`gemini-3.8-flash`):** Do not ask Gemini 3.8 Flash for minimal thinking; the API returns an error. Use low, medium, or high.
 - **Stated by harness:** In headless mode a tool needing approval is denied without failing the run (exit 0, notice on stderr). Shell commands ask by default, so grant them with permissions.allow or the skip flag.
@@ -474,7 +509,7 @@ Authentication is interactive unless Gemini API-key configuration is supplied, a
 - **Stated by harness:** Headless runs use cached credentials. Sign in once with an interactive agy session; an unauthenticated run without a terminal exits with an authentication required error.
 - **Stated by harness:** agy loads GEMINI.md and AGENTS.md from each directory up to the workspace root, plus global copies under ~/.gemini. Rules combine rather than replace, and neither file takes frontmatter.
 - **Stated by harness:** A custom subagent whose tools list has a misspelled or unknown tool name can hang. Check names such as view_file and run_command exactly.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 
 ## Muse Glimmer

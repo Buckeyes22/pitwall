@@ -10,7 +10,7 @@
 | outputFormats | `["text", "json", "stream-json"]` | agy-headless |
 | effortFlag | `"--effort"` | agy-headless |
 | permissionDefault | `"request-review"` | agy-reference, agy-headless |
-| sandboxDefault | `"off"` | agy-reference, agy-sandbox, agy-sandbox |
+| sandboxDefault | `"off"` | agy-reference, agy-sandbox |
 | instructionFiles | `["GEMINI.md", "AGENTS.md"]` | agy-rules, agy-best-practices |
 | subagents | `true` | agy-subagents |
 
@@ -39,10 +39,10 @@ None.
 
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
-| agy-headless | harness | harness | 2026-09-28 | <https://antigravity.google/docs/cli/headless.md> |
-| agy-reference | harness | harness | 2026-09-28 | <https://antigravity.google/docs/cli/reference.md> |
-| agy-permissions | harness | harness | 2026-09-28 | <https://antigravity.google/docs/permissions.md> |
-| agy-sandbox | harness | harness | 2026-09-28 | <https://antigravity.google/docs/sandbox.md> |
-| agy-rules | harness | harness | 2026-09-28 | <https://antigravity.google/docs/rules.md> |
-| agy-subagents | harness | harness | 2026-09-28 | <https://antigravity.google/docs/subagents.md> |
-| agy-best-practices | harness | guidance | 2026-09-28 | <https://antigravity.google/docs/cli/best-practices.md> |
+| agy-headless | harness | harness | 2026-10-13 | <https://antigravity.google/docs/cli/headless.md> |
+| agy-reference | harness | harness | 2026-10-13 | <https://antigravity.google/docs/cli/reference.md> |
+| agy-permissions | harness | harness | 2026-10-13 | <https://antigravity.google/docs/permissions.md> |
+| agy-sandbox | harness | harness | 2026-10-13 | <https://antigravity.google/docs/sandbox.md> |
+| agy-rules | harness | harness | 2026-10-13 | <https://antigravity.google/docs/rules.md> |
+| agy-subagents | harness | harness | 2026-10-13 | <https://antigravity.google/docs/subagents.md> |
+| agy-best-practices | harness | guidance | 2026-10-13 | <https://antigravity.google/docs/cli/best-practices.md> |

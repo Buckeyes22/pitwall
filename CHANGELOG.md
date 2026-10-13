@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Gemini 4 Argon (`gemini-4-argon`) is a registered `agy` route with low, medium, and high effort,
+  and its facts and guidance are in the Gemini model facts. The Gemini prompting reference now
+  follows the model-card layout of the Claude references, and Google's Gemini 4 Argon model card is
+  kept as Markdown in `docs/prompting/model-cards/`. The `agy` default stays `gemini-3.8-flash`,
+  because Antigravity offers Argon only on Google AI Ultra and Enterprise plans.
+- Muse Wonder (`muse-wonder-1.0`, preview) is a registered `muse` route with its own model-facts
+  family, capability card, and prompting reference built from Meta's model card, which is kept as
+  Markdown in `docs/prompting/model-cards/`. Muse Wonder Full is recorded without a route because
+  Meta publishes no model id for it. `muse-wonder-1.0` is now the `muse` default
+  (it was `muse-spark-1.3`). The Claude routing
+  skill gains a Muse Code section.
+
+### Changed
+
+- Gemini 3.7 Flash and Gemini 3.5 Flash are recorded as retired on 2026-10-08, with successors
+  `gemini-3.8-flash` and `gemini-3.6-flash`, and are dropped from the Gemini capability card.
+- The `agy` route no longer offers `gemini-3.5-flash`, which Antigravity has stopped serving; use
+  `gemini-3.6-flash` or `gemini-3.8-flash`. `gemini-3.7-flash` stays because Antigravity still
+  offers it on Enterprise plans.
+- The Gemini routing guidance no longer tells you to keep the default sampling parameters. It now
+  says to leave `temperature`, `top_p`, and `top_k` unset, because Google deprecated them in July
+  2026.
+- The Codex, Copilot, and Claude routing skills list every capability card, adding the missing
+  `claude-haiku-5`, `hy`, `longcat`, and `mimo` cards.
+- Muse facts cite the sections of Meta's reorganized models page, and the Muse Code ultra-effort
+  statement drops a 64-slot agent-tree detail that Meta's documentation no longer states.
+- Model facts no longer cite the Antigravity models page for effort levels, since the page stopped
+  listing them; the `agy` sandbox default no longer cites the Antigravity app's preset table.
+
 ## [0.3.0a1] - 2026-10-07
 
 ### Added
