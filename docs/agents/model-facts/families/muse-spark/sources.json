@@ -9,10 +9,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:0579514685fff0bea40e30a34119fda8c32850417257db725439c2088509db63",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:0579514685fff0bea40e30a34119fda8c32850417257db725439c2088509db63",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:995eb0fcb8e2c20ce265a3b45e4f8ee175246288f5ee5df71faa98810d558bb2",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:995eb0fcb8e2c20ce265a3b45e4f8ee175246288f5ee5df71faa98810d558bb2",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "meta-reasoning",
@@ -21,10 +21,10 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:c923d50e70d0374e355b6d28b392cca8488c815fdcda1b261fbd89d2915c8042",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:c923d50e70d0374e355b6d28b392cca8488c815fdcda1b261fbd89d2915c8042",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:f51d74d314772abe6b140b00c09a76358309a133b76a49644c81d19af47afee3",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:f51d74d314772abe6b140b00c09a76358309a133b76a49644c81d19af47afee3",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "meta-coding-agents",
@@ -33,10 +33,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:1f33be7eab421742916d9707c9f9aa116c1f8c6ea8d8735d1cf0bb6283250cfd",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:1f33be7eab421742916d9707c9f9aa116c1f8c6ea8d8735d1cf0bb6283250cfd",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:a760fb21a91b0d1ebfe5b5b235d0be7be94aefb560588c5857f85cb64794a534",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:a760fb21a91b0d1ebfe5b5b235d0be7be94aefb560588c5857f85cb64794a534",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-changelog",
@@ -45,10 +45,10 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:7f1278b4689c958c5d30ad4dcd403f7b5afb85f2f76927e542e1ee76f9ffbfba",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:7f1278b4689c958c5d30ad4dcd403f7b5afb85f2f76927e542e1ee76f9ffbfba",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "muse-code-configuration",
@@ -57,10 +57,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:a43998535617ac19ecb45a39e9ba1c7565d51b6825ae88c4479a1a385dade504",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:a43998535617ac19ecb45a39e9ba1c7565d51b6825ae88c4479a1a385dade504",
+      "reviewedAt": "2026-10-13"
     }
   ],
   "notPublished": [],

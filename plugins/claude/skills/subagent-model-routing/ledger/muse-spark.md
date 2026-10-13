@@ -16,5 +16,5 @@
 - **Effort:** minimal, low, medium, high, xhigh.
 - **Effort on other values:** other values are rejected.
 - **Stated by harness (`muse-spark-1.3`):** Muse Code defaults to muse-spark-1.2; pass --model muse-spark-1.3 to reach the current model. Its max effort works on both tiers there.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
 <!-- MODEL-FACTS:muse-spark END -->

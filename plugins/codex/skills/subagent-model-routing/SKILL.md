@@ -112,7 +112,7 @@ The canonical Codex-hosted transport/model inventory is generated from `src/pitw
 **Tier example (seed — copy into your own ledger and adjust):**
 GLM-5.3 > Kimi K3 > MiniMax-M3; Grok 4.7 and local/self-hosted models remain unranked pending local evidence. Within the Claude family, the officially hosted system cards provide a provisional capability prior of Fable 5.1 > Opus 5.5 > Sonnet 5.5, but not a cross-provider local ranking: use Sonnet 5.5 as the default workhorse, Opus 5.5 for difficult or verification-heavy work, and Fable 5.1 for the hardest generally available Claude work where its safeguards and possible fallback are acceptable. GLM-5.3 holds the default external authoring seat; Kimi is mid-tier utility, parallel candidates, and burst; MiniMax M3 handles Sonnet-grade throughput (stall policy retained). Native Codex work stays inline and is not a shim seat.
 
-Per-model capability cards (excels-at / struggles-with / operational caveats / evidence) live in the Claude Code package within a Pitwall source clone at `plugins/claude/skills/subagent-model-routing/ledger/{claude-fable-5,claude-opus-4.8,claude-sonnet-5,deepseek,gemini,gemma,glm,grok,kimi,minimax,muse-glimmer,muse-spark,qwen}.md` (or directly below `plugins/` in a legacy standalone source checkout). They are maintained there by that package's `/pitwall:distill` command and are read-only reference material from Codex/Copilot; they are present in a source clone but not in an isolated plugin-cache install.
+Per-model capability cards (excels-at / struggles-with / operational caveats / evidence) live in the Claude Code package within a Pitwall source clone at `plugins/claude/skills/subagent-model-routing/ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` (or directly below `plugins/` in a legacy standalone source checkout). They are maintained there by that package's `/pitwall:distill` command and are read-only reference material from Codex/Copilot; they are present in a source clone but not in an isolated plugin-cache install.
 
 Per-dispatch ceiling: the repo-installed shim enforces `PITWALL_AGENTS_TIMEOUT_SECS` (default 1140s, about 19 min) per run and emits a final `SHIM-DONE exit=<n>` sentinel; its absence in a captured blob signals clipped or still-running output. Long flat jobs (>~15 min expected wall): split the prompt into smaller units, or raise `PITWALL_AGENTS_TIMEOUT_SECS` (and your host agent's own command timeout) deliberately.
 
@@ -261,8 +261,16 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 - **Context:** 1,048,576 tokens.
 - **Effort:** minimal, low, medium, high, xhigh.
 - **Effort on other values:** other values are rejected.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
 <!-- MODEL-FACTS:muse-spark END -->
+- Muse Wonder: pin `--model muse-wonder-1.0` (the default stays `muse-spark-1.3`).
+<!-- MODEL-FACTS:muse-wonder START (generated from docs/agents/model-facts/families/muse-wonder; edit facts.json, not this block) -->
+- **Models:** `muse-wonder-1.0`, `muse-wonder-full`
+- **Context:** `muse-wonder-1.0`: 1,048,576 tokens.
+- **Effort:** `muse-wonder-1.0`: minimal, low, medium, high, xhigh, max.
+- **Effort on other values:** `muse-wonder-1.0`: other values are rejected.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-wonder/FACTS.md`.
+<!-- MODEL-FACTS:muse-wonder END -->
 - Full reference: `references/model-prompting.md#muse-code`
 
 #### Claude Sonnet 5.5

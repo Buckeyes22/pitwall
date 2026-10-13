@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "unit": "families/muse-wonder",
+  "promptReference": "prompting/meta-muse-wonder-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#muse-wonder",
+  "models": {
+    "muse-wonder-1.0": {
+      "status": "current",
+      "displayName": "Muse Wonder",
+      "routes": [
+        {
+          "harness": "muse",
+          "model": "muse-wonder-1.0",
+          "register": true,
+          "effortValues": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        }
+      ],
+      "facts": {
+        "contextWindow": {
+          "value": 1048576,
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-models",
+              "locator": "Muse Wonder, second paragraph"
+            }
+          ]
+        },
+        "inputModalities": {
+          "value": [
+            "text",
+            "image",
+            "video",
+            "audio",
+            "pdf"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-models",
+              "locator": "Muse Wonder, second paragraph"
+            }
+          ]
+        },
+        "effortValues": {
+          "value": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-reasoning",
+              "locator": "How it works, effort table"
+            },
+            {
+              "source": "meta-models",
+              "locator": "Muse Wonder, second paragraph"
+            }
+          ],
+          "note": "Muse Code adds its client-side ultra level, which the route accepts."
+        },
+        "effortOnOther": {
+          "value": {
+            "behaviour": "error"
+          },
+          "method": "reviewed",
+          "evidence": [
+            {
+              "source": "meta-reasoning",
+              "locator": "How it works, effort table, none row"
+            }
+          ]
+        }
+      }
+    },
+    "muse-wonder-full": {
+      "status": "current",
+      "displayName": "Muse Wonder Full",
+      "facts": {}
+    }
+  },
+  "guidance": [
+    {
+      "id": "muse-wonder-choose",
+      "text": "Muse Wonder is a preview aimed at long multi-file coding, multi-hour agent runs and sub-agent orchestration. Meta points high-volume, latency- or cost-sensitive work at Muse Spark instead.",
+      "applies": [
+        "muse-wonder-1.0"
+      ],
+      "class": "vendor",
+      "source": "meta-models",
+      "locator": "Choose Muse Wonder or Muse Spark",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-wonder-full-muse-code-only",
+      "text": "Muse Wonder Full exists only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it. Max effort on muse-wonder-1.0 does not select it.",
+      "applies": [
+        "muse-wonder-full"
+      ],
+      "class": "vendor",
+      "source": "meta-models",
+      "locator": "Muse Wonder availability",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-wonder-none-400",
+      "text": "Never send reasoning effort none to Muse Wonder; Meta's API answers HTTP 400.",
+      "applies": [
+        "muse-wonder-1.0"
+      ],
+      "class": "vendor",
+      "source": "meta-reasoning",
+      "locator": "How it works, effort table, none row",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-wonder-max-effort",
+      "text": "Keep max effort on Muse Wonder for problems where a right answer beats speed, such as a concurrency bug or a large migration plan; it reasons longer and bills more tokens.",
+      "applies": [
+        "muse-wonder-1.0"
+      ],
+      "class": "vendor",
+      "source": "meta-reasoning",
+      "locator": "Max reasoning on Muse Wonder",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-wonder-reasoning-budget",
+      "text": "Reasoning tokens count against max_tokens or max_output_tokens and bill as output, so leave room for reasoning when sizing an output limit.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "meta-reasoning",
+      "locator": "How it works",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-wonder-coding-effort",
+      "text": "Meta's coding-agent setup runs Muse Wonder at high effort as a sound default and keeps xhigh and max for deeper reasoning.",
+      "applies": [
+        "muse-wonder-1.0"
+      ],
+      "class": "vendor",
+      "source": "meta-coding-agents",
+      "locator": "Set up Codex, model_reasoning_effort",
+      "surfaces": [
+        "reference",
+        "ledger"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-wonder-contributor-default",
+      "text": "Muse Code subscriptions turn Contributor mode on by default, which lets Meta train on your prompts and code; switch it off in settings before sensitive work.",
+      "applies": [
+        "*"
+      ],
+      "class": "vendor",
+      "source": "meta-models",
+      "locator": "Muse Wonder availability, Standard and Contributor mode",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "muse-code-wonder-model-flag",
+      "text": "Muse Code's configuration page still names muse-spark-1.2 as the default and does not list Muse Wonder yet; pass --model muse-wonder-1.0 to reach it.",
+      "applies": [
+        "muse-wonder-1.0"
+      ],
+      "class": "harness",
+      "source": "muse-code-configuration",
+      "locator": "Select a model",
+      "surfaces": [
+        "card",
+        "reference"
+      ],
+      "reviewedAt": "2026-10-13"
+    }
+  ]
+}

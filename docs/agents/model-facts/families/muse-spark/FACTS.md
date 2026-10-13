@@ -15,11 +15,11 @@
 - Stated by vendor (meta-reasoning, How it works, effort table, none row): Never send reasoning effort none to Muse Spark; the API answers HTTP 400. Use low for direct-answer work.
 - Stated by vendor (meta-reasoning, How it works, Max reasoning note): The max effort exists only on Standard-tier muse-spark-1.3; Contributor variants do not offer it, so cap those at xhigh.
 - Stated by vendor (meta-reasoning, Log probabilities): Leave logprobs off; Muse Spark is a reasoning model and a request that asks for log probabilities fails with HTTP 400.
-- Stated by vendor (meta-models, Available Muse Spark models, footnote on audio): For audio input prefer muse-spark-1.2; audio handling in 1.3 is not fully supported and answer quality may drop.
-- Stated by vendor (meta-models, Tiers): Contributor-tier routes are cheaper because the vendor may train on prompts and completions; keep sensitive material off them.
+- Stated by vendor (meta-models, Muse Spark, note on audio after the versions list): For audio input prefer muse-spark-1.2; audio handling in 1.3 is not fully supported and answer quality may drop.
+- Stated by vendor (meta-models, Muse Spark availability, Standard and Contributor mode paragraph): Contributor-tier routes are cheaper because the vendor may train on prompts and completions; keep sensitive material off them.
 - Stated by harness (muse-code-changelog, 1.4.0, Changed, reminders line 64): Muse Code turns on its todo, memory, and goal reminders only for 1.2 and 1.3 sessions below max effort.
-- Stated by harness (muse-code-configuration, Set reasoning effort, Premium reasoning tiers note): Muse Code's ultra effort is a client-side level that maps to the provider's highest supported tier and may delegate more; where the provider lacks it, the request runs at xhigh. none is rejected.
-- Stated by harness (muse-code-configuration, Select a model; Set reasoning effort, Premium reasoning tiers note): Muse Code defaults to muse-spark-1.2; pass --model muse-spark-1.3 to reach the current model. Its max effort works on both tiers there.
+- Stated by harness (muse-code-configuration, Set reasoning effort, Premium reasoning levels note): Muse Code's ultra effort is a client-side level that maps to the provider's highest supported tier and may delegate more; where the provider lacks it, the request runs at xhigh. none is rejected.
+- Stated by harness (muse-code-configuration, Select a model; Set reasoning effort, Premium reasoning levels note): Muse Code defaults to muse-spark-1.2; pass --model muse-spark-1.3 to reach the current model. Its max effort works on both tiers there.
 
 ## Disagreements
 
@@ -37,8 +37,8 @@ None recorded.
 
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
-| meta-models | vendor | model | 2026-09-28 | <https://dev.meta.ai/docs/models.md> |
-| meta-reasoning | vendor | effort | 2026-09-28 | <https://dev.meta.ai/docs/reasoning.md> |
-| meta-coding-agents | vendor | guidance | 2026-09-28 | <https://dev.meta.ai/docs/coding-agents.md> |
-| muse-code-changelog | harness | changes | 2026-09-28 | <https://dev.meta.ai/docs/muse-code/changelog.md> |
-| muse-code-configuration | harness | harness | 2026-09-28 | <https://dev.meta.ai/docs/muse-code/configuration.md> |
+| meta-models | vendor | model | 2026-10-13 | <https://dev.meta.ai/docs/models.md> |
+| meta-reasoning | vendor | effort | 2026-10-13 | <https://dev.meta.ai/docs/reasoning.md> |
+| meta-coding-agents | vendor | guidance | 2026-10-13 | <https://dev.meta.ai/docs/coding-agents.md> |
+| muse-code-changelog | harness | changes | 2026-10-13 | <https://dev.meta.ai/docs/muse-code/changelog.md> |
+| muse-code-configuration | harness | harness | 2026-10-13 | <https://dev.meta.ai/docs/muse-code/configuration.md> |

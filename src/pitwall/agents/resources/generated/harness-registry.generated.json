@@ -676,6 +676,23 @@
           "promptReference": "docs/prompting/meta-muse-code-prompting-reference.md",
           "provenance": "model-facts:families/muse-spark",
           "runtimeReference": "references/model-prompting.md#muse-code"
+        },
+        "muse-wonder-1.0": {
+          "aliases": [],
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/muse-wonder.md",
+          "displayName": "Muse Wonder",
+          "effortValues": [
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/meta-muse-wonder-prompting-reference.md",
+          "provenance": "model-facts:families/muse-wonder",
+          "runtimeReference": "references/model-prompting.md#muse-wonder"
         }
       },
       "nativeHosts": [],

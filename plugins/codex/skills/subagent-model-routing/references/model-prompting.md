@@ -18,6 +18,7 @@ This is the self-contained runtime reference bundled with the installed skill. R
 - [MiniMax](#minimax)
 - [Qwen](#qwen)
 - [Muse Code](#muse-code)
+- [Muse Wonder](#muse-wonder)
 - [Gemini through Antigravity](#gemini-through-antigravity)
 - [Muse Glimmer](#muse-glimmer)
 - [DeepSeek V4](#deepseek-v4)
@@ -444,10 +445,39 @@ State goal, authorization boundary, validation commands, and completion criteria
 - **Stated by harness:** On Linux the sandbox needs a working bubblewrap and a non-musl build; without it every shell command fails as an environment error. It also keeps .git, .muse, and .agents read-only.
 - **Stated by harness:** --disable-sandbox also lets the file tools write anywhere and forces full network egress, overriding --sandbox-network. Prefer --disable-approval when only prompts are the problem.
 - **Stated by harness:** Project AGENTS.md, rules, skills, and hooks load only in a trusted workspace; --trust-workspace or --yolo grants that. Committed project memory loads even when untrusted.
-- **Stated by harness:** The ultra effort level is a client-side setting that can make Muse Code delegate more aggressively and defaults the agent tree to 64 slots; unsupported providers run it at xhigh.
+- **Stated by harness:** The ultra effort level is a client-side setting that maps to the provider's highest level and can make Muse Code delegate more aggressively; unsupported providers run it at xhigh.
 - **Stated by harness:** A ~/.config/muse/settings.json without "schema_version": 1 fails every command at startup; a missing file is fine.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
 <!-- MODEL-FACTS:muse-spark END -->
+
+## Muse Wonder
+
+Muse Wonder (`muse-wonder-1.0`, preview) is Meta's most capable model and runs through the same model-bound Muse Code harness: `muse-shim.sh <prompt-file> --model muse-wonder-1.0 [--reasoning-effort minimal|low|medium|high|xhigh|max|ultra]`. The shim default stays `muse-spark-1.3`, so pin Wonder explicitly. Use it for long multi-file changes and multi-hour agent runs; keep Muse Spark for high-volume or cost-sensitive work. Muse Wonder Full is available only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it.
+
+Prompt it as for Muse Code: goal, authorization boundary, validation commands, and completion criteria in the prompt file. Start at `high` effort and keep `max` for problems where correctness outweighs time. Contributor mode is on by default in Muse Code subscriptions; turn it off before sensitive work.
+
+<!-- MODEL-FACTS:muse-wonder START (generated from docs/agents/model-facts/families/muse-wonder; edit facts.json, not this block) -->
+- **Models:** `muse-wonder-1.0`, `muse-wonder-full`
+- **Context:** `muse-wonder-1.0`: 1,048,576 tokens.
+- **Effort:** `muse-wonder-1.0`: minimal, low, medium, high, xhigh, max.
+- **Effort on other values:** `muse-wonder-1.0`: other values are rejected.
+- **Stated by vendor (`muse-wonder-1.0`):** Muse Wonder is a preview aimed at long multi-file coding, multi-hour agent runs and sub-agent orchestration. Meta points high-volume, latency- or cost-sensitive work at Muse Spark instead.
+- **Stated by vendor (`muse-wonder-full`):** Muse Wonder Full exists only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it. Max effort on muse-wonder-1.0 does not select it.
+- **Stated by vendor (`muse-wonder-1.0`):** Never send reasoning effort none to Muse Wonder; Meta's API answers HTTP 400.
+- **Stated by vendor (`muse-wonder-1.0`):** Keep max effort on Muse Wonder for problems where a right answer beats speed, such as a concurrency bug or a large migration plan; it reasons longer and bills more tokens.
+- **Stated by vendor:** Reasoning tokens count against max_tokens or max_output_tokens and bill as output, so leave room for reasoning when sizing an output limit.
+- **Stated by vendor (`muse-wonder-1.0`):** Meta's coding-agent setup runs Muse Wonder at high effort as a sound default and keeps xhigh and max for deeper reasoning.
+- **Stated by vendor:** Muse Code subscriptions turn Contributor mode on by default, which lets Meta train on your prompts and code; switch it off in settings before sensitive work.
+- **Stated by harness (`muse-wonder-1.0`):** Muse Code's configuration page still names muse-spark-1.2 as the default and does not list Muse Wonder yet; pass --model muse-wonder-1.0 to reach it.
+- **Stated by harness:** A headless muse exec run cannot answer approval prompts. Choose --disable-approval (sandbox stays on) or --yolo (no guardrails, isolated container only) before it starts.
+- **Stated by harness:** The muse exec exit code reports how the run ended, not whether the work is right: 0 means the turn finished. Gate on your own test command.
+- **Stated by harness:** On Linux the sandbox needs a working bubblewrap and a non-musl build; without it every shell command fails as an environment error. It also keeps .git, .muse, and .agents read-only.
+- **Stated by harness:** --disable-sandbox also lets the file tools write anywhere and forces full network egress, overriding --sandbox-network. Prefer --disable-approval when only prompts are the problem.
+- **Stated by harness:** Project AGENTS.md, rules, skills, and hooks load only in a trusted workspace; --trust-workspace or --yolo grants that. Committed project memory loads even when untrusted.
+- **Stated by harness:** The ultra effort level is a client-side setting that maps to the provider's highest level and can make Muse Code delegate more aggressively; unsupported providers run it at xhigh.
+- **Stated by harness:** A ~/.config/muse/settings.json without "schema_version": 1 fails every command at startup; a missing file is fine.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-wonder/FACTS.md`.
+<!-- MODEL-FACTS:muse-wonder END -->
 
 ## Gemini through Antigravity
 

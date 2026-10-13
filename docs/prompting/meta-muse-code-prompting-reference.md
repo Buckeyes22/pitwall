@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Vendor | Meta |
-| Models in scope | Muse Spark 1.3 (and 1.2) via Muse Code |
+| Models in scope | Muse Spark 1.3 (and 1.2) and Muse Wonder (`muse-wonder-1.0`) via Muse Code; Wonder's model guidance is in [meta-muse-wonder-prompting-reference.md](meta-muse-wonder-prompting-reference.md) |
 | Primary access | Meta Model API / Muse Code CLI |
 | Official guidance | dev.meta.ai docs |
 | Compiled | 2026-08-26 |

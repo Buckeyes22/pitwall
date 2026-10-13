@@ -244,6 +244,26 @@ If your CLI has MCP tools configured, prompts may direct their use.
 <!-- MODEL-FACTS:gemini END -->
 - Full reference: `references/model-prompting.md#gemini-through-antigravity`
 
+### Muse Code
+
+- **Route:** `muse-shim.sh` runs Meta's model-bound Muse Code with a private prompt file and defaults to `muse-spark-1.3`. Pin Muse Wonder with `--model muse-wonder-1.0`.
+- **Reasoning control:** `--reasoning-effort minimal|low|medium|high|xhigh|max|ultra`; `none` is rejected by Meta's API.
+<!-- MODEL-FACTS:muse-spark START (generated from docs/agents/model-facts/families/muse-spark; edit facts.json, not this block) -->
+- **Models:** `muse-spark-1.2`, `muse-spark-1.3`
+- **Context:** 1,048,576 tokens.
+- **Effort:** minimal, low, medium, high, xhigh.
+- **Effort on other values:** other values are rejected.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
+<!-- MODEL-FACTS:muse-spark END -->
+<!-- MODEL-FACTS:muse-wonder START (generated from docs/agents/model-facts/families/muse-wonder; edit facts.json, not this block) -->
+- **Models:** `muse-wonder-1.0`, `muse-wonder-full`
+- **Context:** `muse-wonder-1.0`: 1,048,576 tokens.
+- **Effort:** `muse-wonder-1.0`: minimal, low, medium, high, xhigh, max.
+- **Effort on other values:** `muse-wonder-1.0`: other values are rejected.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-wonder/FACTS.md`.
+<!-- MODEL-FACTS:muse-wonder END -->
+- Full reference: `references/model-prompting.md#muse-code` and `references/model-prompting.md#muse-wonder`
+
 ---
 
 ## The ledger (observation-driven across sessions)
@@ -251,7 +271,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 The ledger keeps routing opinions from freezing into folklore. It has two tiers, with one-way flow: hot -> warm.
 
 - **Hot -- machine-local observations.** `~/.local/state/pitwall/agents/ledger/observations.jsonl`, append-only JSONL. The repo-installed shims log quantitative records automatically with `"source":"shim"`: `event:"started"` at dispatch start and `event:"finished"` at terminal with `model`, `wall_s`, `exit`, and `outcome`. Override the path with `PITWALL_AGENTS_LEDGER`.
-- **Warm -- repo-committed knowledge.** `ledger/{claude-fable-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,kimi,minimax,muse-glimmer,muse-spark,qwen}.md` capability cards plus the marked rankings block at the top of Picking the model. The three Claude cards record Codex/Copilot-only shim targets; this Claude-hosted skill still uses native `Agent` calls for Claude work. These are seed examples -- maintain them via `/pitwall:distill` and your own ledger.
+- **Warm -- repo-committed knowledge.** `ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` capability cards plus the marked rankings block at the top of Picking the model. The three Claude cards record Codex/Copilot-only shim targets; this Claude-hosted skill still uses native `Agent` calls for Claude work. These are seed examples -- maintain them via `/pitwall:distill` and your own ledger.
 
 Distill counts finished shim records for quality/rate math; started records are for orphan visibility.
 

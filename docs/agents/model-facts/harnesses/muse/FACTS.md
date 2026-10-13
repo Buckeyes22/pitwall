@@ -21,7 +21,7 @@
 - Stated by harness (muse-code-permissions, Run inside the sandbox): On Linux the sandbox needs a working bubblewrap and a non-musl build; without it every shell command fails as an environment error. It also keeps .git, .muse, and .agents read-only.
 - Stated by harness (muse-code-permissions, Run without guardrails): --disable-sandbox also lets the file tools write anywhere and forces full network egress, overriding --sandbox-network. Prefer --disable-approval when only prompts are the problem.
 - Stated by harness (muse-code-configuration, Project instructions with AGENTS.md; Memory loads in untrusted workspaces): Project AGENTS.md, rules, skills, and hooks load only in a trusted workspace; --trust-workspace or --yolo grants that. Committed project memory loads even when untrusted.
-- Stated by harness (muse-code-configuration, Set reasoning effort, Premium reasoning tiers note): The ultra effort level is a client-side setting that can make Muse Code delegate more aggressively and defaults the agent tree to 64 slots; unsupported providers run it at xhigh.
+- Stated by harness (muse-code-configuration, Set reasoning effort, Premium reasoning levels note): The ultra effort level is a client-side setting that maps to the provider's highest level and can make Muse Code delegate more aggressively; unsupported providers run it at xhigh.
 - Stated by harness (muse-code-configuration, The settings file, IMPORTANT note): A ~/.config/muse/settings.json without "schema_version": 1 fails every command at startup; a missing file is fine.
 
 ## Disagreements
@@ -40,8 +40,8 @@ None recorded.
 
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
-| muse-code | harness | harness | 2026-09-28 | <https://dev.meta.ai/docs/muse-code.md> |
-| muse-code-configuration | harness | harness | 2026-09-28 | <https://dev.meta.ai/docs/muse-code/configuration.md> |
-| muse-code-permissions | harness | harness | 2026-09-28 | <https://dev.meta.ai/docs/muse-code/permissions.md> |
-| muse-code-extending | harness | harness | 2026-09-28 | <https://dev.meta.ai/docs/muse-code/extending.md> |
-| muse-code-changelog | harness | changes | 2026-09-28 | <https://dev.meta.ai/docs/muse-code/changelog.md> |
+| muse-code | harness | harness | 2026-10-13 | <https://dev.meta.ai/docs/muse-code.md> |
+| muse-code-configuration | harness | harness | 2026-10-13 | <https://dev.meta.ai/docs/muse-code/configuration.md> |
+| muse-code-permissions | harness | harness | 2026-10-13 | <https://dev.meta.ai/docs/muse-code/permissions.md> |
+| muse-code-extending | harness | harness | 2026-10-13 | <https://dev.meta.ai/docs/muse-code/extending.md> |
+| muse-code-changelog | harness | changes | 2026-10-13 | <https://dev.meta.ai/docs/muse-code/changelog.md> |

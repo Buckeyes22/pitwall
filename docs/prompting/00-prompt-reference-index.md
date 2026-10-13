@@ -1,6 +1,6 @@
 # Prompt Engineering Reference Collection — Index
 
-A set of nineteen standalone, first-party-grounded model, transport, and prompt-engineering reference documents. Each is self-contained; this index records what they are, how they were built, and the cross-cutting caveats that apply to all of them.
+A set of twenty standalone, first-party-grounded model, transport, and prompt-engineering reference documents. Each is self-contained; this index records what they are, how they were built, and the cross-cutting caveats that apply to all of them.
 
 | Model family | Document |
 |---|---|
@@ -17,6 +17,7 @@ A set of nineteen standalone, first-party-grounded model, transport, and prompt-
 | MiniMax | `docs/prompting/minimax-prompting-reference.md` |
 | Meta (Muse Glimmer) | `docs/prompting/meta-muse-glimmer-prompting-reference.md` |
 | Meta (Muse Code / Muse Spark) | `docs/prompting/meta-muse-code-prompting-reference.md` |
+| Meta (Muse Wonder; model-card evidence) | `docs/prompting/meta-muse-wonder-prompting-reference.md` |
 | DeepSeek V4 | `docs/prompting/deepseek-prompting-reference.md` |
 | Meituan LongCat | `docs/prompting/meituan-longcat-prompting-reference.md` |
 | Xiaomi MiMo | `docs/prompting/xiaomi-mimo-prompting-reference.md` |
@@ -32,7 +33,7 @@ Pi, Hermes Agent, Cline CLI, goose, and DeepSeek Harness (`dsh`) are harness-onl
 
 "Official" was scoped to **first-party content only**: vendor developer docs and API platforms, the vendor's own GitHub org, and HuggingFace model cards published by the vendor's org account. Third-party blogs, aggregators, and community guides were excluded except where they pointed to a first-party source, in which case the first-party source was used. Where a document includes a non-first-party claim (e.g., a widely-reported model behavior not in the vendor's docs, or an external reference recommendation), it is **explicitly flagged as non-official** in that document.
 
-For the two vendors whose English/international docs were ambiguous (Z.ai and MiniMax), the documentation **indexes were pulled directly** rather than inferring coverage from search results, to confirm whether a dedicated prompting page actually exists. Content was extracted from live official pages where the docs were machine-readable; the xAI reference uses only `docs.x.ai` pages for Grok 4.5 and Grok Build. The three version-specific Claude references cite Anthropic's official hosted system cards; those cards are evaluation reports, so each reference labels its operational prompting advice as evidence-derived guidance. The vendor publications are linked, not copied into this repository, with one exception: Google's Gemini 4 Argon model card is also kept as a Markdown conversion in `docs/prompting/model-cards/`, and the Gemini reference derives its routing guidance from it.
+For the two vendors whose English/international docs were ambiguous (Z.ai and MiniMax), the documentation **indexes were pulled directly** rather than inferring coverage from search results, to confirm whether a dedicated prompting page actually exists. Content was extracted from live official pages where the docs were machine-readable; the xAI reference uses only `docs.x.ai` pages for Grok 4.5 and Grok Build. The three version-specific Claude references cite Anthropic's official hosted system cards; those cards are evaluation reports, so each reference labels its operational prompting advice as evidence-derived guidance. The vendor publications are linked, not copied into this repository, with two exceptions: Google's Gemini 4 Argon model card and Meta's Muse Wonder model card are also kept as Markdown conversions in `docs/prompting/model-cards/`, and the Gemini and Muse Wonder references derive their routing guidance from them.
 
 Compiled June–July 2026. Every document carries its own source list; prefer those links over this summary.
 
