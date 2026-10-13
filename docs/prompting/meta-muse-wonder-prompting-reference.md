@@ -8,7 +8,7 @@ This is the canonical project reference for routing Muse Wonder through `muse-sh
 - Meta model documentation: [Models — Muse Wonder](https://dev.meta.ai/docs/models#muse-wonder) and [Reasoning](https://dev.meta.ai/docs/reasoning)
 - Model id: `muse-wonder-1.0` (preview)
 - Route: `~/.claude/scripts/muse-shim.sh <prompt-file> --model muse-wonder-1.0 [--reasoning-effort <level>]`
-- Default route: the shim still defaults to `muse-spark-1.3`, so pin Wonder explicitly.
+- Default route: the shim defaults to `muse-wonder-1.0`; pass `--model muse-spark-1.3` for cheaper, high-volume work.
 - Muse Wonder Full, the higher-capability variant, is available only inside Muse Code on the Power Usage and Maximum Usage subscriptions. Meta publishes no model id for it, so it has no route here. Setting `max` effort on `muse-wonder-1.0` does not select it.
 
 ## Evidence-backed capability profile
@@ -60,7 +60,7 @@ These statements come from Meta's models, reasoning, and coding-agent pages.
 
 ## Operational caveats
 
-- Muse Code's own configuration page still names `muse-spark-1.2` as the default and does not list Muse Wonder yet. Pass `--model muse-wonder-1.0` explicitly, and treat a model-not-found error as an account or CLI version issue.
+- Muse Code's own configuration page still names `muse-spark-1.2` as the default and does not list Muse Wonder yet. The shim passes `--model muse-wonder-1.0` explicitly; treat a model-not-found error as an account or CLI version issue.
 - Muse Code's `ultra` effort is a client-side level; it maps to the provider's highest level and can increase delegation.
 - Verify workspace changes and decisive checks from the host after the shim returns.
 

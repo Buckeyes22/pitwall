@@ -5,7 +5,7 @@
 - **Tier:** Hosted vendor model (preview) — unranked pending local evidence
 - **Excels at:** (not yet benchmarked against the roster; Meta's card reports leading DeepSWE 1.1 and SWE-Marathon results)
 - **Struggles with:** (observations pending; Meta's card lists visual and spatial reasoning, especially 3D, as a known limitation)
-- **Operational caveats:** Meta-hosted, closed weights, reached through Muse Code with `--model muse-wonder-1.0`; the shim default stays `muse-spark-1.3`. Muse Wonder Full is Muse Code only, on the Power Usage and Maximum Usage plans, with no published model id. `META_API_KEY`; prompt delivered by file; exit `2` is a usage error, `130`/`143` signals.
+- **Operational caveats:** Meta-hosted, closed weights, reached through Muse Code; `muse-wonder-1.0` is the shim's default model. Muse Wonder Full is Muse Code only, on the Power Usage and Maximum Usage plans, with no published model id. `META_API_KEY`; prompt delivered by file; exit `2` is a usage error, `130`/`143` signals.
 - **Evidence:** Meta's Muse Wonder model card and Model API documentation; replace seed observations with local evidence via `/pitwall:distill`
 - **Runtime reference:** [../references/model-prompting.md#muse-wonder](../references/model-prompting.md#muse-wonder)
 - **Last distilled:** 2026-10-13 (seed)

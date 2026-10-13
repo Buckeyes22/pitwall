@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Muse Wonder (`muse-wonder-1.0`, preview) is a registered `muse` route with its own model-facts
   family, capability card, and prompting reference built from Meta's model card, which is kept as
   Markdown in `docs/prompting/model-cards/`. Muse Wonder Full is recorded without a route because
-  Meta publishes no model id for it. The `muse` default stays `muse-spark-1.3`. The Claude routing
+  Meta publishes no model id for it. `muse-wonder-1.0` is now the `muse` default
+  (it was `muse-spark-1.3`). The Claude routing
   skill gains a Muse Code section.
 
 ### Changed

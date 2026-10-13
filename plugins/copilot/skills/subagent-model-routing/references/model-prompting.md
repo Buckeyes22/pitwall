@@ -423,7 +423,7 @@ For small-context local models, omit unnecessary tool schemas so context remains
 
 ## Muse Code
 
-Meta's Muse Code runs Meta-hosted Muse Spark (`muse-spark-1.3` by default) and accepts no custom endpoint, so it is a model-bound harness: `muse-shim.sh <prompt-file> [--model <id>] [--reasoning-effort none|minimal|low|medium|high|xhigh|max|ultra]`. The shim delivers the prompt with `--prompt-file` (stdin sources go through a private file in the run directory), passes `--yolo` when unrestricted, and never forwards `--json`, `--prompt-file`, or `--session-id`.
+Meta's Muse Code runs Meta-hosted Muse models (`muse-wonder-1.0` by default, `muse-spark-1.3` for cheaper work) and accepts no custom endpoint, so it is a model-bound harness: `muse-shim.sh <prompt-file> [--model <id>] [--reasoning-effort none|minimal|low|medium|high|xhigh|max|ultra]`. The shim delivers the prompt with `--prompt-file` (stdin sources go through a private file in the run directory), passes `--yolo` when unrestricted, and never forwards `--json`, `--prompt-file`, or `--session-id`.
 
 State goal, authorization boundary, validation commands, and completion criteria in the prompt file as for any agentic harness; Muse Code reads `AGENTS.md`/`CLAUDE.md` on its own. Authenticate with `META_API_KEY`; exit `2` means a usage error and `130`/`143` an interrupted run.
 
@@ -452,7 +452,7 @@ State goal, authorization boundary, validation commands, and completion criteria
 
 ## Muse Wonder
 
-Muse Wonder (`muse-wonder-1.0`, preview) is Meta's most capable model and runs through the same model-bound Muse Code harness: `muse-shim.sh <prompt-file> --model muse-wonder-1.0 [--reasoning-effort minimal|low|medium|high|xhigh|max|ultra]`. The shim default stays `muse-spark-1.3`, so pin Wonder explicitly. Use it for long multi-file changes and multi-hour agent runs; keep Muse Spark for high-volume or cost-sensitive work. Muse Wonder Full is available only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it.
+Muse Wonder (`muse-wonder-1.0`, preview) is Meta's most capable model and runs through the same model-bound Muse Code harness: `muse-shim.sh <prompt-file> --model muse-wonder-1.0 [--reasoning-effort minimal|low|medium|high|xhigh|max|ultra]`. It is the shim's default model. Use it for long multi-file changes and multi-hour agent runs; keep Muse Spark for high-volume or cost-sensitive work. Muse Wonder Full is available only inside Muse Code on the Power Usage and Maximum Usage plans, and Meta publishes no model id for it.
 
 Prompt it as for Muse Code: goal, authorization boundary, validation commands, and completion criteria in the prompt file. Start at `high` effort and keep `max` for problems where correctness outweighs time. Contributor mode is on by default in Muse Code subscriptions; turn it off before sensitive work.
 

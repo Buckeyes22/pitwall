@@ -246,7 +246,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 
 ### Muse Code
 
-- **Route:** `muse-shim.sh` runs Meta's model-bound Muse Code with a private prompt file and defaults to `muse-spark-1.3`. Pin Muse Wonder with `--model muse-wonder-1.0`.
+- **Route:** `muse-shim.sh` runs Meta's model-bound Muse Code with a private prompt file and defaults to Muse Wonder (`muse-wonder-1.0`); pass `--model muse-spark-1.3` for cheaper, high-volume work.
 - **Reasoning control:** `--reasoning-effort minimal|low|medium|high|xhigh|max|ultra`; `none` is rejected by Meta's API.
 <!-- MODEL-FACTS:muse-spark START (generated from docs/agents/model-facts/families/muse-spark; edit facts.json, not this block) -->
 - **Models:** `muse-spark-1.2`, `muse-spark-1.3`

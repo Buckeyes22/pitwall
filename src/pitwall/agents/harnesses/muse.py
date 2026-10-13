@@ -44,7 +44,7 @@ class MuseAdapter(HarnessAdapter):
                 argument.startswith(f"{flag}=") for flag in _RESERVED_FLAGS
             ):
                 raise UsageError(f"muse-shim: {argument.split('=', 1)[0]} is managed by the shim")
-        model, has_model = self.parse_model_flag(argv[1:], "muse-spark-1.3")
+        model, has_model = self.parse_model_flag(argv[1:], "muse-wonder-1.0")
         return ParsedRequest(argv[0], model, argv[1:], has_model)
 
     def resolve_binary(self, env: Mapping[str, str], home: Path) -> str | None:

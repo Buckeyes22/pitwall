@@ -286,7 +286,7 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 - **Effort on other values:** other values are rejected.
 - **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/muse-spark/FACTS.md`.
 <!-- MODEL-FACTS:muse-spark END -->
-- Muse Wonder: pin `--model muse-wonder-1.0` (the default stays `muse-spark-1.3`).
+- Muse Wonder (`muse-wonder-1.0`) is the default; pass `--model muse-spark-1.3` for cheaper, high-volume work.
 <!-- MODEL-FACTS:muse-wonder START (generated from docs/agents/model-facts/families/muse-wonder; edit facts.json, not this block) -->
 - **Models:** `muse-wonder-1.0`, `muse-wonder-full`
 - **Context:** `muse-wonder-1.0`: 1,048,576 tokens.

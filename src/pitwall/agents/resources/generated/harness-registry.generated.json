@@ -620,7 +620,7 @@
         "worktreeDispatch": true
       },
       "defaultModel": {
-        "fallback": "muse-spark-1.3",
+        "fallback": "muse-wonder-1.0",
         "source": "registry"
       },
       "displayName": "Meta Muse Code",

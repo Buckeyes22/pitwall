@@ -710,7 +710,7 @@
       "allowUnknownModels": true,
       "defaultModel": {
         "source": "registry",
-        "fallback": "muse-spark-1.3"
+        "fallback": "muse-wonder-1.0"
       },
       "modelSelectors": [
         "--model"
