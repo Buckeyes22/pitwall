@@ -22,7 +22,7 @@ A set of nineteen standalone, first-party-grounded model, transport, and prompt-
 | Xiaomi MiMo | `docs/prompting/xiaomi-mimo-prompting-reference.md` |
 | Tencent Hy (Hunyuan) | `docs/prompting/tencent-hy-prompting-reference.md` |
 | Google Gemma 4 | `docs/prompting/google-gemma-prompting-reference.md` |
-| Google Gemini / Antigravity | `docs/prompting/google-gemini-prompting-reference.md` |
+| Google Gemini / Antigravity (Gemini 4 Argon; model-card evidence) | `docs/prompting/google-gemini-prompting-reference.md` |
 
 Pi, Hermes Agent, Cline CLI, goose, and DeepSeek Harness (`dsh`) are harness-only, model-agnostic routes: they deliberately have no model-specific prompting reference. Select the canonical reference for the model behind their configured endpoint instead.
 
@@ -32,7 +32,7 @@ Pi, Hermes Agent, Cline CLI, goose, and DeepSeek Harness (`dsh`) are harness-onl
 
 "Official" was scoped to **first-party content only**: vendor developer docs and API platforms, the vendor's own GitHub org, and HuggingFace model cards published by the vendor's org account. Third-party blogs, aggregators, and community guides were excluded except where they pointed to a first-party source, in which case the first-party source was used. Where a document includes a non-first-party claim (e.g., a widely-reported model behavior not in the vendor's docs, or an external reference recommendation), it is **explicitly flagged as non-official** in that document.
 
-For the two vendors whose English/international docs were ambiguous (Z.ai and MiniMax), the documentation **indexes were pulled directly** rather than inferring coverage from search results, to confirm whether a dedicated prompting page actually exists. Content was extracted from live official pages where the docs were machine-readable; the xAI reference uses only `docs.x.ai` pages for Grok 4.5 and Grok Build. The three version-specific Claude references cite Anthropic's official hosted system cards; those cards are evaluation reports, so each reference labels its operational prompting advice as evidence-derived guidance. The vendor publications are linked, not copied into this repository.
+For the two vendors whose English/international docs were ambiguous (Z.ai and MiniMax), the documentation **indexes were pulled directly** rather than inferring coverage from search results, to confirm whether a dedicated prompting page actually exists. Content was extracted from live official pages where the docs were machine-readable; the xAI reference uses only `docs.x.ai` pages for Grok 4.5 and Grok Build. The three version-specific Claude references cite Anthropic's official hosted system cards; those cards are evaluation reports, so each reference labels its operational prompting advice as evidence-derived guidance. The vendor publications are linked, not copied into this repository, with one exception: Google's Gemini 4 Argon model card is also kept as a Markdown conversion in `docs/prompting/model-cards/`, and the Gemini reference derives its routing guidance from it.
 
 Compiled June–July 2026. Every document carries its own source list; prefer those links over this summary.
 
@@ -47,7 +47,7 @@ The single most useful cross-vendor finding: **a dedicated text-prompting guide 
 | OpenAI | Yes, extensive (multiple tracks) | `developers.openai.com` | English | Separate GPT and Codex tracks; version-specific guidance |
 | Anthropic | CLI operational guidance plus model system cards | `code.claude.com` and `anthropic.com/system-cards` | English | The transport reference covers print mode, model/effort, permissions, limits, and project discovery; separate Sonnet 5, Opus 4.8, and Fable 5 references derive routing guidance from their officially hosted cards, and the Haiku 5.5 reference derives it from the vendor model and prompting pages |
 | xAI | No standalone general guide | `docs.x.ai` | English | Grok 4.7 model, Grok Build CLI, and headless-operation docs provide the route-specific facts |
-| Google Gemini | Yes, API and model guidance | `ai.google.dev` | English | Antigravity CLI adds the active agentic harness route |
+| Google Gemini | Yes, API and model guidance plus a model card | `ai.google.dev` and `storage.googleapis.com/deepmind-media` | English | Antigravity CLI adds the active agentic harness route; the Gemini 4 Argon card supplies capability and safety evidence |
 | Qwen | Yes, example-heavy | Alibaba Cloud Model Studio | English (+ Chinese) | Built around a named 6-element framework |
 | Kimi | Yes | `platform.moonshot.ai` / `platform.kimi.ai` | English | Mirrors OpenAI's taxonomy; strong agent/tool-specific notes |
 | GLM | Yes, but **Chinese platform only** | `docs.bigmodel.cn` | Chinese | International `docs.z.ai` has **no** standalone prompt page |

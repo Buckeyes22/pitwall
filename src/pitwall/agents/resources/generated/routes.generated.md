@@ -18,7 +18,7 @@ A host runs its own native harness directly, not through a shim; the plugin for 
 | `muse` | `~/.claude/scripts/muse-shim.sh` | `muse-spark-1.2`, `muse-spark-1.3` | `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra` | [muse-code](model-prompting.md#muse-code) |
 | `cline` | `~/.claude/scripts/cline-shim.sh` | any configured model | `none`, `low`, `medium`, `high`, `xhigh` |  |
 | `dsh` | `~/.claude/scripts/dsh-shim.sh` | any configured model | not supported |  |
-| `agy` | `~/.claude/scripts/agy-shim.sh` | `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`, `gemini-3.8-flash` | `low`, `medium`, `high` | [gemini-through-antigravity](model-prompting.md#gemini-through-antigravity) |
+| `agy` | `~/.claude/scripts/agy-shim.sh` | `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`, `gemini-3.8-flash`, `gemini-4-argon` | `low`, `medium`, `high` | [gemini-through-antigravity](model-prompting.md#gemini-through-antigravity) |
 | `zcode` | `~/.claude/scripts/zcode-shim.sh` | `zcode-default` | not supported | [zcode](model-prompting.md#zcode) |
 ## Open-weight models
 

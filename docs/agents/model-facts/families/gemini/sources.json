@@ -3,6 +3,18 @@
   "unit": "families/gemini",
   "sources": [
     {
+      "id": "google-gemini-4-argon",
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-4-argon",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:447fc4852bab152cf5555e136cf052d61562812898153e03f524069a6a4a288e",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:447fc4852bab152cf5555e136cf052d61562812898153e03f524069a6a4a288e",
+      "reviewedAt": "2026-10-13"
+    },
+    {
       "id": "google-gemini-3-8-flash",
       "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash.md.txt",
       "kind": "vendor",
@@ -12,7 +24,19 @@
       "observedHash": "sha256:6925846f840c7fb2274828ea76af648734c22845854c5c3608bdd076f6db9b3b",
       "observedAt": "2026-09-28",
       "reviewedHash": "sha256:6925846f840c7fb2274828ea76af648734c22845854c5c3608bdd076f6db9b3b",
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-13"
+    },
+    {
+      "id": "google-whats-new-3-8",
+      "url": "https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.8",
+      "kind": "vendor",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "html",
+      "observedHash": "sha256:5bb8941b71efa1f3388034725d356b50f3d5c3099496cd9e20fdac5102bb5198",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:5bb8941b71efa1f3388034725d356b50f3d5c3099496cd9e20fdac5102bb5198",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "google-gemini-3-7-flash",
@@ -21,10 +45,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:b41bee20f5cd10e63f1371b1d4eddaacfa89a254be900945d8fae4fe4f3f0b51",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:b41bee20f5cd10e63f1371b1d4eddaacfa89a254be900945d8fae4fe4f3f0b51",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:0d4a3a240a22103125a2f7c7f5bb1a19b6c3027a4b3d4c76bb4c5c1e56873c1b",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:0d4a3a240a22103125a2f7c7f5bb1a19b6c3027a4b3d4c76bb4c5c1e56873c1b",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "google-gemini-3-5-flash",
@@ -33,10 +57,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:5207e42a91269d6fdc7492da60711c3d5cd6093ccdf6c1b512826835e1c0f43c",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:5207e42a91269d6fdc7492da60711c3d5cd6093ccdf6c1b512826835e1c0f43c",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:4db93c5b4e89393ae7f0e4e591f140c444219998b8627524f83d1baa240873ed",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:4db93c5b4e89393ae7f0e4e591f140c444219998b8627524f83d1baa240873ed",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "google-gemini-3-1-pro",
@@ -45,10 +69,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:01cac86268ba46ba8c4ba5abcb281cb0ab28cebe5bdab07fbaf5628fd29a5e89",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:01cac86268ba46ba8c4ba5abcb281cb0ab28cebe5bdab07fbaf5628fd29a5e89",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:59b069e874e71fe2c90f6724565f56e29dac97c2db11da78f95e81dcf968cdfb",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:59b069e874e71fe2c90f6724565f56e29dac97c2db11da78f95e81dcf968cdfb",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "google-thinking",
@@ -57,10 +81,10 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:f1c97b1684f62e55a21e808392d9fdb2c2fdc9fcb3865119dcb7971daeb91825",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:f1c97b1684f62e55a21e808392d9fdb2c2fdc9fcb3865119dcb7971daeb91825",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:abc5e831f5310b6794d320a1e988da19844fa7b90aaa86015021feb7c4404e9c",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:abc5e831f5310b6794d320a1e988da19844fa7b90aaa86015021feb7c4404e9c",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "google-prompting",
@@ -75,16 +99,28 @@
       "reviewedAt": "2026-09-28"
     },
     {
+      "id": "google-long-decode",
+      "url": "https://ai.google.dev/gemini-api/docs/long-decode.md.txt",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:e7676fd507a836e8c065a1711ace2916a8769e9ffa086130189f7dab36c44b93",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:e7676fd507a836e8c065a1711ace2916a8769e9ffa086130189f7dab36c44b93",
+      "reviewedAt": "2026-10-13"
+    },
+    {
       "id": "google-latest-model",
       "url": "https://ai.google.dev/gemini-api/docs/latest-model.md.txt",
       "kind": "vendor",
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:fb2f50bb539187c2e13b6c40bf024b5c760c8a7de3166917d67964bea59cf3b0",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:fb2f50bb539187c2e13b6c40bf024b5c760c8a7de3166917d67964bea59cf3b0",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:3f8e5b7ae805f59f4a8a981ba65b00cfd57989e37c3ef46514d7183fae74588e",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:3f8e5b7ae805f59f4a8a981ba65b00cfd57989e37c3ef46514d7183fae74588e",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "google-changelog",
@@ -93,10 +129,10 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:e7156a032319e8c28ae48f90b88e745ced31002692634736f905bcc366d3dede",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:e7156a032319e8c28ae48f90b88e745ced31002692634736f905bcc366d3dede",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:59791020c4f3e4982a5efdabfb76ed8225c6734fbfca0ac21e33f5589b18c6f9",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:59791020c4f3e4982a5efdabfb76ed8225c6734fbfca0ac21e33f5589b18c6f9",
+      "reviewedAt": "2026-10-13"
     },
     {
       "id": "antigravity-models",
@@ -105,10 +141,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:c4969631a4e471bc64e07c928855405f5c92c8f923358d9f6fb215724d03ae15",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:c4969631a4e471bc64e07c928855405f5c92c8f923358d9f6fb215724d03ae15",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:6abd24f6b76db10858cc0dce377cfc6a4288104bc0cd592a93b85cbbf1874f3e",
+      "observedAt": "2026-10-13",
+      "reviewedHash": "sha256:6abd24f6b76db10858cc0dce377cfc6a4288104bc0cd592a93b85cbbf1874f3e",
+      "reviewedAt": "2026-10-13"
     }
   ],
   "notPublished": [],

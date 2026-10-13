@@ -268,11 +268,11 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 - `authentication required` means sign in interactively or configure Gemini API-key mode.
 - `jetski: no output produced` means a command tool was soft-denied; the shim converts the run to exit `77` (EX_NOPERM) — re-run unrestricted or add a permissions.allow rule.
 <!-- MODEL-FACTS:gemini START (generated from docs/agents/model-facts/families/gemini; edit facts.json, not this block) -->
-- **Models:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`
-- **Context:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
-- **Effort:** `gemini-3.8-flash`, `gemini-3.7-flash`: low, medium, high (default medium); `gemini-3.6-flash`, `gemini-3.5-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
+- **Models:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`
+- **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
+- **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 - Full reference: `references/model-prompting.md#gemini-through-antigravity`
 

@@ -451,21 +451,26 @@ State goal, authorization boundary, validation commands, and completion criteria
 
 ## Gemini through Antigravity
 
-Route Gemini with `agy-shim.sh <prompt-file> [flags]`. The shim defaults to `gemini-3.8-flash` at medium effort, always adds the dispatch workspace with `--add-dir`, and requests text output. Use `--model <base-id> --effort low|medium|high`, or pass an effort-suffixed live slug without `--effort`; Gemini 3.1 Pro supports only low and high in the verified catalog.
+Route Gemini with `agy-shim.sh <prompt-file> [flags]`. The shim defaults to `gemini-3.8-flash` at medium effort, always adds the dispatch workspace with `--add-dir`, and requests text output. Use `--model <base-id> --effort low|medium|high`, or pass an effort-suffixed live slug without `--effort`; Gemini 3.1 Pro supports only low and high in the verified catalog. Pin Gemini 4 Argon with `--model gemini-4-argon`; Antigravity offers it only on Google AI Ultra and Enterprise plans, so check `agy models` first.
 
-Use direct, precise instructions with the goal, constraints, success criteria, and output shape. Put critical behavior and formatting requirements first. Separate instructions, context, examples, and source material with consistent Markdown headings or XML-style tags. For long context, supply context first and put the exact task at the end. Add consistently formatted examples when the desired output is difficult to specify. Gemini 3 is concise by default, so request detail explicitly when needed. Retain the model's default sampling parameters; Google warns that changing Gemini 3.x temperature/top-p/top-k can degrade reasoning.
+Use direct, precise instructions with the goal, constraints, success criteria, and output shape. Put critical behavior and formatting requirements first. Separate instructions, context, examples, and source material with consistent Markdown headings or XML-style tags. For long context, supply context first and put the exact task at the end. Add consistently formatted examples when the desired output is difficult to specify. Gemini is concise by default, so request detail explicitly when needed. Leave temperature, top-p, and top-k unset; Google deprecated them in July 2026 and Gemini 4 Argon ignores them.
 
 Authentication is interactive unless Gemini API-key configuration is supplied, and model availability is tier-dependent. In restricted headless mode, a command tool can be auto-denied; the shim detects the `jetski: no output produced` diagnostic and converts the run to exit 77 (EX_NOPERM). Prefer an unrestricted run or a permissions.allow rule, and verify requested artifacts after every run.
 
 <!-- MODEL-FACTS:gemini START (generated from docs/agents/model-facts/families/gemini; edit facts.json, not this block) -->
-- **Models:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`
-- **Context:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
-- **Effort:** `gemini-3.8-flash`, `gemini-3.7-flash`: low, medium, high (default medium); `gemini-3.6-flash`, `gemini-3.5-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
+- **Models:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`
+- **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
+- **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
 - **Stated by vendor:** Leave temperature, top_p, and top_k out of Gemini requests; Google deprecated all three in July 2026.
-- **Stated by vendor (`gemini-3.7-flash`):** Do not ask Gemini 3.7 Flash for minimal thinking; the API rejects it. Use low, medium, or high.
-- **Stated by harness:** Antigravity's picker offers low, medium, and high for the Flash models but only low and high for 3.1 Pro.
+- **Stated by harness:** Antigravity serves Gemini 4 Argon only on Google AI Ultra and Enterprise plans, and not in its IDE; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.
 - **Stated by vendor:** Gemini models think dynamically by default and scale effort to the request; set thinking_level only to cap cost or force depth.
+- **Stated by vendor (`gemini-4-argon`):** Medium is Gemini 4 Argon's default and Google's pick for most code and agent work. Keep high for the hardest reasoning, and test all three levels before settling on the lowest that passes.
+- **Stated by vendor (`gemini-4-argon`):** On Gemini 4 Argon, thinking and the answer share max_output_tokens. Keep that limit at 32,768 or more, and lower thinking_level rather than the limit when tokens must be saved.
+- **Stated by vendor (`gemini-4-argon`):** A synchronous Gemini 4 Argon request is capped at 65,536 output tokens, and a higher max_output_tokens returns a 400. Longer answers need background execution (long decode).
+- **Stated by vendor (`gemini-4-argon`):** Gemini 4 Argon does not support explicit context caching. Remove cachedContents use; implicit caching covers prompts of 4,096 tokens or more.
+- **Stated by vendor (`gemini-4-argon`):** Hard Gemini 4 Argon prompts can take several minutes. Give the client at least a 15-minute timeout, or run the request in the background.
+- **Stated by vendor (`gemini-3.7-flash`):** Do not ask Gemini 3.7 Flash for minimal thinking; the API rejects it. Use low, medium, or high.
 - **Stated by vendor (`gemini-3.8-flash`):** Gemini 3.8 Flash spends more tokens on long agentic tasks by design; lower thinking_level to low for everyday work to cut cost.
 - **Stated by vendor (`gemini-3.8-flash`):** Do not ask Gemini 3.8 Flash for minimal thinking; the API returns an error. Use low, medium, or high.
 - **Stated by harness:** In headless mode a tool needing approval is denied without failing the run (exit 0, notice on stderr). Shell commands ask by default, so grant them with permissions.allow or the skip flag.
@@ -474,7 +479,7 @@ Authentication is interactive unless Gemini API-key configuration is supplied, a
 - **Stated by harness:** Headless runs use cached credentials. Sign in once with an interactive agy session; an unauthenticated run without a terminal exits with an authentication required error.
 - **Stated by harness:** agy loads GEMINI.md and AGENTS.md from each directory up to the workspace root, plus global copies under ~/.gemini. Rules combine rather than replace, and neither file takes frontmatter.
 - **Stated by harness:** A custom subagent whose tools list has a misspelled or unknown tool name can hang. Check names such as view_file and run_command exactly.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 
 ## Muse Glimmer

@@ -232,15 +232,15 @@ If your CLI has MCP tools configured, prompts may direct their use.
 
 - **Route:** `agy-shim.sh` defaults to `gemini-3.8-flash` with medium effort and always adds the dispatch workspace.
 - **Prompt shape:** be direct and precise; state the goal, constraints, success criteria, and output shape. Use consistent Markdown headings or XML-style delimiters. For long context, put the context first and the exact task last.
-- **Reasoning control:** use `--effort low|medium|high` with a base Gemini ID. Do not combine `--effort` with an effort-suffixed live slug. Gemini 3.1 Pro supports low and high in the verified catalog.
-- **Sampling:** retain Gemini 3.x defaults; Google warns that changing temperature/top-p/top-k can degrade complex reasoning.
+- **Reasoning control:** use `--effort low|medium|high` with a base Gemini ID. Do not combine `--effort` with an effort-suffixed live slug. Gemini 3.1 Pro supports low and high in the verified catalog. Gemini 4 Argon (`--model gemini-4-argon`) needs a Google AI Ultra or Enterprise plan in Antigravity.
+- **Sampling:** leave temperature, top-p, and top-k unset; Google deprecated them in July 2026.
 - **Failure contract:** `authentication required` means sign in interactively or configure Gemini API-key mode. A stderr line beginning `jetski: no output produced` is a soft-denied command tool; the shim converts such runs to exit `77` (EX_NOPERM) — re-run unrestricted or add a permissions.allow rule.
 <!-- MODEL-FACTS:gemini START (generated from docs/agents/model-facts/families/gemini; edit facts.json, not this block) -->
-- **Models:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`
-- **Context:** `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.5-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
-- **Effort:** `gemini-3.8-flash`, `gemini-3.7-flash`: low, medium, high (default medium); `gemini-3.6-flash`, `gemini-3.5-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
+- **Models:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`
+- **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
+- **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
-- **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 - Full reference: `references/model-prompting.md#gemini-through-antigravity`
 

@@ -45,19 +45,6 @@
           "provenance": "model-facts:families/gemini",
           "runtimeReference": "references/model-prompting.md#gemini-through-antigravity"
         },
-        "gemini-3.5-flash": {
-          "aliases": [],
-          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
-          "displayName": "Gemini 3.5 Flash",
-          "effortValues": [
-            "low",
-            "medium",
-            "high"
-          ],
-          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
-          "provenance": "model-facts:families/gemini",
-          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity"
-        },
         "gemini-3.6-flash": {
           "aliases": [],
           "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
@@ -88,6 +75,19 @@
           "aliases": [],
           "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
           "displayName": "Gemini 3.8 Flash",
+          "effortValues": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "promptReference": "docs/prompting/google-gemini-prompting-reference.md",
+          "provenance": "model-facts:families/gemini",
+          "runtimeReference": "references/model-prompting.md#gemini-through-antigravity"
+        },
+        "gemini-4-argon": {
+          "aliases": [],
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/gemini.md",
+          "displayName": "Gemini 4 Argon",
           "effortValues": [
             "low",
             "medium",

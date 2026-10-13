@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Gemini 4 Argon (`gemini-4-argon`) is a registered `agy` route with low, medium, and high effort,
+  and its facts and guidance are in the Gemini model facts. The Gemini prompting reference now
+  follows the model-card layout of the Claude references, and Google's Gemini 4 Argon model card is
+  kept as Markdown in `docs/prompting/model-cards/`. The `agy` default stays `gemini-3.8-flash`,
+  because Antigravity offers Argon only on Google AI Ultra and Enterprise plans.
+
+### Changed
+
+- Gemini 3.7 Flash and Gemini 3.5 Flash are recorded as retired on 2026-10-08, with successors
+  `gemini-3.8-flash` and `gemini-3.6-flash`, and are dropped from the Gemini capability card.
+- The `agy` route no longer offers `gemini-3.5-flash`, which Antigravity has stopped serving; use
+  `gemini-3.6-flash` or `gemini-3.8-flash`. `gemini-3.7-flash` stays because Antigravity still
+  offers it on Enterprise plans.
+- The Gemini routing guidance no longer tells you to keep the default sampling parameters. It now
+  says to leave `temperature`, `top_p`, and `top_k` unset, because Google deprecated them in July
+  2026.
+- Model facts no longer cite the Antigravity models page for effort levels, since the page stopped
+  listing them; the `agy` sandbox default no longer cites the Antigravity app's preset table.
+
 ## [0.3.0a1] - 2026-10-07
 
 ### Added
