@@ -251,15 +251,16 @@ list in which `cost_estimate_under_cap` has `"pass": true` and a non-null
 uv run python - <<'PY'
 import asyncio, os
 os.environ["DATABASE_URL"] = "postgresql://pitwall:pitwall@127.0.0.1:5444/pitwall_test"
+os.environ["PITWALL_MONTHLY_BUDGET_USD"] = "100"
 
 import asyncpg
-from pitwall.cost.exporter import BUDGET_USD, _refresh
+from pitwall.cost.exporter import configured_monthly_budget, _refresh
 from fastapi import FastAPI
 
 async def _test():
     app = FastAPI()
     app.state.pool = await asyncpg.create_pool(os.environ["DATABASE_URL"], min_size=1, max_size=1)
-    app.state.budget = BUDGET_USD
+    app.state.budget = configured_monthly_budget()
     # _refresh polls the DB and sets gauges; it must not raise
     await _refresh(app)
     await app.state.pool.close()

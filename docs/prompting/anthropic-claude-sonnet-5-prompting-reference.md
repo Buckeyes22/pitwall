@@ -30,7 +30,7 @@ The card's standard benchmark configuration used adaptive thinking at maximum ef
 
 ## Routing guidance derived from the card
 
-Use Sonnet 5 as the default Claude route for normal multi-file implementation, repository analysis, review, structured extraction, agentic search, and professional-task work. Escalate to Opus 4.8 or Fable 5 when the work is unusually hard, long-context, novel, or verification-critical and local evidence supports the upgrade.
+The default routed Claude model is Sonnet 5.5 (the `sonnet` alias); Sonnet 5 is reachable only by pinning `--model claude-sonnet-5`. The system-card findings below are evidence about Sonnet 5. Use Sonnet 5.5 as the default Claude route for normal multi-file implementation, repository analysis, review, structured extraction, agentic search, and professional-task work. Escalate to Opus 4.8 or Fable 5 when the work is unusually hard, long-context, novel, or verification-critical and local evidence supports the upgrade.
 
 Prefer a prompt contract with:
 
@@ -54,7 +54,7 @@ Completion: Report changed files, command results, remaining risks, and any assu
 
 ## Operational caveats
 
-- Start with the shim's default `sonnet` route and the cheapest supported effort that can notice failure. Increase effort only for task complexity, not to compensate for a vague prompt.
+- Start with the shim's default `sonnet` route (which reaches Sonnet 5.5) and the cheapest supported effort that can notice failure. Increase effort only for task complexity, not to compensate for a vague prompt.
 - Use `--max-budget-usd` for bounded automation.
 - Re-run decisive checks from the host after authoring work.
 - Leave `PITWALL_AGENTS_UNRESTRICTED` unset (restricted) when the child must retain Claude Code's configured permission policy; set it to `1` only for unattended runs that must not pause for approval.

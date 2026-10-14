@@ -24,7 +24,7 @@ Self-hosted endpoint egress uses the existing outbound URL policy; the profile d
 allow-lists. `api_key_env` stores only an environment-variable name, and bearer values are never
 persisted or returned.
 
-All four static provider adapters follow the same credential-reference boundary. Persisted
+All six static provider adapters follow the same credential-reference boundary. Persisted
 providers carry a validated environment-variable name in `credential_ref`; adapters materialize
 and validate its value only when an operation is invoked. Repository, REST, and GitOps provider
 config writes reject credential-shaped values recursively after normalizing camel-case and common

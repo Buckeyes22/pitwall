@@ -83,13 +83,13 @@ The Arq worker entrypoint. Handles RunPod status polling, webhook processing, le
   - **A lookup error, several marked pods, or a pod with the name but no matching marker:** the workload is held and the pod ids are logged; such a pod is never adopted or terminated. The next pass retries. The ceiling charge above applies only once the workload passes the orphan age threshold.
 
 `_cost_reconcile(ctx: dict[str, Any]) -> None` — **cron every 5 min**
-: For each active workload, unconditionally maps `IN_PROGRESS` to a terminal state and applies it. This catches jobs RunPod marked IN_PROGRESS that silently completed without a webhook. Idempotent: skip-already-terminal guard on the UPDATE.
+: Truths up cost for terminal RunPod leases that map exclusively to a workload, using the exact Pod bill (`_reconcile_runpod_pod_actual_cost`). Its per-workload loop calls `map_runpod_status("IN_PROGRESS")`, which is non-terminal, so it terminalises nothing. Idempotent: skip-already-terminal guard on the UPDATE.
 
 `_poll_and_reconcile(ctx: dict[str, Any]) -> None` — **cron every 2 min**
 : Polls all active workloads against RunPod. For `serverless_queue` providers uses `QueueClient.status()`; for `pod_lease` providers uses `get_pod()` and reads `runtime.podStatus`. Maps the returned status string; applies terminal state if terminal. Publishes `workload.completed` event on update. Silently continues on errors (inner try/except).
 
 `_idempotency_gc(ctx: dict[str, Any]) -> None` — **cron nightly at 03:00 UTC**
-: Deletes workload rows with a non-null `idempotency_key` older than 24 hours.
+: Deletes rows from `pitwall.idempotency_keys` whose `created_at` is older than 24 hours. Workload rows are not touched.
 
 `_lb_endpoint_hibernate_sweep(ctx: dict[str, Any]) -> None` — **cron daily at 12:00 UTC**
 : Per L14 invariant: endpoints with `workersMin > 0` that have been warm for > 24h trigger a `HibernateSweepAlert`. Tracks state in Redis (`pitwall:hibernate_sweep:workers_min:{provider_id}`) with 7-day TTL. Does NOT auto-hibernate — only alerts. Imports `L14_DAILY_BURN_PER_WORKER_USD` from `pitwall.cost.hibernate_alerts`.
@@ -98,7 +98,7 @@ The Arq worker entrypoint. Handles RunPod status polling, webhook processing, le
 : Delegates to `run_pit_restore_drill` in `pitwall.ops.backup_drill`. Silently suppresses all exceptions.
 
 `_archive_old_workloads(ctx: dict[str, Any]) -> None` — **cron weekly Sun 05:00 UTC**
-: Archives completed workloads older than the retention threshold to JSONL files under `PITWALL_ARCHIVE_DIR`. Delegates to `archive_workloads_to_jsonl` in `pitwall.retention`.
+: Runs one bounded archive batch only when `PITWALL_RETENTION_MODE` is `archive` or `archive-purge` (default `off` makes the job a no-op). Workloads older than `PITWALL_RETENTION_DAYS` (default 90) are archived in batches of `PITWALL_RETENTION_BATCH_SIZE` (default 1000) to JSONL under `PITWALL_ARCHIVE_DIR` (required once enabled); `archive-purge` also purges them. Delegates to `archive_workloads_to_jsonl` in `pitwall.retention`.
 
 `_rollup_job(ctx: dict[str, Any]) -> None` — **cron daily at 01:00 UTC**
 : Calls `run_rollup(pool)`. After rollup completes, invokes `after_rollup_hook`, which runs `check_and_send_budget_alert` and the burn-rate forecast alert. A failing alert is logged as a redacted warning and the next alert still runs.
@@ -258,7 +258,10 @@ The reconciler is driven by Arq's `WorkerSettings` class. Arq reads `REDIS_URL`,
 | `RUNPOD_API_KEY` | *(required for polling/probes)* | RunPod REST API key |
 | `RUNPOD_REST_API_URL` | `https://api.runpod.io/v2` | RunPod v2 API base URL for hibernate sweep |
 | `PITWALL_LEASE_ADVANCE_WARNING_MIN` | `15,5` | Comma-separated minutes at which to fire lease expiry warnings |
-| `PITWALL_ARCHIVE_DIR` | *(none)* | Directory path for JSONL workload archives |
+| `PITWALL_ARCHIVE_DIR` | *(none)* | Directory path for JSONL workload archives (required when retention is enabled) |
+| `PITWALL_RETENTION_MODE` | `off` | `off`, `archive`, or `archive-purge`; `off` makes the archive job a no-op |
+| `PITWALL_RETENTION_DAYS` | `90` | Age in days after which workloads are archived |
+| `PITWALL_RETENTION_BATCH_SIZE` | `1000` | Workloads archived per run |
 
 The reconciler module calls `require_runtime_env("reconciler")` at import time (module level, ahead of the `arq` import guard), which validates that the reconciler runtime environment is present. `arq` must also be importable.
 

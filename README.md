@@ -13,7 +13,7 @@ authorizing paid work. Agent Routing dispatches tasks to configured model and ha
 and maintains execution records. Personal model serving uses a separate RunPod workflow with
 local budget and lease controls.
 
-> **Project status:** Pre-1.0, preparing for the first public alpha. APIs and configuration may
+> **Project status:** Pre-1.0 alpha; v0.3.0a1 is the current release. APIs and configuration may
 > change between minor versions. The [support matrix](docs/support-matrix.md) identifies supported
 > capabilities, deferred features, and provider paths verified with live services.
 
@@ -405,7 +405,7 @@ from broker MCP.
 | --- | --- | --- |
 | `PITWALL_API_TOKEN` | Required for non-loopback API binding; recommended locally | Operator bearer token with all scopes. When enabled, authentication is required on every non-health route. |
 | `PITWALL_API_SCOPED_TOKENS` | Delegated API callers | JSON mapping from opaque tokens to `read`, `spend`, `lease:mutate`, `webhook:admin`, and/or `server:admin` scopes. |
-| `PITWALL_ADMIN_SECRET` | Administrative routes and non-loopback API binding | Shared secret checked in constant time for `/v1/admin/*`. Missing configuration causes admin routes to return `401`. |
+| `PITWALL_ADMIN_SECRET` | Administrative routes and non-loopback API binding | Shared secret checked in constant time for `/v1/admin/*`, except `GET` and `HEAD` requests under `/v1/admin/runpod/`. Missing configuration causes admin routes to return `401`. |
 | `PITWALL_INBOUND_RATE_LIMIT` | API request limiting | Defaults to `120/60s`; throttled requests receive `429` and `Retry-After`. Use `off` only for loopback development. |
 | `PITWALL_API_MAX_BODY_BYTES` | REST API | Defaults to 8 MiB; limits both fixed-length and chunked request bodies. |
 | `PITWALL_API_MAX_CONCURRENCY` | API process | Defaults to 100 in-flight Uvicorn connections/tasks. |
@@ -441,6 +441,9 @@ When bearer authentication is enabled, administrative operations require both:
 
 - A bearer token granting `server:admin`.
 - An `X-Pitwall-Secret` header matching `PITWALL_ADMIN_SECRET`.
+
+`GET` and `HEAD` requests under `/v1/admin/runpod/` are the exception: they need only the `read`
+scope and no `X-Pitwall-Secret`. Every other `/v1/admin/*` route requires both.
 
 Loopback-only development may run without bearer authentication and logs an explicit warning.
 The inbound rate limiter defaults to `120/60s` and requires an explicit setting to disable it.

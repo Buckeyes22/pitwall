@@ -104,7 +104,7 @@ class InferenceTrace:
     ) -> None: ...
 ```
 
-Wraps a Langfuse trace object and satisfies the `Trace` Protocol. All public methods are no-ops when `lf_trace is None`. `.finish()` updates the trace with metadata including `duration_ms`, `status`, `error_type`, `error_message`, `input_bytes`, `output_bytes` (`pitwall.observability.langfuse`, `pitwall.observability.langfuse:finish`).
+Wraps a Langfuse trace object and satisfies the `Trace` Protocol. All public methods are no-ops when `lf_trace is None`. `.finish()` updates the trace with metadata including `duration_ms`, `status`, `error_type`, `input_bytes`, `output_bytes` (plus allow-listed extra metadata) (`pitwall.observability.langfuse`, `pitwall.observability.langfuse:finish`).
 
 **Invariant:** Langfuse client initialization and trace emission failures are swallowed at the `log.warning` level and never raise — callers always receive a valid `Trace` (possibly a no-op `InferenceTrace`) (`pitwall.observability.langfuse`, `pitwall.observability.langfuse:finish`, `pitwall.observability.langfuse`).
 
@@ -146,7 +146,7 @@ Infinite loop: calls `_refresh`, catches all exceptions as `log.exception("refre
 async def lifespan(app: FastAPI) -> AsyncIterator[None]
 ```
 
-Entrypoint lifespan manager. Validates `DATABASE_URL` env var is present (exits with code 1 if not). Creates an `asyncpg` pool (`min_size=1, max_size=3`) and stores it in `app.state.pool`. Reads `BUDGET_USD` from env and stores in `app.state.budget`. Sets `cloud_budget_usd`. Starts `_poll_loop` as a background task. On shutdown: cancels the poll task and closes the pool.
+Entrypoint lifespan manager. Validates `DATABASE_URL` env var is present (exits with code 1 if not). Creates an `asyncpg` pool (`min_size=1, max_size=3`) and stores it in `app.state.pool`. Reads `PITWALL_MONTHLY_BUDGET_USD` via `configured_monthly_budget()` (raises and aborts startup if unset or not a positive decimal), stores it in `app.state.budget` and sets `pitwall_cloud_budget_usd`. Starts `_poll_loop` as a background task. On shutdown: cancels the poll task and closes the pool.
 
 ```python
 @app.get("/metrics")
@@ -250,7 +250,7 @@ Converts Workload-shaped objects into observations. Default quality is `1.0` whe
 |---|---|---|---|
 | `pitwall_cloud_spend_month_usd` | Gauge | — | the budget gate's `MONTH_TO_DATE_SPEND_SQL`: actual, else ceiling, else estimate, for every workload submitted in the current UTC month |
 | `pitwall_cloud_budget_pct` | Gauge | — | `cloud_spend_month_usd / budget * 100` |
-| `pitwall_cloud_budget_usd` | Gauge | — | the runtime limit in `pitwall.budget_limits` when set, else env `PITWALL_MONTHLY_BUDGET_USD` (default `1000`) |
+| `pitwall_cloud_budget_usd` | Gauge | — | the runtime limit in `pitwall.budget_limits` when set, else env `PITWALL_MONTHLY_BUDGET_USD` (required, no default) |
 | `pitwall_active_workers` | Gauge | `provider` | `COUNT(leases.id)` JOIN `providers` WHERE `leases.state = 'active'` GROUP BY `providers.name` |
 | `pitwall_kill_log_triggers_7d` | Gauge | — | `COUNT(*)` from `kill_log` where `triggered_at > now() - interval '7 days'` |
 | `pitwall_providers_unhealthy` | Gauge | — | `COUNT(*)` from `providers` where `health_status = 'unhealthy'` (a disarmed serve provider is `disarmed`, not counted) |
@@ -264,8 +264,8 @@ Converts Workload-shaped objects into observations. Default quality is `1.0` whe
 | `pitwall_free_pool_headroom` | Gauge | `provider`, `pool` | remaining share `(budget - used) / budget` per `provider_quotas` window (1.0 when unbudgeted) |
 | `pitwall_free_pool_reset_seconds` | Gauge | `provider`, `pool` | seconds until the pool window resets (0 when unset or past) |
 | `pitwall_free_tokens_used_month` | Gauge | `pool` | used units in the current window (pool key, or provider id when the key is empty) |
-| `pitwall_free_pool_locked` | Gauge | `provider`, `model` | 1 while a `(provider, model)` lockout is active, from the in-memory lockout snapshot |
-| `pitwall_free_pool_429_total` | Counter | `provider`, `model`, `reason` | incremented by the exporter's lockout failure hook for every recorded failure |
+| `pitwall_free_pool_locked` | Gauge | `provider`, `model` | 1 while a `(provider, model)` lockout recorded in `provider_quotas.evidence.lockout` is active; rebuilt on each 60 s refresh (the API process writes the lockout) |
+| `pitwall_free_pool_429_total` | Counter | `provider`, `model`, `reason` | advanced on each 60 s refresh by the increase in the persisted lockout failure count per `(provider, model)`; `reason` is the persisted lockout reason |
 
 `config/prometheus/pitwall-cloud-alerts.yml` provides operator-tunable examples for budget
 thresholds, unhealthy providers, queue backlog, reconciliation lag, overdue and terminal webhook
@@ -410,10 +410,10 @@ When enabled, the Langfuse client is created with `host=settings.langfuse_host o
 | Env var | Default | Description |
 |---|---|---|
 | `DATABASE_URL` | **required** | PostgreSQL connection URL |
-| `PITWALL_MONTHLY_BUDGET_USD` | `"1000"` | Monthly budget hard cap in USD (fed to `BUDGET_USD` Gauge) |
+| `PITWALL_MONTHLY_BUDGET_USD` | **required** | Monthly budget cap in USD, a positive decimal; startup fails without it (feeds the `pitwall_cloud_budget_usd` gauge) |
 | `PITWALL_COST_EXPORTER_PORT` | `"9109"` | TCP port the exporter listens on |
 
-`cost-exporter` service requires only `DATABASE_URL` at runtime (`pitwall.config`).
+`cost-exporter` service requires `DATABASE_URL` and `PITWALL_MONTHLY_BUDGET_USD` at runtime (`pitwall.cost.exporter`).
 
 ---
 

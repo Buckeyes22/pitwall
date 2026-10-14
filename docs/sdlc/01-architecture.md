@@ -89,9 +89,12 @@ All share Postgres + Redis. See `19-deployment.md` for images/compose.
 
 ## 5. Cross-cutting concerns
 
-- **Configuration / fail-closed boot** — the API/reconciler/webhook/cost-exporter call
-  `require_runtime_env(...)` at import and refuse to boot (`os.EX_CONFIG`) without
-  `RUNPOD_API_KEY` / `DATABASE_URL` / `REDIS_URL`. See `16-core-config.md`.
+- **Configuration / fail-closed boot** — the API, reconciler, webhook, and cost-exporter call
+  `require_runtime_env(...)` at import and refuse to boot (`os.EX_CONFIG`) without their own
+  required settings: the API needs `DATABASE_URL` and `REDIS_URL` (no RunPod key); the reconciler
+  and the MCP server (checked at startup, not import) also need `RUNPOD_API_KEY`; the cost-exporter
+  needs `DATABASE_URL`; the webhook needs none at import but refuses to start without
+  `PITWALL_WEBHOOK_SECRET`. See `16-core-config.md`.
 - **Security** — constant-time admin-secret gate on `/v1/admin/*`; `runpod_endpoint_id` allow-list
   (SSRF); mandatory inbound webhook HMAC; outbound signed delivery; secret non-disclosure. See
   `14-security.md`.

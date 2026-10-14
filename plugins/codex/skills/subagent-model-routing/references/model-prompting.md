@@ -423,7 +423,7 @@ For small-context local models, omit unnecessary tool schemas so context remains
 
 ## Muse Code
 
-Meta's Muse Code runs Meta-hosted Muse models (`muse-wonder-1.0` by default, `muse-spark-1.3` for cheaper work) and accepts no custom endpoint, so it is a model-bound harness: `muse-shim.sh <prompt-file> [--model <id>] [--reasoning-effort none|minimal|low|medium|high|xhigh|max|ultra]`. The shim delivers the prompt with `--prompt-file` (stdin sources go through a private file in the run directory), passes `--yolo` when unrestricted, and never forwards `--json`, `--prompt-file`, or `--session-id`.
+Meta's Muse Code runs Meta-hosted Muse models (`muse-wonder-1.0` by default, `muse-spark-1.3` for cheaper work) and accepts no custom endpoint, so it is a model-bound harness: `muse-shim.sh <prompt-file> [--model <id>] [--reasoning-effort minimal|low|medium|high|xhigh|max|ultra]`. The shim delivers the prompt with `--prompt-file` (stdin sources go through a private file in the run directory), passes `--yolo` when unrestricted, and never forwards `--json`, `--prompt-file`, or `--session-id`.
 
 State goal, authorization boundary, validation commands, and completion criteria in the prompt file as for any agentic harness; Muse Code reads `AGENTS.md`/`CLAUDE.md` on its own. Authenticate with `META_API_KEY`; exit `2` means a usage error and `130`/`143` an interrupted run.
 
@@ -529,7 +529,7 @@ Steer reasoning with a system-prompt line `Reasoning strength: low|medium|high|x
 
 ## DeepSeek V4
 
-DeepSeek V4 (`deepseek-ai/DeepSeek-V4-Flash-0731`, `deepseek-ai/DeepSeek-V4-Pro-0813`; MIT; 1M context) is routed as an endpoint entry: `pitwall agents profiles add deepseek --model deepseek-ai/DeepSeek-V4-Flash-0731 --base-url http://<host>:8000/v1 --api-key-env DEEPSEEK_API_KEY`, then `route-shim.sh deepseek <prompt-file>`. Flash is the realistic self-host target; Pro is a multi-node deployment.
+DeepSeek V4 (`deepseek-ai/DeepSeek-V4.1-Flash`, `deepseek-ai/DeepSeek-V4-Pro-0813`; MIT; 1M context) is routed as an endpoint entry: `pitwall agents profiles add deepseek --model deepseek-ai/DeepSeek-V4.1-Flash --base-url http://<host>:8000/v1 --api-key-env DEEPSEEK_API_KEY`, then `route-shim.sh deepseek <prompt-file>`. Flash is the realistic self-host target; Pro is a multi-node deployment.
 
 Reasoning is controlled per request with `reasoning_effort` (`low`, `high`, `max`) and `thinking_mode`; the harness owns those parameters, so choose the effort in the harness's own provider configuration and keep the prompt focused on the work and the output contract. Use the card's sampling defaults (temperature 1.0, top_p 0.95 for agentic runs).
 

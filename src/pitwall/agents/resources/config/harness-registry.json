@@ -719,7 +719,6 @@
         "kind": "harness-flag",
         "key": "--reasoning-effort",
         "values": [
-          "none",
           "minimal",
           "low",
           "medium",

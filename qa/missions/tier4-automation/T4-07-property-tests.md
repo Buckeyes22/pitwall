@@ -12,7 +12,7 @@ adds one property test for a pure-logic rule the tester picks with the maintaine
 ## Sources
 
 - `tests/property/conftest.py`, plus `tests/property/test_token_bucket_properties.py` and
-  `tests/property/test_arbitrage_properties.py` as models
+  `tests/property/test_policy_properties.py` as models
 - [Verification tracks](../../../docs/sdlc/17-testing-strategy.md#2-verification-tracks)
 - [Where tests go](../../handbook/test-automation.md#where-tests-go) and
   [find then fix](../../handbook/test-automation.md#find-then-fix)

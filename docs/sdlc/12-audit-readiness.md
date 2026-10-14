@@ -231,7 +231,8 @@ class ProviderReader(Protocol):
 @dataclass(frozen=True, slots=True)
 class ProviderEstimate:
     provider_id: str
-    estimate_usd: Decimal
+    estimate_usd: Decimal  # for display
+    ceiling_usd: Decimal  # what admission charges; the cost and headroom checks compare this
 
     def to_dict(self) -> dict[str, str]: ...
 
@@ -580,8 +581,10 @@ JSON payload shape:
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `PITWALL_MONTHLY_BUDGET_USD` | not set | Monthly budget cap for budget headroom check |
-| `PITWALL_PER_REQUEST_MAX_USD` | not set | Per-request cost cap for estimate comparison |
+| `PITWALL_MONTHLY_BUDGET_USD` | `50.0` | Monthly budget cap for budget headroom check |
+| `PITWALL_PER_REQUEST_MAX_USD` | `10.0` | Per-request cost cap for estimate comparison |
+
+When no `environ` is injected, the caps come from `load_settings_from_env()` (`PitwallSettings`, with the defaults above). When a database pool is present, the `budget_limits` runtime row overrides them through `effective_limits`. Only an injected `environ` that lacks a variable yields "not set".
 
 ### Hardcoded constants in `checks`
 
@@ -630,7 +633,7 @@ All 19 checks return `CheckResult` entries through `run_all_checks`. Numeric par
 ### `CapabilityAuditService` failure modes
 
 - If the capability does not exist, all 8 checks are still returned; the `capability_exists` check fails with `passed=False`.
-- If `PITWALL_MONTHLY_BUDGET_USD` or `PITWALL_PER_REQUEST_MAX_USD` are not set, the corresponding checks return `passed=False` with no exception raised.
+- If an injected `environ` lacks `PITWALL_MONTHLY_BUDGET_USD` or `PITWALL_PER_REQUEST_MAX_USD`, the corresponding checks return `passed=False` with no exception raised. Without an injected `environ` the caps come from `PitwallSettings` and are never unset.
 - If the provider cost estimator raises `ValueError`, it is caught and appended to `estimate_warnings`; no check fails solely on estimator warning.
 - If the payload guardrail blocks, cost estimation is skipped and `cost_estimate_under_cap` returns `passed=False` with a guardrail warning instead of inspecting the raw payload.
 - If `budget_state` is provided at construction time, env var resolution is skipped entirely.

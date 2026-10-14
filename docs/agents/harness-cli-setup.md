@@ -129,7 +129,7 @@ Static source review on the verification date observed these delivery details wi
 | Pi | Pinned npm recipe: `npm install -g --ignore-scripts @earendil-works/pi-coding-agent@1.1.0 @tintinweb/pi-subagents@0.19.0` (the Workbench backend rides along); `pitwall agents setup pi` runs just this recipe, and `--dry-run` prints it. The npm packages have no reviewed checksum. |
 | Hermes Agent | Bash installer at `hermes-agent.nousresearch.com`, with the reviewed manifest digest and no redirect host allowed. |
 | Cline CLI | Pinned npm recipe: `npm install -g --ignore-scripts cline@3.0.60`; the npm package has no reviewed checksum. |
-| Muse Code | POSIX `sh` installer at `dev.meta.ai`, with the reviewed manifest digest and no redirect host allowed. |
+| Muse Code | Bash installer at `dev.meta.ai`, with the reviewed manifest digest and no redirect host allowed. |
 | goose | Bash; the stable release URL redirects from `github.com` to `release-assets.githubusercontent.com`. The manifest pins the digest of the script `stable` served when it was reviewed. Because `stable` moves, setup refuses goose with a digest mismatch whenever the served script changes, until the pin is reviewed and updated, and it fails closed on any other host. |
 | DeepSeek Harness (`dsh`) | Pinned npm recipe: `npm install -g --ignore-scripts @deepseek-ai/dsh@0.1.1-rc.2`; the npm package has no reviewed checksum. |
 

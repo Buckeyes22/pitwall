@@ -372,7 +372,8 @@ roll back the lease: CLI exits 3, prints
 `serve ok; route registration failed: <stderr>`, and prints the manual
 `pitwall agents profiles add` remedy.
 
-The command help ends with these examples:
+The command help ends with these examples. The first runs on any backend. The other two are
+registry-backed and run only when `[personal] backend = "registry"` and `DATABASE_URL` are set:
 
 ```text
 pitwall serve --plan-only --model Qwen/Qwen3.8-27B --gpu-class RTX_3090
@@ -514,10 +515,10 @@ Argument parser: `_parse_init_args`. Manual-path defaults come from `_DEFAULT_IN
 | `--yes` | No | `False` | `bool` (store_true; alias for `--non-interactive`) |
 | `--capability-name` | No | `"embedding.demo"` on manual path | `str` |
 | `--capability-class` | No | `"embedding"` on manual path | choice: `embedding`, `rerank`, `llm`, `vision`, `transcribe`, `gpu_lease`, `custom` |
-| `--cost-mode` | No | `"per_second"` on manual path | choice: `per_second`, `per_request`, `per_token` |
+| `--cost-mode` | No | `"per_second"` on manual path | choice: `per_second`, `per_request`, `per_token`, `zero` |
 | `--provider-name` | No | `"demo-runpod-lb"` on manual path | `str` |
 | `--endpoint-id` | No | `"eptest00000000"` on manual path | `str` |
-| `--provider-type` | No | `"serverless_lb"` on manual path | choice: `serverless_queue`, `serverless_lb`, `public_endpoint`, `pod_lease` |
+| `--provider-type` | No | `"serverless_lb"` on manual path | choice: `serverless_queue`, `serverless_lb`, `public_endpoint`, `pod_lease`, `openai_gateway`, `model_studio` |
 | `--region` | No | `"US-EXAMPLE-1"` on manual path | `str` |
 | `--gpu-class` | No | `"NVIDIA L4"` on manual path | `str` |
 | `--per-second-active` | No | `"0.001"` on manual path | `str` |
@@ -545,7 +546,7 @@ Argument parser: `_parse_create_capability_args`. Enum choices come from `Capabi
 | `--name` | Conditional | `None` | `str` |
 | `--version` | No | `"1.0.0"` | `str` |
 | `--class` | Conditional | `None` | choice: `embedding`, `rerank`, `llm`, `vision`, `transcribe`, `gpu_lease`, `custom` |
-| `--cost-mode` | Conditional | `None` | choice: `per_second`, `per_request`, `per_token` |
+| `--cost-mode` | Conditional | `None` | choice: `per_second`, `per_request`, `per_token`, `zero` |
 | `--description` | No | `None` | `str` |
 | `--hint` | No | `[]` | repeatable choice: `latency_sensitive`, `cost_sensitive`, `region_preference` |
 | `--openai-compatible` | No | `False` | `bool` (store_true) |
@@ -1112,9 +1113,10 @@ records the selected variant and volume, otherwise `cold`.
 - `RuntimeError` / exception from `asyncio.run`: caught, printed to stderr as `"Error: ..."`, returns `1`.
 
 ### `cmd_warm_volume` failure modes
-- `create_pod_with_fallback_sync` fails for all GPU types: returns `2`.
-- `terminate_pod_sync` fails after pod exit: returns `3`.
-- Capability or provider not found: prints descriptive error, returns `1`.
+- Missing `DATABASE_URL` (`missing_database_url`): returns `2`.
+- `BudgetRejected`, `PitwallApiError` (for example `invalid_request`), and `CatalogueError` (`invalid_request`): return `2`.
+- Any other unexpected exception: prints `warm-volume failed` (JSON `{"error": "warm_failed"}`) and returns `1`.
+- Success returns `0`. There is no exit `3`.
 
 ### `cmd_serve_model` failure modes
 - `BudgetRejected`, Pydantic request validation, and service errors with HTTP status `409` or `422`
@@ -1166,9 +1168,8 @@ records the selected variant and volume, otherwise `cold`.
 | Module | Used by | Purpose |
 |---|---|---|
 | `pitwall.runpod_client.templates` | `pitwall.cli` | `ensure_template`, `get_registry_auth_id_from_env`, `image_sha`, `normalize_template_name`, `template_display_name`, `_TEMPLATE_ENV_KEYS` |
-| `pitwall.runpod_client.pods` | `pitwall.cli` | `terminate_pod_sync`, `get_pod_sync`, `create_pod_with_fallback_sync` |
+| `pitwall.runpod_client.pods` | `pitwall.cli` | `terminate_pod_sync`, `get_pod_sync` |
 | `pitwall.runpod_client.gpu` | `pitwall.cli` | `validate_canonical_gpu_name` |
-| `pitwall.runpod_client.workloads` | `pitwall.cli` | `WorkloadConfig` |
 | `pitwall.seed` | `pitwall.cli` | `SeedValidationError`, `apply_seed_files`, `apply_seed_data`, `apply_capability_seed_files` |
 | `pitwall.db` | `pitwall.cli` | `get_pool`, `main` (for `pitwall db` subcommands) |
 | `pitwall.db.repository` | `pitwall.cli` | `CapabilityRepository`, `ProviderRepository` |

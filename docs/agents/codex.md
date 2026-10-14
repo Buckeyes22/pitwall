@@ -60,6 +60,10 @@ uv run pitwall mcp uninstall codex --scope user
 
 This removes the managed block and restores the surrounding bytes exactly as they were.
 
+Install also registers a second server, `pitwall-channel` (`pitwall mcp serve channel`), in its
+own managed block between `# >>> pitwall-channel (managed by pitwall agents install)` and
+`# <<< pitwall-channel`; uninstall removes both. See the [orchestrator channel](orchestrator-channel.md#tier-1-the-mcp-server).
+
 ## If a foreign `pitwall` entry already exists
 
 If `config.toml` already defines `[mcp_servers.pitwall]` outside the pitwall-managed block,

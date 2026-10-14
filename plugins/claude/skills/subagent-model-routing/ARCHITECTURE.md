@@ -32,7 +32,7 @@ Shim layer  ── runs the CLI in plain-text mode (+ permission/sandbox bypass 
   ▼
 codex / agy / kimi / opencode / grok / qwen / pi / hermes / cline / muse / goose / dsh CLI  ── full agent loop: read source · write files · run gates (tsc/lint/test) · iterate
   ▼
-EXTERNAL MODEL  (GPT-6 · Grok 4.7 · Kimi K3 · Qwen via Qwen Code · GLM-5.3 · MiniMax-M3 · any model behind Pi/Hermes/Cline/goose/dsh · local/self-hosted via Qwen Code or opencode custom provider)  ── external auth/local endpoint, OFF the token meter
+EXTERNAL MODEL  (GPT-6 · Grok 4.7 · Kimi K3 · Qwen via Qwen Code · GLM-5.3 · MiniMax-M3.1-Flash-Preview · any model behind Pi/Hermes/Cline/goose/dsh · local/self-hosted via Qwen Code or opencode custom provider)  ── external auth/local endpoint, OFF the token meter
   │
    └── stdout (the CLI's plain-text output, `SHIM-DONE exit=<n>` last) ─┐
                                                                      │ returned VERBATIM up the chain

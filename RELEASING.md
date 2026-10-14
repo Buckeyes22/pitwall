@@ -21,12 +21,16 @@ migration or overwrite an existing package version or image digest.
    artifact-smoke checks. The user journey harness result is
    required: run `scripts/release/run-user-journeys.sh` against a disposable
    Postgres and Redis (`DATABASE_URL`, `REDIS_URL`) and confirm every journey
-   passes. Pull-request CI does not run the harness; the tag's
-   `release-readiness.yml` runs it again in its `journeys` job. Live-provider testing is optional and always uses the
-   operator's own credentials outside release automation.
+   passes. Neither pull-request CI nor the tag's `release-readiness.yml` runs the harness; the
+   workflow's `journeys` job runs only the non-harness `release` tests
+   (`pytest -m "release and not live" tests/release`). The harness result is a local pre-tag
+   check. Live-provider testing is optional and always uses the operator's own credentials
+   outside release automation.
 4. Confirm the protected release environments allow only `v*` tags.
 5. Confirm the public repository's history is the single approved root:
-   `git rev-list --count HEAD` prints `1` and `git cat-file -p HEAD` has no `parent` line.
+   `git rev-list --max-parents=0 HEAD` prints exactly one commit
+   (`6682717858f85ab4f68d5bee60f53f697a55686b`), so `git rev-list --max-parents=0 HEAD | wc -l`
+   prints `1`.
 6. Confirm a successful `CI` run for that exact commit on the public repository:
    `gh run list --repo Buckeyes22/pitwall --workflow ci.yml --commit "$(git rev-parse HEAD)" --status success --json databaseId --jq length`
    prints at least `1`. CI results from any other repository or commit do not count;

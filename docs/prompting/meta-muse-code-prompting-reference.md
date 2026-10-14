@@ -18,7 +18,7 @@ Use `muse exec "<prompt>"` for a one-shot prompt, or `--prompt-file` to deliver 
 
 ## 3. Model and reasoning
 
-Select a model with `--model`; the shim's default is `muse-wonder-1.0`. `--reasoning-effort` accepts `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, or `ultra`, with default `high`. Use `/models` to inspect available models.
+Select a model with `--model`; the shim's default is `muse-wonder-1.0`. `--reasoning-effort` takes `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, or `ultra`, with default `high`. The shim also passes `none` through, but Meta's API rejects it with HTTP 400, so never send it. Use `/models` to inspect available models.
 
 ## 4. Permissions
 

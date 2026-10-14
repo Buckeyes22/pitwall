@@ -59,8 +59,10 @@ Uninstall:
 uv run pitwall mcp uninstall opencode --scope user
 ```
 
-This removes the `pitwall` entry from `opencode.json` and leaves every other entry
-untouched.
+This removes the `pitwall` and `pitwall-channel` entries from `opencode.json` and leaves every
+other entry untouched. Install registers both: the broker server `pitwall` and a second stdio
+server, `pitwall-channel` (`pitwall mcp serve channel`), at the same scope; see the
+[orchestrator channel](orchestrator-channel.md#tier-1-the-mcp-server).
 
 ## Project scope
 

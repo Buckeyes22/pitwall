@@ -53,7 +53,7 @@ or row-level isolation.
 
 1. Set `PITWALL_API_TOKEN` and `PITWALL_ADMIN_SECRET`; non-loopback API startup refuses to proceed
    without both.
-2. Set `PITWALL_WEBHOOK_SECRET`; non-loopback webhook startup refuses to proceed without it.
+2. Set `PITWALL_WEBHOOK_SECRET`; the webhook receiver refuses to start without it.
 3. Use scoped bearer tokens for delegated callers and reserve the all-scopes token for operators.
 4. Bind published ports to loopback or a private interface and terminate TLS at a trusted proxy.
 
@@ -123,8 +123,8 @@ advisory coordination remain here under one Pitwall security home.
 | Feature | Implementation | Default |
 |---------|---------------|---------|
 | API authorization | Constant-time opaque bearer lookup; explicit `read`, `spend`, `lease:mutate`, `webhook:admin`, and `server:admin` scopes | Required for non-loopback API; optional with warning on loopback |
-| Admin auth | `server:admin` bearer scope plus constant-time `X-Pitwall-Secret` comparison | Required for non-loopback API; admin routes fail closed if absent |
-| Inbound webhook HMAC | `X-Pitwall-Webhook-Signature` verified by `webhook_dispatcher/signer.verify`; bounded timestamp window | Required for non-loopback receiver; optional on loopback |
+| Admin auth | `server:admin` bearer scope plus constant-time `X-Pitwall-Secret` comparison | Required for non-loopback API; admin routes fail closed if absent. `GET`/`HEAD` under `/v1/admin/runpod/` need only the `read` scope |
+| Inbound webhook HMAC | `X-Pitwall-Webhook-Signature` verified by `webhook_dispatcher/signer.verify`; bounded timestamp window | Required at every bind, loopback included; the receiver refuses to start without `PITWALL_WEBHOOK_SECRET` |
 | SSRF allow-list | `runpod_endpoint_id` validated by `^[A-Za-z0-9][A-Za-z0-9_-]{1,63}$` at `resolver/provider_urls.py::_require_endpoint_id` | Always on |
 | Kill-switch | `POST /v1/admin/kill-switch`; ordered network deny → device revoke → compute terminate; `< 30s` budget; audit-logged | Gated by admin auth |
 | Fail-closed boot | Refuses to start when the runtime variables required by a service are unset | Always on |

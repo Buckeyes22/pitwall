@@ -101,10 +101,10 @@ lifecycle methods because it is not a leaseable resource provider.
 `WorkloadConfig` (Pydantic BaseModel): `name`, `capability`, `template_name`, `gpu_types: list[str]` (min_length=1), `gpu_count`, `container_disk_gb`, `min_vcpu`, `min_memory_gb`, `cloud_type`, `gpu_type_priority`, `data_center_priority`, `allowed_cuda_versions`, `ports`. **Invariant:** `gpu_types` is validated at construction via `validate_canonical_gpu_names()` — shorthand aliases like `"H100"` are rejected, while five historical full-name aliases normalize to their live ids (`pitwall.runpod_client.workloads`).
 
 ### `gpu.py`
-The 46 canonical ids and their VRAM values follow the **RunPod gpuTypes snapshot 2026-08-27**. Shorthand aliases are rejected rather than silently normalized; five historical full-name aliases remain accepted and normalize to their live ids.
+The 47 canonical ids and their VRAM values follow the **RunPod gpuTypes snapshot 2026-08-27**. Shorthand aliases are rejected rather than silently normalized; five historical full-name aliases remain accepted and normalize to their live ids.
 
 ```python
-CANONICAL_GPU_NAMES: frozenset[str]  # 46 live ids, e.g. "NVIDIA H100 80GB HBM3"
+CANONICAL_GPU_NAMES: frozenset[str]  # 47 live ids, e.g. "NVIDIA H100 80GB HBM3"
 LEGACY_GPU_NAME_ALIASES: Mapping[str, str]
 GPU_VRAM_GB: Mapping[str, int]
 def is_canonical_gpu_name(gpu_name: str) -> bool
@@ -655,8 +655,11 @@ path-style addressing and SigV4 signing. Response parsing accepts v2 `dataCenter
 
 ## 4. Public Interfaces
 
-Key callable symbols (RunPod client symbols are re-exported from `pitwall.runpod_client`;
-provider plugin symbols are re-exported from `pitwall.providers`):
+Key callable symbols (only the names in `pitwall.runpod_client.__all__` are re-exported from
+`pitwall.runpod_client`; the remaining RunPod client symbols, such as the serverless, serverless
+load-balancer, template, availability, registry, and pod helpers, are imported from their defining
+submodules under `pitwall.runpod_client`; provider plugin symbols are re-exported from
+`pitwall.providers`):
 
 - **Config:** `WorkloadConfig`, `CANONICAL_GPU_NAMES`
 - **Provider plugins:** `Provider`, `ProviderRegistry`, `ProviderOperationContext`, `ProvisionRequest`, `ProvisionResult`, `StatusRequest`, `StatusResult`, `ReconcileRequest`, `ReconcileResult`, `TeardownRequest`, `TeardownResult`, `ResourceStatus`, `RunPodProvider`, `RunPodCredentials`, `create_default_registry`, `get_default_registry`; registry errors: `DuplicateProviderError`, `ProviderNotRegisteredError`, `CredentialValidationError`

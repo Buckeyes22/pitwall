@@ -118,7 +118,7 @@ Responsibility: atomic cost admission with advisory locking and idempotency supp
   - defaults require the env vars to be set
 - `BudgetSnapshot` (`pitwall.cost.budget_gate`) — frozen dataclass with `model_dump(mode="json")` and `to_serializable_dict` for HTTP bodies
 - `BudgetRejected(RuntimeError)` (`pitwall.cost.budget_gate`) — `error_code = "budget_rejected"`, `status_code = 402`; `to_response_body()` returns `{"error", "reason", "snapshot"}`
-- `PITWALL_BUDGET_LOCK_KEY = int.from_bytes(b"PITWBUDG", "big")` = `546840836487` (`pitwall.cost.budget_gate`) — Postgres advisory lock key
+- `PITWALL_BUDGET_LOCK_KEY = int.from_bytes(b"PITWBUDG", "big")` = `5785247930085884999` (`pitwall.cost.budget_gate`) — Postgres advisory lock key
 - `BudgetGate.try_launch(capability_id, provider_id, estimate_usd, workload_type, submitted_at, idempotency_key) -> str` — see §4. `estimate_usd` can be a raw `Decimal` or quote-like object with `upper_bound() -> Decimal`; quote objects are converted to the upper bound before per-request/monthly checks and before insert.
 - `BudgetGate.current_mtd_spend() -> Decimal` (`pitwall.cost.budget_gate`) — read-only month-to-date sum, no lock taken
 
@@ -644,7 +644,7 @@ Post-insert, callers (e.g. `sync_gate.gate_sync_inference`) immediately transiti
 
 | Env Var | Module | Default | Description |
 |---------|--------|---------|-------------|
-| `PITWALL_MONTHLY_BUDGET_USD` | `src/pitwall/cost/budget_gate.py`, `src/pitwall/cost/alerts.py`, `src/pitwall/cost/exporter.py`, `src/pitwall/finops/burn_rate.py` | **required** (gate/alerts) / `"50.0"` (burn-rate settings default) / `"1000"` (exporter) | Monthly spend cap |
+| `PITWALL_MONTHLY_BUDGET_USD` | `src/pitwall/cost/budget_gate.py`, `src/pitwall/cost/alerts.py`, `src/pitwall/cost/exporter.py`, `src/pitwall/finops/burn_rate.py` | **required** (gate/alerts/exporter; the exporter refuses to start without it) / `"50.0"` (burn-rate settings default) | Monthly spend cap |
 | `PITWALL_PER_REQUEST_MAX_USD` | `pitwall.cost.budget_gate` | **required** | Per-request estimate cap |
 | `RESEND_API_KEY` | `pitwall.cost.notifications` | unset → `LogNotifier` | Selects `ResendNotifier` when set; absent falls back to structured logging |
 | `PITWALL_ALERT_FROM` | `pitwall.cost.notifications` | required for `ResendNotifier` | From address; falls back to `RESEND_SENDER_EMAIL` |

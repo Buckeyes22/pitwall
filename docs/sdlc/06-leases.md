@@ -119,7 +119,8 @@ def estimate_lease_launch_cost(capability, provider, payload=None) -> Decimal
 ```
 
 **Idempotent launches:** `POST /v1/leases`, `pitwall_lease_pod`, `POST /v1/serve`,
-`pitwall_serve_model`, and `pitwall serve` accept an optional `idempotency_key`. A keyed
+`pitwall_serve_model`, and `pitwall serve` on the registry backend accept an optional
+`idempotency_key`. A keyed
 admission records the SHA-256 of the caller's request on its workload (`input`
 `{"launch_request_sha256": ...}`) inside the budget-admission transaction: `admit_lease_launch`
 for RunPod, `admit_provision` for Lambda Cloud and Vast. For a lease the request is the resolved
@@ -189,7 +190,9 @@ record or claim a warm cache; a changed variant or configured volume is cold.
 `serve --plan-only` stops before this lease lifecycle: it creates no pool, capability,
 provider, template, workload, or lease. It reports the catalogue argv/image, volume-cache
 environment, selected-GPU fit, startup timeout, TTL estimate, and whether pricing came from the
-read-only live snapshot or canonical-VRAM fallback. Registry-backed `--dry-run` is unchanged.
+read-only live snapshot or canonical-VRAM fallback. Registry-backed `--dry-run` is unchanged:
+`pitwall serve` reaches it when `[personal] backend = "registry"` is set in `pitwall.toml`; on the
+default personal backend it runs the single-host serve instead.
 
 A self-hosted `public_endpoint` warm creates no lease row, returns `lease_id: null`, emits the
 compatible ready event, and is skipped by renewal, idle-stop, and activity-controller logic.
@@ -257,8 +260,8 @@ async def run_teardown(
 
 **Steps:**
 1. Fetch lease; raise `LeaseNotFound` if absent
-2. If already terminal (`STOPPED`/`EXPIRED`), return early (no-op)
-3. Transition `ACTIVE -> STOPPING` via `_mark_stopping`; raises `LeaseStateConflict` if not ACTIVE
+2. If already terminal (`STOPPED`/`FAILED`/`EXPIRED`), return early (no-op)
+3. Move the lease to `STOPPING` via `_mark_stopping`: a `STOPPING` lease resumes unchanged; `CREATING`/`WAITING_RUNTIME`/`WAITING_PROBE`/`ACTIVE` transition to `STOPPING` (`LeaseStateConflict` only for a state outside the active set, which the terminal check makes unreachable)
 4. Call `terminate_pod` with the retained RunPod id or its generic-id fallback
 5. Compute cost via `close_lease_cost(lease, provider, terminated_at)`
 6. Call `lease_repo.close_teardown` transitioning `STOPPING -> terminal_state` with cost/time/reason
@@ -509,7 +512,7 @@ facts again.
 
 **Launch:** `ProviderNotPodLease` (non `pod_lease` provider); `TemplateImageNotConfigured` (no image ref); `InvalidProviderConfig` (malformed config); `LaunchConfigError` (base). `ProviderAttachHangRecoveryRequested` — provider enters 15-min cooldown, response has `provider_fallback=True, provider_cooldown_until`. `ProviderFallbackRequested` — fallback exhausted, `provider_fallback=True`.
 
-**Teardown:** `LeaseNotFound` (404); `LeaseStateConflict` (409 if not ACTIVE on stop); `TeardownFailed` (502 `teardown_failed` when the provider call fails; the lease stays `stopping` and the reconciler retries it).
+**Teardown:** `LeaseNotFound` (404); `TeardownFailed` (502 `teardown_failed` when the provider call fails; the lease stays `stopping` and the reconciler retries it).
 
 **API routes:** `ChangeSetTooBroad` (PATCH spanning multiple axes); `LeaseNotFound` (404); `LeaseStateConflict` (409).
 

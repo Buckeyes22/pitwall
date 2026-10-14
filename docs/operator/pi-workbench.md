@@ -99,8 +99,10 @@ with `reevaluate` and `reevaluate-child` to re-score a saved report.
 The `PITWALL_WORKBENCH_*` variables are listed in `.env.example`: `PITWALL_WORKBENCH_PI_BIN`,
 `PITWALL_WORKBENCH_RUNTIME_DIR`, `PITWALL_WORKBENCH_AGENT_DIR`, `PITWALL_WORKBENCH_RESOURCE_DIR`,
 `PITWALL_WORKBENCH_ACCOUNT_BUDGET_DIR`, `PITWALL_WORKBENCH_TINTIN_EXTENSION`,
-`PITWALL_WORKBENCH_CANDIDATE_B_EXTENSION`, and `PITWALL_WORKBENCH_HOSTED_MAX_COMPLETION_TOKENS`. The
-launcher sets the rest itself; leave them empty. Only the selected credential and operational
+`PITWALL_WORKBENCH_CANDIDATE_B_EXTENSION`, `PITWALL_WORKBENCH_HOSTED_MAX_COMPLETION_TOKENS`, and
+`PITWALL_WORKBENCH_APPROVED_CHECKS`. The last is a JSON array of `{command, args, timeoutMs?}` objects
+that the launcher forwards to Pi; when it is unset, validation is "not run" and explicit integration is
+refused. The launcher sets the rest itself; leave them empty. Only the selected credential and operational
 environment are forwarded to Pi.
 
 ## Reading usage

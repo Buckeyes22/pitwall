@@ -4,6 +4,10 @@
 It forwards four environment variables by reference, never by value:
 `RUNPOD_API_KEY`, `DATABASE_URL`, `REDIS_URL`, and `PITWALL_CONFIG_FILE`.
 
+The same command also registers a second stdio server, `pitwall-channel`, launched as
+`pitwall mcp serve channel`, at the scope you choose (`.mcp.json` for `--scope project`). See
+[the orchestrator channel](orchestrator-channel.md#tier-1-the-mcp-server) for its entry shape.
+
 ## User scope
 
 User scope goes through the `claude` CLI, because Claude Code rewrites `~/.claude.json`
@@ -42,7 +46,7 @@ Uninstall:
 uv run pitwall mcp uninstall claude-code --scope user
 ```
 
-This runs `claude mcp remove --scope user pitwall`.
+This runs `claude mcp remove --scope user pitwall` and removes the `pitwall-channel` entry too.
 
 ## Project scope
 
@@ -91,7 +95,8 @@ Uninstall:
 uv run pitwall mcp uninstall claude-code --scope project --project-root /path/to/project
 ```
 
-This removes the `pitwall` entry from `.mcp.json` and leaves every other entry untouched.
+This removes the `pitwall` and `pitwall-channel` entries from `.mcp.json` and leaves every other
+entry untouched.
 
 ## If a foreign `pitwall` entry already exists
 

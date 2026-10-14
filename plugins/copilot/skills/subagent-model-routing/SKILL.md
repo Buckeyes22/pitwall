@@ -25,7 +25,7 @@ Use it when the user wants Copilot to route work to external model harnesses thr
 - `~/.claude/scripts/qwen-shim.sh` for Qwen models via the local Qwen Code CLI.
 - `~/.claude/scripts/opencode-shim.sh` for GLM, MiniMax, or local/self-hosted models via the local opencode wrapper.
 
-Qwen (including local llama.cpp endpoints configured in `~/.qwen/.env`) routes through `qwen-shim.sh`; other local/self-hosted models are routed as custom providers through `opencode-shim.sh`, or directly through the model-agnostic harnesses below (Pi, Hermes, Cline, goose, dsh) — see the root README for an example.
+Qwen (including local llama.cpp endpoints configured in `~/.qwen/.env`) routes through `qwen-shim.sh`; other local/self-hosted models are routed as custom providers through `opencode-shim.sh`, or directly through the model-agnostic harnesses below (Pi, Hermes, Cline, goose, dsh) — see the `## Routing a local model` section of `docs/agents/routing-readme.md` (or `docs/agents/attach-local-endpoint.md`) for an example.
 
 Do not use Claude-only concepts here. The Copilot path uses direct shell dispatch for flat work (all fourteen shims) and the shared `pitwall agents workflow` JSON runner for durable graphs, which dispatches any registered harness.
 
@@ -106,7 +106,7 @@ The canonical Copilot-hosted transport/model inventory is generated from `src/pi
 
 | Harness | Invocation | Prompt delivery | Caveat |
 |---|---|---|---|
-| Pi | `~/.claude/scripts/pi-shim.sh <prompt-file> [flags]` | argv | Model-agnostic; endpoint routes require `profiles sync --harness pi`. |
+| Pi | `~/.claude/scripts/pi-shim.sh <prompt-file> [flags]` | file | Model-agnostic; endpoint routes require `profiles sync --harness pi`. |
 | Hermes Agent | `~/.claude/scripts/hermes-shim.sh <prompt-file> [flags]` | argv | Model-agnostic; endpoint routes require `profiles sync --harness hermes`. |
 | Cline CLI | `~/.claude/scripts/cline-shim.sh <prompt-file> [flags]` | argv | Model-agnostic, but Cline supports one custom endpoint at a time. |
 | Muse Code | `~/.claude/scripts/muse-shim.sh <prompt-file> [flags]` | file | Model-bound; the prompt is delivered as a private file path. |
@@ -115,7 +115,7 @@ The canonical Copilot-hosted transport/model inventory is generated from `src/pi
 | ZCode | `~/.claude/scripts/zcode-shim.sh <prompt-file> [flags]` | argv | Model-bound to its saved model and account; no model or effort override. |
 
 **Tier example (seed — copy into your own ledger and adjust):**
-codex GPT-6 Sol (provisional flagship seat) ≥ GLM-5.3 > Kimi K3 > MiniMax-M3; Grok 4.7, GPT-6 Astra/Luna, and local/self-hosted models remain unranked pending local evidence. Within the Claude family, the officially hosted system cards provide a provisional capability prior of Fable 5.1 > Opus 5.5 > Sonnet 5.5, but not a cross-provider local ranking: use Sonnet 5.5 as the default workhorse, Opus 5.5 for difficult or verification-heavy work, and Fable 5.1 for the hardest generally available Claude work where its safeguards and possible fallback are acceptable. GLM-5.3 holds the default authoring seat; GPT-6 Sol is reserved for the hardest/critical units and deepest review; Kimi is mid-tier utility, parallel candidates, and burst; MiniMax M3 handles Sonnet-grade throughput (stall policy retained).
+codex GPT-6 Sol (provisional flagship seat) ≥ GLM-5.3 > Kimi K3 > MiniMax M3.1 Flash Preview; Grok 4.7, GPT-6 Astra/Luna, and local/self-hosted models remain unranked pending local evidence. Within the Claude family, the officially hosted system cards provide a provisional capability prior of Fable 5.1 > Opus 5.5 > Sonnet 5.5, but not a cross-provider local ranking: use Sonnet 5.5 as the default workhorse, Opus 5.5 for difficult or verification-heavy work, and Fable 5.1 for the hardest generally available Claude work where its safeguards and possible fallback are acceptable. GLM-5.3 holds the default authoring seat; GPT-6 Sol is reserved for the hardest/critical units and deepest review; Kimi is mid-tier utility, parallel candidates, and burst; MiniMax M3 handles Sonnet-grade throughput (stall policy retained).
 
 Per-model capability cards (excels-at / struggles-with / operational caveats / evidence) live in the Claude Code package within a Pitwall source clone at `plugins/claude/skills/subagent-model-routing/ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` (or directly below `plugins/` in a legacy standalone source checkout). They are maintained there by that package's `/pitwall:distill` command and are read-only reference material from Codex/Copilot; they are present in a source clone but not in an isolated plugin-cache install.
 
@@ -338,7 +338,7 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 ### Kimi / Moonshot
 
 - Use clear detailed instructions, delimiters, explicit steps, examples, and reference text.
-- Keep shim prompts focused on task and output contract; opencode owns the tool harness.
+- Keep shim prompts focused on task and output contract; Kimi Code owns the tool harness.
 - Pilot new templates before fan-out.
 - Do not use non-tool completion routes for grounded review.
 - Tools: if your CLI has MCP tools configured, prompts may direct their use.
@@ -391,12 +391,12 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 
 ### Qwen / Alibaba
 
-- Route status: first-class provider since v0.7.0 over the dedicated `qwen-shim.sh`; other local/self-hosted models route through an opencode custom provider, or directly through another model-agnostic harness (Pi, Hermes, Cline, goose, dsh) — see the root README for an example.
+- Route status: first-class provider since v0.7.0 over the dedicated `qwen-shim.sh`; other local/self-hosted models route through an opencode custom provider, or directly through another model-agnostic harness (Pi, Hermes, Cline, goose, dsh) — see the `## Routing a local model` section of `docs/agents/routing-readme.md` (or `docs/agents/attach-local-endpoint.md`) for an example.
 - Use the six-element framework for prompt work: Context, Objective, Style, Tone, Audience, Response.
 - Add examples, explicit task steps, and separators such as `###`, `===`, or `>>>`.
 - Qwen3 thinking can be steered with `enable_thinking`, `/think`, and `/no_think`; Qwen3.8 replaces the soft switches with `reasoning_effort` (`low`/`medium`/`xhigh`, default `xhigh`).
 - Do not route local Qwen work through `codex-shim`; use `qwen-shim.sh` (Qwen Code CLI, endpoint configured in `~/.qwen/.env`).
-- Tools: MCP tool availability follows your opencode configuration; for small-context local models, consider skipping heavy tool schemas — context is better spent on prompt and source.
+- Tools: MCP tool availability follows your Qwen Code configuration; for small-context local models, consider skipping heavy tool schemas — context is better spent on prompt and source.
 <!-- MODEL-FACTS:qwen START (generated from docs/agents/model-facts/families/qwen; edit facts.json, not this block) -->
 - **Models:** `qwen3.8-flash`, `qwen3.8-flash-next`, `qwen3.8-27b`, `qwen3.6-27b`, `qwen3.6-35b-a3b`, `qwen3-coder-next`, `qwen3.8-max`, `qwen3.8-2.4t-a95b`
 - **Context:** `qwen3.8-flash`, `qwen3.8-max`: 1,000,000 tokens; `qwen3.8-flash-next`, `qwen3.8-27b`, `qwen3.6-27b`, `qwen3.6-35b-a3b`, `qwen3-coder-next`, `qwen3.8-2.4t-a95b`: 262,144 tokens.
@@ -409,7 +409,7 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 
 ### LongCat (OpenCode Go)
 
-- **Use for:** long-context and high-volume work at the cheapest Go request tiers (Meituan 1.6T-class MoE, 256K context).
+- **Use for:** long-context and high-volume work at the cheapest Go request tiers (Meituan 1.6T-class MoE; 256K context on `opencode-go/longcat-2.0`, 1M on `opencode-go/longcat-2.5-preview-free`).
 - **Route:** `opencode-shim.sh opencode-go/longcat-2.5-preview-free <file>` (self-hosting needs 2 TB-class SGLang nodes — not a Pod recipe).
 - **Thinking control:** `enable_thinking` chat kwarg, configured in the harness, not the prompt. No sampling defaults are published; validate locally.
 - **Gotcha:** tool-call `arguments` must be dicts, not OpenAI-style strings.

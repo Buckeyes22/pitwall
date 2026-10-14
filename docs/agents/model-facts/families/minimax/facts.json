@@ -9,7 +9,7 @@
       "routes": [
         {
           "harness": "opencode",
-          "model": "minimax/MiniMax-M3"
+          "model": "minimax-coding-plan/MiniMax-M3"
         }
       ],
       "facts": {

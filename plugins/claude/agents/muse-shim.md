@@ -3,7 +3,7 @@ name: muse-shim
 description: >-
   Transports a single shell command invoking ~/.claude/scripts/muse-shim.sh and
   returns stdout verbatim. Dispatches a one-shot prompt to Meta's Muse Code
-  (Meta-hosted Muse Spark; model-bound; prompt delivered by file).
+  (Meta-hosted Muse Wonder by default, Muse Spark via --model; model-bound; prompt delivered by file).
 model: sonnet
 color: purple
 ---

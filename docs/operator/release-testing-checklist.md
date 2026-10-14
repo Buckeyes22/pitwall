@@ -23,13 +23,14 @@ uv run python -m pitwall.audit.checks --strict
 A non-zero exit blocks the release. (`--json` emits the machine-readable report the CI
 workflow uploads as an artifact.)
 
-## 3. Release tiers — EXACT `-m release`
+## 3. Release tiers — exact `-m` selector
 ```bash
 uv run pytest -m release tests/release -q
 ```
 > **Critical:** `tests/release/conftest.py` un-skips the tier tests ONLY when the pytest
-> `-m` option is the exact string `release`. `-m "release and not live"` silently skips the
-> entire release gate. The `live`-marked envelopes (BGE-M3 smoke, kill drill) self-skip
+> `-m` option is exactly `release` or exactly `release and not live` (the latter is what
+> `release-readiness.yml` runs). Any other `-m` expression silently skips the entire
+> release gate. The `live`-marked envelopes (BGE-M3 smoke, kill drill) self-skip
 > without `RUNPOD_LIVE=1`; that is expected for a hermetic cut. Project CI never supplies
 > provider credentials or enables live execution.
 

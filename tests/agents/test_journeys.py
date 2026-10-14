@@ -1,7 +1,7 @@
 """Release journeys J39-J41: routes and doctor, every shim, and the channel and workflows.
 
 J39 drives the routes lifecycle through the real launcher in a temporary HOME against a
-loopback OpenAI-compatible server. J40 runs each of the fourteen shims (thirteen harness
+loopback OpenAI-compatible server. J40 runs each of the fifteen shims (fourteen harness
 shims plus ``route-shim``) against a fake harness binary and pins the exact argv the
 adapter hands it, the ``SHIM-DONE`` sentinel, the ``SHIM-RESULT`` receipt as read by
 ``pitwall.agents.result.parse_shim_receipt``, and a failing exit. J41 carries the scripted channel and

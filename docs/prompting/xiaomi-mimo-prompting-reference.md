@@ -4,7 +4,7 @@
 |---|---|
 | Vendor | Xiaomi (Xiaomi MiMo team) |
 | Models in scope | MiMo-V2.5 (omnimodal 311B/15B), MiMo-V2.5-Pro (1.02T/42B text), plus the V2-Flash backbone line |
-| Primary access | Open weights (MIT) on HuggingFace `XiaomiMiMo`; hosted access via aggregators such as the OpenCode Go subscription (`opencode-go/mimo-v2.6-pro`, `opencode-go/mimo-v2.6-flash`, `opencode-go/mimo-v2.5`, `opencode-go/mimo-v2.5-pro`) |
+| Primary access | Open weights (MIT) on HuggingFace `XiaomiMiMo`; hosted access via aggregators such as the OpenCode Go subscription (`opencode-go/mimo-v2.6-pro`, `opencode-go/mimo-v2.6-flash`; `opencode-go/mimo-v2.5` and `opencode-go/mimo-v2.5-pro` until they retire on 2026-10-21) |
 | Official guidance | **No dedicated prompt-engineering guide.** The model cards and the team's serving cookbooks are the first-party surface. |
 | Canonical doc host | `huggingface.co/XiaomiMiMo` |
 | Compiled | September 2026 |
@@ -64,7 +64,7 @@ Flagged explicitly as **not** Xiaomi-official: apply the shared agentic prompt c
 | Multimodal | V2.5 accepts text/image/video/audio; Pro is text-only |
 | Long context | 1M tokens on both V2.5 models |
 | Self-hosting | vLLM recipe pins TP=4 for V2.5 (TP=8 broken); Pro needs 8x B200-class |
-| Subscription route | `opencode-go/mimo-v2.6-pro` / `opencode-go/mimo-v2.6-flash` / `opencode-go/mimo-v2.5` / `opencode-go/mimo-v2.5-pro` |
+| Subscription route | `opencode-go/mimo-v2.6-pro` / `opencode-go/mimo-v2.6-flash` (V2.5 routes retire 2026-10-21) |
 
 ---
 

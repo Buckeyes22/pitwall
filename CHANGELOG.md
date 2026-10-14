@@ -63,6 +63,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   goose were listed as unpinned), and `pitwall runpod endpoints create` creates queue and
   load-balancer endpoints (the runbooks said Pitwall could only register existing ones).
 
+- A self-hosted endpoint can be registered: a `public_endpoint` provider with a `self_hosted`
+  profile may name its own `openai_base_url` (validated like a local gateway pool: http or https
+  with a host, no user info, query, or fragment). Seed and admin registration previously refused it
+  without a RunPod endpoint id, so the self-hosted runbook's seed could not apply; the runbook's
+  seed now also sets the provider-level `cost` the loader requires and a literal base URL.
+- The `muse` harness no longer accepts effort `none`, which Meta's Muse Spark and Muse Wonder
+  reject with HTTP 400. Registered models already refused it; an unregistered Muse model id (the
+  harness allows unknown models) only met the harness-level list, which still offered it.
+- A repo-wide doc audit corrected about 110 statements that contradicted the code. The ones a user
+  acts on: Pitwall's mode comes from `[personal] backend` in `pitwall.toml`, not from whether
+  `DATABASE_URL` is set; the webhook receiver needs `PITWALL_WEBHOOK_SECRET` at every bind,
+  loopback included; `GET`/`HEAD` under `/v1/admin/runpod/` need only the `read` scope; `pitwall
+  mcp install` also registers `pitwall-channel`; `PITWALL_WORKBENCH_APPROVED_CHECKS` is set by the
+  operator; and the MiniMax M3 route is `minimax-coding-plan/MiniMax-M3`. Retired DeepSeek V4
+  Flash and retiring MiMo V2.5 routes are marked as such, and stale signatures, counts, paths and
+  commands in the SDLC and operator docs, the routing skills, and the QA missions are corrected.
+- The live catalogue-weights test iterates `load_catalogue().models()` and reads `model_id`, so it
+  runs instead of failing at collection.
+
 ## [0.3.0a1] - 2026-10-07
 
 ### Added

@@ -1,11 +1,11 @@
-# MiniMax-M3 — capability card (seed example)
+# MiniMax-M3.1-Flash-Preview — capability card (seed example)
 
 > Seed example — maintain via `/pitwall:distill` and your own ledger.
 
 - **Tier:** Sonnet peer (Sonnet-grade throughput) *(seed ranking)*
 - **Excels at:** sonnet-grade throughput
 - **Struggles with:** intermittent stalls — retry ≤3, no reroute
-- **Operational caveats:** stall detection/retry machinery retained as cheap insurance; `--thinking` is a binary visibility toggle for M3, not an effort dial; no official text prompt-engineering guide — use Anthropic-style structured prompting. M3 (1M context, tri-state `thinking`) and M2.7 (230B/10B, 196K context) are both on OpenCode Go (`opencode-go/minimax-m3`, `opencode-go/minimax-m2.7`); M2.7 weights are non-commercial licensed.
+- **Operational caveats:** stall detection/retry machinery retained as cheap insurance; `--thinking` is a binary visibility toggle for M3, not an effort dial; no official text prompt-engineering guide — use Anthropic-style structured prompting. M3 (1M context, tri-state `thinking`) and M2.7 (230B/10B, 204,800-token context) are both on OpenCode Go (`opencode-go/minimax-m3`, `opencode-go/minimax-m2.7`); M2.7 weights are non-commercial licensed.
 - **Evidence:** seed default — replace with your own observations via `/pitwall:distill`; observations accumulate in `~/.local/state/pitwall/agents/ledger/observations.jsonl`
 - **Last distilled:** 2026-07-07 (seed)
 

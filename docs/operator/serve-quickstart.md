@@ -130,8 +130,8 @@ requests fail.
 The routing hookup is optional. On the same host as `pitwall agents`, append
 `--route <route>` to the paid serve command; Pitwall adds or refreshes the route
 after readiness. `PITWALL_ROUTING_CLI` selects the executable and defaults to
-`pitwall agents`. The `PITWALL_API_TOKEN` inherited by that process needs `read`
-and `spend`; Pitwall performs every automated stop, so routing does not need
+`pitwall agents`. The `PITWALL_AGENTS_API_TOKEN` inherited by that process needs
+`read` and `spend`; Pitwall performs every automated stop, so routing does not need
 `lease:mutate`.
 
 If registration exits 3, the lease remains live. Run the printed recovery
@@ -157,8 +157,11 @@ curl -fsS -X POST -H "Authorization: Bearer <pitwall-api-token>" \
 This is an explicit operator action, separate from automatic activity renewal.
 The mutation validates the lease identifier and optional idempotency key,
 accepts 1–43,200 minutes, locks the lease, permits only mutable lease states,
-and enforces the 30-day expiry horizon. It does not run the reconciler's
-automatic budget, live-price, or kill-switch renewal checks. Use the returned
+and enforces the 30-day expiry horizon. Manual renewal is still budget-checked: it
+reserves the lease's settlement rate times the extension against the budget under the
+budget lock, and can fail with `budget_rejected` (402) or `budget_not_configured` (503);
+a same-key retry of an applied renewal returns its stored result. It does not run the
+reconciler's automatic live-price or kill-switch renewal checks. Use the returned
 `expires_at`; a renewal that reaches the lifetime ceiling leaves the persisted
 lease unchanged.
 

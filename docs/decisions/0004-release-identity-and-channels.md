@@ -1,6 +1,10 @@
 # ADR 0004: Public release identity and distribution channels
 
 - Status: Accepted by the project owner; GitHub-first release scope selected
+- Superseded in part: the Agent Routing sections were superseded on 2026-09-29 by the
+  single-project unification (`docs/superpowers/specs/2026-09-28-single-project-design.md`). Agent
+  Routing is `pitwall.agents` (`pitwall agents ...`) in the one `pitwall` distribution, released only
+  by `v*` tags.
 - Date: 2026-07-18
 - Decision owner: Project owner
 
@@ -83,8 +87,8 @@ source for new documentation or tooling.
 
 Amendment, 2026-09-02: the Agent Routing identity table above still lists a `model-routing`
 compatibility alias alongside `pitwall-agent-routing`. That alias has been removed as part of the
-`pitwall` plugin-family rename; `[project.scripts]` in `pyproject.toml` now
-defines exactly one console script, `pitwall-agent-routing`, and the removal is recorded under the
+`pitwall` plugin-family rename; at that date `[project.scripts]` in `pyproject.toml`
+defined exactly one console script, `pitwall-agent-routing`, and the removal is recorded under the
 `0.11.0` entry under "History before unification" in the root `CHANGELOG.md`. This ADR's decision text is left as
 originally recorded for the historical account; `pyproject.toml` and the CHANGELOG are authoritative
 for the current CLI surface.

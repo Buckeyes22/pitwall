@@ -15,14 +15,14 @@ provider key, token, or endpoint secret. Use only the placeholder values in the
 - `pitwall` with no arguments, or `pitwall dashboard`, unless the README Quick Start `export`
   lines (including `DATABASE_URL`) are set in that terminal. Without them it starts
   `pitwall setup`.
-- `pitwall serve` without `--dry-run`
+- `pitwall serve` without `--plan-only`
 - `pitwall status` or `pitwall stop`, except the exact `pitwall status` commands in mission T1-07
   (no credential, input from `/dev/null`) and T2-05 Step 4 (README `export` lines set, so it
   reads the local test database)
 - `pitwall terminate-pod`
 - `pitwall warm-volume` or `pitwall register-template` without `--dry-run`
 - `pitwall runpod` anything except `--help`
-- `pitwall runpod-onboard apply` or `pitwall runpod-onboard resume`
+- `pitwall runpod-onboard <request> --action apply` or `pitwall runpod-onboard <request> --action resume`
 - `pitwall volume-files`, `pitwall provider-ops`, and `pitwall retention run`
 - any command that sets `RUNPOD_LIVE`, `PITWALL_RUN_LIVE`, or `PITWALL_RUNPOD_LIVE`, or passes
   `--run-live` or `-m live`
