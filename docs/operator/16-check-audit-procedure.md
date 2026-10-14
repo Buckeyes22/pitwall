@@ -441,7 +441,7 @@ test -f docs/operator/16-check-audit-procedure.md && echo "exists"
 | L2 | `cloud_type=SECURE` for volumes |
 | L3 | `runtime != null` for readiness |
 | L4 | SSH-first probe vs proxy 524 |
-| L5 | LB endpoint creation is console-only |
+| L5 | LB endpoints need REQUEST_COUNT scaling (creation via `pitwall runpod endpoints create` or console) |
 | L6 | Pluggable capacity-error matcher |
 | L7 | Volume attach hang (5-min timeout) |
 | L8 | Idempotent fast-200 webhook + retention windows |

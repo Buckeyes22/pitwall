@@ -1,12 +1,12 @@
-# codex GPT-5.6 family — capability card (seed example)
+# codex GPT-6 family (GPT-5.6 routes still listed) — capability card (seed example)
 
 > Seed example — maintain via `/pitwall:distill` and your own ledger.
 
-- **Tier:** Sol provisionally holds the strongest-implementer seat (≥ GLM-5.3 Opus peer; reserved for hardest/critical + deepest review); Terra and Luna remain unranked pending local evidence *(seed ranking)*
+- **Tier:** GPT-6 Sol provisionally holds the strongest-implementer seat (≥ GLM-5.3 Opus peer; reserved for hardest/critical + deepest review); GPT-6 Astra, GPT-6 Luna, and the GPT-5.6 routes remain unranked pending local evidence *(seed ranking)*
 - **Excels at:** hardest implementation, autonomous verify, deepest review
-- **Struggles with:** system-card evaluations found a greater tendency than GPT-5.5 to go beyond user intent; prompts must state authorization boundaries and destructive-action constraints explicitly
-- **Operational caveats:** Sol is the flagship route; Terra is the lower-cost route; Luna is the fastest and most cost-efficient route. Treat completion claims as unverified until artifacts and deterministic checks pass, especially after tool failures. Deep multi-file work routinely approaches the 20-min ceiling (split long jobs or raise PITWALL_AGENTS_TIMEOUT_SECS deliberately).
-- **Evidence:** GPT-5.6 System Card (`https://deploymentsafety.openai.com/gpt-5-6`) plus seed defaults — replace routing opinions with your own observations via `/pitwall:distill`; observations accumulate in `~/.local/state/pitwall/agents/ledger/observations.jsonl`
+- **Struggles with:** the GPT-5.6 system card's evaluations found a greater tendency than GPT-5.5 to go beyond user intent; prompts must state authorization boundaries and destructive-action constraints explicitly
+- **Operational caveats:** For GPT-6, Codex's subagent guide puts demanding agents on Sol and fast, narrowly scoped agents on Luna; for an explicit effort it starts at medium for Sol, high for Luna, and low for Astra. The GPT-5.6 routes keep their system-card roles: Sol is the flagship, Terra the lower-cost option, and Luna the fastest and most cost-efficient. Treat completion claims as unverified until artifacts and deterministic checks pass, especially after tool failures. Deep multi-file work routinely approaches the 20-min ceiling (split long jobs or raise PITWALL_AGENTS_TIMEOUT_SECS deliberately).
+- **Evidence:** the Codex subagents documentation for the GPT-6 roles, the GPT-5.6 System Card (`https://deploymentsafety.openai.com/gpt-5-6`) for the GPT-5.6 evaluations, plus seed defaults — replace routing opinions with your own observations via `/pitwall:distill`; observations accumulate in `~/.local/state/pitwall/agents/ledger/observations.jsonl`
 - **Last distilled:** 2026-07-09 (seed)
 
 <!-- MODEL-FACTS:codex START (generated from docs/agents/model-facts/families/codex; edit facts.json, not this block) -->

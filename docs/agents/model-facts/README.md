@@ -74,5 +74,5 @@ Run from the repository root.
 
 `/pitwall:model-facts <family>` runs these in order for one family and writes the facts.
 
-A scheduled workflow, `.github/workflows/agent-routing-model-facts.yml`, runs `check --write`
+A scheduled workflow, `.github/workflows/model-facts.yml`, runs `check --write`
 weekly and opens or updates one pull request. It never marks a source reviewed.

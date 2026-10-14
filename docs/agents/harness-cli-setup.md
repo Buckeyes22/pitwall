@@ -16,7 +16,7 @@ Controls:
 - `q` or Escape: skip without installing anything
 - Ctrl-C: restore the terminal and stop with exit 130
 
-The selector shows the exact source domains and whether each installer has a reviewed SHA-256 digest, then asks for a second `[y/N]` confirmation before downloading anything. An unpinned source is labeled with an explicit warning. The default answer is no.
+The selector shows the exact source domains and whether each installer has a reviewed SHA-256 digest, then asks for a second `[y/N]` confirmation before downloading anything. Every script installer must carry a pinned digest (setup refuses one without it); npm recipes, which have no reviewed checksum, are labeled with an explicit warning. The default answer is no.
 
 In CI, cron, redirected sessions, or any process without `/dev/tty`, the selector skips itself and prints the manual command. It never waits on stdin and never installs a harness noninteractively. It also skips when `TERM=dumb`; `--no-color` remains available.
 
@@ -94,22 +94,22 @@ Package-manager recipes use a separate shape:
 |---|---|---|---|
 | `npm` | `"kind": "npm"`, `"package": "<name>"`, `"version": "<exact semver>"` | exactly `registry.npmjs.org` | `npm install -g --ignore-scripts <package>@<version>`; no reviewed checksum |
 
-The installer sources were re-verified against first-party documentation on 2026-08-27:
+The manifest's installer sources were last verified on 2026-10-09 (`sourceVerifiedOn` in `harness-installers.json`); the Hermes digest was re-reviewed and re-pinned on 2026-10-13 after its upstream script changed:
 
 | Provider | Installer URL | Checksum status | First-party documentation |
 |---|---|---|---|
 | Codex | `https://chatgpt.com/codex/install.sh` | reviewed SHA-256 pinned | [OpenAI Codex](https://github.com/openai/codex) |
 | Claude Code | `https://claude.ai/install.sh` | reviewed SHA-256 pinned | [Claude Code setup](https://code.claude.com/docs/en/getting-started) |
-| Antigravity CLI | `https://antigravity.google/cli/install.sh` | unavailable from the verification network; explicit warning | [Antigravity CLI install](https://antigravity.google/docs/cli/install/) |
+| Antigravity CLI | `https://antigravity.google/cli/install.sh` | reviewed SHA-256 pinned | [Antigravity CLI install](https://antigravity.google/docs/cli/install/) |
 | Grok Build | `https://x.ai/cli/install.sh` | reviewed SHA-256 pinned | [Grok Build overview](https://docs.x.ai/build/overview) |
-| Kimi Code | `https://code.kimi.com/kimi-code/install.sh` | unavailable from the verification network; explicit warning | [Kimi Code setup](https://moonshotai.github.io/kimi-code/en/guides/getting-started.html) |
+| Kimi Code | `https://code.kimi.com/kimi-code/install.sh` | reviewed SHA-256 pinned | [Kimi Code setup](https://moonshotai.github.io/kimi-code/en/guides/getting-started.html) |
 | OpenCode | `https://opencode.ai/install` | reviewed SHA-256 pinned | [OpenCode setup](https://opencode.ai/docs/) |
-| Qwen Code | `https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh` | unavailable from the verification network; explicit warning | [Qwen Code](https://github.com/QwenLM/qwen-code) |
+| Qwen Code | `https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen-standalone.sh` | reviewed SHA-256 pinned | [Qwen Code](https://github.com/QwenLM/qwen-code) |
 | Pi | npm `@earendil-works/pi-coding-agent@1.1.0` and `@tintinweb/pi-subagents@0.19.0` | no reviewed checksum; `--ignore-scripts` | [Pi coding agent](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md) |
 | Hermes Agent | `https://hermes-agent.nousresearch.com/install.sh` | reviewed SHA-256 pinned | [Hermes Agent](https://github.com/NousResearch/hermes-agent) |
 | Cline CLI | npm `cline@3.0.60` | no reviewed checksum; `--ignore-scripts` | [Cline CLI reference](https://docs.cline.bot/cli/cli-reference) |
 | Muse Code | `https://dev.meta.ai/install.sh` | reviewed SHA-256 pinned | [Meta Muse Code](https://developer.meta.com/ai/products/muse-code/) |
-| goose | `https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh` | not pinned: `stable` is a moving release tag | [goose installation](https://goose-docs.ai/docs/getting-started/installation/) |
+| goose | `https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh` | reviewed SHA-256 pinned; `stable` is a moving tag, so the pin goes stale whenever the script it serves changes | [goose installation](https://goose-docs.ai/docs/getting-started/installation/) |
 | ZCode | manual build/install; existing CLI supported | no canonical pinned public CLI installer | [Official source](https://github.com/zai-org/ZCode/blob/main/README.md) |
 | DeepSeek Harness (`dsh`) | npm `@deepseek-ai/dsh@0.1.1-rc.2` | no reviewed checksum; `--ignore-scripts` | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) |
 
@@ -123,14 +123,14 @@ Static source review on the verification date observed these delivery details wi
 | Claude Code | Bash; about 6 KiB; redirects to `downloads.claude.ai`; keeps native-install data under `~/.claude` |
 | Antigravity CLI | Bash; downloads a sha512-verified tarball, writes `~/.local/bin/agy`, then runs `agy install`; the recipe allows its manifest and tarball redirect hosts. |
 | Grok Build | Bash; about 17 KiB; remains on `x.ai`; uses the user-level `~/.grok/bin` location |
-| Kimi Code | The exact Bash installer URL is present in MoonshotAI's current repository and guide. The endpoint was not reachable from the release-review network, so its response and any redirect could not be independently inspected there; setup permits only `code.kimi.com` and fails closed if delivery differs. |
+| Kimi Code | The exact Bash installer URL is present in MoonshotAI's current repository and guide. The manifest pins its digest and allows redirects only to `code.kimi.com` and `cdn.kimi.com`; setup fails closed on any other redirect host or on bytes that do not match the pin. The endpoint was not reachable from the 2026-10-13 review network. |
 | OpenCode | Bash; about 14 KiB; redirects to `raw.githubusercontent.com`; uses the user-level `~/.opencode/bin` location |
-| Qwen Code | Bash; the upstream `scripts/installation/install-qwen-standalone.sh` source installs a standalone archive with an npm fallback and writes its `qwen` wrapper under the user-level `~/.local/bin` location. The Aliyun OSS endpoint was not reachable from the review network, so the served bytes could not be digest-pinned; setup permits only `qwen-code-assets.oss-cn-hangzhou.aliyuncs.com` and fails closed if delivery differs. |
+| Qwen Code | Bash; the upstream `scripts/installation/install-qwen-standalone.sh` source installs a standalone archive with an npm fallback and writes its `qwen` wrapper under the user-level `~/.local/bin` location. The manifest pins its digest, and setup permits only `qwen-code-assets.oss-cn-hangzhou.aliyuncs.com` and fails closed if the delivered bytes differ. The Aliyun OSS endpoint was not reachable from the 2026-10-13 review network. |
 | Pi | Pinned npm recipe: `npm install -g --ignore-scripts @earendil-works/pi-coding-agent@1.1.0 @tintinweb/pi-subagents@0.19.0` (the Workbench backend rides along); `pitwall agents setup pi` runs just this recipe, and `--dry-run` prints it. The npm packages have no reviewed checksum. |
 | Hermes Agent | Bash installer at `hermes-agent.nousresearch.com`, with the reviewed manifest digest and no redirect host allowed. |
 | Cline CLI | Pinned npm recipe: `npm install -g --ignore-scripts cline@3.0.60`; the npm package has no reviewed checksum. |
 | Muse Code | POSIX `sh` installer at `dev.meta.ai`, with the reviewed manifest digest and no redirect host allowed. |
-| goose | Bash; the stable release URL redirects from `github.com` to `release-assets.githubusercontent.com`. Its moving `stable` tag cannot be checksum-pinned, so setup emits the explicit unpinned warning and fails closed on any other host. |
+| goose | Bash; the stable release URL redirects from `github.com` to `release-assets.githubusercontent.com`. The manifest pins the digest of the script `stable` served when it was reviewed. Because `stable` moves, setup refuses goose with a digest mismatch whenever the served script changes, until the pin is reviewed and updated, and it fails closed on any other host. |
 | DeepSeek Harness (`dsh`) | Pinned npm recipe: `npm install -g --ignore-scripts @deepseek-ai/dsh@0.1.1-rc.2`; the npm package has no reviewed checksum. |
 
 The Linux flow was additionally exercised with Codex in a disposable clean HOME: the selector and confirmation installed only Codex, the binary became discoverable on the refreshed user PATH, its local version check succeeded, and doctor reported `provider.codex.binary_resolved` as passing. No live recipe was run over an existing maintainer installation. Portable provider-setup and bootstrap tests also run in the macOS CI smoke job; WSL follows the tested Linux manifest and runtime path.
@@ -139,7 +139,7 @@ When updating a recipe:
 
 1. Re-check the current first-party documentation.
 2. Download the installer without executing it and inspect its redirect chain, interpreter, size, and user-level install path.
-3. Record the reviewed response's SHA-256 digest, or use `null` only when the endpoint cannot be inspected and document why.
+3. Record the reviewed response's SHA-256 digest. A script recipe without a pinned digest fails manifest validation, so an endpoint that cannot be inspected cannot ship as a script recipe.
 4. Update the URL/redirect allow-list and `sourceVerifiedOn` date.
 5. Run the schema, semantic, offline setup, and PTY tests.
 6. Validate the real installer only in a disposable VM, container, or dedicated clean user—not over an active maintainer installation.
@@ -162,7 +162,7 @@ Before execution, setup:
 - streams installer output directly to the user's terminal without adding it to routing run records; and
 - removes the temporary script after success, failure, timeout, or interruption.
 
-The manifest digest proves that a download matches the exact bytes reviewed by this project's maintainer; it is not a vendor signature and does not establish who authored those bytes. Some upstream installers verify the artifacts they subsequently download. An unavailable digest is shown as a warning and relies on fixed HTTPS origins, redirect allow-listing, bounded downloads, explicit confirmation, and first-party recipe review. Users who require vendor-authenticated artifacts should follow the provider's documented release/signature process directly.
+The manifest digest proves that a download matches the exact bytes reviewed by this project's maintainer; it is not a vendor signature and does not establish who authored those bytes. Some upstream installers verify the artifacts they subsequently download. Only npm recipes run without a reviewed checksum; they are shown with a warning and rely on exact version pins, `--ignore-scripts`, explicit confirmation, and first-party recipe review. Users who require vendor-authenticated artifacts should follow the provider's documented release/signature process directly.
 
 Official installers may create user-level directories and update shell PATH configuration according to their own documented behavior. This project does not edit shell profiles itself. After setup, the current bootstrap process temporarily adds existing common user binary directories to PATH so a newly installed Claude or Codex host can be registered in the same run.
 

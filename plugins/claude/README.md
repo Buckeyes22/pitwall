@@ -42,11 +42,11 @@ pitwall doctor
 
 Active routes are GPT via `codex-shim`, Gemini via `agy-shim`, Kimi via `kimi-shim`, Grok 4.7 via `grok-shim`, Qwen via `qwen-shim`, configured Pi/Hermes/Cline/goose endpoints via their respective shims, model-bound Muse Code via `muse-shim`, experimental DeepSeek Harness profiles via `dsh-shim`, ZCode's saved model and account via `zcode-shim`, and GLM/MiniMax/other local models via `opencode-shim`. The repo-installed shims log quantitative ledger records with `"source":"shim"` (`event`: `started`/`finished`) and emit a final `SHIM-DONE exit=<n>` sentinel per run.
 
-Named route profiles (`pitwall agents profiles list`, `setup routes`) dispatch through `route-shim` to any of those harnesses; see `docs/agents/routes.md`.
+Named route profiles (`pitwall agents profiles list`, `pitwall agents setup profiles`) dispatch through `route-shim` to any of those harnesses; see `docs/agents/routes.md`.
 
 Write dispatches through any non-Claude shim can opt into `--routing-workspace isolated --routing-task-mode write`; review with `pitwall agents runs diff`, apply explicitly, and discard the retained worktree explicitly. Claude work remains native to Claude Code's Agent/Workflow surfaces.
 
-Claude's native Workflow remains the default for Claude-hosted dependency graphs. The shared `pitwall agents workflow run workflow.json --host claude` command is available only for explicitly requested external-only graphs (any registered non-Claude harness) and does not replace `/dag-routing` or the tripwire hooks. The self-declared host value is advisory; observed Claude tool use remains the enforcement signal.
+Claude-hosted dependency graphs that route external models run as managed `dispatch_and_wait` calls (`/pitwall:dag-routing`); native Workflow shim nodes are a legacy, non-interactive mode. The shared `pitwall agents workflow run workflow.json --host claude` command is available only for explicitly requested external-only graphs (any registered non-Claude harness) and does not replace `/dag-routing` or the tripwire hooks. The self-declared host value is advisory; observed Claude tool use remains the enforcement signal.
 
 Model discovery is explicit with `pitwall agents doctor --discover-models`; the default doctor and dispatch preflight never run it.
 

@@ -2,7 +2,13 @@
 
 Runbook for creating a custom vLLM serverless endpoint on RunPod and registering it with Pitwall.
 
-**Constraint (L5):** LB endpoint creation is console-only. Custom vLLM Serverless endpoint creation is API-accessible. Pitwall v1 **registers existing endpoints** — it does not create them via API. Use `pitwall register-template --image` to register the template, then `pitwall register-endpoint` to register the endpoint.
+**Endpoint creation:** Pitwall can create serverless endpoints through the RunPod API with
+`pitwall runpod endpoints create` (queue endpoints shown here; load-balancer endpoints are covered in
+[Create LB Endpoint](create-lb-endpoint.md)). This RunPod resource control is code-complete with
+operator countersign still pending (see the [support matrix](../support-matrix.md)); one live
+serverless endpoint has completed create, read, update, and delete
+([evidence](../evidence/2026-09-23-runpod-candidate-live.md)). Registering an endpoint you created
+elsewhere with `pitwall register-endpoint` remains supported.
 
 **Constraint (L9):** FlashBoot must be verified in the RunPod console after create. runpodctl 0.x silently no-ops `--flash-boot` on create and errors on update.
 
@@ -35,7 +41,42 @@ Template env contract for vLLM tool-calling endpoints:
 | `REASONING_PARSER` | `qwen3` | Reasoning extraction |
 | `TOOL_CALL_PARSER` | `hermes` | Hermes tool call format |
 
-Example `runpodctl serverless create` equivalent:
+### Create the endpoint with Pitwall
+
+The endpoint create request carries no environment variables, so set the env contract above on the
+template and pass its `template_id`. Preview first; a preview validates the request and performs no
+RunPod mutation or audit write:
+
+```bash
+pitwall runpod endpoints create --dry-run \
+  --idempotency-key <unique-key> \
+  --request-json '{
+    "name": "<endpoint-name>",
+    "endpoint_type": "QUEUE",
+    "template_id": "<template-id>",
+    "gpu": {"pools": ["ADA_80_PRO"]},
+    "workers": {"minimum": 0, "maximum": <N>, "idle_timeout_seconds": 10},
+    "scaling": {"type": "QUEUE_DELAY", "value": 4},
+    "flashboot": true
+  }'
+```
+
+Then apply with the same request and key, typing the endpoint name for `--confirm`:
+
+```bash
+pitwall runpod endpoints create \
+  --idempotency-key <unique-key> \
+  --confirm <endpoint-name> \
+  --request-json '<same JSON as the preview>'
+```
+
+Repeating an apply with the same key and request returns the stored result instead of creating a
+second endpoint.
+
+### Alternative: create outside Pitwall
+
+If you create the endpoint with runpodctl or the console instead, register it in Step 4. Example
+`runpodctl serverless create` equivalent:
 
 ```bash
 runpodctl serverless create \
@@ -86,7 +127,7 @@ First-ever cold start on a new endpoint can take 10–60 minutes total due to im
 
 ## Step 4 — Register the Endpoint with Pitwall
 
-Use `pitwall register-endpoint` to register the endpoint. See `pitwall register-endpoint --help` for required fields.
+Use `pitwall register-endpoint` to register the endpoint, whether Pitwall or another tool created it. See `pitwall register-endpoint --help` for required fields.
 
 OpenAI-compatible base URL pattern: `https://api.runpod.ai/v2/{ENDPOINT_ID}/openai/v1`
 

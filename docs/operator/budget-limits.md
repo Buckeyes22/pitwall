@@ -60,9 +60,9 @@ figures:
 
 `reason` is `monthly_budget` when spend plus the estimate would exceed the monthly budget, or
 `per_request_cap` when the estimate alone exceeds the cap. `snapshot` values are decimal
-strings of the limits and spend at decision time. `budget_rejected`,
-`sub_budget_rejected`, and `budget_exhausted` carry the same shape; every other MCP error
-stays a bare `{"error": code}`.
+strings of the limits and spend at decision time. `budget_rejected` and `budget_exhausted`
+carry the same shape; every other MCP error stays a bare `{"error": code}`. Sub-budgets do not
+gate admission, so no request is refused for exceeding a sub-budget.
 
 ## Previews
 

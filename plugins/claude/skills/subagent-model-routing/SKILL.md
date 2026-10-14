@@ -415,7 +415,7 @@ const goose = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/goose-shi
 const dsh = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/dsh-shim.sh ${file}`, { agentType: 'pitwall:dsh-shim', model: 'sonnet', ...o })
 const route   = (spec, file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/route-shim.sh ${spec} ${file}`, { agentType: 'pitwall:route-shim', model: 'sonnet', ...o })
 const glm     = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh zai-coding-plan/glm-5.3 ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
-const minimax = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh minimax/MiniMax-M3.1-Flash-Preview ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
+const minimax = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh minimax-coding-plan/MiniMax-M3.1-Flash-Preview ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
 
 phase('Spec')
 const spec = await codex(`${DIR}/n1-spec.md`, { label: 'spec', phase: 'Spec' })
@@ -849,7 +849,7 @@ For a non-Claude-native write task (any of the thirteen harnesses) that must not
 |---|---|---|
 | `pitwall:kimi-shim` -> Kimi | configured Kimi default | override with `-m`/`--model` |
 | `pitwall:opencode-shim` -> GLM | `zai-coding-plan/glm-5.3` | routes listed by `opencode models` |
-| `pitwall:opencode-shim` -> MiniMax | `minimax/MiniMax-M3.1-Flash-Preview` | routes listed by `opencode models`; stall policy applies |
+| `pitwall:opencode-shim` -> MiniMax | `minimax-coding-plan/MiniMax-M3.1-Flash-Preview` | routes listed by `opencode models`; stall policy applies |
 | `pitwall:codex-shim` -> GPT | Codex CLI default | GPT-6 Astra: `gpt-6-astra`; Sol: `gpt-6.1-sol`; Luna: `gpt-6-luna` |
 | `pitwall:grok-shim` -> Grok | `grok-4.7` | override with `-m`/`--model`; effort is `low`, `medium`, `high`, or `xhigh` |
 | `pitwall:qwen-shim` -> Qwen | configured Qwen Code default (`QWEN_MODEL` / `~/.qwen/settings.json`) | override with `-m`/`--model`; no per-invocation effort flag |

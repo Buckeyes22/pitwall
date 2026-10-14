@@ -750,7 +750,7 @@
         {
           "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md",
           "displayName": "MiniMax",
-          "example": "minimax/MiniMax-M3.1-Flash-Preview",
+          "example": "minimax-coding-plan/MiniMax-M3.1-Flash-Preview",
           "id": "minimax",
           "patterns": [
             "minimax*",

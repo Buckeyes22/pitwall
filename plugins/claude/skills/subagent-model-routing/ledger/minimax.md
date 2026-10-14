@@ -17,7 +17,7 @@
 - **Sampling:** `minimax-m3`: temperature 1.0, top_p 0.95; `minimax-m2.7`: temperature 1.0, top_p 0.95, top_k 40; `minimax-m3.1-flash-preview`: top_p 0.95.
 - **Reasoning:** pass the whole assistant message, reasoning included, back on every turn (`minimax-m3`, `minimax-m2.7`, `minimax-m3.1-flash-preview`).
 - **Stated by vendor:** In multi-turn and tool-use work, send the model's full previous reply back, thinking blocks included, or its reasoning chain breaks.
-- **Stated by vendor:** MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now, so no Pitwall route reaches it yet. The public API and OpenCode Go serve M3.
+- **Stated by vendor:** MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now; the public API and OpenCode Go serve M3.
 - **Stated by vendor (`minimax-m3.1-flash-preview`):** M3.1-Flash-Preview always thinks. Lower effort to cut latency; disabling thinking or sending effort none returns HTTP 400. Omitting effort means max.
 - **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/minimax/FACTS.md`.
 <!-- MODEL-FACTS:minimax END -->

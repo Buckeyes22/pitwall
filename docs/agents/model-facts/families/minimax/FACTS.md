@@ -7,7 +7,7 @@
 | Model | Harness | Host | Model id on the route | Context | Effort | Web search | Batch |
 |---|---|---|---|---|---|---|---|
 | `minimax-m3` | opencode | direct | `minimax/MiniMax-M3` | 1,048,576 tokens |  |  |  |
-| `minimax-m3.1-flash-preview` | opencode | direct | `minimax/MiniMax-M3.1-Flash-Preview` | 1,000,000 tokens | low, medium, high, xhigh, max (default max), cannot be disabled |  |  |
+| `minimax-m3.1-flash-preview` | opencode | direct | `minimax-coding-plan/MiniMax-M3.1-Flash-Preview` | 1,000,000 tokens | low, medium, high, xhigh, max (default max), cannot be disabled |  |  |
 
 ## Statements
 
@@ -17,7 +17,7 @@
 - Stated by vendor (minimax-m3-tool-use, Tool Use and Interleaved Thinking, multi-turn section): In multi-turn and tool-use work, send the model's full previous reply back, thinking blocks included, or its reasoning chain breaks.
 - Stated by vendor (minimax-anthropic-api, Parameter table, max_tokens row): Thinking tokens count against max_tokens. Set it high enough, or the reply can end with no text at all.
 - Stated by vendor (minimax-anthropic-api, Parameter table, top_k and stop_sequences rows): top_k and stop_sequences are ignored by the MiniMax API, so do not rely on them to shape output.
-- Stated by vendor (minimax-invocation, Note at top of page; Supported Models): MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now, so no Pitwall route reaches it yet. The public API and OpenCode Go serve M3.
+- Stated by vendor (minimax-invocation, Note at top of page; Supported Models): MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now; the public API and OpenCode Go serve M3.
 - Stated by vendor (minimax-invocation, Thinking, Limitations): M3.1-Flash-Preview always thinks. Lower effort to cut latency; disabling thinking or sending effort none returns HTTP 400. Omitting effort means max.
 
 ## Disagreements
