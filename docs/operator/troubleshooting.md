@@ -213,7 +213,8 @@ resource on its own. Do the pod/lease cleanup above first.
    above) — Pitwall's own pods are named `pitwall-<route>`.
 
 3. **Remove local state.** Everything Pitwall keeps on disk —
-   `leases.json` and the generated `endpoint.key` — lives under
+   `leases.json`, `ledger.json`, `audit.jsonl`, the `.lock` file and the generated
+   `endpoint.key` — lives under
    `$XDG_STATE_HOME/pitwall` (default `~/.local/state/pitwall`); see
    [Where personal state lives on disk](personal-serving.md#where-personal-state-lives-on-disk)
    for exactly what's in it. Once step 1 confirms nothing is running, it's

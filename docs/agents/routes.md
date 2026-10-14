@@ -130,7 +130,7 @@ Dispatch holds one `flock` slot per in-flight session; when all slots are busy i
 (`endpoint_busy`), and the kernel frees slots of crashed dispatches. A Token Plan quota
 exhaustion writes a local lockout until the renewal date; `pitwall agents profiles probe` reports the endpoint
 `quota-exhausted` (with the renewal date) and `misconfigured` for key/plan/URL refusals, on top
-of the usual `ok`/`warming`/unreachable states.
+of the usual `reachable`/`warming`/`unauthorized`/`down`/`model-missing` states.
 
 ## Harness defaults
 

@@ -56,9 +56,9 @@ pitwall:
   capability_name: "llm.<slug>"
   served_model_name: "<served id>"
   example_serve_model: >-
-    pitwall serve --capability llm.<slug> --model <org>/<model>
-    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120 --rate-per-second 0.002
-    --start-arg --max-model-len --start-arg 32768
+    pitwall serve --plan-only --model <org>/<model>
+    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120
+    --start-arg=--max-model-len --start-arg 32768
 confidence:
   overall: "low | medium | high"
   notes: ""

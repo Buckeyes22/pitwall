@@ -32,10 +32,10 @@ The distribution includes five components:
 | **Pi workbench** | `pitwall workbench` | Launch the pinned Pi coding agent with configured profiles and isolated state. |
 | **Free-tier gateway** | `pitwall gateway` | Provide a quota-aware catalog and loopback sidecar for free model pools configured with the operator's credentials. |
 
-Provider adapters cover RunPod, Vast.ai, Together, and Lambda Cloud. Capabilities and live
-verification vary by adapter; consult the [support matrix](docs/support-matrix.md) before choosing
-a provider. The gateway makes configured free pools available to coding runs so they can use
-available quota before paid compute.
+Provider adapters cover RunPod, Vast.ai, Together, Lambda Cloud, Alibaba Cloud Model Studio, and
+the OpenAI-compatible free-tier gateway. Capabilities and live verification vary by adapter;
+consult the [support matrix](docs/support-matrix.md) before choosing a provider. The gateway makes
+configured free pools available to coding runs so they can use available quota before paid compute.
 
 ## Architecture
 
@@ -500,7 +500,7 @@ after `make up`, and `make docs-check`, are documented in
 
 ```bash
 # Unit and other fast tests
-uv run pytest -q -n auto -m "not integration and not slow"
+uv run pytest -q -n auto -m "not integration and not slow and not live"
 
 # Integration tests with local Postgres and Redis
 docker compose -f docker-compose.testinfra.yml up -d

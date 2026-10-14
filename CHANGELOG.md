@@ -82,6 +82,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The live catalogue-weights test iterates `load_catalogue().models()` and reads `model_id`, so it
   runs instead of failing at collection.
 
+- A second doc pass corrected 67 smaller statements (each verified, and checked as a doc error
+  rather than a code bug): the hermetic test selector excludes `live` tests, the benchmark smoke runs
+  only locally, README names all six provider adapters, `docs/agents/SECURITY.md` defers supported
+  versions to the root policy and quotes the real npm warning (`no reviewed checksum`), ZCode is
+  listed as vendor-bound, the autopilot docs include the advisory `PROPOSE_*` actions, and model
+  dossier serve examples use `--plan-only`.
+
 ## [0.3.0a1] - 2026-10-07
 
 ### Added

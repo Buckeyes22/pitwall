@@ -3,7 +3,7 @@
 > Seed example — maintain via `/pitwall:distill` and your own ledger.
 
 - **Tier:** Not yet ranked *(seed)*
-- **Excels at:** omnimodal (text/image/video/audio) at 15B active parameters; 1M context; cheap high-volume Go tiers (30,100 requests per 5 hours on MiMo-V2.5)
+- **Excels at:** omnimodal (text/image/video/audio) at 15B active parameters; 1M context; cheap high-volume Go tiers (30,100 requests per 5 hours on MiMo-V2.5, which retires 2026-10-21)
 - **Struggles with:** no first-party prompting guide (thinking can be switched off with `thinking.type` on Xiaomi's hosted API)
 - **Operational caveats:** Xiaomi 311B/15B MoE (Pro: 1.02T/42B, text-only), native FP8, MIT license. Self-host: vLLM recipe pins TP=4 for V2.5 (TP=8 broken) and 8x B200 for Pro; subscription routes for new work are `opencode-go/mimo-v2.6-flash` / `opencode-go/mimo-v2.6-pro`; `opencode-go/mimo-v2.5` / `opencode-go/mimo-v2.5-pro` retire on 2026-10-21, after which requests fail. The architecture and self-host details here are documented for V2.5. Card sampling: temperature=1.0, top_p=0.95.
 - **Evidence:** seed default — replace with your own observations via `/pitwall:distill`; observations accumulate in `~/.local/state/pitwall/agents/ledger/observations.jsonl`

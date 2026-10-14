@@ -171,7 +171,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 
 ### Qwen / Alibaba
 
-- **Route status:** first-class provider since v0.7.0 over the dedicated `qwen-shim`; other local/self-hosted models route through opencode custom providers, goose, pi, cline, dsh, or hermes (see the `## Routing a local model` section of `docs/agents/routing-readme.md`, or `docs/agents/attach-local-endpoint.md`).
+- **Route status:** first-class provider over the dedicated `qwen-shim`; other local/self-hosted models route through opencode custom providers, goose, pi, cline, dsh, or hermes (see the `## Routing a local model` section of `docs/agents/routing-readme.md`, or `docs/agents/attach-local-endpoint.md`).
 - **Use for:** Qwen-specific prompt experiments and independent candidate/review passes; local/self-hosted Qwen endpoints via the dedicated `qwen-shim` route.
 - **Prompt shape:** Qwen's official guide centers Context, Objective, Style, Tone, Audience, and Response. Add output examples, explicit steps, and high-recognizability separators for complex prompts.
 - **Thinking control:** Qwen3 supports `enable_thinking` plus `/think`//`no_think` soft switches; Qwen3.8 replaces the soft switches with `reasoning_effort` (`low`/`medium`/`xhigh`, default `xhigh`). Use thinking for complex reasoning and drop the effort for latency-sensitive work.
@@ -271,7 +271,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 The ledger keeps routing opinions from freezing into folklore. It has two tiers, with one-way flow: hot -> warm.
 
 - **Hot -- machine-local observations.** `~/.local/state/pitwall/agents/ledger/observations.jsonl`, append-only JSONL. The repo-installed shims log quantitative records automatically with `"source":"shim"`: `event:"started"` at dispatch start and `event:"finished"` at terminal with `model`, `wall_s`, `exit`, and `outcome`. Override the path with `PITWALL_AGENTS_LEDGER`.
-- **Warm -- repo-committed knowledge.** `ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` capability cards plus the marked rankings block at the top of Picking the model. The three Claude cards record Codex/Copilot-only shim targets; this Claude-hosted skill still uses native `Agent` calls for Claude work. These are seed examples -- maintain them via `/pitwall:distill` and your own ledger.
+- **Warm -- repo-committed knowledge.** `ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` capability cards plus the marked rankings block at the top of Picking the model. The four Claude cards record Codex/Copilot-only shim targets; this Claude-hosted skill still uses native `Agent` calls for Claude work. These are seed examples -- maintain them via `/pitwall:distill` and your own ledger.
 
 Distill counts finished shim records for quality/rate math; started records are for orphan visibility.
 
@@ -391,7 +391,7 @@ agent("Run verbatim: ~/.claude/scripts/codex-shim.sh /tmp/dag-x/n1.md",
 
 - **No `schema`.** You want the shim's raw stdout, not a structured object forced by the Workflow layer. Prefer filesystem artifacts for structured output.
 - **`agentType` carries the shim system prompt** into the node.
-- **The names are namespaced.** Use `pitwall:codex-shim`, `pitwall:agy-shim`, `pitwall:kimi-shim`, `pitwall:grok-shim`, `pitwall:qwen-shim`, `pitwall:pi-shim`, `pitwall:hermes-shim`, `pitwall:cline-shim`, `pitwall:muse-shim`, `pitwall:goose-shim`, `pitwall:dsh-shim`, and `pitwall:opencode-shim`. A bare shim name or a typo can misroute to a default node. If the plugin is ever renamed, the namespace prefix changes with it: a stale-but-well-formed prefix fails loudly with *'agent type not found'* (verified 2026-07-28 on a live pilot) — a clean error, not a fallback — whereas a typo'd agent name falls back to a default subagent without erroring.
+- **The names are namespaced.** Use `pitwall:codex-shim`, `pitwall:agy-shim`, `pitwall:kimi-shim`, `pitwall:grok-shim`, `pitwall:qwen-shim`, `pitwall:pi-shim`, `pitwall:hermes-shim`, `pitwall:cline-shim`, `pitwall:muse-shim`, `pitwall:goose-shim`, `pitwall:dsh-shim`, `pitwall:zcode-shim`, and `pitwall:opencode-shim`. A bare shim name or a typo can misroute to a default node. If the plugin is ever renamed, the namespace prefix changes with it: a stale-but-well-formed prefix fails loudly with *'agent type not found'* (verified 2026-07-28 on a live pilot) — a clean error, not a fallback — whereas a typo'd agent name falls back to a default subagent without erroring.
 - **Argument shape differs:** `codex-shim.sh <file> [flags]`; `agy-shim.sh <file> [flags]`; `kimi-shim.sh <file> [flags]`; `grok-shim.sh <file> [flags]`; `qwen-shim.sh <file> [flags]`; `route-shim.sh <name[@harness]> <file> [flags]`; `opencode-shim.sh <provider/model> <file> [flags]`.
 
 Author nodes only through helpers. Keep helper definitions on one line so the audit can match them:
@@ -413,6 +413,7 @@ const cline = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/cline-shi
 const muse = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/muse-shim.sh ${file}`, { agentType: 'pitwall:muse-shim', model: 'sonnet', ...o })
 const goose = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/goose-shim.sh ${file}`, { agentType: 'pitwall:goose-shim', model: 'sonnet', ...o })
 const dsh = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/dsh-shim.sh ${file}`, { agentType: 'pitwall:dsh-shim', model: 'sonnet', ...o })
+const zcode = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/zcode-shim.sh ${file}`, { agentType: 'pitwall:zcode-shim', model: 'sonnet', ...o })
 const route   = (spec, file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/route-shim.sh ${spec} ${file}`, { agentType: 'pitwall:route-shim', model: 'sonnet', ...o })
 const glm     = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh zai-coding-plan/glm-5.3 ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
 const minimax = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh minimax-coding-plan/MiniMax-M3.1-Flash-Preview ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
@@ -598,9 +599,9 @@ wc -l /tmp/dag-feature/impl-*.ts
 
 ## The routing gate
 
-**Layer 0 -- helpers only.** Nodes are created through `codex()`, `agy()`, `grok()`, `kimi()`, `qwen()`, `pi()`, `hermes()`, `cline()`, `muse()`, `goose()`, `dsh()`, `route()`, `glm()`, and `minimax()` helpers only.
+**Layer 0 -- helpers only.** Nodes are created through `codex()`, `agy()`, `grok()`, `kimi()`, `qwen()`, `pi()`, `hermes()`, `cline()`, `muse()`, `goose()`, `dsh()`, `zcode()`, `route()`, `glm()`, and `minimax()` helpers only.
 
-**Layer 1 -- hard rule.** Every `agent(` call site must carry one of the namespaced `codex-shim`, `agy-shim`, `kimi-shim`, `grok-shim`, `qwen-shim`, `pi-shim`, `hermes-shim`, `cline-shim`, `muse-shim`, `goose-shim`, `dsh-shim`, `route-shim`, or `opencode-shim` agent types.
+**Layer 1 -- hard rule.** Every `agent(` call site must carry one of the namespaced `codex-shim`, `agy-shim`, `kimi-shim`, `grok-shim`, `qwen-shim`, `pi-shim`, `hermes-shim`, `cline-shim`, `muse-shim`, `goose-shim`, `dsh-shim`, `zcode-shim`, `route-shim`, or `opencode-shim` agent types.
 
 **Layer 2 -- mechanical audit before launch.**
 

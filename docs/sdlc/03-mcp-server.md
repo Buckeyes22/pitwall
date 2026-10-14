@@ -97,7 +97,7 @@ Structured `ErrorData.data` is unchanged across all five classes.
 
 **File:** `src/pitwall/mcp/tools/admin.py`
 
-Implements 6 admin tools. All use `_capability_to_response` / `_provider_to_response` helpers to shape responses, call `insert_audit(pool, actor="mcp:admin", ...)` for every mutation, and raise domain exceptions. `pitwall_update_capability` and `pitwall_update_provider` write the changed fields and then apply `enabled` through the repository's enable/disable in one database transaction, so a failed toggle leaves no partial update. A call that changes `enabled` audits as `enable` or `disable` (so a `pitwall_audit_log` `action` filter finds it), plus an `update` row when it changed other fields too.
+Implements 6 admin tools. All use the shared `pitwall.api.serializers.capability_to_response` / `provider_to_response` helpers to shape responses, call `insert_audit(pool, actor="mcp:admin", ...)` for every mutation, and raise domain exceptions. `pitwall_update_capability` and `pitwall_update_provider` write the changed fields and then apply `enabled` through the repository's enable/disable in one database transaction, so a failed toggle leaves no partial update. A call that changes `enabled` audits as `enable` or `disable` (so a `pitwall_audit_log` `action` filter finds it), plus an `update` row when it changed other fields too.
 
 | Function | Signature |
 |---|---|
@@ -114,7 +114,7 @@ All six are async and raise `CapabilityConflict`, `CapabilityNotFound`, `Provide
 
 **File:** `src/pitwall/mcp/tools/discovery.py`
 
-Implements 4 discovery tools. All use `_capability_to_response` and `_provider_to_response` helpers.
+Implements 4 discovery tools. All use `pitwall.api.serializers.capability_to_response` and `provider_to_response`.
 
 | Function | Signature |
 |---|---|

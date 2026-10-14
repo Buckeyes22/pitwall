@@ -156,7 +156,7 @@ uv run pitwall mcp install claude-code --scope project --project-root .
 ## 7. Doctor check catalogue
 
 Every check below is a `check.id` from a `pitwall doctor` report line. `phase` groups
-related checks; `fix` is the action named in that check's `next:` line, when it has one.
+related checks; `fix` is the suggested remedy. Where the check prints a `next:` line (`install.python`, `config.file`, `personal.runpod_credential`, `personal.endpoint_key`, `personal.routing_cli`, `config.runtime`, `db.migrations`, `registry.*`, `spend.kill_switch`, `api.health`), it is that line; other rows are advice from this guide.
 
 | id | phase | meaning | fix |
 | --- | --- | --- | --- |

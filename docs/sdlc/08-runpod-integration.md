@@ -17,7 +17,7 @@ fields, collection envelopes, and unified pod actions are validated explicitly.
 ## 2. Components
 
 ### `providers/` reference adapter
-`pitwall.providers` is the static adapter seam used by the four current providers. It is deliberately separate from `pitwall.core.models.Provider`: the core model is the persisted fulfillment record selected by routing, while an adapter owns only the capabilities it truthfully implements.
+`pitwall.providers` is the static adapter seam used by the six static provider adapters. It is deliberately separate from `pitwall.core.models.Provider`: the core model is the persisted fulfillment record selected by routing, while an adapter owns only the capabilities it truthfully implements.
 
 ```python
 class ProviderAdapter(Protocol):
@@ -638,7 +638,6 @@ path-style addressing and SigV4 signing. Response parsing accepts v2 `dataCenter
 |---|---|---|---|
 | Pod CRUD and unified actions | `pods.py` | `Bearer {RUNPOD_API_KEY}` | `https://api.runpod.io/v2` (configurable) |
 | Bounded pod create/reset fallback | `pods.py` | `Bearer {RUNPOD_API_KEY}` | `https://rest.runpod.io/v1` (separately configurable) |
-| GPU market, datacenters, spot bids, credits | `graphql.py` | `api_key` query + `Bearer {RUNPOD_API_KEY}` | `https://api.runpod.io/graphql` |
 | Container registry auth CRUD | `registry.py` | `Bearer {RUNPOD_API_KEY}` | `https://api.runpod.io/v2/registries` |
 | Network volume CRUD + S3 | `mounts.py` | REST: `Bearer {RUNPOD_API_KEY}`; S3: `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` | REST: `https://api.runpod.io/v2/network-volumes`; S3: `https://s3api-{dc}.runpod.io` |
 | GPU catalog + datacenter discovery | `discovery.py` | Delegates to `graphql.py` | n/a (in-process) |

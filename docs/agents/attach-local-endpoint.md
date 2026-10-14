@@ -166,7 +166,7 @@ Only some harnesses accept an arbitrary base URL:
 - **Environment delivery** — `qwen`, `goose`: nothing to sync.
 - **Config materialization** — `opencode`, `pi`, `cline`, `dsh`, `hermes`: run
   `pitwall agents profiles sync --harness <name>` after adding a route.
-- **Vendor-bound** — `codex`, `claude`, `grok`, `kimi`, `muse`, `agy`: these
+- **Vendor-bound** — `codex`, `claude`, `grok`, `kimi`, `muse`, `agy`, `zcode`: these
   refuse a custom endpoint by design.
 
 **Hermes resolves credentials from its own provider config**, not from

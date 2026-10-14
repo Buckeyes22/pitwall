@@ -85,9 +85,9 @@ Public health and probe paths pass through without consuming tokens. The value f
 becomes `refill_window_s`, and each admitted request consumes one token.
 
 Client buckets are keyed by `(client_ip, token_digest)`. The IP is `scope["client"][0]` or
-`"unknown"`; `token_digest` is the SHA-256 digest of a matching bearer token only when
-`PITWALL_API_TOKEN` is configured and the presented token matches. Otherwise the token component is
-`None`.
+`"unknown"`; `token_digest` is the SHA-256 digest of the presented bearer token only when it matches
+a token the authorizer recognises (the master `PITWALL_API_TOKEN` or any `PITWALL_API_SCOPED_TOKENS`
+entry). Otherwise the token component is `None`.
 
 When the bucket is exhausted the middleware returns HTTP 429 with body `{"detail": "rate limit
 exceeded"}` and a `Retry-After` header equal to `ceil(bucket.retry_after_s(1.0))`, floored at one

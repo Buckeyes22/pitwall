@@ -393,7 +393,7 @@ Pool sizing: `min_size=2`, `max_size=10` (configured inline in `get_pool()`; not
 
 | Condition | Behaviour |
 |-----------|-----------|
-| `DATABASE_URL` unset in `get_pool()` | `AssertionError: dsn or DATABASE_URL environment variable is required` |
+| `DATABASE_URL` unset in `get_pool()` | `DatabaseNotConfiguredError` (a `RuntimeError`): dsn or DATABASE_URL environment variable is required |
 | `DATABASE_URL` unset in CLI commands | Prints `"DATABASE_URL is not set"` to stderr; `SystemExit(1)` |
 | `app.state.pool` not set in `get_db_pool()` dependency | `RuntimeError: Database pool not initialized. Did you forget to use db_lifespan?` |
 | `cmd_migrate` cannot execute through asyncpg | Prints an asyncpg/DATABASE_URL compatibility error; returns `1` |
@@ -401,7 +401,7 @@ Pool sizing: `min_size=2`, `max_size=10` (configured inline in `get_pool()`; not
 | Migration file changed after application (drift) | `detect_drift()` returns non-empty list; caller is expected to reject the migration run |
 | Migration table missing and `cmd_status` called first | Prints guidance; returns `1` |
 | `Repository.get()` finds no row | Returns `None` (not an exception) |
-| `LeaseRepository.create` with missing `auto_teardown_on_expiry` column (pre-0018 schema) | `psycopg2.errors.UndefinedColumnError` at INSERT |
+| `LeaseRepository.create` with missing `auto_teardown_on_expiry` column (pre-0018 schema) | `asyncpg.exceptions.UndefinedColumnError` at INSERT |
 | JSONB double-encoding — passing a pre-serialized JSON string to a repository method | Decoder returns the raw JSON string instead of a dict; callers that expect `isinstance(result, dict)` will get `None` |
 | `WebhookDeliveryRepository.insert_or_skip` on duplicate `(runpod_job_id, attempt)` | Returns `WebhookDeliveryResult(is_new=False, delivery_id=None)`; no exception raised |
 

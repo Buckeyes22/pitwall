@@ -33,7 +33,7 @@ kill-switch that severs network + compute in under 30 seconds.
 - **Reconciliation** — converges workload state and applies terminal status
   (`reconciler/`, `workload_lifecycle.py`). See `10-reconciler-lifecycle.md`.
 - **Safety & ops** — rate limiting, kill-switch, retention windows, R2 staging cleanup
-  (`rate_limits/`, `ops/`, `retention/`). See `11-rate-limiting.md`, `15-operations.md`.
+  (`rate_limits/`, `api/admin/kill_switch.py`, `retention/`, `r2_staging_cleanup.py`, and the `ops/` drills). See `11-rate-limiting.md`, `15-operations.md`.
 - **Observability & cost export** — Prometheus metrics + a cost exporter service
   (`observability/`, `cost/exporter.py`). See `13-observability.md`.
 
@@ -87,6 +87,10 @@ mutation, performance, and public-alpha release-readiness lanes. See
 | `16-core-config.md` | Core models & configuration |
 | `17-testing-strategy.md` | Testing strategy |
 | `18-cli.md` | Command-line interface |
+| `19-deployment.md` | Services, containers & packaging |
 | `20-provider-plugins.md` | Provider plugins |
 | `21-autopilot.md` | Autonomous Autopilot |
 | `22-recommendations.md` | Recommendations |
+| `23-agent-routing.md` | Agent Routing (`pitwall agents`), shims/plugins, local trust boundary |
+| `24-gateway.md` | Loopback free-tier gateway, catalog sync, quota state |
+| `25-pi-workbench.md` | Pi workbench baseline, profiles, isolated state |

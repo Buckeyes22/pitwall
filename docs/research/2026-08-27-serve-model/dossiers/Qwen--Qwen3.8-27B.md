@@ -69,9 +69,9 @@ pitwall:
   capability_name: "llm.qwen3-8-27b"
   served_model_name: "qwen3.8-27b"
   example_serve_model: >-
-    pitwall serve --capability llm.qwen3-8-27b --model Qwen/Qwen3.8-27B-FP8
-    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120 --rate-per-second 0.002
-    --start-arg --max-model-len --start-arg 32768 --start-arg --reasoning-parser --start-arg qwen3
+    pitwall serve --plan-only --model Qwen/Qwen3.8-27B-FP8
+    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120
+    --start-arg=--max-model-len --start-arg 32768 --start-arg=--reasoning-parser --start-arg qwen3
 confidence:
   overall: "medium"
   notes: "Architecture and parser/reasoning behavior are well sourced. The conservative one-80GB recommendation reserves room for runtime/KV but is not an official exact H100 launch measurement; the exact qwen3_coder parser must be smoke-tested against the selected image."

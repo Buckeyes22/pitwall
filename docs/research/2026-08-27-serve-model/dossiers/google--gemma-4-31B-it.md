@@ -81,9 +81,8 @@ pitwall:
   capability_name: "llm.gemma-4-31b-it"
   served_model_name: "gemma-4-31B-it"
   example_serve_model: >-
-    pitwall serve --capability llm.gemma-4-31b-it --model google/gemma-4-31B-it
-    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120 --rate-per-second 0.002
-    --start-arg --max-model-len --start-arg 16384
+    pitwall serve --plan-only --model google/gemma-4-31B-it --gpu-class "NVIDIA H100 80GB HBM3"
+    --ttl-minutes 120 --start-arg=--max-model-len --start-arg 16384
 confidence:
   overall: "medium"
   notes: "Official HF/vLLM sources verify the model, formats, parser flags, OpenAI API, and full-featured TP=2 recipe. The 24-GB floor applies only to community-validated INT4 TP=2 deployment, not native BF16. Native minimum VRAM and an official minimum vLLM version remain unverified."

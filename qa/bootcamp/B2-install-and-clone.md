@@ -117,7 +117,7 @@ Coach: `--version` and `--help` are always safe; bare `pitwall` is not (rule R2)
 uv run pitwall --version; uv run pitwall --help 2>&1 | head -3
 ```
 
-Expected: a version such as `0.1.0a2`, then a first line starting `Usage: pitwall`.
+Expected: a version such as `0.3.0a1`, then a first line starting `Usage: pitwall`.
 
 ### Step 10 — Save the evidence
 

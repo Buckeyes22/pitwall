@@ -368,7 +368,7 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 
 ### Qwen / Alibaba
 
-- Route status: first-class provider since v0.7.0 over the dedicated `qwen-shim.sh`; other local/self-hosted models route through an opencode custom provider, or directly through another model-agnostic harness (Pi, Hermes, Cline, goose, dsh) — see the `## Routing a local model` section of `docs/agents/routing-readme.md` (or `docs/agents/attach-local-endpoint.md`) for an example.
+- Route status: first-class provider over the dedicated `qwen-shim.sh`; other local/self-hosted models route through an opencode custom provider, or directly through another model-agnostic harness (Pi, Hermes, Cline, goose, dsh) — see the `## Routing a local model` section of `docs/agents/routing-readme.md` (or `docs/agents/attach-local-endpoint.md`) for an example.
 - Use the six-element framework for prompt work: Context, Objective, Style, Tone, Audience, Response.
 - Add examples, explicit task steps, and separators such as `###`, `===`, or `>>>`.
 - Qwen3 thinking can be steered with `enable_thinking`, `/think`, and `/no_think`; Qwen3.8 replaces the soft switches with `reasoning_effort` (`low`/`medium`/`xhigh`, default `xhigh`).

@@ -526,8 +526,8 @@ The shim logs `event: started` when dispatch begins and `event: finished` when i
 
 | Client | Marketplace | Package | Dispatch style |
 |--------|-------------|---------|----------------|
-| Claude Code | `pitwall-local` | [`plugins/claude`](../../plugins/claude/README.md) (plugin `pitwall`) | native Claude + Codex/Gemini/Kimi/OpenCode/Grok/Qwen targets; flat dispatch + managed-dispatch DAG orchestration |
-| Codex | `pitwall-local` | [`plugins/codex`](../../plugins/codex/README.md) (plugin `pitwall-codex`) | native Codex + direct or dependency-workflow Claude/Gemini/Kimi/OpenCode/Grok/Qwen targets |
+| Claude Code | `pitwall-local` | [`plugins/claude`](../../plugins/claude/README.md) (plugin `pitwall`) | native Claude + the other thirteen registered harness transports (Codex, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, dsh); flat dispatch + managed-dispatch DAG orchestration |
+| Codex | `pitwall-local` | [`plugins/codex`](../../plugins/codex/README.md) (plugin `pitwall-codex`) | native Codex + direct or dependency-workflow dispatch to the other thirteen (Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, dsh) |
 | GitHub Copilot CLI | `pitwall-local` | [`plugins/copilot`](../../plugins/copilot/README.md) (plugin `pitwall-copilot`) | direct or dependency-workflow dispatch through all fourteen shims |
 
 ```text

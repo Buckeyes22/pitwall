@@ -133,8 +133,7 @@ settings (so it works on an unconfigured host), and refuse any other argument wi
 service code loads. `pitwall-reconciler check` validates the Redis configuration and exits; the
 help text points to `pitwall config check`.
 
-The wheel force-includes `db/migrations` and the model dossiers under `docs/models` as package
-data. Because the default `uv build` builds the wheel from the sdist, the sdist must carry every force-include
+The wheel force-includes `db/migrations`, the model dossiers under `docs/models`, the gateway catalog, lock and routes files under `config/`, the gateway provider and capability seeds under `seed/`, and `plugins` (as `pitwall/agents/plugins`) as package data. Because the default `uv build` builds the wheel from the sdist, the sdist must carry every force-include
 source: its blanket `/docs` exclusion is negated for `/docs/models` only, so no other `docs/`
 subtree enters the source archive.
 

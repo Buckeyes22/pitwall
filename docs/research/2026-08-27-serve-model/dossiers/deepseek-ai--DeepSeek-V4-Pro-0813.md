@@ -73,7 +73,7 @@ pitwall:
   capability_name: "llm.deepseek-v4-pro-0813"
   served_model_name: "DeepSeek-V4-Pro-0813"
   example_serve_model: >-
-    pitwall serve --capability llm.deepseek-v4-pro-0813 --model deepseek-ai/DeepSeek-V4-Pro-0813 --gpu-class "NVIDIA H200" --ttl-minutes 120 --rate-per-second 0.002 --start-arg --data-parallel-size --start-arg 8 --start-arg --enable-expert-parallel --start-arg --max-model-len --start-arg 800000 --start-arg --tokenizer-mode --start-arg deepseek_v4 --start-arg --tool-call-parser --start-arg deepseek_v4 --start-arg --reasoning-parser --start-arg deepseek_v4
+    pitwall serve --plan-only --model deepseek-ai/DeepSeek-V4-Pro-0813 --gpu-class "NVIDIA H200" --ttl-minutes 120 --start-arg --data-parallel-size --start-arg 8 --start-arg --enable-expert-parallel --start-arg --max-model-len --start-arg 800000 --start-arg --tokenizer-mode --start-arg deepseek_v4 --start-arg --tool-call-parser --start-arg deepseek_v4 --start-arg --reasoning-parser --start-arg deepseek_v4
 confidence:
   overall: "medium"
   notes: "No single listed RunPod GPU is source-validated; source recipe requires 8×H200 DP+EP."
