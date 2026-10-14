@@ -75,7 +75,7 @@ different default is a finding.
 ### Step 4 — Trigger the safe exit codes
 
 Coach: run only the safe-to-trigger commands. Never run `pitwall setup`, `pitwall
-dashboard` (without the README `export` lines), `pitwall serve` without `--dry-run`, or
+dashboard` (without the README `export` lines), `pitwall serve` without `--plan-only`, or
 any never-run-list command (rule R2).
 
 Tester does, with the stack up and the five README `export` lines set:

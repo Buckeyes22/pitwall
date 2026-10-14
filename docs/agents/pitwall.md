@@ -12,15 +12,15 @@ in with `autoServe`.
 2. **Proxy base URL:** `${PITWALL_API_URL}/v1/openai/<capability>/v1` speaks the OpenAI chat-completions protocol. Auth is `Authorization: Bearer $PITWALL_AGENTS_API_TOKEN` with the `spend` scope. `GET …/v1/models` passes through and lists the served model id.
 3. **Capability metadata:** `GET ${PITWALL_API_URL}/v1/capabilities/<name>` (scope `read`) exposes `served_model_id` and, when a lease backs the capability, `active_lease: {lease_id, state, expires_at}` (ISO 8601 UTC). Routing uses these to fill `model` and `expiresAt`; when absent, `--model` is required and no expiry is recorded.
 4. **Dead-lease semantics:** after expiry or teardown, requests through the proxy return `503` (`ProviderUnavailable`) unless the operator configured a fallback chain. Routing may revive the same capability under declared `autoServe` caps, but never silently substitutes another model.
-5. **Environment names used by both sides:** `PITWALL_API_URL` is the client-side base URL. Agent Routing prefers scoped client credentials and accepts the broker's `PITWALL_API_TOKEN` only as a legacy fallback.
+5. **Environment names used by both sides:** `PITWALL_API_URL` is the client-side base URL. Agent Routing reads its bearer token only from `PITWALL_AGENTS_API_TOKEN` (or the route's `apiKeyEnv`). It does not fall back to the broker's `PITWALL_API_TOKEN`.
 
 ## Environment
 
 Set `PITWALL_API_URL` to the Pitwall API base URL and
 `PITWALL_AGENTS_API_TOKEN` to a bearer token. The token needs both the
 `read` scope (capability metadata) and the `spend` scope (proxy traffic).
-Pitwall's master `PITWALL_API_TOKEN` carries all scopes but is only a deprecated
-fallback for Agent Routing. The route configuration stores only the
+The broker's own `PITWALL_API_TOKEN` is not read by Agent Routing; use a scoped
+`PITWALL_AGENTS_API_TOKEN` with `read` and `spend`. The route configuration stores only the
 environment-variable name (`apiKeyEnv`), never the token value.
 
 ```bash

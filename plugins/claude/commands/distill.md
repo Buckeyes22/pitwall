@@ -21,15 +21,16 @@ Distill the pitwall ledger. Work inline (no dispatch needed):
    - `shim:"kimi"` with a Kimi model ID or configured-default label -> `kimi.md`.
    - `shim:"agy"`: all observations -> `gemini.md`.
    - `shim:"goose"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.
-   - `shim:"opencode"`: legacy Kimi provider/model strings such as `kimi-*` or `kimi-for-coding/*` -> `kimi.md`; Z.ai/GLM strings such as `zai-*`, `zai-coding-plan/*`, or `glm-*` -> `glm.md`; case-insensitive `minimax*` provider/model strings -> `minimax.md`; Qwen provider/model strings -> `qwen.md`.
+   - `shim:"opencode"`: legacy Kimi provider/model strings such as `kimi-*` or `kimi-for-coding/*` -> `kimi.md`; Z.ai/GLM strings such as `zai-*`, `zai-coding-plan/*`, or `glm-*` -> `glm.md`; case-insensitive `minimax*` provider/model strings -> `minimax.md`; Qwen provider/model strings -> `qwen.md`; `longcat*` or `opencode-go/longcat-*` -> `longcat.md`; `mimo*` or `opencode-go/mimo-*` -> `mimo.md`; `hy*` or `opencode-go/hy*` -> `hy.md`; `opencode-go/muse-*` -> `muse-spark.md`; `opencode-go/kimi-*` -> `kimi.md`.
    - `shim:"qwen"`: all observations -> `qwen.md`.
-   - `shim:"muse"` -> `muse-spark.md`.
+   - `shim:"muse"` -> by model string: `muse-wonder*` -> `muse-wonder.md`, `muse-spark*` -> `muse-spark.md` (the shim's default model is `muse-wonder-1.0`).
    - `shim:"zcode"` -> `harnesses/zcode.md` (saved-selection label; do not infer a model family).
    - `shim:"pi"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.
    - `shim:"dsh"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.
    - `shim:"hermes"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.
    - Any shim with a model string matching `deepseek*` (case-insensitive) -> `deepseek.md`.
    - Any shim with a model string matching `gemma*` (case-insensitive) -> `gemma.md`.
+   - Any shim with a model string matching `longcat*`, `mimo*`, or `hy*` (case-insensitive, with or without an `opencode-go/` prefix) -> `longcat.md`, `mimo.md`, or `hy.md`.
    - Any shim with a model string matching `*Muse-Glimmer*` (case-insensitive) -> `muse-glimmer.md`.
    - For an unknown custom provider, update an existing card only when the mapping is explicit and unambiguous. Otherwise report the unmapped records and ask the user which existing card owns them; do not invent a card quietly.
 5. **Leave generated blocks alone.** Never edit text between a `<!-- MODEL-FACTS:<family> START` marker and its `END` marker in a ledger card or in `SKILL.md`. `/pitwall:model-facts` generates those blocks from `model-facts/families/<family>/facts.json`.

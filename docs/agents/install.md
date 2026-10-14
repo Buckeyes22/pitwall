@@ -25,12 +25,12 @@ This should print the top-level command list with no error.
 
 ## 2. Choose a mode
 
-Pitwall runs in one of two modes, decided by whether `DATABASE_URL` is set in the
-environment:
+Pitwall runs in one of two modes, set by `[personal] backend` in `pitwall.toml`
+(`"personal"` by default, `"registry"` to opt in). `DATABASE_URL` alone does not switch it.
 
-- **Personal mode** (no `DATABASE_URL`): only a RunPod credential is required. State lives
+- **Personal mode** (the default): only a RunPod credential is required. State lives
   on disk; there is no database.
-- **Registry mode** (`DATABASE_URL` set): Postgres, Redis, and the Pitwall API back a
+- **Registry mode** (`backend = "registry"`): Postgres, Redis, and the Pitwall API back a
   shared capability and provider registry.
 
 `pitwall doctor` reports which mode it detected as `mode personal` or `mode registry` in
@@ -99,7 +99,9 @@ In a second terminal, start the API:
 uv run pitwall-api
 ```
 
-Back in the first terminal, run the readiness report with the dry-run canary against the
+Back in the first terminal, opt in to registry mode by setting `backend = "registry"` under
+`[personal]` in `pitwall.toml` (the file `PITWALL_CONFIG_FILE` names, or
+`./pitwall.toml`), then run the readiness report with the dry-run canary against the
 seeded demo capability:
 
 ```bash
@@ -164,7 +166,7 @@ related checks; `fix` is the action named in that check's `next:` line, when it 
 | `personal.endpoint_key` | config | Personal mode only. Whether the local endpoint key exists and `PITWALL_ENDPOINT_KEY` is exported in this shell. | Run `pitwall setup`, or export `PITWALL_ENDPOINT_KEY` in a new shell. |
 | `personal.routing_cli` | install | Personal mode only. Whether the routing command (`pitwall agents`, or `PITWALL_ROUTING_CLI`) is on `PATH`, so profiles can attach. | Install the release wheel (see the [install steps](../../README.md#install-pitwall)), or unset `PITWALL_ROUTING_CLI` to use the built-in `pitwall agents`. |
 | `personal.leases` | services | Personal mode only. How many pod leases are recorded in local state. | None; a warning names an unreadable state file. |
-| `registry.mode` | registry | Personal mode only. Confirms `DATABASE_URL` is not set. | None; this is informational. |
+| `registry.mode` | registry | Personal mode only. Confirms `[personal] backend` is not `"registry"` in `pitwall.toml` (personal mode). | None; this is informational. |
 | `config.runtime` | config | Registry mode only. Whether the loaded configuration passes domain checks for the API service. | Run `pitwall config check` and address the named codes. |
 | `db.connect` | services | Registry mode only. Whether Postgres at `DATABASE_URL` is reachable. | Confirm Postgres is running and `DATABASE_URL` is correct. |
 | `db.migrations` | install | Registry mode only. Whether every migration has been applied. | Run `pitwall db migrate`. |

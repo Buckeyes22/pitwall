@@ -5,11 +5,13 @@ This worked example sends the same review prompt to two bundled shims and compar
 Run from the root of a Pitwall source clone, after `pitwall agents install` has written the shims:
 
 ```bash
-~/.claude/scripts/opencode-shim.sh kimi-for-coding/k2p7 examples/agents/fan-out-review/review-prompt.md > /tmp/osprep/ex-kimi.out 2>&1
+~/.claude/scripts/opencode-shim.sh opencode-go/kimi-k3 examples/agents/fan-out-review/review-prompt.md > /tmp/osprep/ex-kimi.out 2>&1
 ~/.claude/scripts/codex-shim.sh examples/agents/fan-out-review/review-prompt.md -c model_reasoning_effort=low > /tmp/osprep/ex-codex.out 2>&1
 ```
 
 ## Kimi Findings
+
+The Kimi output was recorded earlier with the route `kimi-for-coding/k2p7` (the `k2p7` label in its header); the command above is the current route.
 
 ```text
 > default-build · k2p7

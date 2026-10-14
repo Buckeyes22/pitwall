@@ -138,15 +138,16 @@ risk domain.
 
 `.github/workflows/ci.yml` runs `lint`, `format`, `typecheck`, `docs`, `container-build`,
 `compose-config`, `security-sast`, `security-secrets`, `security-fuzz`, `mutation-smoke`, `test`,
-`dependency-compatibility`, `integration`, and `coverage-combined`. The mutation smoke lane is
-diagnostic; the blocking mutation floor runs in
-`release-readiness.yml`.
+`dependency-compatibility`, `integration`, and `coverage-combined`. The `mutation-smoke` job runs
+only on the schedule trigger and runs `make mutation-gate`. The `coverage-combined` job enforces
+the combined coverage floor and the risk-coverage policy gate.
 
-`.github/workflows/release-readiness.yml` provides blocking security, mutation, and hermetic
-jobs. The hermetic job validates the strict RunPod audit, exact release-marker suite,
-candidate policy, OpenAPI compatibility, artifacts, and combined coverage. The workflow neither
-requests provider credentials nor enables live execution. Live tests are separate operator-side
-checks using credentials and resources owned by the deploying operator.
+`.github/workflows/release-readiness.yml` does not repeat CI. It has three jobs: `ci-succeeded`
+requires a successful `ci.yml` run for the same commit, `artifacts` runs the reproducible build,
+metadata checks, and clean-install smoke, and `journeys` runs
+`pytest -m "release and not live" tests/release` and `python -m pitwall.audit.checks --strict`.
+The workflow neither requests provider credentials nor enables live execution. Live tests are
+separate operator-side checks using credentials and resources owned by the deploying operator.
 
 The release workflow publishes only after readiness succeeds. It rebuilds Python artifacts twice,
 checks byte identity, validates wheel/sdist contents, signs artifact/image provenance through

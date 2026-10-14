@@ -25,18 +25,17 @@ Entry point for pool lifecycle management and the `pitwall db` CLI.
 **CLI commands (called from `main()`):**
 
 - `def cmd_migrate() -> int` — discovers `db/migrations/*.sql`, creates `pitwall.schema_migrations` if absent, applies pending migrations through the existing `asyncpg` pool, records each applied migration's version/filename/checksum, then closes the CLI pool. Uses `ON CONFLICT (version) DO UPDATE` for idempotency and does not require a local `psql` binary.
-- `def cmd_reset() -> int` — drops the entire `pitwall` schema (`DROP SCHEMA pitwall CASCADE`).
+- `def cmd_reset(*, json_mode: bool = False, force: bool = False) -> int` — drops the entire `pitwall` schema (`DROP SCHEMA IF EXISTS pitwall CASCADE`) through asyncpg. It refuses unless `--force` is passed for a local database host, or `PITWALL_ALLOW_DESTRUCTIVE_RESET=1` is set.
 - `def cmd_status() -> int` — prints applied/pending status of all discoverable migrations without applying any.
 
 **Helper functions:**
 
 - `_database_url() -> str` — reads `DATABASE_URL` env var or exits with `SystemExit(1)`.
 - `_psql_available(database_url: str) -> str | None` — returns path to `psql` if the probe query succeeds; otherwise `None`.
-- `_docker_psql(database_url: str) -> list[str] | None` — returns a `docker exec -i psql ...` command vector targeting `_TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"` if that container is running; otherwise `None`.
+- `_docker_psql(database_url: str) -> tuple[list[str], dict[str, str]] | None` — returns a `docker exec -i psql ...` command vector and its environment, targeting `_TEST_POSTGRES_CONTAINER = "pitwall-test-postgres"` if that container is running; otherwise `None`.
 - `async _cmd_migrate_async(database_url: str) -> int` — async implementation behind `cmd_migrate`; applies each pending migration and its tracking insert in one transaction.
-- `async _applied_migrations_async(pool: asyncpg.Pool) -> dict[str, str]` — queries `pitwall.schema_migrations` through asyncpg and returns `version -> checksum` mapping.
-- `_run_sql(database_url: str, sql: str, *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]` — executes `sql` via `psql` (preferred) or Docker `psql`, with `ON_ERROR_STOP=1` and a 60 s timeout. Kept for `cmd_reset` and `cmd_status`.
-- `_applied_migrations(database_url: str) -> dict[str, str]` — psql-backed status helper that returns `version -> checksum` mapping.
+- `async _read_applied_migrations(database_url: str) -> dict[str, str]` — reads `pitwall.schema_migrations` through asyncpg with SELECTs only and returns a `version -> checksum` mapping; a missing ledger means nothing is applied. Used by `cmd_status`.
+- `_run_sql(database_url: str, sql: str, *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]` — executes `sql` via `psql` (preferred) or Docker `psql`, with `ON_ERROR_STOP=1` and a 60 s timeout. A psql/Docker helper that `cmd_reset` and `cmd_status` do not use.
 
 ### `src/pitwall/db/repository.py`
 
@@ -63,8 +62,8 @@ Constructor: `def __init__(self, pool: asyncpg.Pool) -> None`
 | `create` | `async def create(self, cap: Capability) -> Capability` |
 | `get` | `async def get(self, capability_id: str) -> Capability \| None` |
 | `get_by_name` | `async def get_by_name(self, name: str) -> Capability \| None` |
-| `list` | `async def list(self, *, enabled_only: bool = False, class_filter: str \| None = None, limit: int = 100, offset: int = 0) -> list[Capability]` |
-| `patch` | `async def patch(self, capability_id: str, *, name: str \| None = None, version: str \| None = None, class_: str \| None = None cost_mode: str \| None = None, config: JsonObject \| None = None, source: str \| None = None, last_applied_yaml_hash: str \| None \| object = _UNSET) -> Capability \| None` |
+| `list` | `async def list(self, *, enabled_only: bool = False, class_filter: str \| None = None, cost_mode: str \| None = None, source: str \| None = None, enabled: bool \| None = None, limit: int = 100, offset: int = 0) -> list[Capability]` |
+| `patch` | `async def patch(self, capability_id: str, *, name: str \| None = None, version: str \| None = None, class_: str \| None = None, cost_mode: str \| None = None, config: JsonObject \| None = None, source: str \| None = None, last_applied_yaml_hash: str \| None \| object = _UNSET, served_model_id: str \| None \| object = _UNSET) -> Capability \| None` |
 | `enable` | `async def enable(self, capability_id: str) -> Capability \| None` |
 | `disable` | `async def disable(self, capability_id: str) -> Capability \| None` |
 | `upsert` | `async def upsert(self, name: str, class_: str, cost_mode: str, *, version: str = "1.0.0", description: str \| None = None, input_schema: JsonObject \| None = None, output_schema: JsonObject \| None = None, hints_supported: list[str] \| None = None, openai_compatible: bool = False, enabled: bool = True) -> Capability` |
@@ -80,8 +79,8 @@ Constructor: `def __init__(self, pool: asyncpg.Pool) -> None`
 | `create` | `async def create(self, provider: Provider) -> Provider` |
 | `get` | `async def get(self, provider_id: str) -> Provider \| None` |
 | `get_by_name` | `async def get_by_name(self, name: str) -> Provider \| None` |
-| `list` | `async def list(self, *, capability_id: str \| None = None, enabled_only: bool = False, provider_type: str \| None = None, limit: int = 100, offset: int = 0) -> list[Provider]` |
-| `patch` | `async def patch(self, provider_id: str, *, name: str \| None = None, provider_type: str \| None = None, runpod_endpoint_id: str \| None \| object = _UNSET, runpod_template_id: str \| None \| object = _UNSET, region: str \| None \| object = _UNSET, cloud_type: str \| None \| object = _UNSET, config: JsonObject \| None = None, priority: int \| None = None, health_status: str \| None = None, consecutive_failures: int \| None = None, cooldown_trips: int \| None = None, cold_start_p50_ms: int \| None \| object = _UNSET, cold_start_p95_ms: int \| None \| object = _UNSET, recent_error_rate: float \| None = None, cooldown_until: dt.datetime \| None \| object = _UNSET, source: str \| None = None, last_applied_yaml_hash: str \| None \| object = _UNSET) -> Provider \| None` |
+| `list` | `async def list(self, *, capability_id: str \| None = None, enabled_only: bool = False, provider_type: str \| None = None, enabled: bool \| None = None, limit: int = 100, offset: int = 0) -> list[Provider]` |
+| `patch` | `async def patch(self, provider_id: str, *, name: str \| None = None, adapter_id: str \| None = None, credential_ref: str \| None = None, provider_type: str \| None = None, runpod_endpoint_id: str \| None \| object = _UNSET, runpod_template_id: str \| None \| object = _UNSET, region: str \| None \| object = _UNSET, cloud_type: str \| None \| object = _UNSET, config: JsonObject \| None = None, priority: int \| None = None, health_status: str \| None = None, consecutive_failures: int \| None = None, cooldown_trips: int \| None = None, cold_start_p50_ms: int \| None \| object = _UNSET, cold_start_p95_ms: int \| None \| object = _UNSET, recent_error_rate: float \| None = None, cooldown_until: dt.datetime \| None \| object = _UNSET, source: str \| None = None, last_applied_yaml_hash: str \| None \| object = _UNSET, expected_updated_at: dt.datetime \| None = None) -> Provider \| None` |
 | `enable` | `async def enable(self, provider_id: str) -> Provider \| None` |
 | `disable` | `async def disable(self, provider_id: str) -> Provider \| None` |
 
@@ -97,7 +96,7 @@ Constructor: `def __init__(self, pool: asyncpg.Pool) -> None`
 | `create` | `async def create(self, lease: Lease) -> Lease` |
 | `get` | `async def get(self, lease_id: str) -> Lease \| None` |
 | `update_state` | `async def update_state(self, lease_id: str, state: str) -> Lease \| None` |
-| `close_teardown` | `async def close_teardown(self, lease_id: str, *, state: str, cost_accrued_usd: Any, terminated_at: dt.datetime, terminated_reason: str) -> Lease \| None` |
+| `close_teardown` | `async def close_teardown(self, lease_id: str, *, state: str, cost_accrued_usd: Any, terminated_at: dt.datetime, terminated_reason: str, closable_states: tuple[str, ...] = ('stopping',)) -> Lease \| None` |
 | `update_endpoints` | `async def update_endpoints(self, lease_id: str, endpoints: LeaseEndpoints) -> Lease \| None` |
 | `update_readiness` | `async def update_readiness(self, lease_id: str, readiness: LeaseReadiness) -> Lease \| None` |
 | `update_expires_at` | `async def update_expires_at(self, lease_id: str, expires_at: dt.datetime) -> Lease \| None` |
@@ -151,9 +150,15 @@ Constructor: `def __init__(self, pool: asyncpg.Pool) -> None`
 
 | Method | Signature |
 |--------|-----------|
-| `create` | `async def create(self, consumer: str, webhook_url: str, *, hmac_secret: str \| None = None, active: bool = True) -> WebhookSubscription` |
+| `create` | `async def create(self, consumer: str, webhook_url: str, *, hmac_secret: str, event_types: list[WebhookEventType] \| None = None, active: bool = True, actor: str = 'rest:webhook') -> WebhookSubscription` |
 | `get` | `async def get(self, subscription_id: int) -> WebhookSubscription \| None` |
 | `list` | `async def list(self, *, consumer: str \| None = None, active_only: bool = False, limit: int = 100, offset: int = 0) -> list[WebhookSubscription]` |
+| `activate` | `async def activate(self, subscription_id: int, *, actor: str = 'rest:webhook') -> WebhookSubscription \| None` |
+| `deactivate` | `async def deactivate(self, subscription_id: int, *, actor: str = 'rest:webhook') -> WebhookSubscription \| None` |
+| `delete` | `async def delete(self, subscription_id: int, *, actor: str = 'rest:webhook') -> bool` |
+| `rotate_secret` | `async def rotate_secret(self, subscription_id: int, hmac_secret: str, *, actor: str = 'rest:webhook') -> WebhookSubscription \| None` |
+| `get_for_dispatch` | `async def get_for_dispatch(self, subscription_id: int) -> WebhookSubscription \| None` |
+| `list_for_dispatch` | `async def list_for_dispatch(self, *, consumer: str, event_type: WebhookEventType \| None = None, limit: int = 100) -> list[WebhookSubscription]` |
 
 **Audit helpers** (module-level async functions):
 
@@ -191,7 +196,7 @@ Dual persistence path for drill evidence: a `config_audit` row (authoritative) p
 **Functions:**
 
 - `async def persist_drill_evidence(pool: asyncpg.Pool, drill_id: str, drill_type: str, evidence: dict[str, Any], *, actor: str = "system", change_reason: str | None = None) -> int` — inserts a `config_audit` row with `entity_type='drill'`. `evidence` is JSON-serialised before the `::jsonb` cast (the `::jsonb` cast on the wire expects a string or dict that PostgreSQL can parse, so `json.dumps(evidence)` is pre-applied).
-- `def write_drill_json_report(evidence: dict[str, Any], *, drill_type: str | None = None, output_dir: str | Path | None = None) -> Path` — writes to `{output_dir}/{drill_type}-{YYYYMMDD-HHMMSS}.json`. Defaults `output_dir` from `PITWALL_DRILL_ARTIFACTS_DIR` env var, falling back to `artifacts/drils` relative to repo root.
+- `def write_drill_json_report(evidence: dict[str, Any], *, drill_type: str | None = None, output_dir: str | Path | None = None) -> Path` — writes to `{output_dir}/{drill_type}-{YYYYMMDD-HHMMSS}.json`. Defaults `output_dir` from `PITWALL_DRILL_ARTIFACTS_DIR` env var, falling back to `artifacts/drills` relative to repo root.
 - `async def get_drill_evidence(pool: asyncpg.Pool, *, drill_id: str | None = None, drill_type: str | None = None, since: datetime | None = None, limit: int = 100) -> list[dict[str, Any]]` — queries `config_audit` rows with `entity_type = 'drill'`, optionally filtering by `drill_id`, `drill_type` embedded in `new_value`, and `since`.
 
 ### `src/pitwall/db/__main__.py`
@@ -253,8 +258,8 @@ without running the command.
 ### Table details
 
 **`pitwall.capabilities`** (`0001_capabilities.sql`, extended by
-`0022_capability_served_model.sql`)
-`id TEXT PK`, `name TEXT UNIQUE NOT NULL`, `version TEXT NOT NULL`, `class TEXT NOT NULL`, `cost_mode TEXT NOT NULL CHECK (cost_mode IN ('per_second','per_request','per_token'))`, `config JSONB NOT NULL`, `source TEXT NOT NULL DEFAULT 'api'`, `last_applied_yaml_hash TEXT`, `served_model_id TEXT`, `enabled BOOLEAN DEFAULT true`, `created_at TIMESTAMPTZ DEFAULT now()`, `updated_at TIMESTAMPTZ DEFAULT now()`
+`0022_capability_served_model.sql` and `0034_capabilities_zero_cost_mode.sql`)
+`id TEXT PK`, `name TEXT UNIQUE NOT NULL`, `version TEXT NOT NULL`, `class TEXT NOT NULL`, `cost_mode TEXT NOT NULL CHECK (cost_mode IN ('per_second','per_request','per_token','zero'))`, `config JSONB NOT NULL`, `source TEXT NOT NULL DEFAULT 'api'`, `last_applied_yaml_hash TEXT`, `served_model_id TEXT`, `enabled BOOLEAN DEFAULT true`, `created_at TIMESTAMPTZ DEFAULT now()`, `updated_at TIMESTAMPTZ DEFAULT now()`
 
 **`pitwall.providers`** (`0002_providers.sql`, extended by `0028_provider_neutral_runtime.sql` and `0033_gateway_quotas.sql`)
 `id TEXT PK`, `capability_id TEXT REFERENCES pitwall.capabilities(id)`, `name TEXT NOT NULL`, `adapter_id TEXT NOT NULL`, `credential_ref TEXT NOT NULL`, `provider_type TEXT NOT NULL CHECK (provider_type IN ('serverless_queue','serverless_lb','public_endpoint','pod_lease','openai_gateway'))`, `runpod_endpoint_id TEXT`, `runpod_template_id TEXT`, `region TEXT`, `cloud_type TEXT CHECK (cloud_type IN ('SECURE','COMMUNITY'))`, `config JSONB NOT NULL`, `priority INTEGER NOT NULL`, `enabled BOOLEAN DEFAULT true`, `health_status TEXT DEFAULT 'unknown'` (`unknown`, `healthy`, `warming`, `misconfigured`, `unhealthy`, `hibernated`, or `disarmed` for a serve provider with no active lease; routing never selects `unhealthy` or `disarmed`), `cold_start_p50_ms INTEGER`, `cold_start_p95_ms INTEGER`, `recent_error_rate REAL DEFAULT 0`, `cooldown_until TIMESTAMPTZ`, `source TEXT NOT NULL DEFAULT 'api'`, `last_applied_yaml_hash TEXT`, `updated_at TIMESTAMPTZ DEFAULT now()`
@@ -285,8 +290,8 @@ Unique constraint: `(name, config_sha)`. Indexes: `idx_runpod_templates_image_sh
 `id BIGSERIAL PK`, `triggered_at TIMESTAMPTZ NOT NULL DEFAULT now()`, `reason TEXT NOT NULL`, `actor TEXT NOT NULL`, `pods_terminated INTEGER NOT NULL DEFAULT 0`, `endpoints_hibernated INTEGER NOT NULL DEFAULT 0`, `workloads_cancelled INTEGER NOT NULL DEFAULT 0`, `total_duration_ms INTEGER NOT NULL`, `errors JSONB NOT NULL DEFAULT '[]'::jsonb`
 Index: `idx_kill_log_triggered` ON `(triggered_at DESC)`
 
-**`pitwall.config_audit`** (`0007_config_audit.sql`, extended by `0016_drill_entity_type.sql`)
-`id BIGSERIAL PK`, `actor TEXT NOT NULL CHECK (actor IN (...))` (the current list is in `0042`: `rest:admin`, `mcp:session-id`, `mcp:admin`, `rest:lease`, `rest:webhook`, `mcp`, `system`, `system:lease`, `system:lease-controller`, `api:admin`, `cli`, `cli:lease`, `reconciler:activity`), `action TEXT NOT NULL CHECK (action IN ('create','update','delete','enable','disable','hibernate'))`, `entity_type TEXT NOT NULL CHECK (entity_type IN ('capability','provider','volume','template','drill'))`, `entity_id TEXT NOT NULL`, `old_value JSONB`, `new_value JSONB`, `change_reason TEXT`, `created_at TIMESTAMPTZ DEFAULT now()`
+**`pitwall.config_audit`** (`0007_config_audit.sql`, extended by `0016_drill_entity_type.sql` and `0036_budget_limits.sql`)
+`id BIGSERIAL PK`, `actor TEXT NOT NULL CHECK (actor IN (...))` (the current list is in `0042`: `rest:admin`, `mcp:session-id`, `mcp:admin`, `rest:lease`, `rest:webhook`, `mcp`, `system`, `system:lease`, `system:lease-controller`, `api:admin`, `cli`, `cli:lease`, `reconciler:activity`), `action TEXT NOT NULL CHECK (action IN ('create','update','delete','enable','disable','hibernate','patch','renew','rotate','deactivate','activate','archive','purge','stop','lease_ready','lease_closed','budget_limits.set'))`, `entity_type TEXT NOT NULL CHECK (entity_type IN ('capability','provider','volume','template','drill','lease','webhook_subscription','retention_run','budget_limits'))`, `entity_id TEXT NOT NULL`, `old_value JSONB`, `new_value JSONB`, `change_reason TEXT`, `created_at TIMESTAMPTZ DEFAULT now()`
 Index: `idx_audit_entity` ON `(entity_type, entity_id, created_at DESC)`; `idx_config_audit_mutation_idempotency_key` ON `((new_value ->> 'idempotency_key'))` WHERE `new_value ->> 'kind'` is one of the two RunPod mutation-journal kinds (`0041`)
 
 **`pitwall.volumes`** (`0008_volumes.sql`)
@@ -305,9 +310,9 @@ Index: `idx_idempotency_keys_created_at` ON `(created_at)`
 `id BIGSERIAL PK`, `runpod_job_id TEXT NOT NULL`, `attempt INTEGER NOT NULL CHECK (attempt >= 1 AND attempt <= 3)`, `received_at TIMESTAMPTZ NOT NULL DEFAULT now()`, `payload JSONB`
 Unique constraint: `(runpod_job_id, attempt)`. Index: `idx_runpod_webhook_deliveries_received_at` ON `(received_at)`
 
-**`pitwall.webhook_subscriptions`** (`0014_async_job_migration.sql`)
-`id BIGSERIAL PK`, `consumer TEXT NOT NULL`, `webhook_url TEXT NOT NULL`, `hmac_secret TEXT`, `active BOOLEAN NOT NULL DEFAULT true`, `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`, `updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`
-Index: `idx_webhook_subscriptions_consumer` ON `(consumer, active)`
+**`pitwall.webhook_subscriptions`** (`0014_async_job_migration.sql`, extended by `0020_webhook_security.sql` and `0025_webhook_subscription_event_types.sql`)
+`id BIGSERIAL PK`, `consumer TEXT NOT NULL`, `webhook_url TEXT NOT NULL`, `hmac_secret_ciphertext BYTEA`, `hmac_secret_nonce BYTEA`, `hmac_secret_key_version TEXT`, `event_types TEXT[] NOT NULL DEFAULT ARRAY['workload.completed']` (CHECK restricts it to `workload.completed`, `lease.ready`, `lease.renewed`, `lease.stopped`, `lease.expiring` and requires at least one), `active BOOLEAN NOT NULL DEFAULT true`, `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`, `updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`
+Constraint `webhook_active_has_encrypted_secret` requires the ciphertext, nonce, and key version for an active row. Indexes: `idx_webhook_subscriptions_consumer` ON `(consumer, active)`; `idx_webhook_subscriptions_event_types` (GIN) ON `(event_types)`
 
 **`pitwall.webhook_delivery_failures`** (`0015_webhook_delivery_failures.sql`)
 `id BIGSERIAL PK`, `workload_id TEXT NOT NULL`, `subscription_id BIGINT NOT NULL REFERENCES pitwall.webhook_subscriptions(id)`, `attempt INTEGER NOT NULL CHECK (attempt >= 1 AND attempt <= 4)`, `attempted_at TIMESTAMPTZ NOT NULL DEFAULT now()`, `next_retry_at TIMESTAMPTZ`, `payload JSONB NOT NULL`, `status_code INTEGER`, `error_message TEXT`
@@ -379,7 +384,7 @@ python -m pitwall.db migrate --help   # help after a subcommand: usage only, not
 | Environment Variable | Default | Purpose |
 |----------------------|---------|---------|
 | `DATABASE_URL` | *(required)* | PostgreSQL connection string. Read by `get_pool()` and all `cmd_*` functions. |
-| `PITWALL_DRILL_ARTIFACTS_DIR` | `artifacts/drils` (repo-relative) | Directory for on-disk drill JSON reports. |
+| `PITWALL_DRILL_ARTIFACTS_DIR` | `artifacts/drills` (repo-relative) | Directory for on-disk drill JSON reports. |
 | `PITWALL_DATABASE_URL` | *(optional, backup drills only)* | Separate source DB URL for backup drill restore validation. |
 
 Pool sizing: `min_size=2`, `max_size=10` (configured inline in `get_pool()`; not externally configurable).
@@ -392,7 +397,7 @@ Pool sizing: `min_size=2`, `max_size=10` (configured inline in `get_pool()`; not
 | `DATABASE_URL` unset in CLI commands | Prints `"DATABASE_URL is not set"` to stderr; `SystemExit(1)` |
 | `app.state.pool` not set in `get_db_pool()` dependency | `RuntimeError: Database pool not initialized. Did you forget to use db_lifespan?` |
 | `cmd_migrate` cannot execute through asyncpg | Prints an asyncpg/DATABASE_URL compatibility error; returns `1` |
-| No `psql` binary and Docker test container not running during `cmd_reset`/`cmd_status` | Prints guidance to stderr; `SystemExit(1)` |
+| `cmd_reset` without `--force` (or `PITWALL_ALLOW_DESTRUCTIVE_RESET=1`), or with `--force` against a non-local database host | Prints `Refusing destructive database reset ...`; returns `1` |
 | Migration file changed after application (drift) | `detect_drift()` returns non-empty list; caller is expected to reject the migration run |
 | Migration table missing and `cmd_status` called first | Prints guidance; returns `1` |
 | `Repository.get()` finds no row | Returns `None` (not an exception) |

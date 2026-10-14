@@ -41,6 +41,7 @@ from pitwall.providers.interface import (
     optional_config_string,
     resolve_adapter_credentials,
 )
+from pitwall.resolver.provider_urls import validate_openai_base_url
 from pitwall.runpod_client import pods as runpod_pods
 from pitwall.runpod_client.billing import RunPodBillingClient
 from pitwall.runpod_client.graphql import RUNPOD_GRAPHQL_URL
@@ -117,6 +118,11 @@ def _validate_runpod_url(
         if provider_type is None:
             return
         if endpoint_id is None:
+            # A self-hosted endpoint names its own server; its self_hosted profile is the explicit
+            # local opt-in, as `local` is for a gateway pool.
+            if provider_type == _PUBLIC_ENDPOINT and isinstance(config.get("self_hosted"), Mapping):
+                validate_openai_base_url(openai_base_url, allow_local=True)
+                return
             raise ValueError("config.openai_base_url requires runpod_endpoint_id")
         expected = runpod_openai_base_url(provider_type, endpoint_id)
         if openai_base_url != expected:

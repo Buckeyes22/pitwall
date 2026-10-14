@@ -28,7 +28,7 @@ def test_runbooks_use_the_current_version_and_no_component_tags() -> None:
 
 def test_runbook_requires_public_root_ci_and_public_packages() -> None:
     releasing = _read("RELEASING.md")
-    assert "git rev-list --count" in releasing
+    assert "git rev-list --max-parents=0 HEAD" in releasing
     assert "successful `CI` run for that exact commit" in releasing
     assert "Change visibility" in releasing
     assert "docker logout ghcr.io" in releasing

@@ -9,7 +9,7 @@ This is the canonical project reference for routing Claude Opus 4.8 through `cla
 - Vendor prompting guide for the previous Opus 5 (`claude-opus-5`, legacy, no route): [Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5.md) (model facts source `anthropic-opus-5-prompting`)
 - Evidence source: [Claude Opus 4.8 System Card](https://www.anthropic.com/claude-opus-4-8-system-card)
 - System-card date: May 28, 2026, with corrections through June 17, 2026
-- Route: `~/.claude/scripts/claude-shim.sh <prompt-file> --model opus`
+- Route: no registered route; `--model opus` reaches Opus 5.5, so reach Opus 4.8 only with `~/.claude/scripts/claude-shim.sh <prompt-file> --model claude-opus-4-8`
 - Transport behavior: see [Anthropic Claude Code prompting and transport reference](anthropic-claude-code-prompting-reference.md)
 
 The `opus` alias selects the latest Opus model exposed by the installed Claude Code CLI. Confirm the alias still resolves to Opus 5.5 before applying version-specific claims after a model update; use a full model name when exact version pinning is required and the CLI exposes one.
@@ -30,7 +30,7 @@ The card's standard evaluation configuration used adaptive thinking at maximum e
 
 ## Routing guidance derived from the card
 
-Use Opus 4.8 for difficult general software-engineering work, deep repository analysis, long-context investigations, skeptical review, or independent verification when quality matters more than route cost or latency. Keep final cross-model synthesis and irreversible decisions in the host orchestrator.
+Opus 4.8 is a legacy model (still active, retirement not before May 28, 2027); point current-Opus work at Opus 5.5. Use Opus 4.8 only when its system-card evidence applies, for difficult general software-engineering work, deep repository analysis, long-context investigations, skeptical review, or independent verification when quality matters more than route cost or latency. Keep final cross-model synthesis and irreversible decisions in the host orchestrator.
 
 Prefer a prompt contract with:
 

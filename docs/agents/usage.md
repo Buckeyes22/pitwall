@@ -38,7 +38,7 @@ unreadable `pitwall.toml` exits 2.
 | `codex` | The ChatGPT usage endpoint, with the login in the Codex login directory | the login directory holds `auth.json` |
 | `glm` | The Z.ai quota endpoint | `GLM_API_KEY` is set, or OpenCode's auth store has `zai-coding-plan` |
 | `minimax` | The MiniMax plan endpoint | `MINIMAX_API_KEY` is set, or OpenCode's auth store has `minimax-coding-plan` |
-| `model-studio` | The Token Plan statistics read and the local exhaustion lockout | a Token Plan endpoint is in `profiles.json` |
+| `model-studio` | The Token Plan statistics read and the local exhaustion lockout | a Token Plan `model-studio` endpoint (inline on a model entry or a shared endpoint) is in the `[agents.profiles]` tables of `pitwall.toml` |
 | `kimi`, `grok`, `muse`, `gemini` | Nothing; the row is `unknown` | the harness is installed |
 | `opencode-go` | Nothing; the row is `unknown` | OpenCode's auth store has `opencode-go` |
 

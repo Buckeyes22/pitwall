@@ -310,13 +310,17 @@ prevents spurious failures in cleanup scripts.
 
 ---
 
-### Check 16 — Kill switch is atomic, 3-step, <30s
+### Check 16 — Kill switch latches before teardown, <30s budget
 
-**What it verifies:** The kill switch executes exactly the three ordered steps:
-`list_pods` → `terminate_all` → `verify`. Total budget must be under 30 seconds.
+**What it verifies:** The audit config declares the step list (`list_pods`,
+`terminate_all`, `verify`) and a budget under 30 seconds; both values are fixed in
+`RuntimeAuditConfig.kill_switch_config`. A real probe confirms `emergency.run_kill`
+persists the kill report (latches) before it activates. The check does not exercise the
+live stages. The real order is deny the Tailscale tag, delete the tagged devices, then
+terminate RunPod pods (`src/pitwall/api/admin/kill_switch.py`).
 
-**Operator action:** Inspect kill switch configuration. Confirm steps are exactly
-`("list_pods", "terminate_all", "verify")` and `budget_s < 30`.
+**Operator action:** None. Run the audit (Mode 1) and read the result.
+For the live stages, read `src/pitwall/api/admin/kill_switch.py` and `incident-response.md`.
 
 **Pitwall surface:** `check_16_kill_switch_atomic` in `src/pitwall/audit/_checks_operations.py`.
 `KILL_SWITCH_STEPS = ("list_pods", "terminate_all", "verify")` in `src/pitwall/audit/_common.py`.

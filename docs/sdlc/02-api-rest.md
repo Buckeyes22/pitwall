@@ -125,7 +125,7 @@ Inbound rate limiting is a REST-edge guard configured by
 
 ### `exceptions.py` — Mapped exception hierarchy (`pitwall.api.exceptions`)
 
-39 concrete exception classes, all inherit `PitwallApiError(status_code=500, error_code="internal_error")`.
+41 concrete exception classes, all inherit `PitwallApiError(status_code=500, error_code="internal_error")`.
 `to_response_body()` → `{"error": "<code>", ...extra}`. `ApiErrorResponse(status_code, body)` carries an already-shaped, redacted service body. Every `Serve*` class below derives from `_ServeError`, whose body is `{"error": "<code>", "detail": "<text>", ...fields}`; `no_serve_history`, `cap_exceeded`, `price_unknown`, `budget_exhausted`, `kill_switch_engaged`, and `warm_failed` override it and carry no `detail`.
 
 | Exception | status_code | error_code | Extra fields |
@@ -144,6 +144,8 @@ Inbound rate limiting is a REST-edge guard configured by
 | `UnsupportedLeasePatch` | 422 | `unsupported_lease_patch` | `fields` |
 | `EmptyLeasePatch` | 422 | `empty_lease_patch` | — |
 | `LeaseExpiryLimitExceeded` | 409 | `lease_expiry_limit_exceeded` | `id`, `max_horizon_minutes` |
+| `LeaseLaunchInProgress` | 409 | `mutation_in_progress` | `workload_id`, `id` (lease id, when known) |
+| `LeaseNotServing` (subclass of `LeaseLaunchInProgress`) | 409 | `mutation_in_progress` | `workload_id`, `id`, `reason` (`lease_not_serving`), `remedy` |
 | `IdempotencyConflict` | 422 | `idempotency_conflict` | `idempotency_key` |
 | `IdempotencyMismatch` | 422 | `idempotency_mismatch` | `original_workload_id` |
 | `PreSpendPayloadRejected` | 422 | `pre_spend_payload_rejected` | `decision`, `findings` |
@@ -589,7 +591,7 @@ BearerTokenAuthorizer(master_token, scoped_tokens_json)  # scope grants
 PitwallApiError, CapabilityNotFound, CapabilityDisabled, CapabilityConflict,
 ProviderNotFound, ProviderUnavailable, ProviderConflict, RateLimited,
 LeaseNotFound, LeaseStateConflict, ChangeSetTooBroad, UnsupportedLeasePatch, EmptyLeasePatch,
-LeaseExpiryLimitExceeded, IdempotencyConflict, IdempotencyMismatch, PreSpendPayloadRejected,
+LeaseExpiryLimitExceeded, LeaseLaunchInProgress, LeaseNotServing, IdempotencyConflict, IdempotencyMismatch, PreSpendPayloadRejected,
 ProviderCapabilityMissing, WebhookSubscriptionNotFound, WebhookTargetNotAllowed,
 WorkloadNotFound, JobNotReady, JobNotCancellable, JobCancelFailed, ServeConflict,
 ServeInvalidGpuClass, ServeRateRequired, ServeUnknownVariant, ServeTemplateInvalid,
@@ -676,7 +678,7 @@ All API exceptions inherit `PitwallApiError`. Error envelope: `{"error": "<code>
 | `ProviderConflict` | Duplicate name on create | 409 |
 | `RateLimited` | `QueueClient.cancel()` raises | 503 |
 | `LeaseNotFound` | `repo.get()` → None | 404 |
-| `LeaseStateConflict` | Teardown non-ACTIVE lease | 409 |
+| `LeaseStateConflict` | Lease mutation (renew/patch) conflicts with the lease state | 409 |
 | `ChangeSetTooBroad` | PATCH spans image+GPU+volume | 400 |
 | `IdempotencyMismatch` | Reuse key, different body | 422 |
 | `WorkloadNotFound` | `repo.get(workload_id)` → None | 404 |
@@ -685,6 +687,8 @@ All API exceptions inherit `PitwallApiError`. Error envelope: `{"error": "<code>
 | `EmptyLeasePatch` | PATCH names no setting | 422 |
 | `LeaseExpiryLimitExceeded` | Renewal would put expiry past the allowed horizon | 409 |
 | `IdempotencyConflict` | Lease mutation key reused with a different operation or payload | 422 |
+| `LeaseLaunchInProgress` | First launch under the same idempotency key has no lease yet, or a serve replay found the lease not yet ready and verified; retry with the same key | 409 |
+| `LeaseNotServing` | Serve replay found the lease active but its pod does not list the served model | 409 |
 | `ProviderCapabilityMissing` | `POST /v1/admin/providers` names an unregistered capability id | 422 |
 | `PreSpendPayloadRejected` | Pre-spend guardrail blocks a payload | 422 |
 | `InvalidProxyPath` | OpenAI proxy path fails validation | 400 |

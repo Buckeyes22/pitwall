@@ -48,7 +48,7 @@ Token-to-character ratio for GLM is roughly **1 token ≈ 1.6 Chinese characters
 
 The `thinking` parameter controls whether the model engages chain-of-thought for deeper reasoning and planning. The documented behavior is version-dependent:
 
-- `enabled` (default): On GLM-5.1, GLM-5, GLM-5-Turbo, GLM-5v-Turbo, GLM-4.7, and GLM-4.5V, thinking is **forced**. On GLM-4.6, GLM-4.6V, and GLM-4.5, the model **automatically decides** whether to think.
+- `enabled` (default): Thinking can be disabled on GLM-5.1 and GLM-5.2, and is **forced** (always on; `disabled` is rejected) from GLM-5.3 and GLM-5.3-Flash. On GLM-5, GLM-5-Turbo, GLM-5v-Turbo, GLM-4.7, and GLM-4.5V, thinking is also **forced**. On GLM-4.6, GLM-4.6V, and GLM-4.5, the model **automatically decides** whether to think.
 - `disabled`: Turns off chain-of-thought for faster responses on simple tasks.
 
 Official guidance: enable thinking when the task requires complex reasoning and planning; disable it for simple tasks to reduce latency.
@@ -120,7 +120,7 @@ Flagged explicitly as **not** from Zhipu's official documentation, but widely re
 |---|---|
 | Steering behavior | Use a concrete, behavior-specifying System Prompt |
 | Diversity with quality | `top_p` 0.8–0.95; do not also change `temperature` |
-| Complex reasoning | `thinking: enabled`; forced on GLM-5.x/4.7/4.5V |
+| Complex reasoning | `thinking: enabled`; forced on GLM-5.3 (and the older models in section 4); can be disabled on GLM-5.1/5.2 |
 | Simple/fast task | `thinking: disabled` |
 | Carry reasoning across turns | Replay full `reasoning_content` (costs tokens) |
 | Backend-consumable output | Force fixed JSON format + Structured Output capability |

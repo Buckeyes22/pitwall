@@ -66,7 +66,7 @@ Where the default applies:
 
 - **Tier 1**: the MCP `ask_orchestrator` call applies the default when its deadline passes and returns it to the caller.
 - **Tier 4**: `runs resume` applies defaults to expired asks before resuming, printing `ask NNNN expired; applied its default 'x'`.
-- **Workflows**: the scheduler's wait loop applies them (see `docs/workflows.md`).
+- **Workflows**: the scheduler's wait loop applies them (see `docs/agents/workflows.md`).
 - `inbox` is read-only and marks expired asks. The all-runs inbox lists live and paused runs and skips finished ones; the named-run inbox (the MCP `inbox` tool with `dispatch_id`, or `GET /inbox` for one run) still shows a finished run's asks and steers.
 
 Answer provenance (`answered_by`) is `operator`, `orchestrator`, `default`, or `policy:<model>`. A policy answer may never select `abort`.
@@ -87,7 +87,7 @@ Session isolation: run state is private to your OS user (`0700`/`0600`). It is n
 
 ## Tier 1: the MCP server
 
-`pitwall agents setup mcp` (`pitwall agents install` does this too) registers one stdio server named `pitwall-channel` per harness at user scope. The server is launched as `pitwall mcp serve channel` (`pitwall agents mcp` runs the same server); every entry below carries the absolute path of the `pitwall` command (when `pitwall` is on `PATH`; `setup mcp` stops with exit `2` otherwise, while `pitwall agents install` falls back to the bare command `pitwall`, which doctor then reports as a `channel.registration` `WARN` because the path is not absolute) and the arguments `mcp serve channel`.
+`pitwall agents setup mcp` (`pitwall agents install` does this too) registers one stdio server named `pitwall-channel` per harness at user scope. The server is launched as `pitwall mcp serve channel` (`pitwall agents mcp` runs the same server); every entry below carries the absolute path of the `pitwall` command (when `pitwall` is on `PATH`; `setup mcp` stops with exit `2` otherwise, while `pitwall agents install` falls back to the running executable, its virtualenv sibling, or `~/.local/bin/pitwall`, always registering an absolute path, and fails with an `InstallationError` if none can be found; it never writes a bare `pitwall`) and the arguments `mcp serve channel`.
 
 | Harness | File | Entry keys this server relies on |
 | --- | --- | --- |
@@ -208,7 +208,7 @@ A `stop` is always accepted because the dispatcher's watcher aborts the run at t
 The delivery ladder as built:
 
 1. **Tier 1**: the subagent calls `read_steering` at boundaries and acknowledges with `ack_steer` (advisory notes are delivered exactly once).
-2. **Tier 2**: in tier-1 runs of Claude Code and Codex, a `PreToolUse` hook gate denies every other tool call while a `priority`, `scope`, or `stop` steer is unacknowledged, so steering cannot be silently missed. The channel's own tools are exempt so the subagent can read and acknowledge: `read_steering`, `ack_steer`, and `ask_orchestrator` from the server named exactly `pitwall-channel`, spelled `mcp__pitwall-channel__<tool>` by Claude Code and `mcp__pitwall_channel__<tool>` by Codex, which turns the hyphen into an underscore. A server whose name merely contains `pitwall_channel`, or a tool whose name only ends in a channel tool's name, is not exempt. The gate applies only to a dispatched harness (`PITWALL_AGENTS_CHANNEL_DISPATCH_ID` set) whose `channel.json` says tier 1. It fails closed: when the gate cannot be evaluated (`pitwall` is not on `PATH`, `pitwall agents _steer-gate` times out after 10 s, exits nonzero, or prints something that is not JSON) the plugin hook blocks the tool call and says why. The missing-`pitwall` check runs before the dispatch check, so with `pitwall` off `PATH` every tool call in any Claude Code or Codex session with the plugin enabled is blocked, dispatched or not. Recovery must not use a tool call: type `! uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl` at the prompt, or disable the plugin with `/plugin`.
+2. **Tier 2**: in tier-1 runs of Claude Code and Codex, a `PreToolUse` hook gate denies every other tool call while a `priority`, `scope`, or `stop` steer is unacknowledged, so steering cannot be silently missed. The channel's own tools are exempt so the subagent can read and acknowledge: `read_steering`, `ack_steer`, and `ask_orchestrator` from the server named exactly `pitwall-channel`, spelled `mcp__pitwall-channel__<tool>` by Claude Code and `mcp__pitwall_channel__<tool>` by Codex, which turns the hyphen into an underscore. A server whose name merely contains `pitwall_channel`, or a tool whose name only ends in a channel tool's name, is not exempt. The gate applies only to a dispatched harness (`PITWALL_AGENTS_CHANNEL_DISPATCH_ID` set) whose `channel.json` says tier 1. It fails closed: when the gate cannot be evaluated (`pitwall` is not on `PATH`, `pitwall agents _steer-gate` times out after 10 s, exits nonzero, or prints something that is not JSON) the plugin hook blocks the tool call and says why. The dispatch check runs before the missing-`pitwall` check, so a session that is not a dispatched harness (`PITWALL_AGENTS_CHANNEL_DISPATCH_ID` unset) is never blocked; a dispatched harness is blocked only when `pitwall` is found neither on `PATH` nor at `~/.local/bin/pitwall`. Recovery for a blocked dispatched harness must not use a tool call: type `! uv tool install --python 3.14 https://github.com/Buckeyes22/pitwall/releases/download/v0.3.0a1/pitwall-0.3.0a1-py3-none-any.whl` at the prompt, or disable the plugin with `/plugin`.
 3. **Tier 4**: undelivered steers are appended to the rebuilt prompt on `runs resume` and acked as `delivered on resume`.
 4. **Graceful abort**: an ignored `stop` steer past its window, or SIGTERM/SIGHUP to the supervisor, ends the run as `cancelled` with an `abort.json` receipt (`reason`, `signal`, `killed`, `graceSeconds`; tune with `PITWALL_AGENTS_ABORT_GRACE_SECS`). SIGKILL is only used after the grace period, and the ledger outcome becomes `killed`. The `SHIM-DONE` sentinel is always emitted.
 
@@ -231,7 +231,7 @@ When a task's dispatch has open asks, the scheduler moves it to `waiting_for_ans
 2. Routine asks the policy is allowed to answer (D3: `blocked_on` ∈ {choice, naming, file-selection}, `severity: normal`, a non-`abort` default, ≥2 options) are answered by the `autoAnswer` route over its `/chat/completions` endpoint with `policy:<model>` provenance. The request allows the route's declared output limit (1,024 tokens when the route declares none), so a reasoning model can think before it answers. A policy answer never selects `abort`.
 3. Everything else escalates: the scheduler emits `ask.escalated` and prints `pitwall agents answer <dispatch-id> <ask-id> <choice>` to stderr, then waits for the operator.
 
-When no ask is pending the scheduler resumes the same dispatch id as a new attempt (`"resumed": true`). If the scheduler dies mid-wait, `workflow resume` re-enters the wait loop for the persisted paused dispatch instead of dispatching fresh. See `docs/workflows.md`.
+When no ask is pending the scheduler resumes the same dispatch id as a new attempt (`"resumed": true`). If the scheduler dies mid-wait, `workflow resume` re-enters the wait loop for the persisted paused dispatch instead of dispatching fresh. See `docs/agents/workflows.md`.
 
 ## Retention
 
@@ -239,6 +239,6 @@ Raw channel Q&A is private and expires with its run: `runs cleanup` removes the 
 
 ## Events and ledger
 
-Lifecycle events: `dispatch.paused` (with `reason`), `dispatch.resumed`, `ask.resolved` (`askId`, `resolvedBy`), `ask.escalated`, `steer.sent`, `steer.acked`, `steer.unacked`, `steer.failed` (a steer whose publish failed after its `steer.sent` was logged), and `dispatch.cancelled`. Hooks receive them like any other event; see `docs/lifecycle-hooks.md`.
+Lifecycle events: `dispatch.paused` (with `reason`), `dispatch.resumed`, `ask.resolved` (`askId`, `resolvedBy`), `ask.escalated`, `steer.sent`, `steer.acked`, `steer.unacked`, `steer.failed` (a steer whose publish failed after its `steer.sent` was logged), and `dispatch.cancelled`. Hooks receive them like any other event; see `docs/agents/lifecycle-hooks.md`.
 
 The `finished` ledger row gains channel aggregates whenever the run has a mailbox (§9.3): `askCount`, `askRatePerHour` (covers every attempt across pauses), `askResolutions` (`"<ask-id>:<answered-by>"`), `steerCount`, `steerAckLatencyS`, and `unackedSteerIds` (blocking steers still unacknowledged at exit). These are routing-quality signal, never question content.

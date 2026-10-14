@@ -22,9 +22,9 @@ corrected, or `unknown` when it has not been verified.
 ## Provider profile
 
 Keep the bearer value outside configuration. `api_key_env` names the environment variable
-that contains it. The base URL may be supplied with
-`${PITWALL_SELFHOSTED_BASE_URL}` or a loopback development value such as
-`http://localhost:9292/v1`; never commit an instance-specific address or credential.
+that contains it. The seed loader does not expand environment variables, so write the base URL
+literally; the example uses the loopback development value `http://localhost:9292/v1`. Never
+commit an instance-specific address or credential.
 
 ```yaml
 capabilities:
@@ -38,8 +38,10 @@ providers:
     provider_type: public_endpoint
     gpu_class: NVIDIA GeForce RTX 4090
     health_status: unknown
+    cost:
+      mode: zero
     config:
-      openai_base_url: ${PITWALL_SELFHOSTED_BASE_URL}
+      openai_base_url: http://localhost:9292/v1
       api_key_env: <api-key-env-name>
       self_hosted:
         readiness:
@@ -64,7 +66,9 @@ providers:
           usd_per_kwh: "0.20"
 ```
 
-Apply the seed and ask the ordinary serve path to warm the registered capability:
+Apply the seed and ask the ordinary serve path to warm the registered capability. The
+`--capability` form of `pitwall serve` needs `[personal] backend = "registry"` in `pitwall.toml`
+and `DATABASE_URL` set; the default personal backend has no `--capability` flag:
 
 ```bash
 uv run --frozen pitwall seed <seed-file>

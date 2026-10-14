@@ -7,7 +7,7 @@ The **Core Models & Configuration** subsystem is the foundation layer of the Pit
 - `src/pitwall/config.py` — strict Pydantic settings populated from environment variables and optional TOML config, boot-time domain-config validation, a fail-closed service bootstrapping gate, and a cached global `PitwallSettings` singleton.
 - `src/pitwall/core/models.py` — Pydantic v2 domain objects (`Capability`, `Provider`, `Lease`, `Workload`, etc.) that form the persisted registry and runtime record vocabulary.
 - `src/pitwall/core/enums.py` — `StrEnum` values for capability classes, lease/workload lifecycle states, provider types, cost modes, and registry prefixes.
-- `src/pitwall/core/` leaf modules — `ids.py`, `idempotency.py`, `jobs.py`, `inference.py`, `cost_reporting.py`, `errors.py`, `types.py`, `constants.py`.
+- `src/pitwall/core/` leaf modules — `ids.py`, `idempotency.py`, `cost_reporting.py`, `errors.py`, `types.py`, `constants.py`.
 
 All other Pitwall subsystems (`api`, `routing`, `cost`, `runpod_client`, `db`, etc.) import domain models and settings from this subsystem. It has **no runtime dependencies on any other Pitwall package** — only standard-library, Pydantic, and `asyncpg`.
 
@@ -17,13 +17,13 @@ All other Pitwall subsystems (`api`, `routing`, `cost`, `runpod_client`, `db`, e
 
 ### `src/pitwall/core/__init__.py`
 
-Re-exports the public surface of `pitwall.core`. The module docstring states the design constraint: heavier modules (`inference`, `cost`, routing) are **not** re-exported here to avoid import cycles — they are imported by full path where needed.
+Re-exports the public surface of `pitwall.core`.
 
 **Public exports:**
 
 | Symbol | Origin |
 |---|---|
-| `Capability`, `CapabilityDefaults`, `Provider`, `Lease`, `LeaseEndpoints`, `LeaseReadiness`, `LeaseTcpEndpoint`, `Workload`, `ConfigAuditEntry`, `WebhookSubscription*` | `core.models` |
+| `Capability`, `CapabilityDefaults`, `Provider`, `Lease`, `LeaseEndpoints`, `LeaseReadiness`, `LeaseTcpEndpoint`, `Workload`, `ConfigAuditEntry` | `core.models` |
 | `CapabilityClass`, `CapabilityHint`, `CapabilitySource`, `CostMode`, `LeaseRenewalPolicy`, `LeaseState`, `ProviderType`, `RegistryPrefix`, `ResultDelivery`, `WorkloadState` | `core.enums` |
 | `ULID`, `ulid_new()` | `core.ids` |
 | `reserve_idempotency_key()`, `IdempotencyReservation`, `IdempotencyMismatch` | `core.idempotency` |
@@ -36,15 +36,15 @@ Re-exports the public surface of `pitwall.core`. The module docstring states the
 |---|---|
 | `RegistryPrefix` | `GHCR_IO`, `GITLAB_REGISTRY`, `DOCKER_HUB`, `DOCKER_HUB_ALT`; `from_image_ref()` classmethod |
 | `CapabilityClass` | `EMBEDDING`, `RERANK`, `LLM`, `VISION`, `TRANSCRIBE`, `GPU_LEASE`, `CUSTOM` |
-| `CostMode` | `PER_SECOND`, `PER_REQUEST`, `PER_TOKEN` |
+| `CostMode` | `PER_SECOND`, `PER_REQUEST`, `PER_TOKEN`, `ZERO` |
 | `CapabilitySource` | `API`, `MCP`, `YAML` |
 | `ResultDelivery` | `SYNC`, `ASYNC` |
 | `CapabilityHint` | `LATENCY_SENSITIVE`, `COST_SENSITIVE`, `REGION_PREFERENCE` |
 | `WorkloadState` | `QUEUED`, `RUNNING`, `COMPLETED`, `FAILED`, `CANCELLED`, `TIMED_OUT` |
-| `ProviderType` | `SERVERLESS_QUEUE`, `SERVERLESS_LB`, `PUBLIC_ENDPOINT`, `POD_LEASE` |
-| `ProviderAdapterId` | `RUNPOD`, `VAST`, `TOGETHER`, `LAMBDA_CLOUD` | stable persisted adapter ids |
+| `ProviderType` | `SERVERLESS_QUEUE`, `SERVERLESS_LB`, `PUBLIC_ENDPOINT`, `POD_LEASE`, `OPENAI_GATEWAY`, `MODEL_STUDIO` |
+| `ProviderAdapterId` | `RUNPOD`, `VAST`, `TOGETHER`, `LAMBDA_CLOUD`, `GATEWAY`, `MODEL_STUDIO` | stable persisted adapter ids |
 | `LeaseState` | `CREATING`, `WAITING_RUNTIME`, `WAITING_PROBE`, `ACTIVE`, `STOPPING`, `STOPPED`, `FAILED`, `EXPIRED` |
-| `LeaseRenewalPolicy` | `MANUAL` (currently; other values defined in spec) |
+| `LeaseRenewalPolicy` | `MANUAL`, `ACTIVITY` |
 
 ### `src/pitwall/core/models.py`
 
@@ -132,7 +132,7 @@ model_config = ConfigDict(
 
 ### Capability / Provider
 
-`Capability` describes what a consumer requests. `Provider` binds it to one of the four static adapters through `adapter_id`; `credential_ref` stores only the environment-variable name resolved at an adapter call boundary. Both support `source` (`API`, `MCP`, `YAML`) and a `last_applied_yaml_hash` for YAML-registered capabilities. `Provider.config` remains adapter configuration, but repository/API/GitOps writes reject raw credential-shaped values recursively across snake, camel, and separator variants; model and audit reads redact legacy values, and repr omits the field. Migration 0028 removes legacy values from provider config after deriving safe credential references. For generated pod templates, the complete `image_ref` (repository plus tag or digest), `docker_start_cmd`, `ports`, the container disk size, the registry auth id, and the sorted non-secret key names from `env_vars` contribute to `config_sha`; environment values never do. The RunPod account enters only as a keyed digest (HMAC-SHA256 keyed by SHA-256 of a fixed context string plus the API key), so two accounts never share a cached template and the key is never stored or recoverable. Cache rows written before these inputs existed simply miss once and are recreated.
+`Capability` describes what a consumer requests. `Provider` binds it to one of the six static adapters through `adapter_id`; `credential_ref` stores only the environment-variable name resolved at an adapter call boundary. Both support `source` (`API`, `MCP`, `YAML`) and a `last_applied_yaml_hash` for YAML-registered capabilities. `Provider.config` remains adapter configuration, but repository/API/GitOps writes reject raw credential-shaped values recursively across snake, camel, and separator variants; model and audit reads redact legacy values, and repr omits the field. Migration 0028 removes legacy values from provider config after deriving safe credential references. For generated pod templates, the complete `image_ref` (repository plus tag or digest), `docker_start_cmd`, `ports`, the container disk size, the registry auth id, and the sorted non-secret key names from `env_vars` contribute to `config_sha`; environment values never do. The RunPod account enters only as a keyed digest (HMAC-SHA256 keyed by SHA-256 of a fixed context string plus the API key), so two accounts never share a cached template and the key is never stored or recoverable. Cache rows written before these inputs existed simply miss once and are recreated.
 
 Generated-template image references must be credential-free Docker references, and because `docker_start_cmd` is template identity, start arguments must never contain secrets.
 

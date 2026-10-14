@@ -22,33 +22,35 @@ Model-specific prompting follows the family's canonical reference (`prompting/` 
 
 ## Model table
 
-The 27 models on the plan's published list (September 2026), with their Go model ids, families, and reference wiring. "Open weights" rows are also covered by a Pitwall dossier under `docs/models/` in the monorepo.
+The 28 models on the plan's published list (September 2026), with their Go model ids, families, and reference wiring. "Open weights" rows are also covered by a Pitwall dossier under `docs/models/` in the monorepo.
 
 | Model | Go model id | Family / reference | Open weights (dossier) |
 |---|---|---|---|
 | Grok 4.7 / Grok 4.6 | `opencode-go/grok-4.7`, `opencode-go/grok-4.6` | [Grok](../prompting/xai-grok-prompting-reference.md) | no |
 | GPT-6 Luna | `opencode-go/gpt-6-luna` | [GPT/Codex](../prompting/openai-codex-gpt-prompting-reference.md) | no |
 | GLM-5.3 / GLM-5.3-Flash | `opencode-go/glm-5.3`, `opencode-go/glm-5.3-flash` | [GLM](../prompting/glm-zhipu-prompting-reference.md) | yes (`zai-org/GLM-5.3`, `zai-org/GLM-5.3-Flash`) |
-| GLM-5.2 / GLM-5.1 | `opencode-go/glm-5.2`, `opencode-go/glm-5.1` | [GLM](../prompting/glm-zhipu-prompting-reference.md) | yes (`zai-org/GLM-5.2`, `zai-org/GLM-5.1`) |
+| GLM-5.2 | `opencode-go/glm-5.2` | [GLM](../prompting/glm-zhipu-prompting-reference.md) | yes (`zai-org/GLM-5.2`) |
 | Kimi K3 | `opencode-go/kimi-k3` | [Kimi](../prompting/kimi-moonshot-prompting-reference.md) | yes (`moonshotai/Kimi-K3`) |
-| Kimi K2.7 Code / K2.6 | `opencode-go/kimi-k2.7-code`, `opencode-go/kimi-k2.6` | [Kimi](../prompting/kimi-moonshot-prompting-reference.md) | yes (`moonshotai/Kimi-K2.7-Code`, `moonshotai/Kimi-K2.6`) |
+| Kimi K2.7 Code | `opencode-go/kimi-k2.7-code` | [Kimi](../prompting/kimi-moonshot-prompting-reference.md) | yes (`moonshotai/Kimi-K2.7-Code`) |
 | LongCat-2.5 Preview / LongCat-2.0 | `opencode-go/longcat-2.5-preview-free`, `opencode-go/longcat-2.0` | [LongCat](../prompting/meituan-longcat-prompting-reference.md) | yes (`meituan-longcat/LongCat-2.0`; self-hosting is SGLang-only on 2 TB-class nodes) |
 | MiMo-V2.6 Pro / Flash, MiMo-V2.5 / MiMo-V2.5-Pro | `opencode-go/mimo-v2.6-pro`, `opencode-go/mimo-v2.6-flash`, `opencode-go/mimo-v2.5`, `opencode-go/mimo-v2.5-pro` | [MiMo](../prompting/xiaomi-mimo-prompting-reference.md) | yes (`XiaomiMiMo/MiMo-V2.5`, `XiaomiMiMo/MiMo-V2.5-Pro`) |
 | MiniMax M3 / M2.7 | `opencode-go/minimax-m3`, `opencode-go/minimax-m2.7` | [MiniMax](../prompting/minimax-prompting-reference.md) | yes (`MiniMaxAI/MiniMax-M3`, `MiniMaxAI/MiniMax-M2.7` — M2.7 weights are non-commercial licensed) |
 | Muse Spark 1.3 / 1.2 Contributor | `opencode-go/muse-spark-1.3-contributor`, `opencode-go/muse-spark-1.2-contributor` | [Muse Code](../prompting/meta-muse-code-prompting-reference.md) | no — Contributor tiers allow prompts/completions to train future Meta models and are region-limited |
 | Qwen3.8 Max / Flash | `opencode-go/qwen3.8-max`, `opencode-go/qwen3.8-flash` | [Qwen](../prompting/qwen-alibaba-prompting-reference.md) | Flash only, as `Qwen/Qwen3.8-Flash-Next` (the Go `qwen3.8-flash` tier and the Flash-Next weights are presumed but not confirmed to be the same checkpoint) |
-| Qwen3.7 Max / Plus, Qwen3.6 Plus | `opencode-go/qwen3.7-max`, `opencode-go/qwen3.7-plus`, `opencode-go/qwen3.6-plus` | [Qwen](../prompting/qwen-alibaba-prompting-reference.md) | no (API-only tiers) |
+| Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | [Qwen](../prompting/qwen-alibaba-prompting-reference.md) | no (API-only tiers) |
 | DeepSeek V4.1 Flash / V4 Pro / Flash / Flash Vision Exp | `opencode-go/deepseek-v4.1-flash`, `opencode-go/deepseek-v4-pro`, `opencode-go/deepseek-v4-flash`, `opencode-go/deepseek-v4-flash-vision-exp` | [DeepSeek](../prompting/deepseek-prompting-reference.md) | yes (`deepseek-ai/DeepSeek-V4.1-Flash`, `deepseek-ai/DeepSeek-V4-Pro-0813`, `DeepSeek-V4-Flash-0731`, `DeepSeek-V4-Flash-Vision-Exp`) |
 | Hy4 preview / Hy3 | `opencode-go/hy4-preview`, `opencode-go/hy3` | [Tencent Hy](../prompting/tencent-hy-prompting-reference.md) | yes (`tencent/Hy4-preview`, `tencent/Hy3`) |
 | Omen Alpha | `opencode-go/omen-alpha` | — (unidentified vendor; no first-party reference — routes as plain pass-through) | no |
 
 `grok-4.5` and other legacy ids may also appear in the live model list; only the published plan list is tabled here.
 
+`deepseek-v4-flash` and `deepseek-v4-flash-vision-exp` are retired DeepSeek API names (retired 2026-09-10) that the vendor API temporarily routes to DeepSeek-V4.1-Flash, so use `opencode-go/deepseek-v4.1-flash` for new work. MiMo-V2.5 and MiMo-V2.5-Pro retire on 2026-10-21 and requests fail after that date with no automatic replacement, so use `opencode-go/mimo-v2.6-pro` or `opencode-go/mimo-v2.6-flash` for new work.
+
 ## Tier facts that change routing decisions
 
 From the plan's published usage math (September 2026; subject to change):
 
-- **Request budgets differ by orders of magnitude.** Examples per 5 hours: Kimi K3 ≈ 110, Grok 4.6 ≈ 169, Qwen3.8 Max ≈ 160, GLM-5.2 ≈ 880, DeepSeek V4 Flash ≈ 7,600, LongCat-2.0 ≈ 11,400, MiMo-V2.5 ≈ 30,100, Muse Spark Contributor ≈ 45,300. Route fan-out accordingly.
+- **Request budgets differ by orders of magnitude.** Examples per 5 hours: Kimi K3 ≈ 110, Grok 4.6 ≈ 169, Qwen3.8 Max ≈ 160, GLM-5.2 ≈ 880, DeepSeek V4 Flash ≈ 7,600, LongCat-2.0 ≈ 11,400, MiMo-V2.5 (retires 2026-10-21) ≈ 30,100, Muse Spark Contributor ≈ 45,300. Route fan-out accordingly.
 - **Muse Spark Contributor trades data for price.** Prompts and completions may train future Meta models; availability follows Meta's Geographic Use Policy. Do not route confidential work there.
 - **DeepSeek V4 pricing is peak/off-peak.** Peak windows are 01:00–04:00 and 06:00–10:00 UTC on weekdays.
 - **Usage multipliers vary by model** ($15 to $100 of included usage); some models fall back to Zen balance when exhausted if "Use balance" is enabled.

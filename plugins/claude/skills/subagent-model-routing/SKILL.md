@@ -171,7 +171,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 
 ### Qwen / Alibaba
 
-- **Route status:** first-class provider since v0.7.0 over the dedicated `qwen-shim`; other local/self-hosted models route through opencode custom providers, goose, pi, cline, dsh, or hermes (see README: routing a local model).
+- **Route status:** first-class provider since v0.7.0 over the dedicated `qwen-shim`; other local/self-hosted models route through opencode custom providers, goose, pi, cline, dsh, or hermes (see the `## Routing a local model` section of `docs/agents/routing-readme.md`, or `docs/agents/attach-local-endpoint.md`).
 - **Use for:** Qwen-specific prompt experiments and independent candidate/review passes; local/self-hosted Qwen endpoints via the dedicated `qwen-shim` route.
 - **Prompt shape:** Qwen's official guide centers Context, Objective, Style, Tone, Audience, and Response. Add output examples, explicit steps, and high-recognizability separators for complex prompts.
 - **Thinking control:** Qwen3 supports `enable_thinking` plus `/think`//`no_think` soft switches; Qwen3.8 replaces the soft switches with `reasoning_effort` (`low`/`medium`/`xhigh`, default `xhigh`). Use thinking for complex reasoning and drop the effort for latency-sensitive work.
@@ -188,7 +188,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 
 ### LongCat (OpenCode Go)
 
-- **Use for:** long-context and high-volume work at the cheapest Go request tiers (Meituan 1.6T-class MoE, 256K context).
+- **Use for:** long-context and high-volume work at the cheapest Go request tiers (Meituan 1.6T-class MoE; 256K context on `opencode-go/longcat-2.0`, 1M on `opencode-go/longcat-2.5-preview-free`).
 - **Route:** `opencode-shim.sh opencode-go/longcat-2.5-preview-free <file>` (self-hosting needs 2 TB-class SGLang nodes — not a Pod recipe).
 - **Thinking control:** `enable_thinking` chat kwarg, configured in the harness, not the prompt. No sampling defaults are published; validate locally.
 - **Gotcha:** tool-call `arguments` must be dicts, not OpenAI-style strings.
@@ -753,7 +753,7 @@ PY
 
 ## See also -- DAG layer
 
-- `scripts/*.sh` in this repo: the public standalone shim scripts installed to `~/.claude/scripts/*-shim.sh`.
+- `src/pitwall/agents/harnesses/*.py` in this repo: the harness implementations behind the `~/.claude/scripts/*-shim.sh` wrappers that `pitwall agents install` writes.
 - `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode}-shim.md`: transport agent definitions registered under their namespaced shim agent types.
 - `plugins/claude/commands/dag-routing.md`: managed dependency-ordered routing entry command.
 - `plugins/claude/skills/subagent-model-routing/ARCHITECTURE.md`: architecture reference.
@@ -857,7 +857,7 @@ For a non-Claude-native write task (any of the thirteen harnesses) that must not
 | `pitwall:pi-shim` -> Pi | configured Pi default | override with `-m`/`--model` |
 | `pitwall:hermes-shim` -> Hermes | configured Hermes default | override with `-m`/`--model` |
 | `pitwall:cline-shim` -> Cline | configured Cline default | override with `-m`/`--model` |
-| `pitwall:muse-shim` -> Muse Code | `muse-spark-1.3` | override with `--model` |
+| `pitwall:muse-shim` -> Muse Code | `muse-wonder-1.0` | override with `--model` (e.g. `--model muse-spark-1.3`) |
 | `pitwall:goose-shim` -> goose | configured goose default | override with `--model` |
 | `pitwall:dsh-shim` -> DeepSeek Harness (experimental) | configured dsh default | profile-defined |
 | `pitwall:zcode-shim` -> ZCode | saved ZCode model and account (`zcode-default`) | none: no model or effort override |
@@ -873,7 +873,7 @@ Refresh the opencode catalog with `opencode models`, Grok Build models with `gro
 | Task shape | Route |
 |---|---|
 | Authoring narrative / first-draft TypeScript or frontend work | `pitwall:opencode-shim` with GLM-5.3; `pitwall:kimi-shim` as parallel candidate |
-| Throughput / bulk classification | `pitwall:opencode-shim` with MiniMax-M3, pilot first |
+| Throughput / bulk classification | `pitwall:opencode-shim` with MiniMax-M3.1-Flash-Preview, pilot first |
 | Balanced extraction / structured tasks | `pitwall:opencode-shim` with GLM-5.3 |
 | Deep one-off reasoning / autonomous verification | `pitwall:codex-shim` |
 | Independent coding / agentic candidate | `pitwall:grok-shim`, provisional until local evidence ranks it |
@@ -1070,7 +1070,7 @@ The shim defaults to `grok-4.7`. Grok Build accepts `-m`/`--model` and Grok 4.7 
 ~/.claude/scripts/grok-shim.sh /tmp/task.md --model=grok-4.7 --sandbox workspace
 ```
 
-Scripted invocations automatically include `--no-auto-update`, `--no-alt-screen`, plain output, and the prompt via `-p`. In unrestricted mode the shim also passes `--always-approve`.
+Scripted invocations automatically include `--no-auto-update`, `--no-alt-screen`, plain output (`--output-format plain`), and the prompt via `--prompt-file` from a private file (never on argv). In unrestricted mode the shim also passes `--always-approve`.
 
 ## opencode-shim profile overrides
 
@@ -1131,7 +1131,7 @@ Transport agents use Sonnet because they must ferry long stdout faithfully. Haik
 
 ## Observability (optional)
 
-The ledger JSONL is the quantitative record for every dispatch (`started`/`finished` with `wall_s`, `exit`, and `outcome`). Users with an OTLP collector can set `OPENCODE_OTLP_ENDPOINT` for OpenCode spans and standard `OTEL_*` environment variables for Codex spans; the shim appends `gen_ai.request.model` for per-dispatch attribution. See the root `README.md` `## Observability` section for setup. A localhost example is `http://localhost:4318`.
+The ledger JSONL is the quantitative record for every dispatch (`started`/`finished` with `wall_s`, `exit`, and `outcome`). Users with an OTLP collector can set `OPENCODE_OTLP_ENDPOINT` for OpenCode spans and standard `OTEL_*` environment variables for Codex spans; the shim appends `gen_ai.request.model` for per-dispatch attribution. See the `## Observability` section of `docs/agents/routing-readme.md` for setup. A localhost example is `http://localhost:4318`.
 
 ## Cost / quota
 
@@ -1163,7 +1163,7 @@ Expected complete shim output ends with `SHIM-DONE exit=<n>`.
 
 ## See also
 
-- `scripts/codex-shim.sh`, `scripts/agy-shim.sh`, `scripts/kimi-shim.sh`, `scripts/opencode-shim.sh`, `scripts/grok-shim.sh`, `scripts/qwen-shim.sh`, `scripts/pi-shim.sh`, `scripts/hermes-shim.sh`, `scripts/cline-shim.sh`, `scripts/muse-shim.sh`, `scripts/goose-shim.sh`, `scripts/dsh-shim.sh`, `scripts/zcode-shim.sh`, and `scripts/route-shim.sh` in this repo.
+- The shim scripts `~/.claude/scripts/{codex,agy,kimi,opencode,grok,qwen,pi,hermes,cline,muse,goose,dsh,zcode,route}-shim.sh` are generated by `pitwall agents install` (two-line wrappers around `pitwall agents _shim <target>`); the harness code lives in `src/pitwall/agents/harnesses/*.py` in this repo.
 - `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode}-shim.md`.
 - `plugins/claude/skills/subagent-model-routing/ARCHITECTURE.md`.
 - `references/model-prompting.md` for the self-contained runtime model reference.

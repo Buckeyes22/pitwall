@@ -23,14 +23,14 @@ _API = "https://huggingface.co/api/models/{repo}"
 
 def _declared_pairs() -> list[tuple[str, str, str]]:
     pairs: list[tuple[str, str, str]] = []
-    for model in load_catalogue():
+    for model in load_catalogue().models():
         for variant in model.variants:
             if variant.file:
-                pairs.append((f"{model.id}:{variant.id}", variant.repo, variant.file))
+                pairs.append((f"{model.model_id}:{variant.id}", variant.repo, variant.file))
             for companion in variant.companions:
                 if companion.file:
                     pairs.append(
-                        (f"{model.id}:{variant.id}:companion", companion.repo, companion.file)
+                        (f"{model.model_id}:{variant.id}:companion", companion.repo, companion.file)
                     )
     return pairs
 

@@ -43,7 +43,6 @@ class ToolSpec:
     name: str
     description: str
     handler: Callable[..., dict[str, Any]] | Callable[..., Awaitable[dict[str, Any]]]
-    scope: str = "general"
 ```
 
 `register_all(server: Any) -> None` iterates `TOOL_REGISTRY` and calls `server.add_tool(spec.handler, name=..., title=..., description=..., annotations=...)` for each, fills missing parameter descriptions, then installs the safe call boundary, `strip_unused_features(server)` (drops the prompt, resource, completion, and logging handlers, because SDK 2 advertises a capability for every registered handler), and `install_list_tools_filter(server)` (omits a tool's `outputSchema` when its keys are a subset of `GENERIC_OUTPUT_SCHEMA_KEYS = {"type", "additionalProperties", "title"}`, the generic dict schema that conveys no structure; `structuredContent` on `tools/call` is unaffected).
@@ -104,8 +103,8 @@ Implements 6 admin tools. All use `_capability_to_response` / `_provider_to_resp
 |---|---|
 | `pitwall_create_capability` | `(name: str, version: str, capability_class: str, cost_mode: str, description: str \| None = None, input_schema: dict[str, Any] \| None = None, output_schema: dict[str, Any] \| None = None) -> dict[str, Any]` |
 | `pitwall_update_capability` | `(capability_id: str, name: str \| None = None, version: str \| None = None, description: str \| None = None, cost_mode: str \| None = None, enabled: bool \| None = None, input_schema: dict[str, Any] \| None = None, output_schema: dict[str, Any] \| None = None) -> dict[str, Any]` |
-| `pitwall_create_provider` | `(capability_id: str, name: str, provider_type: str, runpod_endpoint_id: str \| None = None, runpod_template_id: str \| None = None, region: str \| None = None, cloud_type: str \| None = None, config: dict[str, Any] \| None = None, priority: int = 0, enabled: bool = True) -> dict[str, Any]` |
-| `pitwall_update_provider` | `(provider_id: str, name: str \| None = None, provider_type: str \| None = None, runpod_endpoint_id: str \| None = None, runpod_template_id: str \| None = None, region: str \| None = None, cloud_type: str \| None = None, config: dict[str, Any] \| None = None, priority: int \| None = None, enabled: bool \| None = None, health_status: str \| None = None, consecutive_failures: int \| None = None, cooldown_trips: int \| None = None, cold_start_p50_ms: int \| None = None, cold_start_p95_ms: int \| None = None, recent_error_rate: float \| None = None) -> dict[str, Any]` |
+| `pitwall_create_provider` | `(capability_id: str, name: str, provider_type: str, adapter_id: str = "runpod", credential_ref: str \| None = None, runpod_endpoint_id: str \| None = None, runpod_template_id: str \| None = None, region: str \| None = None, cloud_type: str \| None = None, config: dict[str, Any] \| None = None, priority: int = 0, enabled: bool = True) -> dict[str, Any]` |
+| `pitwall_update_provider` | `(provider_id: str, name: str \| None = None, adapter_id: str \| None = None, credential_ref: str \| None = None, provider_type: str \| None = None, runpod_endpoint_id: str \| None = None, runpod_template_id: str \| None = None, region: str \| None = None, cloud_type: str \| None = None, config: dict[str, Any] \| None = None, priority: int \| None = None, enabled: bool \| None = None, health_status: str \| None = None, consecutive_failures: int \| None = None, cooldown_trips: int \| None = None, cold_start_p50_ms: int \| None = None, cold_start_p95_ms: int \| None = None, recent_error_rate: float \| None = None) -> dict[str, Any]` |
 | `pitwall_disable_provider` | `(provider_id: str) -> dict[str, Any]` |
 | `pitwall_hibernate_provider` | `(provider_id: str) -> dict[str, Any]` |
 
@@ -174,7 +173,7 @@ Implements 4 lease tools. All use `_lease_to_response` to shape responses.
 
 | Function | Signature |
 |---|---|
-| `pitwall_serve_model` | `(capability: str, model: str, gpu_class: str, gpu_count: int = 1, engine: Engine = "vllm", variant: str \| None = None, template_id: str \| None = None, ttl_minutes: int = 120, idle_timeout_min: int \| None = None, max_usd_per_hour: Decimal \| None = None, renewal_policy: LeaseRenewalPolicy \| None = None, route: str \| None = None, image: str \| None = None, served_model_name: str \| None = None, rate_per_second: Decimal \| None = None, gated: bool = False, dry_run: bool = False, idempotency_key: str \| None = None) -> dict[str, Any]` |
+| `pitwall_serve_model` | `(capability: str, model: str, gpu_class: str, gpu_count: int = 1, engine: EngineOverride \| None = None, variant: str \| None = None, template_id: str \| None = None, ttl_minutes: int = 120, idle_timeout_min: int \| None = None, max_usd_per_hour: Decimal \| None = None, renewal_policy: LeaseRenewalPolicy \| None = None, route: str \| None = None, image: str \| None = None, served_model_name: str \| None = None, rate_per_second: Decimal \| None = None, gated: bool = False, dry_run: bool = False, idempotency_key: str \| None = None) -> dict[str, Any]` |
 
 The tool is a thin adapter that delegates only to `pitwall.serve` and uses the configured local catalogue. It launches vLLM, llama.cpp, or SGLang rows. Use the catalogue-first workflow: call `pitwall_models_fit`, select a fitting `variant`, then call `pitwall_serve_model` with that variant. GPU classes must use canonical RunPod names; supported legacy aliases normalize automatically. A model without a dossier requires `image` and may not pass `variant`. For catalogue models, result `model_id` is the dossier's `served_model_name` (falling back to the HF ID); consumers must use returned `model_id`, not the requested `model`. When fit output is `unpriced` (pricing unavailable), supply `rate_per_second`. `dry_run` validates and returns the resolved plan without launching a pod. `idempotency_key` makes a launch retry-safe: the same key and request return the first launch's lease (`created: false`) once it is active and the served model is listed within a verification window (`VERIFY_REQUEST_TIMEOUT_S`, up to three requests), with no registry write, price step, pod, or budget admission; a different request is `idempotency_mismatch`, a first launch still without a lease or a lease not yet active and verified is `mutation_in_progress` (retry the same key; an active lease whose pod does not list the model adds `reason: lease_not_serving`, its lease `id`, and a fixed remedy naming `pitwall_stop_lease`), a key whose lease is no longer serving is `lease_state_conflict`, and a key whose launch ended without a lease is `idempotency_conflict` (both: use a new key). No pod-lease serve path, keyed or not, publishes `lease.ready` before `verify_served_model` passes (the lease-less self-hosted warm path publishes after its own readiness probe) (`docs/sdlc/06-leases.md`, "Idempotent launches"). Service exceptions propagate unchanged: 409 `serve_conflict`; 422 `rate_required`, `unknown_variant` (including non-chat or unsupported-companion rows), `invalid_template`, or `invalid_gpu_class`; 502 `served_model_mismatch`; and 503 `launch_failed`. The manually serialized MCP fit response does not gain a field from the `FitOption.container_disk_gb` projection.
 
@@ -195,7 +194,7 @@ successful serve into an MCP error.
 | Function | Signature |
 |---|---|
 | `pitwall_models_list` | `() -> dict[str, Any]` |
-| `pitwall_models_fit` | `(model: str, variant: str \| None = None, ttl_minutes: int = 120, cloud: str = "secure") -> dict[str, Any]` |
+| `pitwall_models_fit` | `(model: str, variant: str \| None = None, ttl_minutes: int = 120, cloud: str = "secure", inventory: Mapping[str, Any] \| None = None, context: int \| None = None) -> dict[str, Any]` |
 
 Both are thin wrappers over the public `pitwall.models` services and require no database. Use
 `pitwall_models_fit` to select a catalogue variant and canonical GPU class before calling
@@ -357,7 +356,7 @@ All five are thin async adapters over the shared `VolumeFileService` and route e
 | `pitwall_gateway_catalog_read` | `(tos: str \| None = None, routable_only: bool = False) -> dict[str, Any]` |
 | `pitwall_quota_list` | `() -> dict[str, Any]` |
 
-`pitwall_gateway_catalog_read` reads the synced `config/gateway-catalog.json` produced by `tools/gateway/sync_catalog.py` and optionally filters rows by ToS verdict or by ADR 0007 routability (`eligibility_gate`, `tos in {avoid, unknown}`, and `discontinued` rows are excluded when `routable_only=true`); the response always carries `source: "config/gateway-catalog.json"` plus `curated_at`, `totals`, and `avoid_list`. `pitwall_quota_list` obtains the shared database pool and delegates to `QuotaRepository.list_all`, adding a derived `headroom` ratio to each persisted record. Both tools are read-only — no provider egress, no database or audit writes, no `pitwall.cost` import — and the catalog handler never reaches the network even when the file is missing (returns an empty `providers` list). Both handlers carry the explicit `scope="gateway"` so the routing policy that gates free-tier rows stays discoverable from `TOOL_REGISTRY`.
+`pitwall_gateway_catalog_read` reads the synced `config/gateway-catalog.json` produced by `tools/gateway/sync_catalog.py` and optionally filters rows by ToS verdict or by ADR 0007 routability (`eligibility_gate`, `tos in {avoid, unknown}`, and `discontinued` rows are excluded when `routable_only=true`); the response always carries `source: "config/gateway-catalog.json"` plus `curated_at`, `totals`, and `avoid_list`. `pitwall_quota_list` obtains the shared database pool and delegates to `QuotaRepository.list_all`, adding a derived `headroom` ratio to each persisted record. Both tools are read-only — no provider egress, no database or audit writes, no `pitwall.cost` import — and the catalog handler never reaches the network even when the file is missing (returns an empty `providers` list).
 
 ## 3. Tool Inventory
 
@@ -369,8 +368,8 @@ All five are thin async adapters over the shared `VolumeFileService` and route e
 | `pitwall_describe_capability` | Single capability details | `name` | capability dict |
 | `pitwall_list_providers` | List registered providers; `enabled` filters SQL-side (`true`/`false`/omitted) | `capability_id`, `provider_type`, `enabled` | `{providers: [...]}` |
 | `pitwall_get_provider_health` | Provider health & cooldown | `provider_id` | health dict |
-| `pitwall_submit_inference` | Sync inference request | `capability_id`, `provider_id`, `dry_run`, `idempotency_key`, `**kwargs` | workload dict |
-| `pitwall_submit_job` | Async job submission | `capability_id`, `input`, `provider_id`, `dry_run`, `idempotency_key`, `webhook_url`, `**kwargs` | workload dict |
+| `pitwall_submit_inference` | Sync inference request | `capability_id`, `payload`, `provider_id`, `dry_run`, `idempotency_key` | workload dict |
+| `pitwall_submit_job` | Async job submission | `capability_id`, `input`, `provider_id`, `dry_run`, `idempotency_key`, `webhook_url` | workload dict |
 | `pitwall_get_job_status` | Async job state | `workload_id` | workload dict |
 | `pitwall_get_job_result` | Async job result | `workload_id` | workload dict |
 | `pitwall_cancel_job` | Cancel async job | `workload_id` | workload dict with `cancelled` flag |
@@ -380,12 +379,12 @@ All five are thin async adapters over the shared `VolumeFileService` and route e
 | `pitwall_stop_lease` | Tear down lease | `lease_id`, `reason` | lease dict |
 | `pitwall_serve_model` | Launch or replay a model-serving pod lease | `capability`, `model`, `gpu_class`, `gpu_count`, `engine`, `variant`, `template_id`, `ttl_minutes`, `idle_timeout_min`, `max_usd_per_hour`, `renewal_policy`, `route`, `image`, `served_model_name`, `rate_per_second`, `gated`, `dry_run`, `idempotency_key` | serve result dict |
 | `pitwall_models_list` | List curated model dossiers and variants | none | `{models: [...]}` with REST-compatible model summaries |
-| `pitwall_models_fit` | Compare a model variant with GPU classes and estimate TTL cost | `model`, `variant`, `ttl_minutes`, `cloud` | REST-compatible fit response with `options` |
+| `pitwall_models_fit` | Compare a model variant with GPU classes and estimate TTL cost | `model`, `variant`, `ttl_minutes`, `cloud`, `inventory`, `context` | REST-compatible fit response with `options` |
 | `pitwall_cost_summary` | Aggregated cost | `capability_class`, `since`, `until` | `{total_usd, entries}` |
 | `pitwall_recent_workloads` | Recent workload list | `limit`, `state`, `capability_id`, `provider_id`, `provider_type`, `since`, `until` | `{workloads}` |
 | `pitwall_create_capability` | Register capability | `name`, `version`, `capability_class`, `cost_mode`, `description`, `input_schema`, `output_schema` | capability dict |
 | `pitwall_update_capability` | Update capability | `capability_id`, `name`, `version`, `description`, `cost_mode`, `enabled`, `input_schema`, `output_schema` | capability dict |
-| `pitwall_create_provider` | Register provider | `capability_id`, `name`, `provider_type`, `runpod_endpoint_id`, `runpod_template_id`, `region`, `cloud_type`, `config`, `priority`, `enabled` | provider dict |
+| `pitwall_create_provider` | Register provider | `capability_id`, `name`, `provider_type`, `adapter_id`, `credential_ref`, `runpod_endpoint_id`, `runpod_template_id`, `region`, `cloud_type`, `config`, `priority`, `enabled` | provider dict |
 | `pitwall_update_provider` | Update provider | `provider_id`, many optional fields | provider dict |
 | `pitwall_disable_provider` | Disable provider | `provider_id` | provider dict |
 | `pitwall_hibernate_provider` | Hibernate provider | `provider_id` | provider dict |

@@ -74,7 +74,7 @@ uv run pitwall --help 2>&1 | head -40
 ```
 Expected: the usage line and the command list, including `setup`, `serve`, `status`, `stop`, `runpod`, `runpod-onboard`, `volume-files`, and `terminate-pod`.
 If different: ask the coach which subcommand is missing.
-Coach: point out the commands on rule R2's never-run list: `setup`, `serve` (allowed only with `--dry-run`), `status` and `stop` (a mission names the one allowed form), `runpod`, `runpod-onboard`, `volume-files`, `provider-ops`, `retention`, and `terminate-pod`. `--help` on any of them is fine; look, don't run.
+Coach: point out the commands on rule R2's never-run list: `setup`, `serve` (allowed only with `--plan-only`), `status` and `stop` (a mission names the one allowed form), `runpod`, `runpod-onboard`, `volume-files`, `provider-ops`, `retention`, and `terminate-pod`. `--help` on any of them is fine; look, don't run.
 
 ### Step 6 — The API docs page
 

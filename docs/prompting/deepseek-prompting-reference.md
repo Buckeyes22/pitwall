@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Vendor | DeepSeek |
-| Models in scope | `deepseek-ai/DeepSeek-V4-Pro-0813` and `deepseek-ai/DeepSeek-V4-Flash-0731` |
+| Models in scope | `deepseek-ai/DeepSeek-V4-Pro-0813` and `deepseek-ai/DeepSeek-V4.1-Flash` (`deepseek-ai/DeepSeek-V4-Flash-0731` is retired, superseded 2026-09-10) |
 | Primary access | Self-hosted OpenAI-compatible endpoint |
 | Official guidance | DeepSeek V4 model cards and local-serving instructions |
 | Canonical doc host | DeepSeek's `deepseek-ai` Hugging Face organization |
@@ -38,11 +38,11 @@ For local deployment, DeepSeek recommends `temperature=1.0` and `top_p=0.95` for
 **Evidence-derived operational guidance:** create an endpoint route for the Flash model and dispatch it through the route shim:
 
 ```bash
-pitwall agents profiles add deepseek --model deepseek-ai/DeepSeek-V4-Flash-0731 --base-url http://<host>:8000/v1 --api-key-env DEEPSEEK_API_KEY
+pitwall agents profiles add deepseek --model deepseek-ai/DeepSeek-V4.1-Flash --base-url http://<host>:8000/v1 --api-key-env DEEPSEEK_API_KEY
 route-shim.sh deepseek <prompt-file>
 ```
 
-An endpoint route uses Qwen Code's environment-variable delivery by default; after `pitwall agents profiles sync`, `deepseek@opencode` can use opencode's synced provider configuration. Flash is the realistic single-box self-host target; Pro needs a multi-node deployment. Configure `reasoning_effort` and `thinking_mode` in the selected harness, and keep the prompt focused on the work and output contract.
+An endpoint route uses Qwen Code's environment-variable delivery by default; after `pitwall agents profiles sync`, `deepseek@opencode` can use opencode's synced provider configuration. Configure `reasoning_effort` and `thinking_mode` in the selected harness, and keep the prompt focused on the work and output contract.
 
 ## 6. Sources
 

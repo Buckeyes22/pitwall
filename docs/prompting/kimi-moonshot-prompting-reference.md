@@ -25,7 +25,7 @@ Coverage assessment: solid for general technique, system-prompt construction, to
 
 ## 2. Message format and API surface
 
-Kimi is **OpenAI-API-compatible**. Base URL is `https://api.moonshot.ai/v1`; existing OpenAI Python/Node SDKs work against it. A documented API difference: **`tool_choice="required"` is not currently supported** — and if you set `temperature=0` for deterministic output, you must set `n=1` (or leave it default). Usage information (`prompt_tokens` / `completion_tokens` / `total_tokens`) is placed in the end data block when streaming.
+Kimi is **OpenAI-API-compatible**. Base URL is `https://api.moonshot.ai/v1`; existing OpenAI Python/Node SDKs work against it. A documented API difference: **`tool_choice="required"` is not currently supported on the K2.x models (`kimi-k2.6`, `kimi-k2.7-code`)** — and if you set `temperature=0` for deterministic output, you must set `n=1` (or leave it default). Usage information (`prompt_tokens` / `completion_tokens` / `total_tokens`) is placed in the end data block when streaming.
 
 ---
 
@@ -96,7 +96,7 @@ The recommended pre-build step for agents is to **decompose the target task**, w
 
 ### Thinking mode and tool interaction
 
-When the `thinking` parameter is `{"type": "enabled"}` and tools are in use, **`tool_choice` can only be `"auto"` or `"none"`** (default `"auto"`) to avoid conflicts between reasoning content and the tool specification. Note also that the official built-in `$web_search` tool was documented as temporarily incompatible with K2.5 thinking mode — the workaround is to disable thinking before using `$web_search`.
+On the K2.x models, when the `thinking` parameter is `{"type": "enabled"}` and tools are in use, **`tool_choice` can only be `"auto"` or `"none"`** (default `"auto"`) to avoid conflicts between reasoning content and the tool specification. Note also that the official built-in `$web_search` tool was documented as temporarily incompatible with K2.5 thinking mode — the workaround is to disable thinking before using `$web_search`.
 
 ---
 
@@ -115,7 +115,7 @@ Moonshot's benchmarking best-practices page is worth following whenever output s
 | Reliability on long outputs | Enable streaming |
 | Steering | Use the canonical Kimi system prompt (long form for API) |
 | Tool use | Pass tools per request; let the model decide; do **not** list tools in the system prompt |
-| Thinking + tools | `tool_choice` must be `auto` or `none` |
+| Thinking + tools (K2.x) | `tool_choice` must be `auto` or `none` |
 | `$web_search` on K2.5 | Disable thinking first |
 | Anti-hallucination | Instruct "if not in the text, say 'I can't find the answer'" |
 | Hard-to-describe style | Few-shot examples |
@@ -148,6 +148,8 @@ default `max`). Preserved thinking is required: multi-turn and agentic flows mus
 messages — including `reasoning_content` and `tool_calls` — back to the model. Evaluation-methodology
 sampling: `temperature 1.0`; `top_p 0.95` for single-step tasks, `top_p 1.0` for agentic tasks. In API requests,
 K3 fixes temperature, top_p, n, and both penalties, so leave them out instead of setting them.
+K3 accepts `tool_choice` `"required"`: with a large tool inventory, declare one search tool and force it on
+the first turn with `tool_choice` `"required"`, then inject the matching tool definitions on demand.
 
 ## Asking through the orchestrator channel
 

@@ -27,15 +27,23 @@ before step 2.
 ## Setup
 
 The local test stack is up and the README Quick Start has run against it, as in tier 2. Run the
-five README `export` lines first, then load the real key so it replaces the placeholder:
+five README `export` lines first, then load the real key so it replaces the placeholder.
+
+`pitwall serve --capability` and `--dry-run` exist only on the registry backend, and
+`DATABASE_URL` alone does not select it. Put `[personal]` with `backend = "registry"` in the
+`pitwall.toml` in the working directory (or in the file `PITWALL_CONFIG_FILE` names), as the
+[serve quickstart](../../../docs/operator/serve-quickstart.md#with-a-database-configured) says.
 
 ```bash
 set -a; . ~/.config/pitwall-qa/runpod.env; set +a
 export PITWALL_MONTHLY_BUDGET_USD=<agreed-budget>
+uv run pitwall status
 uv run pitwall leases list
 ```
 
-Expected: a `Columns:` line and no lease rows.
+Expected: `pitwall status` reports `Backend: registry`. `pitwall leases list` prints a `Columns:`
+line and no lease rows.
+If `pitwall status` reports another backend: stop and fix `pitwall.toml` before step 1.
 If different: an existing lease row means something is already running; stop and ask the
 maintainer before launching anything.
 

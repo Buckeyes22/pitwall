@@ -1,6 +1,6 @@
 # External source policy
 
-This repository contains original routing and prompting guidance derived from publicly available vendor documentation. It links to external publications rather than redistributing complete copies whose reuse terms are not part of this repository's MIT license.
+This repository contains original routing and prompting guidance derived from publicly available vendor documentation. It links to external publications rather than redistributing complete copies whose reuse terms are not part of this repository's Apache-2.0 license.
 
 The Claude model references use Anthropic's official system-card sources:
 

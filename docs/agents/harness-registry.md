@@ -15,12 +15,12 @@ python3 tools/agents/sync_routes.py --check
 
 Semantic validation supplements `src/pitwall/agents/resources/schemas/harness-registry.schema.json`. It checks required fields, identifier shapes, repository-contained paths, reference anchors, alias uniqueness, adapter/registry parity, reciprocal native ownership, valid defaults, and the explicit absence of any Mythos-specific route or card.
 
-`tools/agents/sync_routes.py` writes two deterministic files into each plugin package:
+`tools/agents/sync_routes.py` writes two deterministic files into `src/pitwall/agents/resources/generated/`:
 
-- `references/routes.generated.md`
-- `references/harness-registry.generated.json`
+- `routes.generated.md`
+- `harness-registry.generated.json`
 
-Claude's generated catalog omits the native Claude provider, Codex's omits native Codex, and Copilot's includes all fourteen providers. Unknown provider-supported model IDs remain pass-through; the catalog is guidance, not a live availability claim.
+`pitwall agents install` copies both into each host plugin's `skills/subagent-model-routing/references/`. All three hosts (Claude, Codex, Copilot) receive the identical generated catalog covering all fourteen providers, including each host's own native provider. Unknown provider-supported model IDs remain pass-through; the catalog is guidance, not a live availability claim.
 
 Some registry fields are generated from `model-facts/` by `tools/agents/sync_model_facts.py`: a model's
 `displayName`, `effortValues`, and `provenance`, and a model family's `contextWindow`,

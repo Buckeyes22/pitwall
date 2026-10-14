@@ -12,7 +12,7 @@ Report vulnerabilities via **GitHub private vulnerability reporting**:
 2. Click **Report a vulnerability**.
 3. Include a description, reproduction steps, and impact.
 
-Do not open public issues for undisclosed vulnerabilities. Best-effort acknowledgment within 7 days (solo maintainer).
+Do not open public issues for undisclosed vulnerabilities. The project targets acknowledgement within 72 hours and a substantive update within 14 days (best-effort, not an SLA); see the root [`SECURITY.md`](../../SECURITY.md).
 
 This component uses the Pitwall repository's single disclosure and advisory process. The root
 [`SECURITY.md`](../../SECURITY.md) is authoritative for reporting targets, supported versions, and
