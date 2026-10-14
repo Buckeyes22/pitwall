@@ -1,4 +1,4 @@
-"""Tests for the setup routes picker."""
+"""Tests for the setup profiles picker."""
 
 from __future__ import annotations
 

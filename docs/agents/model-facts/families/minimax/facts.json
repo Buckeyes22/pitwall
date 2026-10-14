@@ -233,7 +233,7 @@
       "routes": [
         {
           "harness": "opencode",
-          "model": "minimax/MiniMax-M3.1-Flash-Preview"
+          "model": "minimax-coding-plan/MiniMax-M3.1-Flash-Preview"
         }
       ],
       "facts": {
@@ -443,7 +443,7 @@
     },
     {
       "id": "minimax-m31-token-plan-only",
-      "text": "MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now, so no Pitwall route reaches it yet. The public API and OpenCode Go serve M3.",
+      "text": "MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now; the public API and OpenCode Go serve M3.",
       "applies": [
         "*"
       ],

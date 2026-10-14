@@ -5,7 +5,7 @@
 - **Tier:** Hosted vendor model — unranked pending local evidence
 - **Excels at:** (not yet benchmarked)
 - **Struggles with:** (not yet benchmarked)
-- **Operational caveats:** closed-weights, Meta-hosted Muse Spark (`--model muse-spark-1.3` or `muse-spark-1.2`; the shim default is `muse-wonder-1.0`); `--reasoning-effort none…ultra`; `META_API_KEY`; prompt delivered by file; exit `2` is a usage error, `130`/`143` signals. OpenCode Go serves the discounted Contributor tiers (`opencode-go/muse-spark-1.3-contributor`, `opencode-go/muse-spark-1.2-contributor`): prompts and completions may train future Meta models, and availability is limited to regions in Meta's Geographic Use Policy.
+- **Operational caveats:** closed-weights, Meta-hosted Muse Spark (`--model muse-spark-1.3` or `muse-spark-1.2`; the shim default is `muse-wonder-1.0`); `--reasoning-effort` (Muse Spark accepts minimal–xhigh and rejects `none`; Meta's API offers `max` only on Standard-tier `muse-spark-1.3`, while Muse Code reports that `max` works on both tiers of `muse-spark-1.3`; `ultra` is Muse Code's client-side level); `META_API_KEY`; prompt delivered by file; exit `2` is a usage error, `130`/`143` signals. OpenCode Go serves the discounted Contributor tiers (`opencode-go/muse-spark-1.3-contributor`, `opencode-go/muse-spark-1.2-contributor`): prompts and completions may train future Meta models, and availability is limited to regions in Meta's Geographic Use Policy.
 - **Evidence:** first-party Meta Muse Code documentation; replace seed observations with local evidence via `/pitwall:distill`
 - **Runtime reference:** [../references/model-prompting.md#muse-code](../references/model-prompting.md#muse-code)
 - **Last distilled:** 2026-08-26 (seed)

@@ -46,7 +46,7 @@ INSTRUCTIONS = (
     "serve whose lease is no longer serving is refused instead). On mutation_in_progress retry "
     "with the same key later; on idempotency_conflict, idempotency_mismatch, or "
     "lease_state_conflict use a new key. Spend is gated by the "
-    "budget: on budget_rejected, sub_budget_rejected, or budget_exhausted read the remedy "
+    "budget: on budget_rejected or budget_exhausted read the remedy "
     "field, and change limits only with pitwall_budget_set and a reason. Tool failures are "
     "returned as {'error': '<code>'} tool results; invalid_tool_arguments lists parameter "
     "names."

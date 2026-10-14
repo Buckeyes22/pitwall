@@ -38,6 +38,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Model facts no longer cite the Antigravity models page for effort levels, since the page stopped
   listing them; the `agy` sandbox default no longer cites the Antigravity app's preset table.
 
+### Fixed
+
+- `pitwall agents setup harnesses` installs Hermes again: its upstream installer changed, so the
+  pinned digest no longer matched and setup refused it. The new script was reviewed and re-pinned.
+- The MiniMax M3.1 Flash Preview route is `minimax-coding-plan/MiniMax-M3.1-Flash-Preview`, the
+  OpenCode provider that reaches it (a live check on 2026-10-13 answered). The registry, the routing
+  skill's helper and roster, and the references named `minimax/MiniMax-M3.1-Flash-Preview`, which no
+  OpenCode provider serves, and the model facts said no Pitwall route reached it.
+- MiMo guidance routes new work to V2.6 (`opencode-go/mimo-v2.6-flash`, `opencode-go/mimo-v2.6-pro`);
+  V2.5 and V2.5-Pro retire on 2026-10-21 with no automatic replacement.
+- The Grok, Codex, MiMo, and Muse Spark capability cards match their model facts: Grok 4.7, the
+  GPT-6 roles, MiMo V2.6, and Muse Spark's minimal–xhigh effort range (`none` is rejected).
+- Docs no longer advertise behavior that does not exist: sub-budgets feed the TUI chargeback report
+  but do not gate admission, so `sub_budget_rejected` is gone from the MCP agent instructions;
+  Claude-hosted DAGs run as managed
+  `dispatch_and_wait` calls; the setup command is `setup profiles`; the model-facts workflow is
+  `model-facts.yml`.
+- Prompting references match their reviewed facts: Kimi K3 requests leave sampling parameters out,
+  GLM-5.2 was already text-only, and MiMo's thinking can be switched off with `thinking.type`.
+- Docs now match current behavior: workflows run on every registered harness except the host's own
+  (the workflow guide listed six); the DAG and ledger tripwires block a turn from ending once instead
+  of never blocking; every script installer is pinned (Antigravity, Kimi, Qwen, and
+  goose were listed as unpinned), and `pitwall runpod endpoints create` creates queue and
+  load-balancer endpoints (the runbooks said Pitwall could only register existing ones).
+
 ## [0.3.0a1] - 2026-10-07
 
 ### Added

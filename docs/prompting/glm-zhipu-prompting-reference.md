@@ -152,7 +152,7 @@ with a 1M-token context window and a 128K-token maximum output. Z.ai reports ~50
 its private Code Bench plus a token-efficiency gain, with post-training expanded into long-horizon task
 environments. Reasoning is now mandatory: `thinking.type` accepts only `enabled`, and depth is steered with
 `reasoning_effort` (`low`/`high`/`max`, default `max`; Z.ai recommends `max` for coding). Inputs are
-text-only — GLM-5.2's multimodal support was dropped. Migration: callers sending `thinking.type: "disabled"`
+text-only, as GLM-5.2 already was; GLM-5.3-Flash is the multimodal model. Migration: callers sending `thinking.type: "disabled"`
 must switch to `enabled` with `reasoning_effort: "low"` or requests fail. Docs examples use `temperature 1.0`;
 no explicit `top_p` guidance is published.
 

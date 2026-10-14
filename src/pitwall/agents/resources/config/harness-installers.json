@@ -186,14 +186,14 @@
           "interpreter": [
             "bash"
           ],
-          "sha256": "14b4c89518cf0e4e71841708dd5d8a28f1f494d22cd20e12f4d5eeb29c7d2fdb"
+          "sha256": "f4cdb0e20f1aca2c3871a76b962fd4db61510f549cf973759c753ac13349beb5"
         },
         "linux": {
           "installerUrl": "https://hermes-agent.nousresearch.com/install.sh",
           "interpreter": [
             "bash"
           ],
-          "sha256": "14b4c89518cf0e4e71841708dd5d8a28f1f494d22cd20e12f4d5eeb29c7d2fdb"
+          "sha256": "f4cdb0e20f1aca2c3871a76b962fd4db61510f549cf973759c753ac13349beb5"
         }
       },
       "allowedRedirectHosts": [

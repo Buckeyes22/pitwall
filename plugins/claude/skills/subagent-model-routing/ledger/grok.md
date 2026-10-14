@@ -1,4 +1,4 @@
-# Grok 4.5 — capability card (seed example)
+# Grok 4.7 — capability card (seed example)
 
 > Seed example — maintain via `/pitwall:distill` and your own ledger.
 
@@ -7,7 +7,7 @@
 - **Excels at:** agentic coding, tool-using software work, repository inspection, and knowledge tasks through the Grok Build harness
 - **Struggles with:** no route-specific local failure pattern is established yet; do not infer reliability or rank from first-party capability claims alone
 - **Operational caveats:** `grok-4.7` is the shim default; `--effort low|medium|high|xhigh` controls reasoning depth and xAI documents `high` as the default. The prompt is delivered on argv, unrestricted mode adds `--always-approve`, and Grok Build's sandbox policy remains separate—use explicit boundaries and deterministic checks. Grok 4.6 is available through the OpenCode Go subscription as `opencode-go/grok-4.6` (not through the Grok Build shim); its first-party prompting guidance is the same docs.x.ai family.
-- **Evidence:** first-party Grok 4.5, Grok Build CLI, headless-operation, and enterprise-security documentation under `docs.x.ai`, summarized in `../references/model-prompting.md#xai-grok-47-through-grok-build`; replace routing opinions with local observations in `~/.local/state/pitwall/agents/ledger/observations.jsonl`
+- **Evidence:** first-party Grok 4.7, Grok Build CLI, headless-operation, and enterprise-security documentation under `docs.x.ai`, summarized in `../references/model-prompting.md#xai-grok-47-through-grok-build`; replace routing opinions with local observations in `~/.local/state/pitwall/agents/ledger/observations.jsonl`
 - **Last distilled:** 2026-07-10 (first-party documentation seed)
 
 <!-- MODEL-FACTS:grok START (generated from docs/agents/model-facts/families/grok; edit facts.json, not this block) -->

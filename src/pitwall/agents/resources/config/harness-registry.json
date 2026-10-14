@@ -418,7 +418,7 @@
             "minimax/*",
             "opencode-go/minimax*"
           ],
-          "example": "minimax/MiniMax-M3.1-Flash-Preview",
+          "example": "minimax-coding-plan/MiniMax-M3.1-Flash-Preview",
           "promptReference": "docs/prompting/minimax-prompting-reference.md",
           "runtimeReference": "references/model-prompting.md#minimax",
           "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md"

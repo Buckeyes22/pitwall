@@ -314,7 +314,7 @@ Sources: xAI's Grok 4.7, Grok Build CLI, and headless-operation documentation un
 
 Route through `kimi-shim.sh <prompt-file> [Kimi args]`. Model precedence is explicit `-m`/`--model`, then `KIMI_MODEL_NAME`, then the Kimi Code CLI's configured default. The shim owns prompt/output flags and rejects `-y`/`--yolo`/`--auto`, which cannot be combined with prompt mode.
 
-Kimi K3 (current default `kimi-code/k3`) is a 2.8T-parameter MoE with 104B active parameters (16-of-896 experts) built on Kimi Delta Attention plus Attention Residuals, with a 1M-token context window. Thinking is always on and returns `reasoning_content`; steer depth with the top-level `reasoning_effort` field (`low`/`high`/`max`, default `max`). Multi-turn and agentic flows must pass complete assistant messages — including `reasoning_content` and `tool_calls` — back to the model (preserved thinking). Card sampling: `temperature 1.0` with `top_p 0.95` for single-step tasks and `top_p 1.0` for agentic tasks.
+Kimi K3 (current default `kimi-code/k3`) is a 2.8T-parameter MoE with 104B active parameters (16-of-896 experts) built on Kimi Delta Attention plus Attention Residuals, with a 1M-token context window. Thinking is always on and returns `reasoning_content`; steer depth with the top-level `reasoning_effort` field (`low`/`high`/`max`, default `max`). Multi-turn and agentic flows must pass complete assistant messages — including `reasoning_content` and `tool_calls` — back to the model (preserved thinking). K3 fixes temperature, top_p, n, and both penalties, so leave them out of requests instead of setting them.
 
 Use clear, detailed instructions; delimit instruction, context, and reference text; provide explicit steps and examples when output shape is hard to describe. Keep the shim prompt focused on task and output contract because Kimi Code owns the tool harness. Grounded review requires the harness to read the real files.
 
@@ -346,7 +346,7 @@ Kimi Code prompt mode applies the `auto` permission policy while retaining stati
 
 Route through `opencode-shim.sh zai-coding-plan/glm-5.3 <prompt-file>`.
 
-GLM-5.3 keeps GLM-5.2's 744B-A40B MoE base and 1M-token context (max output 128K tokens); the gains are post-training scale. Reasoning is mandatory: `thinking.type` accepts only `enabled`, and depth is steered with `reasoning_effort` (`low`/`high`/`max`, default `max` — Z.ai recommends `max` for coding). Inputs are text-only (5.2's multimodal support was dropped). Callers that previously sent `thinking.type: "disabled"` must switch to `enabled` with `reasoning_effort: "low"`.
+GLM-5.3 keeps GLM-5.2's 744B-A40B MoE base and 1M-token context (max output 128K tokens); the gains are post-training scale. Reasoning is mandatory: `thinking.type` accepts only `enabled`, and depth is steered with `reasoning_effort` (`low`/`high`/`max`, default `max` — Z.ai recommends `max` for coding). Inputs are text-only; GLM-5.3-Flash is the multimodal model. Callers that previously sent `thinking.type: "disabled"` must switch to `enabled` with `reasoning_effort: "low"`.
 
 Define the role and task, use delimiters, demand an exact output format, and decompose complex work into explicit subtasks. Prefer supported thinking controls over vague requests to “think harder.” When JSON is required, demand parseable JSON and validate it after return.
 
@@ -371,7 +371,7 @@ Putting critical instructions early is a field heuristic in this project, not a 
 
 ## MiniMax
 
-Route through `opencode-shim.sh minimax/MiniMax-M3.1-Flash-Preview <prompt-file>`.
+Route through `opencode-shim.sh minimax-coding-plan/MiniMax-M3.1-Flash-Preview <prompt-file>`.
 
 MiniMax has no dedicated official text-prompting guide in the canonical research set. Use a structured prompt with role, task, constraints, success criteria, and output shape. A planning phase can help coding work. `--thinking` controls reasoning-trace visibility; it is not an effort dial.
 
@@ -390,7 +390,7 @@ A missing-text result before the sentinel is a known operational stall shape. Re
 - **Stated by vendor:** In multi-turn and tool-use work, send the model's full previous reply back, thinking blocks included, or its reasoning chain breaks.
 - **Stated by vendor:** Thinking tokens count against max_tokens. Set it high enough, or the reply can end with no text at all.
 - **Stated by vendor:** top_k and stop_sequences are ignored by the MiniMax API, so do not rely on them to shape output.
-- **Stated by vendor:** MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now, so no Pitwall route reaches it yet. The public API and OpenCode Go serve M3.
+- **Stated by vendor:** MiniMax-M3.1-Flash-Preview is offered only through Token Plan and MiniMax Code for now; the public API and OpenCode Go serve M3.
 - **Stated by vendor (`minimax-m3.1-flash-preview`):** M3.1-Flash-Preview always thinks. Lower effort to cut latency; disabling thinking or sending effort none returns HTTP 400. Omitting effort means max.
 - **Facts checked:** 2026-09-28. Sources: `docs/agents/model-facts/families/minimax/FACTS.md`.
 <!-- MODEL-FACTS:minimax END -->
@@ -569,7 +569,7 @@ Thinking is a chat-template kwarg (`enable_thinking` on/off, plus `save_reasonin
 
 ## MiMo
 
-Xiaomi MiMo-V2.5 (`XiaomiMiMo/MiMo-V2.5`, MIT, 1M context, omnimodal text/image/video/audio) and MiMo-V2.5-Pro (`XiaomiMiMo/MiMo-V2.5-Pro`, 1M context, text-only) route through OpenCode Go (`opencode-go/mimo-v2.5`, `opencode-go/mimo-v2.5-pro`) or self-host via the vLLM recipe (V2.5 is pinned to TP=4; Pro needs 8x B200-class).
+Route new MiMo work to V2.6 through OpenCode Go: `opencode-go/mimo-v2.6-flash` or `opencode-go/mimo-v2.6-pro`. MiMo-V2.5 and MiMo-V2.5-Pro retire on 2026-10-21 (Beijing time) with no automatic replacement, so requests to them fail after that date; Xiaomi's models page recommends the V2.6 pair. The details that follow are documented for the V2.5 line: MiMo-V2.5 (`XiaomiMiMo/MiMo-V2.5`, MIT, 1M context, omnimodal text/image/video/audio) and MiMo-V2.5-Pro (`XiaomiMiMo/MiMo-V2.5-Pro`, 1M context, text-only) route through OpenCode Go (`opencode-go/mimo-v2.5`, `opencode-go/mimo-v2.5-pro`) until retirement, or self-host via the vLLM recipe (V2.5 is pinned to TP=4; Pro needs 8x B200-class).
 
 Card-recommended sampling: `temperature=1.0, top_p=0.95`. Thinking can be switched off with `thinking.type`; custom sampling is ignored while thinking. Tool use follows the OpenAI schema with the `mimo` tool parser.
 

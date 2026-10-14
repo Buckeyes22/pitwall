@@ -268,7 +268,7 @@ pitwall agents workflow cancel <workflow-id>
 pitwall agents workflow resume <workflow-id> --host copilot
 ```
 
-Codex-hosted workflows keep Codex work inline and may contain Claude, Grok, Kimi, OpenCode, and Pi transport tasks — the workflow-capable set the durable runner dispatches today; other registered providers are rejected at validation. Copilot-hosted workflows accept the same set. Claude Code continues to prefer native Workflow; its external-only runner usage does not replace the tripwire hooks. See [host-neutral workflows](workflows.md).
+Codex-hosted workflows keep Codex work inline and may contain tasks for any other registered harness; Copilot-hosted workflows accept every registered harness. Claude Code runs its external-model dependency graphs as managed `dispatch_and_wait` calls (`/pitwall:dag-routing`); its external-only runner usage does not replace the tripwire hooks. See [host-neutral workflows](workflows.md).
 
 ### 6. Agent profiles
 
@@ -304,7 +304,7 @@ MCP registration enables the child-side tools but does not by itself prove an en
 
 ## Day-to-day use
 
-In normal use you don't run the shims by hand — you ask in plain language: "route this to Claude", "get Grok's second opinion", or "fan this review out across Codex and GLM and compare". The routing skill decides the shape of the work: independent one-shot dispatches run flat, Claude-hosted dependency graphs use native Workflow by default, and Codex/Copilot can execute durable JSON graphs through `pitwall agents workflow`.
+In normal use you don't run the shims by hand — you ask in plain language: "route this to Claude", "get Grok's second opinion", or "fan this review out across Codex and GLM and compare". The routing skill decides the shape of the work: independent one-shot dispatches run flat, Claude-hosted dependency graphs run as managed `dispatch_and_wait` calls in dependency order (`/pitwall:dag-routing`; native Workflow is a legacy, non-interactive mode whose nodes cannot ask the parent), and Codex/Copilot can execute durable JSON graphs through `pitwall agents workflow`.
 
 Set expectations on time. A routed dispatch is a full agentic run: the external model reads files, edits, and runs checks in your workspace, then reports back. Substantive dispatches typically take several minutes, not seconds. The shim enforces a per-run ceiling of `PITWALL_AGENTS_TIMEOUT_SECS` (default 1140s, ~19 min), so a single dispatch that runs longer than that will be clipped.
 
@@ -313,9 +313,9 @@ Ctrl+C in the terminal running a shim stops the dispatch cleanly: the harness's 
 The important part — the two Stop-hook nudges. After a turn that dispatched shims, you may see one of two messages appear. Both are normal operation, not errors.
 
 - **Ledger nudge** — a line beginning `pitwall LEDGER: shims were dispatched this turn and no ledger note was written…`. It's asking whether anything notable happened on that dispatch. Claude answers it — noting anything notable, or stating nothing was — and continues. The ledger improves only if you actually feed it observations.
-- **DAG tripwire** — if a DAG-shaped request ran as flat direct dispatches instead, you may see `dag-routing TRIPWIRE: …`, which asks Claude to either redo the work via the Workflow tool or state that flat dispatch was deliberate. Usually it was deliberate, and saying so clears it.
+- **DAG tripwire** — if a DAG-shaped request ran as flat direct dispatches instead, you may see `dag-routing TRIPWIRE: …`, which asks Claude to either redo the work with managed `dispatch_and_wait` calls or state that flat dispatch was deliberate. Usually it was deliberate, and saying so clears it.
 
-These are advisory, fail-open guardrails. Seeing one is the system working as designed — it never blocks your turn. If you'd rather not see them at all, disable the plugin entirely, or delete the `Stop` entries in `plugins/claude/hooks/hooks.json`.
+Each one blocks the turn from ending once, so Claude has to answer it before it stops; on malformed or unreadable input the hooks fail open and stay silent. Seeing one is the system working as designed. If you'd rather not see them at all, disable the plugin entirely, or delete the `Stop` entries in `plugins/claude/hooks/hooks.json`.
 
 ## Routing a local model
 
@@ -483,7 +483,7 @@ Isolated branches and worktrees remain available for review until `runs discard`
 
 The shims keep each child CLI's own sandbox and approval policy unless `PITWALL_AGENTS_UNRESTRICTED=1` is set explicitly. That setting bypasses the sandbox or interactive approval prompts where the CLI supports a compatible flag. Kimi's `--prompt` mode is inherently unattended and applies its auto approval policy while retaining static deny rules; it has no compatible restricted-mode switch, so the Kimi shim (like dsh) refuses to dispatch unless `PITWALL_AGENTS_UNRESTRICTED=1` is set, and it rejects `-y`/`--yolo`/`--auto` instead of forwarding conflicting flags. Grok Build's sandbox is off by default, so forward an explicit policy such as `--sandbox workspace` when you need isolation. A Git worktree separates files from the caller's checkout but is not a container or permission boundary. Review model-generated patches before applying them.
 
-The optional provider selector is a separate explicit mutation surface. It downloads only checked, missing providers from fixed first-party HTTPS URLs, validates every redirect hop and the final host, bounds size, verifies a reviewed SHA-256 digest when one is available, shows the source and checksum status, confirms again, executes a private temporary script without shell interpolation, and never logs in. A provider whose endpoint could not be checksum-pinned is labeled with an explicit warning and still fails closed on unexpected redirects. Review the full [provider setup security boundary](harness-cli-setup.md#security-boundary) before using it.
+The optional provider selector is a separate explicit mutation surface. It downloads only checked, missing providers from fixed first-party HTTPS URLs, validates every redirect hop and the final host, bounds size, verifies the reviewed SHA-256 digest every script installer carries, shows the source and checksum status, confirms again, executes a private temporary script without shell interpolation, and never logs in. npm recipes, which have no reviewed checksum, are labeled with an explicit warning, and every download fails closed on unexpected redirects. Review the full [provider setup security boundary](harness-cli-setup.md#security-boundary) before using it.
 
 ## Observability
 
@@ -526,7 +526,7 @@ The shim logs `event: started` when dispatch begins and `event: finished` when i
 
 | Client | Marketplace | Package | Dispatch style |
 |--------|-------------|---------|----------------|
-| Claude Code | `pitwall-local` | [`plugins/claude`](../../plugins/claude/README.md) (plugin `pitwall`) | native Claude + Codex/Gemini/Kimi/OpenCode/Grok/Qwen targets; flat dispatch + Workflow DAG orchestration |
+| Claude Code | `pitwall-local` | [`plugins/claude`](../../plugins/claude/README.md) (plugin `pitwall`) | native Claude + Codex/Gemini/Kimi/OpenCode/Grok/Qwen targets; flat dispatch + managed-dispatch DAG orchestration |
 | Codex | `pitwall-local` | [`plugins/codex`](../../plugins/codex/README.md) (plugin `pitwall-codex`) | native Codex + direct or dependency-workflow Claude/Gemini/Kimi/OpenCode/Grok/Qwen targets |
 | GitHub Copilot CLI | `pitwall-local` | [`plugins/copilot`](../../plugins/copilot/README.md) (plugin `pitwall-copilot`) | direct or dependency-workflow dispatch through all fourteen shims |
 
@@ -544,7 +544,7 @@ docs/prompting/                         # model-specific prompt guidance
 
 ## Project status
 
-Agent Routing is part of Pitwall `0.2.0a1`, an early-stage project built and maintained by a single maintainer. Issues and pull requests are welcome, with best-effort response times. The public contract (the `SHIM-DONE` sentinel, the `PITWALL_AGENTS_*` environment-variable names, the namespaced agent types, and the versioned workflow schema) is versioned with the rest of Pitwall in the root [CHANGELOG.md](../../CHANGELOG.md).
+Agent Routing is part of Pitwall `0.3.0a1`, an early-stage project built and maintained by a single maintainer. Issues and pull requests are welcome, with best-effort response times. The public contract (the `SHIM-DONE` sentinel, the `PITWALL_AGENTS_*` environment-variable names, the namespaced agent types, and the versioned workflow schema) is versioned with the rest of Pitwall in the root [CHANGELOG.md](../../CHANGELOG.md).
 
 ## License
 

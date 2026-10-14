@@ -146,7 +146,8 @@ efficiency vs K2). Thinking is always on and cannot be disabled; `reasoning_cont
 unconditionally and depth is steered with the top-level `reasoning_effort` field (`low`/`high`/`max`,
 default `max`). Preserved thinking is required: multi-turn and agentic flows must pass complete assistant
 messages — including `reasoning_content` and `tool_calls` — back to the model. Evaluation-methodology
-sampling: `temperature 1.0`; `top_p 0.95` for single-step tasks, `top_p 1.0` for agentic tasks.
+sampling: `temperature 1.0`; `top_p 0.95` for single-step tasks, `top_p 1.0` for agentic tasks. In API requests,
+K3 fixes temperature, top_p, n, and both penalties, so leave them out instead of setting them.
 
 ## Asking through the orchestrator channel
 

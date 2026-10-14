@@ -133,7 +133,7 @@ Responsibility: the pre-RunPod pipeline — estimate → budget gate → record 
 **Key functions:**
 
 - `gate_sync_inference(capability, provider_id, provider_cost, payload, budget_gate, runpod_caller, idempotency_key, submitted_at, input_bytes, fallback_chain) -> SyncInferenceResult` (`pitwall.cost.sync_gate`)
-  - with an `idempotency_key` it first reserves the key (placeholder workload `wkl_pending_<key[:16]>` plus the request `body_hash`) in its own transaction. When admission then raises before any workload row exists (`BudgetRejected`, `SubBudgetRejected`, anything else), the reservation this call created is deleted and the error re-raised, so a refused request does not bind the key; a rejected replay (`is_new=False`) leaves the other request's reservation alone
+  - with an `idempotency_key` it first reserves the key (placeholder workload `wkl_pending_<key[:16]>` plus the request `body_hash`) in its own transaction. When admission then raises before any workload row exists (`BudgetRejected` or anything else), the reservation this call created is deleted and the error re-raised, so a refused request does not bind the key; a rejected replay (`is_new=False`) leaves the other request's reservation alone
 - `estimate_cost(capability, provider_cost, payload) -> Decimal` (`pitwall.cost.sync_gate:gate_sync_inference`) — public wrapper
 - `SyncInferenceRejected(RuntimeError)` (`pitwall.cost.sync_gate`) — wraps a `BudgetRejected` for the sync path
 - `update_workload_fallback_chain(pool, workload_id, fallback_chain)` (`pitwall.cost.sync_gate`)
@@ -510,7 +510,9 @@ Invariant: all costs and savings are `Decimal` values quantised to 6 decimal pla
 
 ### `sub_budgets.py` — Blast-Radius Sub-Budgets + Chargeback
 
-Responsibility: partition the monthly budget into named sub-budgets (per capability/team/tag), gate admission against the relevant sub-budget, and attribute spend via deterministic chargeback reports.
+Responsibility: partition the monthly budget into named sub-budgets (per capability/team/tag) and attribute spend via deterministic chargeback reports.
+
+Status: sub-budgets currently feed only the TUI cost screen's chargeback report (`pitwall.tui.cost`). Admission is not wired: no request path constructs `SubBudgetGate`, so no request is refused with `sub_budget_rejected` today. The gate described below is implemented and unit-tested but unused.
 
 **Key types / functions:**
 

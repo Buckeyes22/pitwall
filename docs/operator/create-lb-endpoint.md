@@ -2,7 +2,11 @@
 
 Runbook for creating a RunPod load-balancer (LB) endpoint and registering it with Pitwall.
 
-**Constraint:** Pitwall registers existing LB endpoints; it does not create them.
+**Endpoint creation:** Pitwall can create LB endpoints through the RunPod API with
+`pitwall runpod endpoints create` and `"endpoint_type": "LOAD_BALANCER"`; load-balancer endpoints
+require `REQUEST_COUNT` scaling. This RunPod resource control is code-complete with operator
+countersign still pending (see the [support matrix](../support-matrix.md)). Creating the endpoint in
+the RunPod console and registering it with Pitwall remains supported.
 
 ---
 
@@ -39,12 +43,42 @@ the operator's responsibility.
 
 ---
 
-## Step 2 — Create the LB Endpoint via RunPod Console
+## Step 2 — Create the LB Endpoint
+
+### With Pitwall
+
+Preview first; a preview validates the request and performs no RunPod mutation or audit write. Pass
+`image` (or a `template_id` for a template that carries the port and env vars):
+
+```bash
+pitwall runpod endpoints create --dry-run \
+  --idempotency-key <unique-key> \
+  --request-json '{
+    "name": "<endpoint-name>",
+    "endpoint_type": "LOAD_BALANCER",
+    "image": "ghcr.io/example/pitwall-embed:1",
+    "gpu": {"pools": ["ADA_80_PRO"]},
+    "workers": {"minimum": 0, "maximum": 4, "idle_timeout_seconds": 60},
+    "scaling": {"type": "REQUEST_COUNT", "value": 4}
+  }'
+```
+
+Then apply with the same request and key, typing the endpoint name for `--confirm`:
+
+```bash
+pitwall runpod endpoints create \
+  --idempotency-key <unique-key> \
+  --confirm <endpoint-name> \
+  --request-json '<same JSON as the preview>'
+```
+
+Repeating an apply with the same key and request returns the stored result instead of creating a
+second endpoint. Continue at "After Deploy".
+
+### Alternative: RunPod console
 
 Create the endpoint in the RunPod console, then register the resulting endpoint
 ID with Pitwall.
-
-### Console steps
 
 1. Navigate to RunPod console → Serverless → Deploy.
 2. Select **Custom (Docker image)**.
