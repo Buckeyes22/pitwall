@@ -35,6 +35,8 @@ class AutopilotActionKind(StrEnum):
     MARK_PROVIDER_UNHEALTHY = "mark_provider_unhealthy"
     RESERVE_CAPACITY = "reserve_capacity"
     ADJUST_PROVIDER_PRIORITY = "adjust_provider_priority"
+    PROPOSE_SEAT_SWITCH = "propose_seat_switch"
+    PROPOSE_SERVE = "propose_serve"
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,6 +104,10 @@ For each action:
    `downgrade` or `block`.
 5. **Mode / executor** — shadow mode records `shadowed`; apply mode requires an
    executor and records the executor result.
+
+PROPOSE_* actions (`propose_seat_switch`, `propose_serve`) are advisory. They skip all five gates,
+are never simulated or applied, and are always audited as `shadowed` with a single failed
+`proposal` gate.
 
 Policy-denied actions are not simulated or applied. Actions without simulation
 workloads, simulations that raise, and simulations that would exceed budget are

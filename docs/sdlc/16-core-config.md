@@ -9,7 +9,7 @@ The **Core Models & Configuration** subsystem is the foundation layer of the Pit
 - `src/pitwall/core/enums.py` — `StrEnum` values for capability classes, lease/workload lifecycle states, provider types, cost modes, and registry prefixes.
 - `src/pitwall/core/` leaf modules — `ids.py`, `idempotency.py`, `cost_reporting.py`, `errors.py`, `types.py`, `constants.py`.
 
-All other Pitwall subsystems (`api`, `routing`, `cost`, `runpod_client`, `db`, etc.) import domain models and settings from this subsystem. It has **no runtime dependencies on any other Pitwall package** — only standard-library, Pydantic, and `asyncpg`.
+All other Pitwall subsystems (`api`, `routing`, `cost`, `runpod_client`, `db`, etc.) import domain models and settings from this subsystem. Its foundation modules (`core/enums.py`, `ids.py`, `idempotency.py`, `models.py`) depend only on the standard library, Pydantic and each other, with one lazy import of `pitwall.security.pre_spend` in `core/models.py`. `core/cost_reporting.py` also imports `pitwall.cost.read_models` and uses `asyncpg`. `config.py` imports `pitwall.r2_temp_credentials` and lazily imports `pitwall.api.scopes` and `pitwall.webhook_dispatcher.secret_store`.
 
 ---
 

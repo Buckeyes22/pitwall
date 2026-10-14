@@ -603,7 +603,7 @@ Steer reasoning with `reasoning_effort`; accepted values differ by model: `hy3` 
 
 OpenCode Go is a $10/month subscription inside OpenCode that serves a curated model list through the `opencode-go` provider. After `/connect` in the OpenCode TUI, route any of its models with `opencode-shim.sh opencode-go/<model-id> <prompt-file>` or `route-shim.sh opencode-go/<model-id>@opencode <prompt-file>`; the registry claims `opencode-go/*` families for GLM, MiniMax, Kimi, DeepSeek, Qwen, GPT, Grok, Muse Spark, LongCat, MiMo, and Hy.
 
-Go tiers differ widely in included requests (for example 110 per five hours for Kimi K3 versus 30,100 for MiMo-V2.5), Muse Spark runs discounted **Contributor** tiers whose prompts may train future Meta models and are region-limited, and DeepSeek V4 Flash/Pro prices distinguish peak and off-peak windows. Consult the plan page before fanning out. Model-specific prompting follows the section for the underlying family above; see `docs/agents/opencode-go.md` in the Agent Routing package for the full model table.
+Go tiers differ widely in included requests (for example 110 per five hours for Kimi K3 versus 30,100 for MiMo-V2.5, which retires 2026-10-21), Muse Spark runs discounted **Contributor** tiers whose prompts may train future Meta models and are region-limited, and DeepSeek V4.1 Flash prices distinguish peak and off-peak windows. Consult the plan page before fanning out. Model-specific prompting follows the section for the underlying family above; see `docs/agents/opencode-go.md` in the Agent Routing package for the full model table.
 
 ## Gemma 4
 

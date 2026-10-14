@@ -194,7 +194,7 @@ uv run pitwall-api &
 ```
 
 Expected: uvicorn starts on `127.0.0.1:8080`; `curl http://127.0.0.1:8080/healthz`
-returns `{"ok":true,"backend":"runpod"}`.
+returns `{"ok":true}`.
 
 - [ ] POST a dry-run inference request. This exercises the full routing,
   cost-gate, and audit path without calling RunPod or spending money.

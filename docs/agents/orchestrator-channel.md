@@ -119,7 +119,7 @@ channel tools; Hermes as a dispatched child works because the dispatcher always 
 pitwall agents setup mcp [--harness ID]... [--command PATH] [--dry-run] [--yes] [--remove]
 ```
 
-Without `--harness` it targets every channel harness found on `PATH`; with `--remove` and no `--harness` it targets all thirteen channel harnesses in the table. It prints a diff for each file and asks before writing (`--yes` skips the prompt; a non-interactive run without it exits `2`; `--dry-run` writes nothing). Changing an existing file first copies it to `<file>.bak.<UTC timestamp>`.
+Without `--harness` it targets every channel harness found on `PATH`; with `--remove` and no `--harness` it targets all thirteen channel harnesses in the table. For each file it prints the path and the managed `pitwall-channel` entry it would add or remove (never a diff, so other servers' credentials are not echoed) and asks before writing (`--yes` skips the prompt; a non-interactive run without it exits `2`; `--dry-run` writes nothing). Changing an existing file first copies it to `<file>.bak.<UTC timestamp>`.
 
 `--command PATH` sets the executable written into each entry. The default is the absolute path of `pitwall` found on `PATH`, resolved through symlinks; pass `--command` to register a different install, or when `pitwall` is not on `PATH` (the default lookup exits `2`). Keep the file name `pitwall`: an entry is recognised as ours only when its command's file name is `pitwall` and its arguments are `mcp serve channel`, so an entry written with another file name is refused as foreign on the next run and `--remove` will not remove it. `--remove` deletes the `pitwall-channel` entry that pitwall wrote and registers nothing; it never removes an entry pitwall did not write.
 

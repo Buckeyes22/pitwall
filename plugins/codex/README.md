@@ -7,6 +7,7 @@ This package is intentionally separate from `plugins/claude/` so Codex does not 
 ## What It Contains
 
 - `.codex-plugin/plugin.json` - Codex plugin manifest.
+- `hooks/hooks.json` and `hooks/steer-gate.py` - the tier-2 `PreToolUse` steering gate.
 - `skills/subagent-model-routing/SKILL.md` - Codex-native subagent-model-routing workflow.
 - `skills/attach-local-endpoint/SKILL.md` - detect and attach a locally hosted model server as a route.
 

@@ -34,8 +34,8 @@ queue. Outbound effects (RunPod calls, webhooks) are the only things that leave 
         └────────────────────────────────────────────────────────────────┘
 
    Cross-cutting: config (fail-closed boot) · security (admin auth / SSRF / HMAC /
-   secret non-disclosure) · rate_limits · observability + cost.exporter · ops (kill-switch,
-   retention, R2 cleanup)
+   secret non-disclosure) · rate_limits · observability + cost.exporter · kill switch (api.admin)
+   · retention · ops (backup and chaos drills, R2 staging cleanup)
 ```
 
 ## 2. Request data flow — inference

@@ -69,9 +69,9 @@ pitwall:
   capability_name: "llm.muse-glimmer-30b"
   served_model_name: "muse-glimmer-30b"
   example_serve_model: >-
-    pitwall serve --capability llm.muse-glimmer-30b --model meta-models/Muse-Glimmer-30B
-    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120 --rate-per-second 0.002
-    --start-arg --enable-auto-tool-choice --start-arg --tool-call-parser --start-arg muse_glimmer
+    pitwall serve --plan-only --model meta-models/Muse-Glimmer-30B
+    --gpu-class "NVIDIA H100 80GB HBM3" --ttl-minutes 120
+    --start-arg=--enable-auto-tool-choice --start-arg=--tool-call-parser --start-arg muse_glimmer
 confidence:
   overall: "medium"
   notes: "Core recipe is sourced from a community cookbook and current vLLM support page; the cookbook explicitly says its vLLM path is not end-to-end attested."

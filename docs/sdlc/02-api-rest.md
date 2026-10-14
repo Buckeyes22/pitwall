@@ -1,6 +1,6 @@
 # REST API Surface — SDLC Subsystem Documentation
 
-> All claims grounded in `src/pitwall/api/` source, with `path:line` citations.
+> All claims grounded in `src/pitwall/api/` source, with `module:symbol` references.
 
 ## 1. Purpose & Scope
 

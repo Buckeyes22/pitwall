@@ -47,7 +47,7 @@ From the model cards. These are consistent across the recent M2.x generation.
 |---|---|
 | `temperature` | **1.0** |
 | `top_p` | **0.95** |
-| `top_k` | **40** |
+| `top_k` | **40** (M2.x open-weight cards only; the MiniMax API ignores `top_k`, and M3 recommends none) |
 
 Context windows: most M2.x models support **204,800 tokens**; **M3 supports 1,000,000 tokens**; **M2-her** (dialogue/role-play) is **64K**. Both M2.5 and M2.5-Lightning support caching.
 
@@ -103,7 +103,7 @@ Included for completeness, since this is the prompt guidance MiniMax does publis
 
 | Situation | Action |
 |---|---|
-| Default sampling | `temperature=1.0`, `top_p=0.95`, `top_k=40` |
+| Default sampling | `temperature=1.0`, `top_p=0.95` (`top_k=40` is an M2.x open-weight card value; the API ignores it) |
 | Advanced features (thinking/interleaved) | Use the Anthropic-compatible endpoint |
 | Long context | M3 (1M tokens); most M2.x are 204,800 |
 | Role-play / dialogue | M2-her (64K) |

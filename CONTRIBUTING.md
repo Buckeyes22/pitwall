@@ -48,7 +48,7 @@ the hermetic lane. This is the default `test` target and avoids any RunPod spend
 make test          # alias for test-fast
 ```
 
-`test-fast` runs pytest with `-n auto -m "not integration and not slow"` — no Postgres,
+`test-fast` runs pytest with `-n auto -m "not integration and not slow and not live"` — no Postgres,
 no Redis, no external network.
 
 ### Integration lane (requires local Postgres + Redis)
@@ -70,8 +70,8 @@ run the integration, harness, and coverage suites one at a time against the same
 Run all gates before pushing. CI enforces every one of these on each PR,
 except mutation testing and combined coverage, which CI runs only on the
 weekly `schedule` trigger (`mutation-smoke` and `coverage-combined` jobs in
-`.github/workflows/ci.yml`) — run them locally before pushing changes that
-could affect them.
+`.github/workflows/ci.yml`), and the benchmark smoke, which CI does not run — run them locally
+before pushing changes that could affect them.
 
 | Gate | Make target | What it does |
 |---|---|---|
@@ -79,7 +79,7 @@ could affect them.
 | Lint | `uv run ruff check .` | Whole-tree ruff lint |
 | Format | `uv run ruff format --check .` | Whole-tree ruff format, including Python blocks in Markdown |
 | Types | `uv run mypy --strict src/` | Strict type check |
-| Unit tests | `make test` | Hermetic pytest (`-m "not integration and not slow"`) |
+| Unit tests | `make test` | Hermetic pytest (`-m "not integration and not slow and not live"`) |
 | Integration tests | `make up && make test-int && make down` | Real PostgreSQL and Redis behavior |
 | Coverage report | `make test-cov` | pytest + coverage HTML report |
 | Security scan | `make sec` | bandit SAST, pip-audit CVE check, secrets scan, and license policy |
@@ -90,7 +90,7 @@ could affect them.
 | Security unit tests | `make sec-test` | pytest `-m "security and not fuzz"` |
 | API fuzzing | `make sec-fuzz` | schemathesis `-m fuzz` |
 | Mutation testing (scheduled CI only) | `make mutation-gate` | mutmut run + export-cicd-stats + >=85% kill floor |
-| Benchmark smoke | `make load-smoke` | pytest `-m slow` (locustfile import check) |
+| Benchmark smoke (local only) | `make load-smoke` | pytest `-m slow` (locustfile import check) |
 | Combined coverage (scheduled CI only) | fast + integration `coverage run` | ratchet `fail_under=77` (see `docs/sdlc/17-testing-strategy.md` §6) |
 | Pattern scrub | `uv run python tools/guards/repo_text_policy.py <files>` | banned literals, real RunPod IDs/hosts |
 | OpenAPI compatibility | `make openapi-check` | no incompatible public API change |

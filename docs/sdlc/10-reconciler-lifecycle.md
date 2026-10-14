@@ -240,7 +240,7 @@ The reconciler is driven by Arq's `WorkerSettings` class. Arq reads `REDIS_URL`,
 | `publish_workload_completed` | `(redis: Any, event: dict[str, Any]) -> int` |
 | `aggregate_daily_cost` | `(pool: asyncpg.Pool) -> None` |
 | `fetch_providers_for_health_probe` | `(pool: asyncpg.Pool) -> list[dict[str, Any]]` |
-| `update_provider_health` | `(pool: asyncpg.Pool, *, provider_id: str, health_status: str, consecutive_failures: int, cooldown_trips: int, cooldown_until: datetime\|None) -> None` |
+| `update_provider_health` | `(pool: asyncpg.Pool, *, provider_id: str, health_status: str, consecutive_failures: int, cooldown_trips: int, cooldown_until: datetime\|None, self_hosted_state: Mapping\|None = None, expected_updated_at: datetime\|None = None) -> bool` |
 
 ### `pitwall.reconciler.cost_daily_rollup`
 

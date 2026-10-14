@@ -12,7 +12,7 @@ The repository route is:
 ~/.claude/scripts/grok-shim.sh <prompt-file> [grok flags]
 ```
 
-The shim converts the prompt file (or stdin via `-`) into Grok Build's headless `-p` request, selects `grok-4.7` unless the caller passes `-m`/`--model`, requests plain output, disables automatic CLI updates for the scripted run, and preserves the shared `SHIM-DONE exit=<n>` and JSONL-ledger contracts.
+The shim converts the prompt file (or stdin via `-`) into a Grok Build single-turn request (the prompt goes in a private file passed with `--prompt-file`, so it never appears in argv), selects `grok-4.7` unless the caller passes `-m`/`--model`, requests plain output, disables automatic CLI updates for the scripted run, and preserves the shared `SHIM-DONE exit=<n>` and JSONL-ledger contracts.
 
 ## Prompt shape for routed coding work
 

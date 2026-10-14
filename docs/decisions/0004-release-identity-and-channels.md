@@ -79,7 +79,7 @@ Attestation is supplemental best-effort provenance: it requires no manual setup 
 GitHub Release creation.
 
 On 2026-08-31, after Agent Routing became a first-class component, the project owner shortened only
-the GitHub repository slug from `Buckeyes22/pitwall` to `Buckeyes22/pitwall`. The Python
+the GitHub repository slug, from the earlier longer name to `Buckeyes22/pitwall`. The Python
 distribution, CLI, import package, environment prefix, component identities, release tags, and GHCR
 container namespace did not change. Canonical repository and raw-content URLs use the new slug;
 GitHub's old-slug redirect is compatibility for historical links and published artifacts, not the

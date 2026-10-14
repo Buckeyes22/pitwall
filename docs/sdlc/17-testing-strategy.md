@@ -117,7 +117,8 @@ make openapi-check
 `make mutation-gate` runs mutmut over the configured high-risk pure-logic modules, exports CI
 statistics, and requires at least an 85% kill score among covered mutants. `make bench` runs
 micro-benchmarks; `make load-smoke` validates the load profile without calling a deployed service.
-Actual load execution requires an operator-supplied `PITWALL_HOST` and remains an explicit action.
+Actual load execution (`make load`) targets `PITWALL_HOST`, which defaults to `http://127.0.0.1:8080`;
+point it at a deployed target explicitly. It remains an explicit action.
 
 ## 6. Coverage
 
@@ -136,9 +137,10 @@ risk domain.
 
 ## 7. CI and release readiness
 
-`.github/workflows/ci.yml` runs `lint`, `format`, `typecheck`, `docs`, `container-build`,
-`compose-config`, `security-sast`, `security-secrets`, `security-fuzz`, `mutation-smoke`, `test`,
-`dependency-compatibility`, `integration`, and `coverage-combined`. The `mutation-smoke` job runs
+`.github/workflows/ci.yml` runs `lint`, `format`, `typecheck`, `docs`, `gateway-catalog-drift`,
+`container-build`, `compose-config`, `security-sast`, `security-secrets`, `security-fuzz`,
+`mutation-smoke`, `test`, `pi-extensions`, `agents-macos`, `dependency-compatibility`, `integration`,
+and `coverage-combined`, plus the `required` aggregate job (named `CI`) that gates them. The `mutation-smoke` job runs
 only on the schedule trigger and runs `make mutation-gate`. The `coverage-combined` job enforces
 the combined coverage floor and the risk-coverage policy gate.
 
@@ -157,7 +159,7 @@ GitHub attestations, generates SBOMs, scans images, and promotes the exact teste
 
 ```bash
 # Fast hermetic lane
-uv run pytest -q -m "not integration and not slow"
+uv run pytest -q -m "not integration and not slow and not live"
 
 # Real PostgreSQL/Redis integration lane
 make up

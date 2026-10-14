@@ -28,7 +28,7 @@ pitwall agents setup harnesses --dry-run
 
 See [optional provider CLI setup](harness-cli-setup.md) for its confirmation, download, and authentication boundaries.
 
-`--installation-only` limits the report to runtime/install checks. The installer uses this mode after creating its symlinks.
+`--installation-only` limits the report to runtime/install checks. `pitwall doctor` runs this mode for its agents section, and CI uses it as a smoke check.
 
 ### Channel checks
 
@@ -55,7 +55,7 @@ The repository-supported evidence for each harness is deliberately bounded:
 
 | Harness | Local source or safe command | Readiness the doctor can report | Limitation |
 | --- | --- | --- | --- |
-| agy | `agy` executable; optional explicit pong request | `verified-request` only with `--live-auth`, otherwise `unknown` | Desktop keyring identity and model discovery do not establish current request validity |
+| agy | `agy` executable; optional explicit pong request | `configured` when `GEMINI_API_KEY` is non-empty (otherwise `unknown`) by default; `verified-request` only with `--live-auth` after an exact pong | Desktop keyring identity and model discovery do not establish current request validity |
 | claude | `claude auth status` with `--live-auth`; `~/.claude` state may identify a local account | `signed-in` or `unknown` | Status is local CLI evidence, not a fresh model request |
 | cline | `~/.cline/data/settings/providers.json` metadata | `unknown`; opaque file presence is reported only as metadata | Stored provider keys do not establish identity or server acceptance |
 | codex | `codex login status` with `--live-auth`; `~/.codex/auth.json` is local evidence | `signed-in` or `unknown` | Cached identity and status do not prove a fresh request |

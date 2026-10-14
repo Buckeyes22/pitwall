@@ -34,9 +34,9 @@
   data layer; the `wreq-js` notice obligation follows only when (and if) the
   gateway fork is taken into `packages/gateway` in Lane D (Tasks 18–19).
 - **No source code from OmniRoute.** No `.ts`/`.mjs` files are vendored. The
-  `tools/gateway/extract_upstream.mjs` script is original Pitwall code that
-  regex-parses the upstream data files when Node is built without
-  `--experimental-strip-types`; it does not import or copy any upstream source.
+  `src/pitwall/gateway_catalog/extract.py` module is original Pitwall code that
+  regex-parses the upstream data files without Node; it does not import or copy
+  any upstream source.
 - **No model weights, datasets, or binaries.** None are referenced by the
   catalog.
 

@@ -115,8 +115,7 @@ contracts remain responsible for later actual-cost truth-up.
 
 To roll selection back without changing persisted history, set `PITWALL_ROUTING_MODE=priority`
 and restart the API/CLI process. Existing workloads retain their original append-only plan document
-and remain readable. Deploy the final migration `0031` definition before applying this unreleased
-feature branch; once released/applied, follow-up schema repairs require a new migration.
+and remain readable. Schema repairs to the route plan need a new migration; do not edit `0031_workload_route_plan.sql`.
 
 Common failures are safe and actionable:
 

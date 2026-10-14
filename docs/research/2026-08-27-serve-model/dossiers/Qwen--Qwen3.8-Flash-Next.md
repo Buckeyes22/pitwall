@@ -72,9 +72,7 @@ pitwall:
   capability_name: "llm.qwen3-8-flash-next"
   served_model_name: "qwen3.8-flash-next"
   example_serve_model: >-
-    pitwall serve --capability llm.qwen3-8-flash-next --model Qwen/Qwen3.8-Flash-Next-FP8
-    --gpu-class "NVIDIA H200" --ttl-minutes 120 --rate-per-second 0.002
-    --start-arg --tensor-parallel-size --start-arg 8 --start-arg --reasoning-parser --start-arg qwen3
+    pitwall serve --plan-only --model Qwen/Qwen3.8-Flash-Next-FP8 --gpu-class "NVIDIA H200" --ttl-minutes 120 --start-arg=--tensor-parallel-size --start-arg 8 --start-arg=--reasoning-parser --start-arg qwen3
 confidence:
   overall: "medium"
   notes: "Official vLLM recipe is explicit but its validated H200 path requires eight GPUs; no single RunPod GPU class in the allowed list is documented as sufficient. Flash-Next’s dedicated container tag must be available to the pod runtime."

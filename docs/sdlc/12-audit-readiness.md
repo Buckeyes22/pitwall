@@ -191,7 +191,7 @@ def main(argv: list[str] | None = None) -> int: ...
 
 ### `pitwall.audit.capability` — Capability pre-spend audit service
 
-**File:** `src/pitwall/audit/capability.py` (680 lines)
+**File:** `src/pitwall/audit/capability.py` (721 lines)
 
 **Responsibility:** Implements the eight-check pre-spend readiness evaluation for a named capability. It coordinates capability lookup, provider enumeration, pre-spend payload scanning, cost estimation on the sanitized payload, budget headroom evaluation, and the 19-check result. Designed to be framework-free and used by the REST audit route.
 
@@ -347,7 +347,7 @@ policies:
 
 ### `pitwall.audit._runtime_config` — Runtime configuration adapter
 
-**File:** `src/pitwall/audit/_runtime_config.py` (212 lines)
+**File:** `src/pitwall/audit/_runtime_config.py` (239 lines)
 
 **Responsibility:** Implements `AuditConfig` backed by environment variables and hardcoded defaults. Allows the 19-check CLI to run in CI without a live database.
 
@@ -380,7 +380,7 @@ class RuntimeAuditConfig:
 
 ### `pitwall.api.admin.audit_capability` — REST route
 
-**File:** `src/pitwall/api/admin/audit_capability.py` (72 lines)
+**File:** `src/pitwall/api/admin/audit_capability.py` (73 lines)
 
 **Responsibility:** Exposes the capability audit as a FastAPI route. Injects `CapabilityRepository`, `ProviderRepository`, and the asyncpg pool from `app.state`. Delegates entirely to `pitwall.audit.capability.audit_capability`.
 
@@ -448,11 +448,11 @@ Each function carries a `check_id` attribute. The `CHECK_DESCRIPTIONS` dict maps
 | 6 | `check_06_ttl_ge_timeout_plus_queue` | `ttl >= executionTimeout + expected_queue_time`. |
 | 7 | `check_07_webhook_idempotent_fast200` | Webhook config must have `idempotent=True` and `fast_200=True`. The FastAPI app must have a POST route matching `/webhooks/runpod` or `/runpod`. |
 | 8 | `check_08_retention_windows` | `sync_retention_s >= 60`, `async_retention_s >= 1800`, `persist_before_expiry=True`, `sync_persist_deadline_s < 60`, `async_persist_deadline_s < 1800`. |
-| 9 | `check_09_dc_pin` | Volume attached with more than one `dataCenterId` is rejected. Pod-lease provider fixture timeouts must be ≤ 300s. Source inspection of `wait_for_pod_runtime_sync` verifies `PodVolumeAttachTimeout` token is present; source of `_run_launch_runpod` and `_set_provider_attach_hang_cooldown` verifies `ProviderAttachHangRecoveryRequested` token. |
+| 9 | `check_09_dc_pin` | A volume attached without exactly one `dataCenterId` is rejected. Pod-lease provider fixture timeouts must be ≤ 300s. Source inspection of `wait_for_pod_runtime_sync` verifies `PodVolumeAttachTimeout` token is present; source of `_run_launch_runpod` and `_set_provider_attach_hang_cooldown` verifies `ProviderAttachHangRecoveryRequested` token. |
 | 10 | `check_10_ssh_first_probe` | `ssh_first=True` required; `ssh_localhost` must be in `probe_methods`; `primary_probe` must be `ssh_localhost` or unset; `pods.POD_READINESS_PROBE_ORDER[0] == pods.SSH_LOCALHOST_PROBE_METHOD`. |
 | 11 | `check_11_image_pull_timeout` | `image_pull_timeout_s > 0` and `>= startup_timeout_s` (`pitwall.audit.checks`). Also verifies the pod env path uses the `StagingStore` seam (`_env_for_pod` calls `get_staging_store().vend_pod_credentials()` and does not call `vend_r2_temp_credential_pod_env` directly), the unconfigured default is `NoOpStagingStore` with empty credential/cleanup behavior, and `CloudflareR2StagingStore` wraps temporary credential vending plus staging cleanup (`pitwall.api.leases.launch`, `pitwall.audit.checks`, `pitwall.staging_store:vend_pod_credentials`, `pitwall.staging_store`). The R2 implementation stays lazy: cleanup imports `cleanup_staging_for_pods`, which imports `boto3` only when the `storage` extra is installed (`pitwall.staging_store`, `pitwall.r2_staging_cleanup`, `pyproject.toml`). See `docs/sdlc/15-operations.md` and `docs/sdlc/15-operations.md` for the R2 temp-credential and staging-cleanup writeup. Current check 11 still verifies the `temp-access-credentials` API fragment, rejects the deprecated R2 token-rotation route, checks session-token env output, rejects provider-injected managed R2 credential keys, and requires temporary R2 strategies (`pitwall.audit.checks`). |
 | 12 | `check_12_disk_sized` | All workloads in `per_workload` must meet minimum sizes (vllm≥80GB, embed≥40GB, slim≥20GB). Operator-supplied vLLM provider fixtures must have `container_disk_gb >= 80` and must not use the deprecated Hugging Face CLI. Pitwall does not ship a GPU worker image in the public alpha. |
-| 13 | `check_13_template_cache` | `cache_enabled=True`, `create_on_cache_miss=True`, `reuse_on_cache_hit=True`. Source of `templates.ensure_template` must call `_lookup_cached` before `create_template` and must call `_insert_cache`. |
+| 13 | `check_13_template_cache` | `cache_enabled=True`, `create_on_cache_miss=True`, `reuse_on_cache_hit=True`. Source of `templates.ensure_template` must call `_lookup_cached` before `create_template_rest` and must call `_insert_cache`. |
 | 14 | `check_14_registry_auth` | `prefix_to_auth_id` mapping must cover `ghcr.io`, `registry.gitlab.com`, `docker.io`. `registry_auth_id_from_env` must select the correct auth ID per prefix. vLLM serverless provider fixtures must have `workers_min == 0` (hibernated fixtures only). |
 | 15 | `check_15_terminate_idempotent` | `treat_404_as_success=True` required. A fake 404 is injected into `pods._rest_request` and `pods.terminate_pod_sync` must not raise. Route `/v1/leases/{lease_id}/stop` must exist as POST; `/v1/admin/kill-switch` must exist as POST; single-lease stop must call `run_teardown`; admin kill switch must call `persist_kill_report` and use `rest:admin` audit actor. |
 | 16 | `check_16_kill_switch_atomic` | `atomic=True`, steps must be exactly `["list_pods", "terminate_all", "verify"]`, `budget_s < 30`. Lease PATCH route must exist. `lease_patch_conflicting_fields` must reject multi-axis changes (image_ref + gpuTypeIds + volume_id) and accept single-axis changes. PATCH validation must run before the atomic mutation service. |
@@ -642,7 +642,7 @@ All 19 checks return `CheckResult` entries through `run_all_checks`. Numeric par
 
 - `RuntimeError` with message "app.state.pool is not configured" if asyncpg pool is not attached to `app.state`.
 - `PreSpendPayloadRejected` maps `POST /v1/inference` secret/private-key findings to HTTP 422 with redacted finding metadata.
-- Returns HTTP 422 if repository `get_by_name` raises (not currently handled; propagates as 500).
+- An exception raised by the repository `get_by_name` is not handled and surfaces as HTTP 500.
 
 ---
 
@@ -652,13 +652,13 @@ All 19 checks return `CheckResult` entries through `run_all_checks`. Numeric par
 
 | Path | What it covers |
 |------|----------------|
-| `tests/test_audit_checks.py` (1252 lines) | Full hermetic test suite for all 19 checks. `DictAuditConfig` test double. Tests each check's pass/fail paths, pre-spend scanner decisions, CLI exit code tests with `--strict`, and JSON output tests. |
-| `tests/audit/test_capability_audit.py` (298 lines) | `CapabilityAuditService` unit tests. FakeCapabilityRepo, FakeProviderRepo. All 8 check paths, payload guardrail block/redact behavior, budget_state, estimate warnings, 19-check integration. |
+| `tests/test_audit_checks.py` (1348 lines) | Full hermetic test suite for all 19 checks. `DictAuditConfig` test double. Tests each check's pass/fail paths, pre-spend scanner decisions, CLI exit code tests with `--strict`, and JSON output tests. |
+| `tests/audit/test_capability_audit.py` (449 lines) | `CapabilityAuditService` unit tests. FakeCapabilityRepo, FakeProviderRepo. All 8 check paths, payload guardrail block/redact behavior, budget_state, estimate warnings, 19-check integration. |
 | `tests/policy/test_engine.py` | Policy schema, YAML loading, evaluator allow/deny behavior, deterministic violation order, default packaged policy examples. |
 | `tests/property/test_policy_properties.py` | Hypothesis coverage for `contains_none` provider-target evaluation. |
-| `tests/audit/test_rest_audit_mode.py` (137 lines) | FastAPI route integration tests for `POST /v1/admin/audit-capability/{name}`. Monkeypatched audit delegate. Happy path, forced failures, unknown capability. |
-| `tests/api/test_inference_contract.py` (235 lines) | REST inference contract tests, including pre-spend secret rejection before resolver/gate and PII redaction before RunPod call arguments. |
-| `tests/security/test_pre_spend_payload_guardrails.py` (51 lines) | Hypothesis property tests that email and token redaction never return the original sensitive value in structured scanner output or redacted payloads. |
+| `tests/audit/test_rest_audit_mode.py` (157 lines) | FastAPI route integration tests for `POST /v1/admin/audit-capability/{name}`. Monkeypatched audit delegate. Happy path, forced failures, unknown capability. |
+| `tests/api/test_inference_contract.py` (289 lines) | REST inference contract tests, including pre-spend secret rejection before resolver/gate and PII redaction before RunPod call arguments. |
+| `tests/security/test_pre_spend_payload_guardrails.py` (78 lines) | Hypothesis property tests that email and token redaction never return the original sensitive value in structured scanner output or redacted payloads. |
 | `tests/test_provider_audit_evidence.py` | Evidence collection for provider audit. |
 | `tests/test_audit_checks.py::TestStrictModeExitCode` | Verifies `--strict` exit code 0 on all-pass, exit code 1 on any failure, exit code 0 in non-strict even on failure. |
 | `tests/test_audit_checks.py::TestCLI` | Subprocess tests for CLI, JSON output, `--help`. |
@@ -677,7 +677,7 @@ All 19 checks return `CheckResult` entries through `run_all_checks`. Numeric par
 | `CANONICAL_GPU_NAMES` | `pitwall.runpod_client.gpu` | check 1 |
 | `DOCKER_HUB_PREFIX`, `GHCR_PREFIX`, `GITLAB_REGISTRY_PREFIX`, `registry_auth_id_from_env` | `pitwall.runpod_client.registry` | checks 2, 14 |
 | `Capability`, `Provider` | `pitwall.core.models` | `capability.py` |
-| `EstimatePayload`, `get_estimator` | `pitwall.cost.estimator` | `capability.py` |
+| `EstimatePayload`, `quote_cost` | `pitwall.cost.estimator` | `capability.py` |
 | `BudgetGate` (referenced in docstring) | `pitwall.cost.budget_gate` | `capability.py` |
 | `CapabilityRepository`, `ProviderRepository` | `pitwall.db.repository` | REST route |
 | `CloudflareR2TempCredentialClient`, `R2TemporaryCredentials` | `pitwall.r2_temp_credentials` | check 11 |
@@ -687,7 +687,7 @@ All 19 checks return `CheckResult` entries through `run_all_checks`. Numeric par
 | `lease_routes` (`router`, `stop_lease`, `patch_lease`) | `pitwall.api.routes.leases` | checks 15, 16 |
 | `emergency` (`router`, `run_kill`, `activate_kill_switch`) | `pitwall.api.admin` | check 15 |
 | `LeasePatch`, `lease_patch_conflicting_fields` | `pitwall.api.schemas.leases` | check 16 |
-| `webhook_receiver` (`app`) | `pitwall.webhook_receiver` | check 7 |
+| `pitwall.webhook_receiver` (read from source, never imported) | `pitwall.webhook_receiver` | check 7 |
 
 ### External libraries
 

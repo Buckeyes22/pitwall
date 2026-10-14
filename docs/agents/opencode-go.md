@@ -38,7 +38,7 @@ The 28 models on the plan's published list (September 2026), with their Go model
 | Muse Spark 1.3 / 1.2 Contributor | `opencode-go/muse-spark-1.3-contributor`, `opencode-go/muse-spark-1.2-contributor` | [Muse Code](../prompting/meta-muse-code-prompting-reference.md) | no — Contributor tiers allow prompts/completions to train future Meta models and are region-limited |
 | Qwen3.8 Max / Flash | `opencode-go/qwen3.8-max`, `opencode-go/qwen3.8-flash` | [Qwen](../prompting/qwen-alibaba-prompting-reference.md) | Flash only, as `Qwen/Qwen3.8-Flash-Next` (the Go `qwen3.8-flash` tier and the Flash-Next weights are presumed but not confirmed to be the same checkpoint) |
 | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | [Qwen](../prompting/qwen-alibaba-prompting-reference.md) | no (API-only tiers) |
-| DeepSeek V4.1 Flash / V4 Pro / Flash / Flash Vision Exp | `opencode-go/deepseek-v4.1-flash`, `opencode-go/deepseek-v4-pro`, `opencode-go/deepseek-v4-flash`, `opencode-go/deepseek-v4-flash-vision-exp` | [DeepSeek](../prompting/deepseek-prompting-reference.md) | yes (`deepseek-ai/DeepSeek-V4.1-Flash`, `deepseek-ai/DeepSeek-V4-Pro-0813`, `DeepSeek-V4-Flash-0731`, `DeepSeek-V4-Flash-Vision-Exp`) |
+| DeepSeek V4.1 Flash / V4 Pro / Flash / Flash Vision Exp | `opencode-go/deepseek-v4.1-flash`, `opencode-go/deepseek-v4-pro`, `opencode-go/deepseek-v4-flash`, `opencode-go/deepseek-v4-flash-vision-exp` | [DeepSeek](../prompting/deepseek-prompting-reference.md) | yes (`deepseek-ai/DeepSeek-V4.1-Flash` — no Pitwall dossier yet; dossiers: `deepseek-ai/DeepSeek-V4-Pro-0813`, `deepseek-ai/DeepSeek-V4-Flash-0731`, `deepseek-ai/DeepSeek-V4-Flash-Vision-Exp`) |
 | Hy4 preview / Hy3 | `opencode-go/hy4-preview`, `opencode-go/hy3` | [Tencent Hy](../prompting/tencent-hy-prompting-reference.md) | yes (`tencent/Hy4-preview`, `tencent/Hy3`) |
 | Omen Alpha | `opencode-go/omen-alpha` | — (unidentified vendor; no first-party reference — routes as plain pass-through) | no |
 
@@ -50,7 +50,7 @@ The 28 models on the plan's published list (September 2026), with their Go model
 
 From the plan's published usage math (September 2026; subject to change):
 
-- **Request budgets differ by orders of magnitude.** Examples per 5 hours: Kimi K3 ≈ 110, Grok 4.6 ≈ 169, Qwen3.8 Max ≈ 160, GLM-5.2 ≈ 880, DeepSeek V4 Flash ≈ 7,600, LongCat-2.0 ≈ 11,400, MiMo-V2.5 (retires 2026-10-21) ≈ 30,100, Muse Spark Contributor ≈ 45,300. Route fan-out accordingly.
+- **Request budgets differ by orders of magnitude.** Examples per 5 hours: Kimi K3 ≈ 110, Grok 4.6 ≈ 169, Qwen3.8 Max ≈ 160, GLM-5.2 ≈ 880, DeepSeek V4 Flash (retired API name since 2026-09-10, now served by V4.1 Flash) ≈ 7,600, LongCat-2.0 ≈ 11,400, MiMo-V2.5 (retires 2026-10-21) ≈ 30,100, Muse Spark Contributor ≈ 45,300. Route fan-out accordingly.
 - **Muse Spark Contributor trades data for price.** Prompts and completions may train future Meta models; availability follows Meta's Geographic Use Policy. Do not route confidential work there.
 - **DeepSeek V4 pricing is peak/off-peak.** Peak windows are 01:00–04:00 and 06:00–10:00 UTC on weekdays.
 - **Usage multipliers vary by model** ($15 to $100 of included usage); some models fall back to Zen balance when exhausted if "Use balance" is enabled.

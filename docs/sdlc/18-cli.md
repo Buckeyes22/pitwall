@@ -856,8 +856,8 @@ Every check is a `DoctorCheck(id, phase, status, detail, next_step=None)`. The f
 def cmd_doctor(argv: list[str]) -> int
 ```
 
-Flags: `--strict` (treat warnings as failures), `--api-url` (default `PITWALL_API_URL` or
-`http://127.0.0.1:8080`), `--canary CAPABILITY` (also send a dry-run inference to this embedding
+Flags: `--strict` (treat warnings as failures), `--api-url` (default `PITWALL_API_URL`, else
+`PITWALL_BASE_URL`, else `http://127.0.0.1:$PITWALL_API_PORT`, port 8080 when unset), `--canary CAPABILITY` (also send a dry-run inference to this embedding
 capability), `--timeout` (per-probe timeout in seconds, default `5`), `--json`.
 
 Text mode prints one unwrapped line per check with `Output.print(..., soft_wrap=True)`, in the
@@ -1059,7 +1059,7 @@ serialized integration hotspot.
 | `RUNPOD_API_KEY` | `register-template`, `terminate-pod` | `~/.runpod/config.toml` fallback | Preferred process-level RunPod API authentication |
 | `DATABASE_URL` | `dashboard` | *(required unless a test source is injected)* | Postgres pool DSN for Overview state reads |
 | `PITWALL_MCP_TRANSPORT` | `mcp serve broker` | `"stdio"` | MCP transport override |
-| `PITWALL_API_URL` | `doctor`, `gateway status` | `doctor`: `http://127.0.0.1:8080`; `gateway status`: unset (local lock only) | Broker API base URL for the API probe and live quota rows |
+| `PITWALL_API_URL` | `doctor`, `gateway status` | `doctor`: `PITWALL_API_URL`, else `PITWALL_BASE_URL`, else `http://127.0.0.1:$PITWALL_API_PORT` (port 8080 when unset); `gateway status`: unset (local lock only) | Broker API base URL for the API probe and live quota rows |
 | `PITWALL_API_TOKEN` | `doctor`, `gateway status` | unset | Bearer token sent with the API probe and the live `/v1/quotas` read |
 | `PITWALL_GATEWAY_TOKEN` | `serve --gateway`, `gateway serve`, `gateway doctor` | unset | Bearer token the loopback gateway requires; the sidecar does not start without it. `gateway doctor` always runs its health check and fails without the token, while the gateway section of `pitwall doctor` skips it |
 | `PITWALL_GATEWAY_URL` | `gateway doctor` | `http://127.0.0.1:20130` when unset (the `PitwallSettings.pitwall_gateway_url` default adds `/v1`) | Front-door URL; `front_door_loopback` fails unless it is loopback |
@@ -1192,8 +1192,8 @@ records the selected variant and volume, otherwise `cold`.
 | `json` | stdlib | Init smoke-command payload formatting, JSON mode emission |
 | `time` | stdlib | Polling loops |
 | `rich` | `>=15.0` (transitive via `textual`) | Tables, panels, and styled console output (`pitwall.cli.output`) |
-| `textual` | `>=8.2,<9` | TUI app shell, widgets, key bindings, Footer, and Pilot tests |
-| `mcp` | `>=1.0.0` (from `pitwall.mcp`) | MCP server (`cmd_mcp`) |
+| `textual` | `>=8.2.8,<9` | TUI app shell, widgets, key bindings, Footer, and Pilot tests |
+| `mcp` | `>=2.3.0,<3` (from `pitwall.mcp`) | MCP server (`cmd_mcp`) |
 
 ---
 

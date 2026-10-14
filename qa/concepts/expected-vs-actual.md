@@ -18,7 +18,7 @@ uv run pitwall --version
 grep -m1 '^version' pyproject.toml
 ```
 
-Expected: both lines contain the same version string, for example `0.1.0a2`. If the two strings
+Expected: both lines contain the same version string, for example `0.3.0a1`. If the two strings
 disagree, that is a finding.
 
 ## Common confusions

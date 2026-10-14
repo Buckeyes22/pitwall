@@ -54,10 +54,9 @@ In order, it:
    source the profile) before your first `serve` and route dispatch**, or the
    route it registers won't authenticate from your current shell — see the
    status warning below.
-5. **Checks for the routing command.** If `pitwall agents` (or the command in
-   `PITWALL_ROUTING_CLI`) isn't on `PATH`, it tells you to install Pitwall
-   (install the release wheel, see the [install steps](../../README.md#install-pitwall)) and run `pitwall agents install` so `--route`
-   has something to attach to.
+5. **Checks for the routing command.** If the routing command (`pitwall agents` by
+   default, or the command in `PITWALL_ROUTING_CLI`) isn't on `PATH`, it says so and tells
+   you to unset `PITWALL_ROUTING_CLI` to use the built-in `pitwall agents`.
 
 It also prints which backend is active (`personal` or `registry`, from
 `[personal] backend` in `pitwall.toml`; `personal` when the file or key is absent) so
@@ -87,18 +86,20 @@ pitwall serve --model ornith-ai/Ornith-1.5-35B-A3B-GGUF \
 | `--max-usd-per-hour` (required) | Refuses the launch before any pod is created if the GPU's live hourly price exceeds this. |
 | `--rate-per-second` | Sets the hourly price yourself (USD/second × 3600), overriding the live price lookup entirely. Required if pricing is unavailable (`unpriced`, see below). |
 | `--route` (required) | Agent profile name to register with `pitwall agents` on success. |
+| `--gateway` | Start the loopback gateway sidecar before serving; needs `PITWALL_GATEWAY_TOKEN`. |
 | `--json` | Machine-readable output. |
 
 `--max-usd-per-hour` has no default; omitting it exits with an error before
 anything is launched.
 
 Before creating a pod, `serve` checks — and refuses for free, with no pod
-ever created — six things: the route name isn't already in use
+ever created — seven things: the route name isn't already in use
 (`route_exists`), the routing command (`pitwall agents`) is on `PATH`
 (`routing_cli_missing`), the model fits on the requested GPU (`does_not_fit`),
+RunPod offers a CUDA version the model needs (`cuda_unavailable`),
 the TTL outlasts the model's startup budget (`ttl_below_startup`), a price could
 be determined (`unpriced`, fixable with `--rate-per-second`), and that price is at
-or under your cap (`price_over_cap`). Only after all six
+or under your cap (`price_over_cap`). Only after all seven
 pass does it create the pod, wait for the model to answer
 (`GET <endpoint>/v1/models`), attach the route, and probe it. If the pod
 never becomes ready in time (`readiness_timeout`) or the route can't be
@@ -134,6 +135,8 @@ every write) at mode `0700`; every file in it is `0600`:
     "model": "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
     "served_model_id": "ornith-1.5-35b",
     "engine": "llama.cpp",
+    "variant": "<variant-id or null>",
+    "image": "<container image>",
     "gpu_class": "NVIDIA GeForce RTX 3090",
     "gpu_count": 1,
     "cloud": "community",
@@ -237,8 +240,8 @@ ornith               ready      ornith-1.5-35b               NVIDIA GeForce RTX 
 | `gone` | The RunPod pod no longer exists (deleted outside Pitwall). |
 
 If `PITWALL_ENDPOINT_KEY` isn't set in the shell you're running `status`
-from, it prints a warning: *"note: PITWALL_ENDPOINT_KEY is not set; routes
-will not authenticate until it is."* This means the route was registered
+from, it prints a warning: *"note: PITWALL_ENDPOINT_KEY is not set in this shell; routes
+will not authenticate until it is"* This means the route was registered
 correctly, but `pitwall agents`/`route-shim.sh` only knows the
 *name* of the environment variable that holds the key (`apiKeyEnv`), never
 the value — each dispatch reads the value live from its own process
@@ -277,8 +280,10 @@ read before the pod is terminated; afterwards they are gone.
 | `per_request_cap` | This lease's maximum spend (hourly price times `--ttl-minutes`) exceeds `PITWALL_PER_REQUEST_MAX_USD` (default 10). Shorten the TTL or raise the cap. |
 | `monthly_budget` | This month's settled spend, plus the maximum spend of leases still running, plus this lease would exceed `PITWALL_MONTHLY_BUDGET_USD`. Stop a lease or raise the budget. |
 | `route_exists` | That route name is already in use (or already launching/ready). Choose another `--route` or stop the existing one first. |
-| `routing_cli_missing` | `pitwall agents` (or the `PITWALL_ROUTING_CLI` override) isn't on `PATH`, so the route could never attach. Install the release wheel (see the [install steps](../../README.md#install-pitwall)) and run `pitwall agents install`, then retry. |
+| `routing_cli_missing` | The routing command (default built-in `pitwall agents`, or the `PITWALL_ROUTING_CLI` override) isn't on `PATH`, so the route could never attach. Unset `PITWALL_ROUTING_CLI` to use the built-in command, then retry. |
 | `does_not_fit` | The model doesn't fit on the requested `--gpu-class`. |
+| `cuda_unavailable` | RunPod offers no CUDA version for the requested GPU class that the model variant's minimum CUDA needs, or only versions the create call cannot request. Refused before any pod is created. Choose another `--gpu-class`. |
+| `gateway_start_failed` | `--gateway` was set and the gateway sidecar failed to start. Check `PITWALL_GATEWAY_TOKEN` and the gateway port. Refused before any pod is created; `serve` exits `2`. |
 | `ttl_below_startup` | `--ttl-minutes` is at or within the model's startup budget (its dossier's `startup_min`), so the in-pod deadline would end the pod before the model answers. Choose a longer TTL. |
 | `unpriced` | No live price for that GPU/cloud combination; pass `--rate-per-second`. |
 | `price_over_cap` | The live (or `--rate-per-second`) price exceeds `--max-usd-per-hour`. |

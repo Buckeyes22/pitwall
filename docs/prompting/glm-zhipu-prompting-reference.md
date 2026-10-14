@@ -154,7 +154,7 @@ environments. Reasoning is now mandatory: `thinking.type` accepts only `enabled`
 `reasoning_effort` (`low`/`high`/`max`, default `max`; Z.ai recommends `max` for coding). Inputs are
 text-only, as GLM-5.2 already was; GLM-5.3-Flash is the multimodal model. Migration: callers sending `thinking.type: "disabled"`
 must switch to `enabled` with `reasoning_effort: "low"` or requests fail. Docs examples use `temperature 1.0`;
-no explicit `top_p` guidance is published.
+the GLM-5.3 and GLM-5.3-Flash `generation_config.json` set `top_p` 0.95, and Z.ai suggests temperature 1, top_p 0.95 for GLM-5.3-Flash.
 
 ## Asking through the orchestrator channel
 

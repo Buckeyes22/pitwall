@@ -559,6 +559,5 @@ Hermetic route tests for `/v1/leases` POST/GET/PATCH using override dependencies
 | `pitwall.cost.budget_gate` | `BudgetGate` |
 | `pitwall.cost.sync_gate` | `estimate_cost` |
 | `pitwall.r2_temp_credentials` | `vend_r2_temp_credential_pod_env` |
-| `pitwall.reconciler` | `_fire_lease_expiry_actions` |
 
 **External libraries:** `asyncpg` (Pool), `redis`/`redis.asyncio` (pub/sub), `pydantic` (all `PitwallModel` subclasses), `fastapi` (router).

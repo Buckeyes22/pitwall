@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Only the latest commit on the `main` branch is supported.
+Supported versions are listed in the root [`SECURITY.md`](../../SECURITY.md), which is authoritative: the default branch (`main`) and the current alpha.
 
 ## Reporting a Vulnerability
 
@@ -32,7 +32,7 @@ Out of scope: risks from the documented opt-in unrestricted execution model; soc
 
 Installer recipes are argv-only data in `src/pitwall/agents/resources/config/harness-installers.json`. The loader requires exact provider-registry parity, HTTPS URLs, a fixed `bash`/`sh` interpreter allow-list, and provider-specific redirect hosts. Downloads have connection/read/size bounds, must begin with a shebang, and are written to mode-`0600` temporary files only after validation. Execution uses no `eval`, shell command string, or routing run record; temporary scripts are removed in cleanup paths. One provider failure does not broaden authorization to another provider.
 
-These moving first-party installer URLs do not expose one common detached checksum/signature contract. The checked-in manifest therefore pins the exact reviewed installer bytes with SHA-256 when the endpoint can be inspected. A digest mismatch fails before execution. A provider without a reviewed digest is labeled `WARNING: no pinned checksum` during confirmation and remains protected only by HTTPS, exact origins, redirect allow-listing, bounded content, explicit confirmation, and source review. Upstream installers may perform their own artifact verification and may update user-level PATH configuration. This project never runs provider login commands or writes credentials/provider configuration itself. Users requiring vendor-signed or release-pinned artifacts should use each provider's documented verification flow. See [provider CLI setup](harness-cli-setup.md).
+These moving first-party installer URLs do not expose one common detached checksum/signature contract. The checked-in manifest therefore pins the exact reviewed installer bytes with SHA-256 when the endpoint can be inspected. A digest mismatch fails before execution. Every script installer must carry a reviewed digest. The pinned npm recipes (Pi, Cline, dsh) have no reviewed checksum and are labeled `WARNING: no reviewed checksum` during confirmation; they remain protected only by HTTPS, exact origins, redirect allow-listing, bounded content, explicit confirmation, and source review. Upstream installers may perform their own artifact verification and may update user-level PATH configuration. This project never runs provider login commands or writes credentials/provider configuration itself. Users requiring vendor-signed or release-pinned artifacts should use each provider's documented verification flow. See [provider CLI setup](harness-cli-setup.md).
 
 `setup inventory` is a separate read-only scan followed by private local snapshot writes. It reads
 bounded known JSON, TOML, and YAML config files only for detected harnesses and enumerates bounded
