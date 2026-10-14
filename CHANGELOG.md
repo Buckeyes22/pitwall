@@ -68,6 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with a host, no user info, query, or fragment). Seed and admin registration previously refused it
   without a RunPod endpoint id, so the self-hosted runbook's seed could not apply; the runbook's
   seed now also sets the provider-level `cost` the loader requires and a literal base URL.
+- The `muse` harness no longer accepts effort `none`, which Meta's Muse Spark and Muse Wonder
+  reject with HTTP 400. Registered models already refused it; an unregistered Muse model id (the
+  harness allows unknown models) only met the harness-level list, which still offered it.
 - A repo-wide doc audit corrected about 110 statements that contradicted the code. The ones a user
   acts on: Pitwall's mode comes from `[personal] backend` in `pitwall.toml`, not from whether
   `DATABASE_URL` is set; the webhook receiver needs `PITWALL_WEBHOOK_SECRET` at every bind,

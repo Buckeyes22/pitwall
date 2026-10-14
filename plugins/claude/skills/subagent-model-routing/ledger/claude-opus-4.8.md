@@ -2,7 +2,7 @@
 
 > System-card prior — maintain routing confidence via `/pitwall:distill` and your own ledger.
 
-- **Route:** `claude-shim.sh <prompt-file> --model claude-opus-4-8` from the Codex and Copilot packages; Claude-hosted work uses native `Agent` calls
+- **Route:** `claude-shim.sh <prompt-file> --model opus` from the Codex and Copilot packages; Claude-hosted work uses native `Agent` calls
 - **Tier:** verification-heavy and difficult-work Claude seat; unranked against other providers until local ledger evidence exists
 - **Excels at:** software engineering, agentic tool use, knowledge work, deep repository tracing, long context, professional tasks, and honest code-status summaries
 - **Struggles with:** system-card case studies still include fabrication, ignored corrections, skipped cheap verification, and instruction-following failures; unsafeguarded prompt-injection robustness regressed in some agentic settings; refusals can be over-elaborate

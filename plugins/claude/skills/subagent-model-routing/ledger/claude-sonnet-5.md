@@ -2,7 +2,7 @@
 
 > System-card prior — maintain routing confidence via `/pitwall:distill` and your own ledger.
 
-- **Route:** `claude-shim.sh <prompt-file>` or `--model claude-sonnet-5` from the Codex and Copilot packages; Claude-hosted work uses native `Agent` calls
+- **Route:** `claude-shim.sh <prompt-file>` or `--model sonnet` from the Codex and Copilot packages; Claude-hosted work uses native `Agent` calls
 - **Tier:** default Claude workhorse; unranked against other providers until local ledger evidence exists
 - **Excels at:** multi-file coding, terminal work, agentic search, multimodal reasoning, and professional tasks; clear gains over Sonnet 4.6
 - **Struggles with:** slightly weaker flawed-result handling than Opus 4.8; higher closed-book abstention/error rates than stronger contemporary Claude models; occasional over-refusal or overly discouraging responses

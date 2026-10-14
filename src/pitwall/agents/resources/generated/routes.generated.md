@@ -15,7 +15,7 @@ A host runs its own native harness directly, not through a shim; the plugin for 
 | `qwen` | `~/.claude/scripts/qwen-shim.sh` | `qwen3-coder` | not supported | [qwen](model-prompting.md#qwen) |
 | `hermes` | `~/.claude/scripts/hermes-shim.sh` | any configured model | not supported |  |
 | `pi` | `~/.claude/scripts/pi-shim.sh` | any configured model | `off`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max` |  |
-| `muse` | `~/.claude/scripts/muse-shim.sh` | `muse-spark-1.2`, `muse-spark-1.3`, `muse-wonder-1.0` | `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra` | [muse-code](model-prompting.md#muse-code)<br>[muse-wonder](model-prompting.md#muse-wonder) |
+| `muse` | `~/.claude/scripts/muse-shim.sh` | `muse-spark-1.2`, `muse-spark-1.3`, `muse-wonder-1.0` | `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra` | [muse-code](model-prompting.md#muse-code)<br>[muse-wonder](model-prompting.md#muse-wonder) |
 | `cline` | `~/.claude/scripts/cline-shim.sh` | any configured model | `none`, `low`, `medium`, `high`, `xhigh` |  |
 | `dsh` | `~/.claude/scripts/dsh-shim.sh` | any configured model | not supported |  |
 | `agy` | `~/.claude/scripts/agy-shim.sh` | `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.1-pro`, `gemini-3.8-flash`, `gemini-4-argon` | `low`, `medium`, `high` | [gemini-through-antigravity](model-prompting.md#gemini-through-antigravity) |

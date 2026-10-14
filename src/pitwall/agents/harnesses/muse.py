@@ -15,7 +15,6 @@ _RESERVED_FLAGS = ("--json", "--prompt-file", "--session-id")
 class MuseAdapter(HarnessAdapter):
     harness_id = "muse"
     effort_values: tuple[str, ...] | None = (
-        "none",
         "minimal",
         "low",
         "medium",

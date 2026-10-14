@@ -119,7 +119,8 @@ def estimate_lease_launch_cost(capability, provider, payload=None) -> Decimal
 ```
 
 **Idempotent launches:** `POST /v1/leases`, `pitwall_lease_pod`, `POST /v1/serve`,
-and `pitwall_serve_model` accept an optional `idempotency_key`. A keyed
+`pitwall_serve_model`, and `pitwall serve` on the registry backend accept an optional
+`idempotency_key`. A keyed
 admission records the SHA-256 of the caller's request on its workload (`input`
 `{"launch_request_sha256": ...}`) inside the budget-admission transaction: `admit_lease_launch`
 for RunPod, `admit_provision` for Lambda Cloud and Vast. For a lease the request is the resolved
@@ -189,10 +190,9 @@ record or claim a warm cache; a changed variant or configured volume is cold.
 `serve --plan-only` stops before this lease lifecycle: it creates no pool, capability,
 provider, template, workload, or lease. It reports the catalogue argv/image, volume-cache
 environment, selected-GPU fit, startup timeout, TTL estimate, and whether pricing came from the
-read-only live snapshot or canonical-VRAM fallback. `pitwall serve` dispatches to this catalogue
-plan only when `--plan-only` is passed; otherwise it runs the personal single-host serve, which has no
-`--capability`, `--dry-run`, or `--idempotency-key`. The registry-backed `--dry-run` and launch path
-is reached through `POST /v1/serve` and `pitwall_serve_model`.
+read-only live snapshot or canonical-VRAM fallback. Registry-backed `--dry-run` is unchanged:
+`pitwall serve` reaches it when `[personal] backend = "registry"` is set in `pitwall.toml`; on the
+default personal backend it runs the single-host serve instead.
 
 A self-hosted `public_endpoint` warm creates no lease row, returns `lease_id: null`, emits the
 compatible ready event, and is skipped by renewal, idle-stop, and activity-controller logic.
