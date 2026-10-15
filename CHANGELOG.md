@@ -40,6 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Harness children now see `PWD` set to their working directory. OpenCode builds its session from
+  `$PWD`, so isolated dispatches started from another checkout wrote into that checkout instead of
+  their worktree.
+
 - `pitwall agents setup harnesses` installs Hermes again: its upstream installer changed, so the
   pinned digest no longer matched and setup refused it. The new script was reviewed and re-pinned.
 - The MiniMax M3.1 Flash Preview route is `minimax-coding-plan/MiniMax-M3.1-Flash-Preview`, the

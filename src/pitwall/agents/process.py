@@ -250,12 +250,17 @@ def _start_supervised(
     run out), the child's group is reaped before the error propagates.
     """
 
+    child_env = dict(env)
+    if cwd is not None:
+        # Popen changes the directory but not PWD. A harness that reads PWD (opencode
+        # does) would otherwise work in the caller's checkout instead of *cwd*.
+        child_env["PWD"] = str(cwd)
     process = subprocess.Popen(
         argv,
         stdin=subprocess.PIPE if stdin_pipe else subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        env=dict(env),
+        env=child_env,
         cwd=cwd,
         # A dedicated process group is the cancellation boundary.  A new
         # session is unnecessary and macOS can reject setsid() with EPERM;
