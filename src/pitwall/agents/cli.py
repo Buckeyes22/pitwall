@@ -108,6 +108,23 @@ def _runs_list() -> int:
     return 0
 
 
+def _runs_usage(args: argparse.Namespace) -> int:
+    from .caller import resolve_caller
+    from .session_usage import _public_totals, load_finished, render_text, summarize
+
+    selected_session = args.session
+    if args.current:
+        selected_session = resolve_caller(os.environ, start_pid=os.getppid()).session
+    totals = summarize(load_finished(os.environ), session=selected_session, since=args.since)
+    if args.json_output:
+        print(json.dumps({"sessions": [_public_totals(item) for item in totals]}))
+        return 0
+    rendered = render_text(totals)
+    if rendered:
+        print(rendered)
+    return 0
+
+
 def _runs_show(dispatch_id: str) -> int:
     try:
         path = find_run(os.environ, dispatch_id)
@@ -1615,6 +1632,22 @@ def _add_run_commands(subparsers: Any) -> None:
     )
     run_commands = runs.add_subparsers(dest="runs_command", required=True)
     run_commands.add_parser("list", help="List recorded runs.")
+    usage = run_commands.add_parser(
+        "usage", help="Report token usage grouped by launching session."
+    )
+    session = usage.add_mutually_exclusive_group()
+    session.add_argument("--session", help="Show usage for this exact session key.")
+    session.add_argument(
+        "--current",
+        action="store_true",
+        help="Show usage for the session that launched this command.",
+    )
+    usage.add_argument(
+        "--since", metavar="YYYY-MM-DD", help="Include dispatches on or after this date."
+    )
+    usage.add_argument(
+        "--json", action="store_true", dest="json_output", help="Print the report as JSON."
+    )
     show = run_commands.add_parser("show", help="Show one run record.")
     show.add_argument("dispatch_id")
     logs = run_commands.add_parser("logs", help="Print a run's stdout and/or stderr.")
@@ -1999,6 +2032,8 @@ def main(argv: list[str] | None = None) -> int:
         return _pitwall_watch(args.interval)
     if args.runs_command == "list":
         return _runs_list()
+    if args.runs_command == "usage":
+        return _runs_usage(args)
     if args.runs_command == "show":
         return _runs_show(args.dispatch_id)
     if args.runs_command == "logs":

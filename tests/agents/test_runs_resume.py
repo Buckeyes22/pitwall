@@ -341,6 +341,62 @@ class RunsResumeTests(unittest.TestCase):
         self.assertNotIn("resumes without you", flattened)
         self.assertIn("The run stays paused until then.", flattened)
 
+    def test_runs_usage_json_and_runs_list_cli(self) -> None:
+        sandbox = self._sandbox()
+        ledger = sandbox.state / "pitwall" / "agents" / "ledger" / "observations.jsonl"
+        ledger.parent.mkdir(parents=True, exist_ok=True)
+        ledger.write_text(
+            json.dumps(
+                {
+                    "event": "finished",
+                    "session": "claude:test-session",
+                    "shim": "codex",
+                    "model": "gpt-test",
+                    "dispatch_id": "usage-run-1",
+                    "ts": "2026-10-15T10:00:00Z",
+                    "usage": {
+                        "inputTokens": 8,
+                        "outputTokens": 2,
+                        "cacheReadTokens": None,
+                        "cacheWriteTokens": None,
+                        "reasoningTokens": None,
+                        "totalTokens": 10,
+                        "costUsd": None,
+                        "complete": True,
+                        "source": "harness-json",
+                    },
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        env = self._env(sandbox, "done")
+        env.pop("PITWALL_AGENTS_LEDGER")
+        usage = subprocess.run(
+            [str(PITWALL), "agents", "runs", "usage", "--json"],
+            capture_output=True,
+            env=env,
+            check=False,
+        )
+        self.assertEqual(0, usage.returncode, usage.stderr)
+        report = json.loads(usage.stdout)
+        self.assertEqual(["sessions"], list(report))
+        [session] = report["sessions"]
+        self.assertEqual("claude:test-session", session["session"])
+        self.assertEqual(
+            (1, 1, 0), (session["dispatches"], session["withUsage"], session["withoutUsage"])
+        )
+        self.assertEqual(10, session["usage"]["totalTokens"])
+
+        runs_command = ["runs", "list"]
+        listed = subprocess.run(
+            [str(PITWALL), "agents", *runs_command],
+            capture_output=True,
+            env=env,
+            check=False,
+        )
+        self.assertEqual(0, listed.returncode, listed.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
