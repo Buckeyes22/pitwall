@@ -141,8 +141,11 @@ def fake(pid: int) -> ProcessInfo | None:
 
 
 def test_inherited_session_wins_over_everything() -> None:
-    env = {SESSION_ENV: "claude:root", "CLAUDE_CODE_SESSION_ID": "other",
-           "PITWALL_AGENTS_CHANNEL_DISPATCH_ID": "11111111-1111-4111-8111-111111111111"}
+    env = {
+        SESSION_ENV: "claude:root",
+        "CLAUDE_CODE_SESSION_ID": "other",
+        "PITWALL_AGENTS_CHANNEL_DISPATCH_ID": "11111111-1111-4111-8111-111111111111",
+    }
     caller = resolve_caller(env, start_pid=500, read_process=fake)
     assert (caller.session, caller.source) == ("claude:root", "inherited")
     assert caller.parent_dispatch_id == "11111111-1111-4111-8111-111111111111"
@@ -157,7 +160,10 @@ def test_nearest_host_ancestor_identifies_hosts_without_a_session_variable(monke
     monkeypatch.setattr("pitwall.agents.caller.process_identity", lambda pid: f"linux:{pid}9")
     caller = resolve_caller({}, start_pid=500, read_process=fake)
     assert (caller.session, caller.source, caller.host) == (
-        "opencode:pid:300:linux:3009", "host-process", "opencode")
+        "opencode:pid:300:linux:3009",
+        "host-process",
+        "opencode",
+    )
 
 
 def test_no_host_found_is_unknown_not_an_error() -> None:
@@ -166,14 +172,17 @@ def test_no_host_found_is_unknown_not_an_error() -> None:
 
 
 def test_ancestor_walk_stops_on_a_cycle() -> None:
-    loop = {10: ProcessInfo(ppid=11, names=frozenset({"bash"})),
-            11: ProcessInfo(ppid=10, names=frozenset({"bash"}))}
+    loop = {
+        10: ProcessInfo(ppid=11, names=frozenset({"bash"})),
+        11: ProcessInfo(ppid=10, names=frozenset({"bash"})),
+    }
     assert resolve_caller({}, start_pid=10, read_process=loop.get).source == "unknown"
 
 
 def test_read_process_sees_this_test_process() -> None:
     import os
     from pitwall.agents.caller import read_process
+
     info = read_process(os.getpid())
     assert info is not None and info.ppid == os.getppid()
 ```
@@ -201,10 +210,26 @@ SESSION_ENV = "PITWALL_AGENTS_SESSION"
 # Claude Code sets it for Bash children and for stdio MCP servers).
 HOST_SESSION_ENVS: tuple[tuple[str, str], ...] = (("CLAUDE_CODE_SESSION_ID", "claude"),)
 # Process names that mark the host session when no variable names it.
-HOST_PROCESS_NAMES = frozenset({
-    "claude", "codex", "copilot", "opencode", "kimi", "qwen", "grok", "agy", "pi",
-    "hermes", "cline", "goose", "muse", "zcode", "mcode", "dsh",
-})
+HOST_PROCESS_NAMES = frozenset(
+    {
+        "claude",
+        "codex",
+        "copilot",
+        "opencode",
+        "kimi",
+        "qwen",
+        "grok",
+        "agy",
+        "pi",
+        "hermes",
+        "cline",
+        "goose",
+        "muse",
+        "zcode",
+        "mcode",
+        "dsh",
+    }
+)
 _MAX_DEPTH = 64
 _SCRIPT_SUFFIXES = (".js", ".mjs", ".cjs")
 
@@ -244,7 +269,7 @@ def read_process(pid: int) -> ProcessInfo | None:
         comm = stat[stat.index("(") + 1 : stat.rindex(")")]
         ppid = int(stat.rsplit(") ", 1)[1].split()[1])
         argv = Path(f"/proc/{pid}/cmdline").read_bytes().split(b"\0")
-    except (OSError, ValueError, IndexError, UnicodeDecodeError):
+    except OSError, ValueError, IndexError, UnicodeDecodeError:
         return _read_process_ps(pid)
     names = {comm, *(_name(a.decode("utf-8", "replace")) for a in argv[:2] if a)}
     return ProcessInfo(ppid, frozenset(names))
@@ -255,10 +280,13 @@ def _read_process_ps(pid: int) -> ProcessInfo | None:
     try:
         out = subprocess.run(
             ["ps", "-p", str(pid), "-o", "ppid=,command="],
-            capture_output=True, text=True, timeout=0.5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=0.5,
+            check=False,
         ).stdout.split()
         return ProcessInfo(int(out[0]), frozenset(_name(a) for a in out[1:3]))
-    except (OSError, subprocess.SubprocessError, ValueError, IndexError):
+    except OSError, subprocess.SubprocessError, ValueError, IndexError:
         return None
 
 
@@ -315,41 +343,46 @@ def resolve_caller(
 - [ ] **Step 1: Failing tests** (add to `tests/agents/test_dispatch_contract.py`, using its existing `ShimSandbox` style):
 
 ```python
-    def test_result_and_ledger_carry_the_launching_session(self) -> None:
-        sandbox = ShimSandbox()
-        try:
-            sandbox.install_harness("codex")
-            result = sandbox.run(
-                "codex", [str(sandbox.prompt())],
-                env=sandbox.environment(CLAUDE_CODE_SESSION_ID="sess-1", FAKE_ENV_FILE=str(sandbox.env_file)),
-            )
-            self.assertEqual(0, result.returncode, result.stderr)
-            run = sandbox.run_directories()[-1]
-            caller = json.loads((run / "result.json").read_text())["caller"]
-            self.assertEqual(("claude:sess-1", "host-env"), (caller["session"], caller["source"]))
-            finished = [r for r in sandbox.ledger_records() if r["event"] == "finished"][-1]
-            self.assertEqual("claude:sess-1", finished["session"])
-            child_env = json.loads(sandbox.env_file.read_text())
-            self.assertEqual("claude:sess-1", child_env["PITWALL_AGENTS_SESSION"])
-        finally:
-            sandbox.cleanup()
+def test_result_and_ledger_carry_the_launching_session(self) -> None:
+    sandbox = ShimSandbox()
+    try:
+        sandbox.install_harness("codex")
+        result = sandbox.run(
+            "codex",
+            [str(sandbox.prompt())],
+            env=sandbox.environment(
+                CLAUDE_CODE_SESSION_ID="sess-1", FAKE_ENV_FILE=str(sandbox.env_file)
+            ),
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        run = sandbox.run_directories()[-1]
+        caller = json.loads((run / "result.json").read_text())["caller"]
+        self.assertEqual(("claude:sess-1", "host-env"), (caller["session"], caller["source"]))
+        finished = [r for r in sandbox.ledger_records() if r["event"] == "finished"][-1]
+        self.assertEqual("claude:sess-1", finished["session"])
+        child_env = json.loads(sandbox.env_file.read_text())
+        self.assertEqual("claude:sess-1", child_env["PITWALL_AGENTS_SESSION"])
+    finally:
+        sandbox.cleanup()
 
-    def test_nested_dispatch_inherits_the_root_session(self) -> None:
-        # FAKE_NESTED_DISPATCH makes the fake harness run a second shim from inside itself.
-        sandbox = ShimSandbox()
-        try:
-            sandbox.install_harness("codex")
-            result = sandbox.run(
-                "codex", [str(sandbox.prompt())],
-                env=sandbox.environment(CLAUDE_CODE_SESSION_ID="root", FAKE_NESTED_DISPATCH="codex"),
-            )
-            self.assertEqual(0, result.returncode, result.stderr)
-            rows = [r for r in sandbox.ledger_records() if r["event"] == "finished"]
-            self.assertEqual({"claude:root"}, {r["session"] for r in rows})
-            outer = rows[-1]["dispatch_id"]
-            self.assertEqual([outer], [r["parentDispatchId"] for r in rows if "parentDispatchId" in r])
-        finally:
-            sandbox.cleanup()
+
+def test_nested_dispatch_inherits_the_root_session(self) -> None:
+    # FAKE_NESTED_DISPATCH makes the fake harness run a second shim from inside itself.
+    sandbox = ShimSandbox()
+    try:
+        sandbox.install_harness("codex")
+        result = sandbox.run(
+            "codex",
+            [str(sandbox.prompt())],
+            env=sandbox.environment(CLAUDE_CODE_SESSION_ID="root", FAKE_NESTED_DISPATCH="codex"),
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        rows = [r for r in sandbox.ledger_records() if r["event"] == "finished"]
+        self.assertEqual({"claude:root"}, {r["session"] for r in rows})
+        outer = rows[-1]["dispatch_id"]
+        self.assertEqual([outer], [r["parentDispatchId"] for r in rows if "parentDispatchId" in r])
+    finally:
+        sandbox.cleanup()
 ```
 
 Read `FAKE_NESTED_DISPATCH` handling in `tests/agents/fixtures/fake_harness.py` (lines 55–75) first and pass the value it expects; the assertions stay as written. Expected now: `KeyError: 'caller'`.
@@ -388,6 +421,8 @@ Expected: pass; validator OK. (`test_result.py` is the result-validation suite; 
       source: str = "harness-json"      # or "harness-report"
       def __add__(self, other: "TokenUsage") -> "TokenUsage"
       def to_public_dict(self) -> dict[str, Any]   # camelCase keys below
+      @classmethod
+      def from_public_dict(cls, data: Mapping[str, Any]) -> "TokenUsage"   # inverse; used by Task 7
   @dataclass(frozen=True, slots=True)
   class ParsedOutput:
       answer: bytes; usage: TokenUsage | None; diagnostic: str | None = None
@@ -418,8 +453,14 @@ def test_addition_keeps_unknowns_unknown_and_sums_knowns() -> None:
 
 def test_public_dict_shape() -> None:
     assert TokenUsage(1, 2, total_tokens=3).to_public_dict() == {
-        "inputTokens": 1, "outputTokens": 2, "cacheReadTokens": None, "cacheWriteTokens": None,
-        "reasoningTokens": None, "totalTokens": 3, "costUsd": None, "complete": True,
+        "inputTokens": 1,
+        "outputTokens": 2,
+        "cacheReadTokens": None,
+        "cacheWriteTokens": None,
+        "reasoningTokens": None,
+        "totalTokens": 3,
+        "costUsd": None,
+        "complete": True,
         "source": "harness-json",
     }
 
@@ -433,19 +474,21 @@ def test_json_helpers_tolerate_noise() -> None:
 - [ ] **Step 2: Implement** `token_usage.py` per the interface (in `__add__`, a field is `None` only when both sides are `None`; `complete` is the AND; `source` is kept from the left side). In `base.py` add after `private_prompt_file`:
 
 ```python
-    # How the dispatch reads the harness's answer and usage: "text" passes stdout through;
-    # "json" runs the harness in its JSON mode and parse_output turns it back into the answer;
-    # "usage-file" leaves stdout alone and reads the report the harness writes beside it.
-    output_mode = "text"
+# How the dispatch reads the harness's answer and usage: "text" passes stdout through;
+# "json" runs the harness in its JSON mode and parse_output turns it back into the answer;
+# "usage-file" leaves stdout alone and reads the report the harness writes beside it.
+output_mode = "text"
 
-    def parse_output(self, raw: bytes) -> ParsedOutput:
-        """Answer text and token usage from the harness's raw stdout (json mode)."""
-        return ParsedOutput(raw, None)
 
-    def parse_usage_file(self, data: Any) -> TokenUsage | None:
-        """Token usage from the harness's own report file (usage-file mode)."""
-        del data
-        return None
+def parse_output(self, raw: bytes) -> ParsedOutput:
+    """Answer text and token usage from the harness's raw stdout (json mode)."""
+    return ParsedOutput(raw, None)
+
+
+def parse_usage_file(self, data: Any) -> TokenUsage | None:
+    """Token usage from the harness's own report file (usage-file mode)."""
+    del data
+    return None
 ```
 
 - [ ] **Step 3: Pass** — `.venv/bin/python -m pytest tests/agents/test_token_usage.py -q 2>&1 | tail -1` → pass.
@@ -508,23 +551,32 @@ def test_json_helpers_tolerate_noise() -> None:
 - [ ] **Step 1: Failing tests** — `tests/agents/test_dispatch_usage.py` drives a json-mode harness (codex after Task 5; for this task, a test-only adapter registered with `unittest.mock.patch.dict("pitwall.agents.harnesses._ADAPTERS", {"codex": FakeJsonCodex})` where `FakeJsonCodex(CodexAdapter)` sets `output_mode = "json"` and `parse_output` returns `ParsedOutput(b"answer\n", TokenUsage(3, 1))` when `raw` contains `"turn.completed"`, else `ParsedOutput(b"", None, "unparseable")`):
 
 ```python
-def test_json_mode_answer_reaches_stdout_and_usage_is_recorded(): ...
+def test_json_mode_answer_reaches_stdout_and_usage_is_recorded():
+    ...
     # FAKE_STDOUT='{"type":"turn.completed"}\n' → stdout contains b"answer\n" before SHIM-DONE,
     # result.json usage == {"inputTokens": 3, "outputTokens": 1, ...}, harness-output.jsonl holds the raw line,
     # finished ledger row has usage.
 
-def test_unparseable_output_reaches_the_caller_unchanged(): ...
+
+def test_unparseable_output_reaches_the_caller_unchanged():
+    ...
     # FAKE_STDOUT='Traceback: boom\n' → stdout contains b"Traceback: boom", result.json usage is None,
     # usageError == "unparseable".
 
-def test_text_mode_harness_records_usage_unavailable(): ...
+
+def test_text_mode_harness_records_usage_unavailable():
+    ...
     # a text-mode adapter → usage None, usageError "<id> reports no token usage", stdout unchanged.
 
-def test_partial_stream_counts_completed_steps(): ...
+
+def test_partial_stream_counts_completed_steps():
+    ...
     # FakeJsonCodex returning TokenUsage(3, 1, complete=False) with FAKE_EXIT=124 → usage.complete is False,
     # exit code preserved.
 
-def test_managed_launch_does_not_echo_the_answer_to_fd1(): ...
+
+def test_managed_launch_does_not_echo_the_answer_to_fd1():
+    ...
     # with PITWALL_AGENTS_MANAGED_LAUNCH=1 (MANAGED_LAUNCH_ENV) the answer is in stdout.log only.
 ```
 
@@ -591,13 +643,22 @@ def parsed(harness: str, name: str):
         ("pi", "pi.jsonl", b"ok\n", 2426, 2, 0, 0, 0, 2428, 0),
     ],
 )
-def test_parser_reads_answer_and_usage(harness, name, answer, inp, out, cache_r, cache_w, reason, total, cost):
+def test_parser_reads_answer_and_usage(
+    harness, name, answer, inp, out, cache_r, cache_w, reason, total, cost
+):
     result = parsed(harness, name)
     assert result.answer == answer
     u = result.usage
     assert u is not None and u.complete
-    assert (u.input_tokens, u.output_tokens, u.cache_read_tokens, u.cache_write_tokens,
-            u.reasoning_tokens, u.total_tokens, u.cost_usd) == (inp, out, cache_r, cache_w, reason, total, cost)
+    assert (
+        u.input_tokens,
+        u.output_tokens,
+        u.cache_read_tokens,
+        u.cache_write_tokens,
+        u.reasoning_tokens,
+        u.total_tokens,
+        u.cost_usd,
+    ) == (inp, out, cache_r, cache_w, reason, total, cost)
 
 
 def test_qwen_error_result_still_reports_zero_usage_and_its_text() -> None:
@@ -615,9 +676,16 @@ def test_agy_error_document_becomes_a_diagnostic() -> None:
 
 def test_hermes_usage_file() -> None:
     u = get_adapter("hermes").parse_usage_file(json.loads((FIX / "hermes-usage.json").read_text()))
-    assert (u.input_tokens, u.output_tokens, u.cache_read_tokens, u.cache_write_tokens,
-            u.reasoning_tokens, u.total_tokens, u.cost_usd, u.source) == (
-        1200, 34, 800, 0, 12, 1234, 0.0123, "harness-report")
+    assert (
+        u.input_tokens,
+        u.output_tokens,
+        u.cache_read_tokens,
+        u.cache_write_tokens,
+        u.reasoning_tokens,
+        u.total_tokens,
+        u.cost_usd,
+        u.source,
+    ) == (1200, 34, 800, 0, 12, 1234, 0.0123, "harness-report")
 
 
 @pytest.mark.parametrize("harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy"])
@@ -731,13 +799,28 @@ Validation: `.venv/bin/python -m pytest tests/agents/test_harness_usage_parsers.
 ```python
 from pitwall.agents.session_usage import summarize
 
+
 def row(session, total, *, shim="codex", model="m", usage=True, ts="2026-10-15T10:00:00Z"):
-    r = {"event": "finished", "session": session, "shim": shim, "model": model, "ts": ts,
-         "dispatch_id": f"{session}-{total}-{ts}"}
+    r = {
+        "event": "finished",
+        "session": session,
+        "shim": shim,
+        "model": model,
+        "ts": ts,
+        "dispatch_id": f"{session}-{total}-{ts}",
+    }
     if usage:
-        r["usage"] = {"inputTokens": total - 1, "outputTokens": 1, "cacheReadTokens": None,
-                      "cacheWriteTokens": None, "reasoningTokens": None, "totalTokens": total,
-                      "costUsd": None, "complete": True, "source": "harness-json"}
+        r["usage"] = {
+            "inputTokens": total - 1,
+            "outputTokens": 1,
+            "cacheReadTokens": None,
+            "cacheWriteTokens": None,
+            "reasoningTokens": None,
+            "totalTokens": total,
+            "costUsd": None,
+            "complete": True,
+            "source": "harness-json",
+        }
     else:
         r["usageError"] = "codex reports no token usage"
     return r
@@ -754,20 +837,30 @@ def test_runs_without_usage_are_counted_not_zeroed() -> None:
 
 
 def test_filters_by_session_and_since() -> None:
-    rows = [row("a", 10, ts="2026-10-01T00:00:00Z"), row("a", 3, ts="2026-10-15T00:00:00Z"), row("b", 1)]
+    rows = [
+        row("a", 10, ts="2026-10-01T00:00:00Z"),
+        row("a", 3, ts="2026-10-15T00:00:00Z"),
+        row("b", 1),
+    ]
     [t] = summarize(rows, session="a", since="2026-10-10")
     assert t.usage.total_tokens == 3
 
 
 def test_rows_from_before_this_feature_are_grouped_as_unattributed() -> None:
-    old = {"event": "finished", "shim": "codex", "model": "m", "ts": "2026-09-01T00:00:00Z", "dispatch_id": "x"}
+    old = {
+        "event": "finished",
+        "shim": "codex",
+        "model": "m",
+        "ts": "2026-09-01T00:00:00Z",
+        "dispatch_id": "x",
+    }
     [t] = summarize([old])
     assert (t.session, t.without_usage) == ("unattributed", 1)
 ```
 
 Plus one CLI test through the existing CLI test style (`grep -ln '"runs", "list"' tests/agents`): seed a ledger under a temp `XDG_STATE_HOME`, run `pitwall agents runs usage --json`, and assert the JSON keys and totals.
 
-- [ ] **Step 2: Implement** `session_usage.py` (rows without `session` group under `"unattributed"`; a usage dict becomes `TokenUsage` through a `from_public_dict` classmethod added to `token_usage.py` in this task) and the CLI.
+- [ ] **Step 2: Implement** `session_usage.py` (rows without `session` group under `"unattributed"`; a usage dict becomes `TokenUsage` through `TokenUsage.from_public_dict`, which Task 3 adds so this task and Task 4 share no file) and the CLI.
 - [ ] **Step 3: Pass** — `.venv/bin/python -m pytest tests/agents/test_session_usage.py tests/agents/test_cli*.py -q 2>&1 | tail -2` → pass.
 - [ ] **Step 4: Commit** — `git commit -s -am "feat(agents): runs usage reports tokens and cost per launching session"`
 

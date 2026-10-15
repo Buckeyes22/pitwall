@@ -314,7 +314,11 @@ def test_dispatch_sends_prompt_on_stdin_with_workspace_policy_and_model(
         sandbox.cleanup()
     adapter = get_adapter("mcode")
     prepared = adapter.prepare(
-        adapter.parse(["/p.md"], {}, Path("/home")), "/bin/mcode", b"x", {}, {"workspacePath": "/ws"}
+        adapter.parse(["/p.md"], {}, Path("/home")),
+        "/bin/mcode",
+        b"x",
+        {},
+        {"workspacePath": "/ws"},
     )
     assert prepared.argv[prepared.argv.index("--cwd") + 1] == "/ws"
     assert prepared.stdin == b"x"
@@ -381,7 +385,9 @@ def test_not_signed_in_exit_propagates() -> None:
         result = sandbox.run(
             "mcode",
             [str(sandbox.prompt())],
-            env=sandbox.environment(FAKE_EXIT="3", FAKE_STDERR="mcode exec failed: Sign in to MiniMax\n"),
+            env=sandbox.environment(
+                FAKE_EXIT="3", FAKE_STDERR="mcode exec failed: Sign in to MiniMax\n"
+            ),
         )
         assert result.returncode == 3
         assert b"Sign in to MiniMax" in result.stderr
@@ -391,7 +397,13 @@ def test_not_signed_in_exit_propagates() -> None:
 
 def test_workflow_args_and_registered_models() -> None:
     adapter = get_adapter("mcode")
-    assert adapter.workflow_args(M31, "high", Path("/p.md")) == ["/p.md", "--model", M31, "--effort", "high"]
+    assert adapter.workflow_args(M31, "high", Path("/p.md")) == [
+        "/p.md",
+        "--model",
+        M31,
+        "--effort",
+        "high",
+    ]
     assert adapter.workflow_args(M31, None, Path("/p.md")) == ["/p.md", "--model", M31]
     models = load_registry()["harnesses"]["mcode"]["models"]
     assert set(models) == {
@@ -710,32 +722,33 @@ git commit -s -m "feat(agents): MiniMax Code harness with shim, registry models,
 - [ ] **Step 1: Failing tests** — append to `RegistrationTests` in `tests/agents/test_mcp_registration.py`:
 
 ```python
-    def test_mcode_registers_in_minimax_mcp_json_and_keeps_other_servers(self) -> None:
-        config = self.home / ".minimax" / "mcp.json"
-        config.parent.mkdir(parents=True)
-        original = {"mcpServers": {"docs": {"command": "docs"}}}
-        config.write_text(json.dumps(original), encoding="utf-8")
-        plan = self._apply("mcode")
-        self.assertEqual(config, plan.path)
-        data = json.loads(config.read_text(encoding="utf-8"))
-        self.assertEqual(
-            {"command": CMD, "args": ARGS, "enabled": True, "timeout": 3660000},
-            data["mcpServers"]["pitwall-channel"],
-        )
-        self.assertEqual({"command": "docs"}, data["mcpServers"]["docs"])
-        self.assertTrue(mcp_channel_registered("mcode", self.env, self.home))
-        self.assertFalse(plan_registration("mcode", self.env, self.home, command=CMD).changed)
-        self._apply("mcode", remove=True)
-        self.assertEqual(original, json.loads(config.read_text(encoding="utf-8")))
+def test_mcode_registers_in_minimax_mcp_json_and_keeps_other_servers(self) -> None:
+    config = self.home / ".minimax" / "mcp.json"
+    config.parent.mkdir(parents=True)
+    original = {"mcpServers": {"docs": {"command": "docs"}}}
+    config.write_text(json.dumps(original), encoding="utf-8")
+    plan = self._apply("mcode")
+    self.assertEqual(config, plan.path)
+    data = json.loads(config.read_text(encoding="utf-8"))
+    self.assertEqual(
+        {"command": CMD, "args": ARGS, "enabled": True, "timeout": 3660000},
+        data["mcpServers"]["pitwall-channel"],
+    )
+    self.assertEqual({"command": "docs"}, data["mcpServers"]["docs"])
+    self.assertTrue(mcp_channel_registered("mcode", self.env, self.home))
+    self.assertFalse(plan_registration("mcode", self.env, self.home, command=CMD).changed)
+    self._apply("mcode", remove=True)
+    self.assertEqual(original, json.loads(config.read_text(encoding="utf-8")))
 
-    def test_mcode_fresh_registration_is_private_and_refuses_a_foreign_entry(self) -> None:
-        plan = self._apply("mcode")
-        self.assertEqual(0o600, plan.path.stat().st_mode & 0o777)
-        plan.path.write_text(
-            '{"mcpServers": {"pitwall-channel": {"command": "someone-else"}}}', encoding="utf-8"
-        )
-        with self.assertRaises(RegistrationError):
-            plan_registration("mcode", self.env, self.home, command=CMD)
+
+def test_mcode_fresh_registration_is_private_and_refuses_a_foreign_entry(self) -> None:
+    plan = self._apply("mcode")
+    self.assertEqual(0o600, plan.path.stat().st_mode & 0o777)
+    plan.path.write_text(
+        '{"mcpServers": {"pitwall-channel": {"command": "someone-else"}}}', encoding="utf-8"
+    )
+    with self.assertRaises(RegistrationError):
+        plan_registration("mcode", self.env, self.home, command=CMD)
 ```
 
 and in `test_a_disabled_channel_entry_is_not_registered` add `"mcode": ("mcpServers", "enabled", False),` to `json_hosts`.

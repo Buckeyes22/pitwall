@@ -81,7 +81,7 @@ def sandbox() -> Iterator[ShimSandbox]:
     bootstrap = (
         "import os, sys; from unittest.mock import patch; "
         "from tests.agents.test_dispatch_usage import FakeJsonCodex, FakeTextCodex, FakeUsageFileCodex; "
-                "from pitwall.agents.cli import main; "
+        "from pitwall.agents.cli import main; "
         "adapter = {'json': FakeJsonCodex, 'usage-file': FakeUsageFileCodex, "
         "'text': FakeTextCodex}[os.environ.get('FAKE_OUTPUT_MODE', 'json')]; "
         "sys.argv.remove('agents'); "
