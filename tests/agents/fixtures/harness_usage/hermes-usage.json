@@ -1,0 +1,1 @@
+{"estimated_cost_usd": 0.0123, "cost_status": "estimated", "cost_source": "pricing_table", "input_tokens": 1200, "output_tokens": 34, "cache_read_tokens": 800, "cache_write_tokens": 0, "reasoning_tokens": 12, "total_tokens": 1234, "api_calls": 1, "model": "hermes-x", "provider": "custom", "session_id": "s1", "completed": true, "failed": false, "service_tier": null}

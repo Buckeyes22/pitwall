@@ -1,0 +1,28 @@
+{
+  "text": "ok",
+  "stopReason": "end_turn",
+  "sessionId": "01a14192-a3ac-7aa1-9f18-844db0b21714",
+  "requestId": "97d94c7e-ff91-4210-bc21-5cbe2689bd01",
+  "thought": "The user wants me to reply with the single word \"ok\" and not use any tools. This is a straightforward request. I should just reply with \"ok\".",
+  "usage": {
+    "input_tokens": 29530,
+    "cache_read_input_tokens": 1152,
+    "cache_creation_input_tokens": 0,
+    "output_tokens": 34,
+    "reasoning_tokens": 33,
+    "total_tokens": 30716
+  },
+  "num_turns": 1,
+  "total_cost_usd": 0.05984,
+  "total_cost_usd_ticks": 598400000,
+  "modelUsage": {
+    "grok-4.7": {
+      "inputTokens": 29530,
+      "outputTokens": 34,
+      "cacheReadInputTokens": 1152,
+      "cacheCreationInputTokens": 0,
+      "modelCalls": 1,
+      "costUSD": 0.05984
+    }
+  }
+}

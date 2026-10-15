@@ -1,0 +1,1 @@
+[{"type":"system","subtype":"init","session_id":"3390adb7-1659-4e30-a6d8-c07af1943cf8"},{"type":"result","subtype":"success","is_error":false,"result":"[API Error: 405 status code (no body)]","session_id":"3390adb7-1659-4e30-a6d8-c07af1943cf8","total_cost_usd":null,"usage":{"input_tokens":0,"output_tokens":0,"cache_read_input_tokens":0}}]
