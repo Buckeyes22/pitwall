@@ -16,7 +16,9 @@ Directories use mode `0700` and files use mode `0600`.
 | `request.json` | Prompt source type/path, delivery kind, SHA-256, byte length, and retention status |
 | `events.jsonl` | Versioned lifecycle envelopes for this dispatch |
 | `stdout.log` / `stderr.log` | Raw provider streams. A direct shim call also forwards them live to the terminal. A managed launch (`dispatch_and_wait`) keeps them only here: nothing goes live to the terminal or to the launcher's logs |
-| `result.json` | Terminal status, timing, exit/signal, sanitized arguments, output hashes, and artifact paths as written (a managed `terminal` or `orphan` event reports the run directory's current paths instead, which matters after a migration moved the run) |
+| `result.json` | Terminal status, timing, exit/signal, sanitized arguments, output hashes, artifact paths, the launching `caller`, and parsed `usage` (a managed `terminal` or `orphan` event reports the run directory's current paths instead, which matters after a migration moved the run) |
+| `harness-output.jsonl` | The raw stdout from JSON-mode harnesses, retained separately from the plain answer written to `stdout.log` |
+| `harness-usage.json` | The usage report written by Hermes when dispatched with its `--usage-file` option |
 | `prompt.md` | Present only when `--routing-retain-prompt` was explicitly passed |
 | `prompt.deliver.md` | The prompt exactly as delivered, including the channel instructions. Written for runs with ask support and for harnesses that take the prompt as a file (Muse Code only when the prompt came from stdin; see [prompt exposure](architecture.md#prompt-exposure)). [The delivery prompt](#the-delivery-prompt) says when it is removed |
 | `hooks/` | Captured hook stdout, stderr, and status documents; a hook skipped for a pending Ctrl+C leaves `{"skipped": "interrupted"}` (see [lifecycle hooks](lifecycle-hooks.md#hooks-and-ctrlc)) |
@@ -95,6 +97,45 @@ When a harness exits `0` without doing the work and dispatch rewrites the exit t
 Setting `SHIM_RESULT=1` also writes the `finished` row to stdout as `SHIM-RESULT <json>` immediately before the sentinel; see the [Agent Routing README](routing-readme.md#quickstart) for the parsing contract.
 
 Workflow attempts additionally carry `workflowId`, `taskId`, effort, and attempt number in run state/results/events, plus `workflow_id`, `task_id`, and `attempt` in ledger rows. The scheduler assigns the dispatch UUID before launch, so these identifiers remain stable through preflight, retries, cancellation, and resume. Workflow state itself lives under `workflows/<workflow-id>/`; see [host-neutral workflows](workflows.md).
+
+## Caller and token usage
+
+Each dispatch records the launching session as `caller` in `result.json`. The public object contains
+`session`, `source`, `host`, and `parentDispatchId`. A caller-supplied `PITWALL_AGENTS_SESSION`
+takes priority, followed by Claude Code's `CLAUDE_CODE_SESSION_ID`, then the nearest recognized host
+process in the ancestor chain. If none can be identified, the session is `unknown`. A nested
+dispatch inherits the same session key and records its parent dispatch id.
+
+Completed ledger rows keep schema version 4 and may include `session`, `parentDispatchId`, `usage`,
+and `usageError`. `session` groups the row in the usage report; `parentDispatchId` is present for
+nested dispatches. `usage` is either null or an object with `inputTokens`, `outputTokens`,
+`cacheReadTokens`, `cacheWriteTokens`, `reasoningTokens`, `totalTokens`, `costUsd`, `complete`, and
+`source`. `usageError` explains why usage was unavailable. A failed or partial dispatch remains a
+dispatch in the report; partial counts are marked `complete: false`, and unavailable usage is not
+counted as zero.
+
+`inputTokens` is normalized to exclude cached input for every supported harness; cached tokens are
+reported separately in `cacheReadTokens`. The cache, reasoning, and total fields can be null when a
+harness does not report them. `costUsd` is populated only when the harness supplies a cost value;
+the report does not estimate it. `source` is `harness-json` for JSON output and `harness-report`
+for Hermes's usage file.
+
+| Harness | Capture mode | Usage fields | Answer source |
+|---|---|---|---|
+| Claude Code (`claude`) | JSON stdout (`--output-format json`) | Final `result.usage`: `input_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens`, `output_tokens`; `total_cost_usd`. Total is normalized from the four token counts. | Final `result.result`. |
+| Codex (`codex`) | JSONL stdout (`exec --json`) | Sum of `turn.completed.usage`: `input_tokens` minus `cached_input_tokens`, `cached_input_tokens`, `cache_write_input_tokens`, `output_tokens`, `reasoning_output_tokens`; total is `input_tokens + output_tokens`. | Last completed `agent_message` item's `text`. |
+| OpenCode (`opencode`) | JSONL stdout (`run --format json`) | Sum of each `step_finish.part.tokens`: `input`, `cache.read`, `cache.write`, `output`, `reasoning`, `total`; sum of reported `part.cost`. | `text` events' `part.text`, in order. |
+| Grok Build (`grok`) | JSON stdout (`--output-format json`) | `usage.input_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens`, `output_tokens`, `reasoning_tokens`, `total_tokens`; `total_cost_usd`. | `text`. |
+| Pi (`pi`) | JSONL stdout (`--mode json`) | Sum of `turn_end.usage`: `input`, `output`, `cacheRead`, `cacheWrite`, `reasoning`, `totalTokens`, and `cost.total`. Repeated `message_end` usage is not counted. | Last assistant `message_end` text content. |
+| Qwen Code (`qwen`) | JSON stdout (`--output-format json`) | Final `result.usage`: `input_tokens`, `cache_read_input_tokens`, optional `cache_creation_input_tokens`, `output_tokens`; optional `total_cost_usd`. Total is normalized from the available token counts. | Final `result.result`. |
+| Antigravity (`agy`) | JSON stdout (`--output-format json`) | `usage.input_tokens`, `cache_read_tokens`, `output_tokens`, `thinking_tokens`, `total_tokens`. | `response`; `status == "ERROR"` records its error as a diagnostic and returns no answer. |
+| Hermes (`hermes`) | Usage file (`--usage-file`) | `input_tokens`, `output_tokens`, `cache_read_tokens`, `cache_write_tokens`, `reasoning_tokens`, `total_tokens`, `estimated_cost_usd`; source is `harness-report`. | Stdout remains plain answer text. |
+
+These eight harnesses capture usage in this branch. Usage samples for the other harnesses remain
+unavailable: Kimi and dsh could not start because file-watch capacity
+was exhausted; Cline timed out; goose and Muse lacked provider setup or login; ZCode reported a
+model creation failure. They remain text mode and report usage as unavailable. Mcode is not part
+of this branch.
 
 Legacy asymmetries remain deliberate:
 

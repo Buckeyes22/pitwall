@@ -461,6 +461,19 @@
   "database": false,
   "exit": 1
  },
+ "pitwall|agents runs usage": {
+  "argv": [
+   "agents",
+   "runs",
+   "usage",
+   "--json"
+  ],
+  "database": false,
+  "exit": 0,
+  "json_keys": [
+   "sessions"
+  ]
+ },
  "pitwall|agents setup": {
   "argv": [
    "agents",

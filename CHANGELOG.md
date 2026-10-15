@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Dispatch records now include the launching session and normalized token usage from eight
+  harnesses, and `pitwall agents runs usage` reports accumulated usage by session.
+
 - Gemini 4 Argon (`gemini-4-argon`) is a registered `agy` route with low, medium, and high effort,
   and its facts and guidance are in the Gemini model facts. The Gemini prompting reference now
   follows the model-card layout of the Claude references, and Google's Gemini 4 Argon model card is
@@ -22,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   skill gains a Muse Code section.
 
 ### Changed
+
+- Claude, Codex, OpenCode, Grok, Pi, Qwen, and Antigravity run in their JSON output modes inside
+  dispatches; callers still receive plain answer text.
 
 - Gemini 3.7 Flash and Gemini 3.5 Flash are recorded as retired on 2026-10-08, with successors
   `gemini-3.8-flash` and `gemini-3.6-flash`, and are dropped from the Gemini capability card.

@@ -934,7 +934,7 @@ Policy:
 - Re-dispatch the same MiniMax route up to 3 times.
 - If it still stalls, report the failure and stop; do not reroute without reporting it to GLM or Kimi.
 
-Check opencode's log directory only when you need provider diagnostics. The operational signal for dispatch is the text before `SHIM-DONE exit=<n>` plus the artifact on disk.
+Check opencode's log directory only when you need provider diagnostics. The operational signal for dispatch is the text before `SHIM-DONE exit=<n>` plus the artifact on disk. Check accumulated subagent usage with `pitwall agents runs usage --current`.
 
 ## Why all shims must wrap agentic harnesses
 

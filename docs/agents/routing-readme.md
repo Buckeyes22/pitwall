@@ -160,6 +160,21 @@ copilot plugin update pitwall-copilot@pitwall-local
 copilot plugin uninstall pitwall-copilot
 ```
 
+## Usage by session
+
+`pitwall agents runs usage --current` totals completed dispatches launched by the session that
+started the command. Use `--session KEY` to inspect a particular session key, `--since
+YYYY-MM-DD` to include only dispatches from that date onward, and `--json` for a machine-readable
+report. The JSON output has a top-level `sessions` array with totals, usage availability counts,
+and per-model breakdowns.
+
+Pitwall chooses a key from an inherited `PITWALL_AGENTS_SESSION`, then Claude Code's
+`CLAUDE_CODE_SESSION_ID`, then the nearest recognized host process. A nested dispatch inherits the
+root key. Set `PITWALL_AGENTS_SESSION` in the launching environment to group work under an explicit
+key. Dispatches from before session recording are grouped as `unattributed`; runs without usage are
+counted separately and do not add zero tokens. The report reads the durable ledger, so run cleanup
+does not remove these totals.
+
 ## Quickstart
 
 ### 1. Transport smoke test
