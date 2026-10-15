@@ -5,12 +5,14 @@ from __future__ import annotations
 import json
 import os
 from collections.abc import Mapping
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
-from pitwall.agents.errors import ProfileSyncError
+from pitwall.agents.errors import ProfileSyncError, UsageError
 from pitwall.agents.paths import xdg_dir
 from pitwall.agents.process import run_bounded_capture
+from pitwall.agents.token_usage import ParsedOutput, TokenUsage, as_int, json_lines
 from pitwall.providers.model_studio import catalog as model_studio
 
 from .base import HarnessAdapter, ParsedRequest, PreparedCommand
@@ -18,6 +20,7 @@ from .base import HarnessAdapter, ParsedRequest, PreparedCommand
 
 class OpenCodeAdapter(HarnessAdapter):
     harness_id = "opencode"
+    output_mode = "json"
     effort_values: tuple[str, ...] | None = ()
     prompt_delivery = "stdin"
     # `opencode run` prints the model's answer; an empty stdout with exit 0 is a stalled
@@ -141,6 +144,48 @@ class OpenCodeAdapter(HarnessAdapter):
             }
         return path, before, json.dumps(data, indent=2) + "\n"
 
+    def parse_output(self, raw: bytes) -> ParsedOutput:
+        usage: TokenUsage | None = None
+        texts: list[str] = []
+        pending = False
+        for event in json_lines(raw):
+            kind = event.get("type")
+            if kind == "step_start":
+                pending = True
+            part = event.get("part")
+            if not isinstance(part, dict):
+                continue
+            if kind == "text" and isinstance(part.get("text"), str):
+                texts.append(part["text"])
+            elif kind == "step_finish":
+                pending = False
+                data = part.get("tokens")
+                if not isinstance(data, dict):
+                    continue
+                inp, out = as_int(data.get("input")), as_int(data.get("output"))
+                if inp is None or out is None:
+                    continue
+                cache = data.get("cache")
+                if not isinstance(cache, dict):
+                    cache = {}
+                cost = part.get("cost")
+                step = TokenUsage(
+                    inp,
+                    out,
+                    cache_read_tokens=as_int(cache.get("read")),
+                    cache_write_tokens=as_int(cache.get("write")),
+                    reasoning_tokens=as_int(data.get("reasoning")),
+                    total_tokens=as_int(data.get("total")),
+                    cost_usd=cost
+                    if isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0
+                    else None,
+                )
+                usage = usage + step if usage is not None else step
+        if usage is not None and pending:
+            usage = replace(usage, complete=False)
+        text = "\n".join(texts)
+        return ParsedOutput((text + "\n").encode() if text else b"", usage)
+
     def workflow_args(self, model: str, effort: str | None, prompt_path: Path) -> list[str]:
         args = [model, str(prompt_path)]
         if effort is not None:
@@ -152,6 +197,9 @@ class OpenCodeAdapter(HarnessAdapter):
 
     def parse(self, argv: list[str], env: Mapping[str, str], home: Path) -> ParsedRequest:
         self.require_args(argv, 2, self.usage())
+        for argument in argv[2:]:
+            if argument.split("=", 1)[0] == "--format":
+                raise UsageError("opencode-shim: --format is managed by the shim")
         model, has_model = self.parse_model_flag(argv[2:], argv[0])
         return ParsedRequest(
             source=argv[1], model=model, extra_args=argv[2:], has_model_override=has_model
@@ -220,7 +268,7 @@ class OpenCodeAdapter(HarnessAdapter):
             child_env.setdefault("OPENCODE_ENABLE_TELEMETRY", "1")
             child_env.setdefault("OPENCODE_OTLP_PROTOCOL", "http/protobuf")
             child_env.setdefault("OPENCODE_RESOURCE_ATTRIBUTES", "service.name=opencode")
-        args = ["run"]
+        args = ["run", "--format", "json"]
         if not request.has_model_override:
             args.extend(["-m", request.model])
         permission_flag = preflight_data.get("permissionFlag")

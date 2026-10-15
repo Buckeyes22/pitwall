@@ -38,6 +38,12 @@ class FakeJsonCodex(CodexAdapter):
         return ParsedOutput(b"", None, "unparseable")
 
 
+class FakeTextCodex(CodexAdapter):
+    """Codex runs in JSON mode now; this stands in for a harness that reports no usage."""
+
+    output_mode = "text"
+
+
 class FakeUsageFileCodex(CodexAdapter):
     output_mode = "usage-file"
 
@@ -74,11 +80,10 @@ def sandbox() -> Iterator[ShimSandbox]:
     # ShimSandbox.run starts a fresh interpreter: register the test adapter there.
     bootstrap = (
         "import os, sys; from unittest.mock import patch; "
-        "from tests.agents.test_dispatch_usage import FakeJsonCodex, FakeUsageFileCodex; "
-        "from pitwall.agents.harnesses.codex import CodexAdapter; "
-        "from pitwall.agents.cli import main; "
+        "from tests.agents.test_dispatch_usage import FakeJsonCodex, FakeTextCodex, FakeUsageFileCodex; "
+                "from pitwall.agents.cli import main; "
         "adapter = {'json': FakeJsonCodex, 'usage-file': FakeUsageFileCodex, "
-        "'text': CodexAdapter}[os.environ.get('FAKE_OUTPUT_MODE', 'json')]; "
+        "'text': FakeTextCodex}[os.environ.get('FAKE_OUTPUT_MODE', 'json')]; "
         "sys.argv.remove('agents'); "
         "patcher = patch.dict('pitwall.agents.harnesses._ADAPTERS', {'codex': adapter}); "
         "patcher.start(); raise SystemExit(main())"

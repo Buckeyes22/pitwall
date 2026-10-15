@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
 from pitwall.agents.errors import ProfileSyncError, UsageError
+from pitwall.agents.token_usage import ParsedOutput, TokenUsage, as_int, json_lines
 from pitwall.providers.model_studio import catalog as model_studio
 
 from .base import HarnessAdapter, ParsedRequest, PreparedCommand
@@ -17,6 +19,7 @@ _RESERVED_FLAGS = ("-p", "--print", "--mode", "--export")
 
 class PiAdapter(HarnessAdapter):
     harness_id = "pi"
+    output_mode = "json"
     effort_values: tuple[str, ...] | None = (
         "off",
         "minimal",
@@ -32,6 +35,55 @@ class PiAdapter(HarnessAdapter):
     private_prompt_file = True
     binary_override_env = "PI_BIN"
     endpoint_delivery = "config-sync"
+
+    def parse_output(self, raw: bytes) -> ParsedOutput:
+        usage: TokenUsage | None = None
+        text = ""
+        complete = False
+        for event in json_lines(raw):
+            kind = event.get("type")
+            if kind == "agent_start":
+                complete = False
+            elif kind == "agent_end":
+                complete = True
+            message = event.get("message")
+            if not isinstance(message, dict):
+                message = {}
+            if kind == "message_end" and message.get("role") == "assistant":
+                content = message.get("content")
+                if isinstance(content, list):
+                    text = "".join(
+                        part["text"]
+                        for part in content
+                        if isinstance(part, dict)
+                        and part.get("type") == "text"
+                        and isinstance(part.get("text"), str)
+                    )
+            elif kind == "turn_end":
+                # Captured Pi output nests usage in message; some versions emit it on the event.
+                data = event.get("usage", message.get("usage"))
+                if not isinstance(data, dict):
+                    continue
+                inp, out = as_int(data.get("input")), as_int(data.get("output"))
+                if inp is None or out is None:
+                    continue
+                cost_data = data.get("cost")
+                cost = cost_data.get("total") if isinstance(cost_data, dict) else None
+                turn = TokenUsage(
+                    inp,
+                    out,
+                    cache_read_tokens=as_int(data.get("cacheRead")),
+                    cache_write_tokens=as_int(data.get("cacheWrite")),
+                    reasoning_tokens=as_int(data.get("reasoning")),
+                    total_tokens=as_int(data.get("totalTokens")),
+                    cost_usd=cost
+                    if isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0
+                    else None,
+                )
+                usage = usage + turn if usage is not None else turn
+        if usage is not None:
+            usage = replace(usage, complete=complete)
+        return ParsedOutput((text + "\n").encode() if text else b"", usage)
 
     def workflow_args(self, model: str, effort: str | None, prompt_path: Path) -> list[str]:
         args = [str(prompt_path), "--model", model]
@@ -89,6 +141,8 @@ class PiAdapter(HarnessAdapter):
         args = [
             "-p",
             "--no-session",
+            "--mode",
+            "json",
             "--approve" if self.unrestricted(env) else "--no-approve",
             *request.extra_args,
             f"@{preflight_data['promptFile']}",

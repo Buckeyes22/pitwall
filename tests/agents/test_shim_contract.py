@@ -285,7 +285,7 @@ class ShimContractTests(unittest.TestCase):
         self.assertTrue(result.stdout.startswith(b"Antigravity fixture prompt\n"))
         args = sandbox.captured_args()
         self.assertEqual(["-p", "Antigravity fixture prompt"], args[-2:])
-        self.assertEqual("text", args[args.index("--output-format") + 1])
+        self.assertEqual("json", args[args.index("--output-format") + 1])
         self.assertIn("--add-dir", args)
         self.assertIn("--print-timeout", args)
         self.assertIn("--model", args)
@@ -967,7 +967,8 @@ class RouteShimContractTests(unittest.TestCase):
         result = sandbox.run_route(["glimmer@opencode", str(prompt)], env=env)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(
-            ["run", "-m", "glimmer/meta-models/Muse-Glimmer-30B"], sandbox.captured_args()[:3]
+            ["run", "--format", "json", "-m", "glimmer/meta-models/Muse-Glimmer-30B"],
+            sandbox.captured_args()[:5],
         )
         self.assertEqual("glimmer@opencode", sandbox.ledger_records()[-1]["route"])
 

@@ -8,6 +8,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from pitwall.agents.errors import UsageError
+from pitwall.agents.token_usage import ParsedOutput, TokenUsage, as_int, json_document
 
 from .base import HarnessAdapter, ParsedRequest, PreparedCommand, parse_duration_seconds
 
@@ -34,6 +35,7 @@ _SOFT_DENIAL_MARKER = b"jetski: no output produced"
 
 class AgyAdapter(HarnessAdapter):
     harness_id = "agy"
+    output_mode = "json"
     effort_values: tuple[str, ...] | None = (
         "low",
         "medium",
@@ -43,6 +45,34 @@ class AgyAdapter(HarnessAdapter):
     prompt_delivery = "argv"
     binary_override_env = "AGY_BIN"
     endpoint_delivery = "none"
+
+    def parse_output(self, raw: bytes) -> ParsedOutput:
+        document = json_document(raw)
+        if not isinstance(document, dict):
+            return ParsedOutput(b"", None)
+        diagnostic = None
+        text = document.get("response")
+        answer = (text + "\n").encode() if isinstance(text, str) and text else b""
+        if document.get("status") == "ERROR":
+            answer = b""
+            diagnostic = f"agy reported ERROR: {document.get('error')}"
+        data = document.get("usage")
+        if not isinstance(data, dict):
+            return ParsedOutput(answer, None, diagnostic)
+        inp, out = as_int(data.get("input_tokens")), as_int(data.get("output_tokens"))
+        if inp is None or out is None:
+            return ParsedOutput(answer, None, diagnostic)
+        return ParsedOutput(
+            answer,
+            TokenUsage(
+                inp,
+                out,
+                cache_read_tokens=as_int(data.get("cache_read_tokens")),
+                reasoning_tokens=as_int(data.get("thinking_tokens")),
+                total_tokens=as_int(data.get("total_tokens")),
+            ),
+            diagnostic,
+        )
 
     def workflow_args(self, model: str, effort: str | None, prompt_path: Path) -> list[str]:
         args = [str(prompt_path), "--model", model]
@@ -141,7 +171,7 @@ class AgyAdapter(HarnessAdapter):
                 "--print-timeout",
                 f"{print_timeout}s",
                 "--output-format",
-                "text",
+                "json",
                 "-p",
                 self.argv_prompt_text(prompt),
             ]

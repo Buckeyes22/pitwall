@@ -147,7 +147,7 @@ ARGV = {
         "--print-timeout",
         "1200s",
         "--output-format",
-        "text",
+        "json",
         "-p",
         TEXT,
     ],
@@ -158,11 +158,12 @@ ARGV = {
         "-m",
         "journey-model",
         "--output-format",
-        "text",
+        "json",
     ],
     "cline": ["-m", "journey-model", "--auto-approve", "true", TEXT],
     "codex": [
         "exec",
+        "--json",
         "--skip-git-repo-check",
         "--dangerously-bypass-approvals-and-sandbox",
         "-m",
@@ -187,16 +188,25 @@ ARGV = {
         "-m",
         "journey-model",
         "--output-format",
-        "plain",
+        "json",
         "--prompt-file",
         "{delivery}",
     ],
-    "hermes": ["-m", "journey-model", "--yolo", "-z", TEXT],
+    "hermes": ["-m", "journey-model", "--yolo", "--usage-file", "{usage}", "-z", TEXT],
     "kimi": ["-m", "journey-model", "--output-format", "text", "--prompt", TEXT],
     "muse": ["exec", "--yolo", "-m", "journey-model", "--prompt-file", "{prompt}"],
-    "opencode": ["run", "-m", "test-harness/journey-model"],
-    "pi": ["-p", "--no-session", "--approve", "-m", "journey-model", "@{delivery}"],
-    "qwen": ["-m", "journey-model", "--yolo", "--output-format", "text", "--prompt", TEXT],
+    "opencode": ["run", "--format", "json", "-m", "test-harness/journey-model"],
+    "pi": [
+        "-p",
+        "--no-session",
+        "--mode",
+        "json",
+        "--approve",
+        "-m",
+        "journey-model",
+        "@{delivery}",
+    ],
+    "qwen": ["-m", "journey-model", "--yolo", "--output-format", "json", "--prompt", TEXT],
     "zcode": [
         "--cwd",
         "{cwd}",
@@ -258,7 +268,9 @@ class J40ShimsJourney(unittest.TestCase):
                 self.assertEqual(0, result.returncode, result.stderr)
                 self.assertEqual("SHIM-DONE exit=0", result.stdout.decode().splitlines()[-1])
                 expected = [
-                    part.replace("{prompt}", str(prompt)).replace("{cwd}", os.getcwd())
+                    part.replace("{prompt}", str(prompt))
+                    .replace("{cwd}", os.getcwd())
+                    .replace("{usage}", str(sandbox.run_directories()[-1] / "harness-usage.json"))
                     for part in ARGV[shim]
                 ]
                 captured = sandbox.captured_args()
@@ -339,7 +351,7 @@ class J40ShimsJourney(unittest.TestCase):
                 )
                 self.assertIn("route-shim: jr -> qwen journey-model", result.stderr.decode())
                 self.assertEqual(
-                    ["-m", "journey-model", "--yolo", "--output-format", "text", "--prompt", TEXT],
+                    ["-m", "journey-model", "--yolo", "--output-format", "json", "--prompt", TEXT],
                     sandbox.captured_args(),
                 )
                 receipt = self._receipt(result.stdout)
@@ -393,7 +405,17 @@ class J41ChannelAndWorkflowsJourney(unittest.TestCase):
         captured = self.sandbox.captured_args()
         self.assertRegex(captured[-1], r"^@.*/runs/[^/]+/prompt\.deliver\.md$")
         self.assertEqual(
-            ["-p", "--no-session", "--approve", "--model", "journey-model", captured[-1]], captured
+            [
+                "-p",
+                "--no-session",
+                "--mode",
+                "json",
+                "--approve",
+                "--model",
+                "journey-model",
+                captured[-1],
+            ],
+            captured,
         )
         listed = json.loads(_launch(self.env, "workflow", "list", "--json").stdout)
         self.assertEqual(

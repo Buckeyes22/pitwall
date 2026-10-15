@@ -90,7 +90,8 @@ class DispatchContractTests(unittest.TestCase):
         self.assertIsNone(caller["parentDispatchId"])
         validate_result(document)
         self.assertIsNone(document["usage"])
-        self.assertEqual("codex reports no token usage", document["usageError"])
+        # Codex runs in JSON mode; the fake harness prints plain text, so no usage parses.
+        self.assertEqual("harness output carried no usage", document["usageError"])
         finished = [r for r in sandbox.ledger_records() if r["event"] == "finished"][-1]
         self.assertEqual("claude:sess-1", finished["session"])
         self.assertEqual(4, finished["schema_version"])

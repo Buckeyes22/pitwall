@@ -8,10 +8,11 @@ from pathlib import Path
 from typing import Any
 
 from pitwall.agents.errors import ProfileSyncError, UsageError
+from pitwall.agents.token_usage import TokenUsage, as_int
 
 from .base import HarnessAdapter, ParsedRequest, PreparedCommand
 
-_RESERVED_FLAGS = ("-z", "-q", "--query", "--query-file", "-Q", "--quiet")
+_RESERVED_FLAGS = ("-z", "-q", "--query", "--query-file", "-Q", "--quiet", "--usage-file")
 _DEFAULT_MODEL_RE = re.compile(
     r"^model:\s*$(?:\n(?:[ \t]+.*|\s*)$)*?\n[ \t]+default:\s*['\"]?([^'\"\n#]+)", re.M
 )
@@ -25,6 +26,7 @@ _PROVIDER = re.compile(r"^  ([A-Za-z0-9_.-]+):(?:\s*#.*)?\n$")
 
 class HermesAdapter(HarnessAdapter):
     harness_id = "hermes"
+    output_mode = "usage-file"
     effort_values: tuple[str, ...] | None = None
     prompt_delivery = "argv"
     binary_override_env = "HERMES_BIN"
@@ -32,6 +34,27 @@ class HermesAdapter(HarnessAdapter):
     # OPENAI_API_KEY in the environment is not attached to a non-loopback
     # endpoint, so the endpoint has to be named in config.yaml.
     endpoint_delivery = "config-sync"
+
+    def parse_usage_file(self, data: Any) -> TokenUsage | None:
+        if not isinstance(data, dict):
+            return None
+        inp, out = as_int(data.get("input_tokens")), as_int(data.get("output_tokens"))
+        if inp is None or out is None:
+            return None
+        cost = data.get("estimated_cost_usd")
+        return TokenUsage(
+            inp,
+            out,
+            cache_read_tokens=as_int(data.get("cache_read_tokens")),
+            cache_write_tokens=as_int(data.get("cache_write_tokens")),
+            reasoning_tokens=as_int(data.get("reasoning_tokens")),
+            total_tokens=as_int(data.get("total_tokens")),
+            cost_usd=cost
+            if isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0
+            else None,
+            complete=not data.get("failed", False),
+            source="harness-report",
+        )
 
     def workflow_args(self, model: str, effort: str | None, prompt_path: Path) -> list[str]:
         del effort  # no effort control; workflow validation rejects one
@@ -57,7 +80,8 @@ class HermesAdapter(HarnessAdapter):
         self.require_args(argv, 1, self.usage())
         for argument in argv[1:]:
             if argument in _RESERVED_FLAGS or any(
-                argument.startswith(f"{flag}=") for flag in ("--query", "--query-file")
+                argument.startswith(f"{flag}=")
+                for flag in ("--query", "--query-file", "--usage-file")
             ):
                 raise UsageError(f"hermes-shim: {argument.split('=', 1)[0]} is managed by the shim")
         model, has_model = self.parse_model_flag(argv[1:], self._configured_model(env, home))
@@ -242,7 +266,9 @@ class HermesAdapter(HarnessAdapter):
         args = [*request.extra_args]
         if self.unrestricted(env):
             args.append("--yolo")
-        args.extend(["-z", self.argv_prompt_text(prompt)])
+        args.extend(
+            ["--usage-file", preflight_data["usageFile"], "-z", self.argv_prompt_text(prompt)]
+        )
         return PreparedCommand(
             [binary, *args], child_env, None, self.sanitize_args(args[:-1] + ["<prompt>"])
         )
