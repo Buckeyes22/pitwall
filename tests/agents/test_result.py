@@ -10,6 +10,7 @@ from pitwall.agents.result import (
     ResultError,
     validate_result,
 )
+from pitwall.agents.token_usage import TokenUsage
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -59,7 +60,7 @@ class ResultTests(unittest.TestCase):
                     "host": "claude",
                     "parentDispatchId": "00000000-0000-4000-8000-000000000002",
                 },
-                "usage": {"inputTokens": 3, "outputTokens": 1},
+                "usage": TokenUsage(3, 1).to_public_dict(),
             },
             {
                 "caller": {

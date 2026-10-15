@@ -95,7 +95,25 @@
         "parentDispatchId": { "type": ["string", "null"] }
       }
     },
-    "usage": { "type": ["object", "null"] },
+    "usage": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "inputTokens", "outputTokens", "cacheReadTokens", "cacheWriteTokens",
+        "reasoningTokens", "totalTokens", "costUsd", "complete", "source"
+      ],
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "cacheReadTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "cacheWriteTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "reasoningTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "totalTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "costUsd": { "type": ["number", "null"], "minimum": 0 },
+        "complete": { "type": "boolean" },
+        "source": { "type": "string" }
+      }
+    },
     "usageError": { "type": "string" },
     "route": {
       "type": "object",

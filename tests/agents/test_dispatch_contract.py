@@ -89,8 +89,8 @@ class DispatchContractTests(unittest.TestCase):
         self.assertEqual("claude", caller["host"])
         self.assertIsNone(caller["parentDispatchId"])
         validate_result(document)
-        self.assertNotIn("usage", document)
-        self.assertNotIn("usageError", document)
+        self.assertIsNone(document["usage"])
+        self.assertEqual("codex reports no token usage", document["usageError"])
         finished = [r for r in sandbox.ledger_records() if r["event"] == "finished"][-1]
         self.assertEqual("claude:sess-1", finished["session"])
         self.assertEqual(4, finished["schema_version"])
