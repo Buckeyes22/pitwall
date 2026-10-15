@@ -44,9 +44,21 @@ def validate_result(value: Any) -> None:
     if not isinstance(value, dict):
         raise ResultError("result must be an object")
     missing = REQUIRED_FIELDS - set(value)
-    extra = set(value) - REQUIRED_FIELDS - {"route"}
+    extra = set(value) - REQUIRED_FIELDS - {"route", "caller", "usage", "usageError"}
     if missing or extra:
         raise ResultError(f"result field mismatch: missing={sorted(missing)} extra={sorted(extra)}")
+    if "caller" in value:
+        caller = value["caller"]
+        if (
+            not isinstance(caller, dict)
+            or not {"session", "source"} <= set(caller)
+            or not set(caller) <= {"session", "source", "host", "parentDispatchId"}
+            or not all(isinstance(caller[field], str) for field in ("session", "source"))
+        ):
+            raise ResultError("invalid caller metadata")
+        for field in ("host", "parentDispatchId"):
+            if caller.get(field) is not None and not isinstance(caller[field], str):
+                raise ResultError(f"caller {field} must be a string or null")
     if value["schemaVersion"] != 1:
         raise ResultError("unsupported result schema version")
     try:

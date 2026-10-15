@@ -67,6 +67,80 @@ class DispatchContractTests(unittest.TestCase):
         self.sandboxes.append(value)
         return value
 
+    def test_result_and_ledger_carry_the_launching_session(self) -> None:
+        sandbox = self.sandbox()
+        harness = sandbox.install_harness("codex")
+        # Extend only this sandbox's copy of the fixture's env capture allowlist.
+        harness.write_text(
+            harness.read_text().replace(
+                '"MCP_TOOL_TIMEOUT",', '"MCP_TOOL_TIMEOUT", "PITWALL_AGENTS_SESSION",'
+            )
+        )
+        completed = sandbox.run(
+            "codex",
+            [str(sandbox.prompt())],
+            env=sandbox.environment(CLAUDE_CODE_SESSION_ID="sess-1"),
+        )
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        (run,) = sandbox.run_directories()
+        document = json.loads((run / "result.json").read_text())
+        caller = document["caller"]
+        self.assertEqual(("claude:sess-1", "host-env"), (caller["session"], caller["source"]))
+        self.assertEqual("claude", caller["host"])
+        self.assertIsNone(caller["parentDispatchId"])
+        validate_result(document)
+        self.assertNotIn("usage", document)
+        self.assertNotIn("usageError", document)
+        finished = [r for r in sandbox.ledger_records() if r["event"] == "finished"][-1]
+        self.assertEqual("claude:sess-1", finished["session"])
+        self.assertEqual(4, finished["schema_version"])
+        self.assertNotIn("parentDispatchId", finished)
+        child_env = json.loads(sandbox.env_file.read_text())
+        self.assertEqual("claude:sess-1", child_env["PITWALL_AGENTS_SESSION"])
+
+    def test_nested_dispatch_inherits_the_root_session(self) -> None:
+        sandbox = self.sandbox()
+        sandbox.install_harness("codex")
+        completed = sandbox.run(
+            "codex",
+            [str(sandbox.prompt())],
+            env=sandbox.environment(
+                CLAUDE_CODE_SESSION_ID="root",
+                FAKE_NESTED_DISPATCH=str(ROOT / "tests/agents/fixtures/agents_launcher.py"),
+                FAKE_NESTED_PYTHON=sys.executable,
+            ),
+        )
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        rows = [r for r in sandbox.ledger_records() if r["event"] == "finished"]
+        self.assertEqual(2, len(rows))
+        self.assertEqual({"claude:root"}, {r["session"] for r in rows})
+        outer = rows[-1]["dispatch_id"]
+        self.assertEqual([outer], [r["parentDispatchId"] for r in rows if "parentDispatchId" in r])
+        callers = {
+            run.name: json.loads((run / "result.json").read_text())["caller"]
+            for run in sandbox.run_directories()
+        }
+        self.assertEqual("host-env", callers[outer]["source"])
+        nested = callers[rows[0]["dispatch_id"]]
+        self.assertEqual(("claude:root", "inherited"), (nested["session"], nested["source"]))
+        self.assertEqual(outer, nested["parentDispatchId"])
+
+    def test_early_failure_records_the_launching_session(self) -> None:
+        sandbox = self.sandbox()
+        sandbox.install_harness("codex")
+        completed = sandbox.run(
+            "codex",
+            [str(sandbox.root / "missing-prompt.md")],
+            env=sandbox.environment(PITWALL_AGENTS_SESSION="claude:root"),
+        )
+        self.assertEqual(66, completed.returncode, completed.stderr)
+        (run,) = sandbox.run_directories()
+        document = json.loads((run / "result.json").read_text())
+        self.assertEqual("failed", document["status"])
+        self.assertEqual("claude:root", document["caller"]["session"])
+        self.assertEqual("inherited", document["caller"]["source"])
+        validate_result(document)
+
     def test_ledger_rows_carry_route_and_schema_version_4(self) -> None:
         sandbox = self.sandbox()
         env = sandbox.environment()

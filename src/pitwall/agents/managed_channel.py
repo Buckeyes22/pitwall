@@ -530,8 +530,11 @@ def start_dispatch(env: Mapping[str, str], request: LaunchRequest) -> dict[str, 
         command.append("--routing-retain-prompt")
     command.extend(request.extra_args)
 
+    from .caller import SESSION_ENV, resolve_caller
+
     child_env = dict(env)
     child_env["PITWALL_AGENTS_DISPATCH_ID"] = dispatch_id
+    child_env.setdefault(SESSION_ENV, resolve_caller(env, start_pid=os.getpid()).session)
     child_env[MANAGED_LAUNCH_ENV] = "1"
     child_env["PITWALL_AGENTS_TIMEOUT_SECS"] = str(timeout_seconds)
     if request.ask_support:
