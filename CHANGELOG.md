@@ -53,6 +53,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `pitwall agents runs discard` again removes an isolated worktree whose branch and Git metadata
+  are already gone. Git 2.56 reports such a worktree as "gitfile does not point to a valid
+  repository" instead of "not a git repository", and the discard refused the cleanup.
+
 - Harness children now see `PWD` set to their working directory. OpenCode builds its session from
   `$PWD`, so isolated dispatches started from another checkout wrote into that checkout instead of
   their worktree.

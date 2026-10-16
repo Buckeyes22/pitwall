@@ -185,6 +185,11 @@ def resolve_workspace(request: WorkspaceRequest | Mapping[str, Any]) -> str:
     return "shared" if task_mode == "read" else "isolated"
 
 
+# Git reports a worktree whose gitfile points at deleted metadata as "not a git repository"
+# before 2.56 and as "gitfile does not point to a valid repository" from 2.56.
+_BROKEN_GITFILE_MESSAGES = ("not a git repository", "gitfile does not point to a valid repository")
+
+
 def _run_git(
     argv: list[str],
     *,
@@ -1108,7 +1113,7 @@ def _discard_branchless_worktree(
     owned = worktree_path(env, dispatch_id)
     if (
         probe.returncode == 0
-        or "not a git repository" not in stderr
+        or not any(message in stderr for message in _BROKEN_GITFILE_MESSAGES)
         or wt_path.is_symlink()
         or wt_path.resolve() != owned.resolve()
         or wt_path.resolve().parent != worktree_root(env).resolve()
