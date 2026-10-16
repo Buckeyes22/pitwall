@@ -49,6 +49,33 @@ class RegistrationTests(unittest.TestCase):
         apply_plan(plan)
         return plan
 
+    def test_mcode_registers_in_minimax_mcp_json_and_keeps_other_servers(self) -> None:
+        config = self.home / ".minimax" / "mcp.json"
+        config.parent.mkdir(parents=True)
+        original = {"mcpServers": {"docs": {"command": "docs"}}}
+        config.write_text(json.dumps(original), encoding="utf-8")
+        plan = self._apply("mcode")
+        self.assertEqual(config, plan.path)
+        data = json.loads(config.read_text(encoding="utf-8"))
+        self.assertEqual(
+            {"command": CMD, "args": ARGS, "enabled": True, "timeout": 3660000},
+            data["mcpServers"]["pitwall-channel"],
+        )
+        self.assertEqual({"command": "docs"}, data["mcpServers"]["docs"])
+        self.assertTrue(mcp_channel_registered("mcode", self.env, self.home))
+        self.assertFalse(plan_registration("mcode", self.env, self.home, command=CMD).changed)
+        self._apply("mcode", remove=True)
+        self.assertEqual(original, json.loads(config.read_text(encoding="utf-8")))
+
+    def test_mcode_fresh_registration_is_private_and_refuses_a_foreign_entry(self) -> None:
+        plan = self._apply("mcode")
+        self.assertEqual(0o600, plan.path.stat().st_mode & 0o777)
+        plan.path.write_text(
+            '{"mcpServers": {"pitwall-channel": {"command": "someone-else"}}}', encoding="utf-8"
+        )
+        with self.assertRaises(RegistrationError):
+            plan_registration("mcode", self.env, self.home, command=CMD)
+
     def test_codex_block_is_valid_toml_idempotent_and_removable(self) -> None:
         config = self.home / ".codex" / "config.toml"
         config.parent.mkdir()
