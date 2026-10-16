@@ -25,6 +25,7 @@ HARNESS_ARGS = {
     "grok": lambda prompt: [str(prompt)],
     "hermes": lambda prompt: [str(prompt)],
     "kimi": lambda prompt: [str(prompt)],
+    "mcode": lambda prompt: [str(prompt)],
     "muse": lambda prompt: [str(prompt)],
     "pi": lambda prompt: [str(prompt)],
     "qwen": lambda prompt: [str(prompt)],
@@ -144,6 +145,7 @@ class ShimContractTests(unittest.TestCase):
             "grok": [],
             "hermes": [],
             "kimi": [],
+            "mcode": [],
             "muse": [],
             "pi": [],
             "qwen": [],
@@ -181,6 +183,7 @@ class ShimContractTests(unittest.TestCase):
             "grok": ["finished"],
             "hermes": ["finished"],
             "kimi": ["finished"],
+            "mcode": ["finished"],
             "muse": ["finished"],
             "pi": ["finished"],
             "qwen": ["finished"],
@@ -242,7 +245,7 @@ class ShimContractTests(unittest.TestCase):
                 )
                 self.assertEqual(0, result.returncode)
                 args = sandbox.captured_args()
-                if shim in {"claude", "codex", "goose", "opencode"}:
+                if shim in {"claude", "codex", "goose", "opencode", "mcode"}:
                     self.assertEqual(prompt_text.encode(), sandbox.captured_stdin())
                     self.assertNotIn(prompt_text.rstrip("\n"), args)
                 elif shim in {"kimi", "qwen", "zcode"}:
@@ -362,7 +365,7 @@ class ShimContractTests(unittest.TestCase):
                 )
                 self.assertEqual(0, result.returncode)
                 captured_args = sandbox.captured_args()
-                if shim in {"claude", "codex", "goose", "opencode"}:
+                if shim in {"claude", "codex", "goose", "opencode", "mcode"}:
                     self.assertEqual(prompt, sandbox.captured_stdin())
                 elif shim in {"kimi", "qwen", "zcode"}:
                     self.assertEqual(
@@ -475,6 +478,7 @@ class ShimContractTests(unittest.TestCase):
             "goose": None,
             "grok": None,
             "kimi": None,
+            "mcode": ("--permission", "smart"),
             "muse": None,
             "pi": None,
             "qwen": None,
@@ -490,6 +494,7 @@ class ShimContractTests(unittest.TestCase):
             "goose": "GOOSE_MODE",
             "grok": "--always-approve",
             "kimi": "--yolo",
+            "mcode": "full",
             "muse": "--yolo",
             "pi": "--approve",
             "qwen": "--yolo",

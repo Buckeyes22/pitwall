@@ -20,6 +20,7 @@ HARNESS_ARGS = {
     "grok": lambda prompt: [str(prompt)],
     "hermes": lambda prompt: [str(prompt)],
     "kimi": lambda prompt: [str(prompt)],
+    "mcode": lambda prompt: [str(prompt)],
     "muse": lambda prompt: [str(prompt)],
     "pi": lambda prompt: [str(prompt)],
     "qwen": lambda prompt: [str(prompt)],

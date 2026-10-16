@@ -29,6 +29,7 @@ ALL_HARNESSES = (
     "grok",
     "hermes",
     "kimi",
+    "mcode",
     "muse",
     "opencode",
     "pi",
@@ -59,6 +60,11 @@ EXPECTED: dict[str, tuple[str, str | None, list[str]]] = {
     "goose": ("goose-x", None, [str(PROMPT), "--model", "goose-x"]),
     "grok": ("grok-4.7", "low", [str(PROMPT), "--model", "grok-4.7", "--effort", "low"]),
     "hermes": ("hermes-x", None, [str(PROMPT), "--model", "hermes-x"]),
+    "mcode": (
+        "minimax/MiniMax-M3.1-Flash-Preview",
+        "high",
+        [str(PROMPT), "--model", "minimax/MiniMax-M3.1-Flash-Preview", "--effort", "high"],
+    ),
     "kimi": ("kimi-code/k3", None, [str(PROMPT), "--model", "kimi-code/k3"]),
     "muse": (
         "muse-spark-1.3",

@@ -7,7 +7,11 @@
 | Model | Harness | Host | Model id on the route | Context | Effort | Web search | Batch |
 |---|---|---|---|---|---|---|---|
 | `minimax-m3` | opencode | direct | `minimax-coding-plan/MiniMax-M3` | 1,048,576 tokens |  |  |  |
+| `minimax-m3` | mcode | direct | `minimax/MiniMax-M3` | 1,048,576 tokens |  |  |  |
+| `minimax-m2.7` | mcode | direct | `minimax/MiniMax-M2.7` | 204,800 tokens |  |  |  |
+| `minimax-m2.7` | mcode | direct | `minimax/MiniMax-M2.7-highspeed` | 204,800 tokens |  |  |  |
 | `minimax-m3.1-flash-preview` | opencode | direct | `minimax-coding-plan/MiniMax-M3.1-Flash-Preview` | 1,000,000 tokens | low, medium, high, xhigh, max (default max), cannot be disabled |  |  |
+| `minimax-m3.1-flash-preview` | mcode | direct | `minimax/MiniMax-M3.1-Flash-Preview` | 1,000,000 tokens | low, medium, high, xhigh, max (default max), cannot be disabled |  |  |
 
 ## Statements
 

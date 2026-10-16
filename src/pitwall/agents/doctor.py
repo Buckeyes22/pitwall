@@ -93,6 +93,7 @@ HARNESS_HELP: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "grok": (("--no-auto-update", "--help"), ("--output-format", "--prompt-file")),
     "hermes": (("--help",), ("-z", "--yolo")),
     "kimi": (("--help",), ("--prompt", "--output-format", "doctor", "provider")),
+    "mcode": (("exec", "--help"), ("--input", "--cwd", "--permission", "--output-format")),
     "muse": (("exec", "--help"), ("--prompt-file", "--yolo")),
     "opencode": (("run", "--help"), ("--format",)),
     "pi": (("--help",), ("--no-session", "--list-models")),

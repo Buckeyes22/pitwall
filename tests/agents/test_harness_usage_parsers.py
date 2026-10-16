@@ -16,6 +16,7 @@ def parsed(harness: str, name: str):
     "harness,name,answer,inp,out,cache_r,cache_w,reason,total,cost",
     [
         ("claude", "claude.json", b"ok\n", 2, 4, 0, 42123, None, 42129, 0.008426800000000002),
+        ("mcode", "mcode.json", b"ok\n", 16270, 3, 190, None, None, 16273, None),
         ("codex", "codex.jsonl", b"ok\n", 6202, 5, 12288, 0, 0, 18495, None),
         ("opencode", "opencode.jsonl", b"ok\n", 54215, 3, 1943, 0, 0, 56161, 0),
         ("grok", "grok.json", b"ok\n", 29530, 34, 1152, 0, 33, 30716, 0.05984),
@@ -67,7 +68,9 @@ def test_hermes_usage_file() -> None:
     ) == (1200, 34, 800, 0, 12, 1234, 0.0123, "harness-report")
 
 
-@pytest.mark.parametrize("harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy"])
+@pytest.mark.parametrize(
+    "harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy", "mcode"]
+)
 def test_garbage_is_not_usage(harness: str) -> None:
     result = get_adapter(harness).parse_output(b"Traceback (most recent call last):\n  boom\n")
     assert result.usage is None and result.answer == b""
@@ -89,7 +92,9 @@ def test_opencode_sums_every_step() -> None:
     assert get_adapter("opencode").parse_output(raw).usage.total_tokens == 2 * 56161
 
 
-@pytest.mark.parametrize("harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy"])
+@pytest.mark.parametrize(
+    "harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy", "mcode"]
+)
 def test_json_output_mode(harness: str) -> None:
     assert get_adapter(harness).output_mode == "json"
 
@@ -109,7 +114,9 @@ def test_array_parsers_use_last_result(harness: str, name: str) -> None:
     assert get_adapter(harness).parse_output(b'[{"type":"system"}]').usage is None
 
 
-@pytest.mark.parametrize("harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy"])
+@pytest.mark.parametrize(
+    "harness", ["claude", "codex", "opencode", "grok", "pi", "qwen", "agy", "mcode"]
+)
 @pytest.mark.parametrize(
     "raw",
     [
@@ -169,6 +176,7 @@ def test_hermes_failed_report_is_incomplete() -> None:
         ("qwen", "--output-format"),
         ("agy", "--output-format"),
         ("hermes", "--usage-file"),
+        ("mcode", "--output-format"),
     ],
 )
 @pytest.mark.parametrize("suffix", ["", "=text"])
@@ -227,6 +235,7 @@ def test_pi_supports_usage_directly_on_turn_end() -> None:
         ("pi", "pi.jsonl", b"ok\n"),
         ("qwen", "qwen.json", b"[API Error: 405 status code (no body)]\n"),
         ("agy", "agy-error.json", b""),
+        ("mcode", "mcode.json", b"ok\n"),
     ],
 )
 def test_dispatch_renders_captured_json_as_plain_answer(
@@ -253,3 +262,20 @@ def test_dispatch_renders_captured_json_as_plain_answer(
         assert sandbox.ledger_records()[-1]["usage"] == result["usage"]
     finally:
         sandbox.cleanup()
+
+
+def test_mcode_failed_result_retains_incomplete_usage() -> None:
+    document = json.loads((FIX / "mcode.json").read_bytes())
+    document["status"] = "failed"
+    result = get_adapter("mcode").parse_output(json.dumps(document).encode())
+    assert result.answer == b"ok\n"
+    assert result.usage is not None and not result.usage.complete
+    assert result.usage.total_tokens == 16273
+
+
+@pytest.mark.parametrize("data", [None, {}, {"inputTokens": True, "outputTokens": -1}])
+def test_mcode_missing_or_invalid_usage_stays_unknown(data: object) -> None:
+    document = json.loads((FIX / "mcode.json").read_bytes())
+    document["usage"] = data
+    result = get_adapter("mcode").parse_output(json.dumps(document).encode())
+    assert result.answer == b"ok\n" and result.usage is None

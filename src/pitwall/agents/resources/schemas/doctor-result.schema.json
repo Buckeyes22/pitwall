@@ -18,7 +18,7 @@
         "liveAuth": { "type": "boolean" },
         "discoverModels": { "type": "boolean" },
         "probeRoutes": { "type": "boolean" },
-        "providerFilter": { "enum": ["agy", "claude", "cline", "codex", "dsh", "goose", "grok", "hermes", "kimi", "muse", "opencode", "pi", "qwen", "zcode", null] },
+        "providerFilter": { "enum": ["agy", "claude", "cline", "codex", "dsh", "goose", "grok", "hermes", "kimi", "mcode", "muse", "opencode", "pi", "qwen", "zcode", null] },
         "sourceMode": { "type": "boolean" }
       }
     },
@@ -46,7 +46,7 @@
           "status": { "enum": ["PASS", "WARN", "FAIL", "SKIP"] },
           "summary": { "type": "string", "minLength": 1 },
           "remediation": { "type": "string", "minLength": 1 },
-          "provider": { "enum": ["agy", "claude", "cline", "codex", "dsh", "goose", "grok", "hermes", "kimi", "muse", "opencode", "pi", "qwen", "zcode"] },
+          "provider": { "enum": ["agy", "claude", "cline", "codex", "dsh", "goose", "grok", "hermes", "kimi", "mcode", "muse", "opencode", "pi", "qwen", "zcode"] },
           "details": { "type": "object" }
         }
       }

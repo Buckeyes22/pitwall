@@ -29,6 +29,7 @@ HARNESSES = (
     "grok",
     "hermes",
     "kimi",
+    "mcode",
     "muse",
     "opencode",
     "pi",
@@ -88,7 +89,7 @@ class InstallTests(unittest.TestCase):
         self.sandbox.install(harnesses=(), plugin_hosts=())
         scripts = self.sandbox.home / ".claude" / "scripts"
         expected = {f"{name}-shim.sh" for name in HARNESSES} | {"route-shim.sh"}
-        self.assertEqual(15, len(expected))
+        self.assertEqual(16, len(expected))
         self.assertEqual(expected, set(shim_names()))
         self.assertEqual(expected, {path.name for path in scripts.iterdir()})
         for name in expected:

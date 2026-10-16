@@ -31,6 +31,7 @@ class ProviderAdapterTests(unittest.TestCase):
                 "grok",
                 "hermes",
                 "kimi",
+                "mcode",
                 "muse",
                 "opencode",
                 "pi",
@@ -1210,6 +1211,7 @@ class ProviderAdapterTests(unittest.TestCase):
             "claude": ("CLAUDE_BIN", "/custom/claude"),
             "grok": ("GROK_BIN", "/custom/grok"),
             "kimi": ("KIMI_BIN", "/custom/kimi"),
+            "mcode": ("MCODE_BIN", "/custom/mcode"),
             "opencode": ("OPENCODE_BIN", "/custom/opencode"),
             "pi": ("PI_BIN", "/custom/pi"),
             "muse": ("MUSE_BIN", "/custom/muse"),
@@ -1242,6 +1244,7 @@ ALL_ADAPTERS = (
     "grok",
     "hermes",
     "kimi",
+    "mcode",
     "muse",
     "opencode",
     "pi",
@@ -1276,6 +1279,7 @@ UNRESTRICTED_MARKERS = {
     "goose": ("env", ("GOOSE_MODE", "auto")),
     "grok": ("argv", "--always-approve"),
     "hermes": ("argv", "--yolo"),
+    "mcode": ("argv-pair", ("--permission", "full")),
     "muse": ("argv", "--yolo"),
     "opencode": ("argv", "--dangerously-skip-permissions"),
     "pi": ("argv", "--approve"),
@@ -1363,10 +1367,12 @@ class ModelFlagTests(unittest.TestCase):
             for form in self.FORMS:
                 with self.subTest(provider=provider, form=form):
                     adapter = get_adapter(provider)
+                    model = "test-provider/picked-model" if provider == "mcode" else "picked-model"
+                    arguments = [argument.replace("picked-model", model) for argument in form]
                     request = adapter.parse(
-                        _provider_argv(provider, *form), UNRESTRICTED_ENV, Path("/tmp")
+                        _provider_argv(provider, *arguments), UNRESTRICTED_ENV, Path("/tmp")
                     )
-                    self.assertEqual("picked-model", request.model)
+                    self.assertEqual(model, request.model)
                     self.assertTrue(request.has_model_override)
 
     def test_shared_parser_last_flag_wins_and_reports_no_override_by_default(self) -> None:

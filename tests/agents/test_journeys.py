@@ -193,6 +193,19 @@ ARGV = {
         "{delivery}",
     ],
     "hermes": ["-m", "journey-model", "--yolo", "--usage-file", "{usage}", "-z", TEXT],
+    "mcode": [
+        "exec",
+        "--input",
+        "-",
+        "--cwd",
+        "{cwd}",
+        "--permission",
+        "full",
+        "--output-format",
+        "json",
+        "--model",
+        "test-harness/journey-model",
+    ],
     "kimi": ["-m", "journey-model", "--output-format", "text", "--prompt", TEXT],
     "muse": ["exec", "--yolo", "-m", "journey-model", "--prompt-file", "{prompt}"],
     "opencode": ["run", "--format", "json", "-m", "test-harness/journey-model"],
@@ -219,7 +232,7 @@ ARGV = {
         TEXT,
     ],
 }
-STDIN_PROMPT = {"claude", "codex", "goose", "opencode"}
+STDIN_PROMPT = {"claude", "codex", "goose", "opencode", "mcode"}
 # The effort flag passes through to every harness that takes one, in place of any default.
 EFFORT_TAIL = {
     "agy": ["--effort", "high", "--print-timeout"],
@@ -228,6 +241,8 @@ EFFORT_TAIL = {
 
 
 def _shim_args(shim: str, prompt: Path, *extra: str) -> list[str]:
+    if shim == "mcode":
+        return [str(prompt), "--model", "test-harness/journey-model", *extra]
     if shim == "zcode":
         return [str(prompt), *extra]
     if shim == "opencode":
