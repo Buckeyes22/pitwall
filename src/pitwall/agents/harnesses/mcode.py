@@ -57,7 +57,6 @@ def _without_model_flags(arguments: list[str]) -> list[str]:
 
 class MCodeAdapter(HarnessAdapter):
     harness_id = "mcode"
-    DEFAULT_MODEL = DEFAULT_MODEL
     output_mode = "json"
     effort_values: tuple[str, ...] | None = ("low", "medium", "high", "xhigh", "max")
     model_bound = True
