@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import threading
 import time
 import unittest
@@ -31,8 +32,9 @@ ROOT = Path(__file__).resolve().parents[2]
 DISPATCH_ID = "00000000-0000-4000-8000-0000000000e2"
 
 # A fake MCP-capable codex that polls read_steering and obeys the first scope or stop directive.
-_STEERED_HARNESS = """\
-#!/usr/bin/env python3
+_STEERED_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 import json, os, subprocess, sys, time
 sys.stdin.read()
 server = subprocess.Popen([{launcher!r}, "mcp", "serve", "channel"], stdin=subprocess.PIPE,
@@ -64,6 +66,7 @@ while time.monotonic() < deadline:
     time.sleep(0.2)
 sys.exit(1)
 """
+)
 
 
 class SteerIntegrationTests(unittest.TestCase):

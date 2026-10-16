@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -31,8 +32,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 DISPATCH_ID = "00000000-0000-4000-8000-0000000000c2"
 
-_ASKING_HARNESS = """\
-#!/usr/bin/env python3
+_ASKING_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 import os, sys
 sys.path.insert(0, {runtime!r})
 from pathlib import Path
@@ -47,6 +49,7 @@ for index in range(int(os.environ.get("FAKE_ASKS", "1"))):
                   default="a", deadline_s=3600)
 sys.exit(75)
 """
+)
 
 
 class ChannelConfigTests(unittest.TestCase):

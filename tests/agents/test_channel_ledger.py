@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -20,8 +21,9 @@ ROOT = Path(__file__).resolve().parents[2]
 DISPATCH_ID = "00000000-0000-4000-8000-0000000000c4"
 
 # Simulates a tier-1 session: the ask is answered mid-run and a steer is acked.
-_TIER1_HARNESS = """\
-#!/usr/bin/env python3
+_TIER1_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 import os, sys
 sys.path.insert(0, {runtime!r})
 from pitwall.agents.mailbox import Mailbox
@@ -38,6 +40,7 @@ if os.environ.get("FAKE_MODE") == "unacked":
     box.write_steer(kind="scope", message="narrow")
 print("done", flush=True)
 """
+)
 
 
 class LedgerFieldTests(unittest.TestCase):

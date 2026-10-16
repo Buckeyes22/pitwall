@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import unittest
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -31,8 +32,9 @@ def _age_ask(run_dir: Path, ask_id: str, *, seconds: int) -> None:
     path.write_text(json.dumps(doc), encoding="utf-8")
 
 
-_FAKE_HARNESS = """\
-#!/usr/bin/env python3
+_FAKE_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 \"\"\"Fake harness for resume tests: asks once, then completes.\"\"\"
 import json
 import os
@@ -79,6 +81,7 @@ if capture:
 print("attempt-2 marker", flush=True)
 sys.exit(0)
 """
+)
 
 
 class RunsResumeTests(unittest.TestCase):

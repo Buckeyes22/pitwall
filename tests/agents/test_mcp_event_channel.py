@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 import time
 import unittest
 import uuid
@@ -30,8 +31,9 @@ ROOT = Path(__file__).resolve().parents[2]
 EVENT_WAIT_SECS = HANG_GUARD_SECS / 2
 
 
-_ASKING_HARNESS = """\
-#!/usr/bin/env python3
+_ASKING_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 import json, os, subprocess, sys, time
 sys.stdin.buffer.read()
 time.sleep(float(os.environ.get("FAKE_ASK_DELAY", "0")))
@@ -65,10 +67,12 @@ while release and not os.path.exists(release) and time.monotonic() < release_dea
 server.stdin.close()
 server.wait()
 """.replace("__HANG_GUARD__", repr(HANG_GUARD_SECS))
+)
 
 
-_STEERING_HARNESS = """\
-#!/usr/bin/env python3
+_STEERING_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 import json, os, subprocess, sys, time
 sys.stdin.buffer.read()
 server = subprocess.Popen(["__LAUNCHER__", "mcp", "serve", "channel"], stdin=subprocess.PIPE,
@@ -100,6 +104,7 @@ while time.monotonic() < deadline:
 server.stdin.close()
 server.wait()
 """
+)
 
 
 _ORDERED_HARNESS = _ASKING_HARNESS.replace(

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -33,8 +34,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 # A fake opencode: attempt 1 asks (routine or destructive, by prompt) and pauses; attempt 2 finishes.
-_ASKING_OPENCODE = """\
-#!/usr/bin/env python3
+_ASKING_OPENCODE = (
+    f"#!{sys.executable}\n"
+    + """\
 import os, sys
 from pathlib import Path
 sys.path.insert(0, {runtime!r})
@@ -49,11 +51,13 @@ if os.environ["PITWALL_AGENTS_CHANNEL_ATTEMPT"] == "1":
     sys.exit(75)
 print("resumed", flush=True)
 """
+)
 
 # A fake tier-1 opencode: it asks and then blocks until the ask is answered, as the MCP
 # ask_orchestrator tool does, so the attempt never pauses.
-_BLOCKING_OPENCODE = """\
-#!/usr/bin/env python3
+_BLOCKING_OPENCODE = (
+    f"#!{sys.executable}\n"
+    + """\
 import os, sys, time
 from pathlib import Path
 sys.path.insert(0, {runtime!r})
@@ -74,6 +78,7 @@ while time.monotonic() < deadline:
     time.sleep(0.05)
 sys.exit(1)
 """
+)
 
 _ENDPOINT_QWEN = {
     "displayName": "Qwen Code",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import unittest
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -17,8 +18,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 DISPATCH_ID = "00000000-0000-4000-8000-0000000000a1"
 
-_FAKE_HARNESS = """\
-#!/usr/bin/env python3
+_FAKE_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 \"\"\"Fake harness for pause tests: optionally asks, then exits 75.\"\"\"
 import os
 import signal
@@ -56,6 +58,7 @@ if mode in ("ask", "crash", "answered"):
         box.write_answer(ask["ask_id"], choice="a", answered_by="orchestrator")
 sys.exit(75)
 """
+)
 
 
 def _age_ask(run_dir: Path, ask_id: str, *, seconds: int) -> None:

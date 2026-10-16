@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import time
 import unittest
 from pathlib import Path
@@ -24,8 +25,9 @@ DISPATCH_ID = "00000000-0000-4000-8000-0000000000e1"
 
 # A fake codex that behaves like an MCP-capable harness: it starts the registered
 # server with its own environment and calls ask_orchestrator once.
-_MCP_HARNESS = """\
-#!/usr/bin/env python3
+_MCP_HARNESS = (
+    f"#!{sys.executable}\n"
+    + """\
 import json, os, subprocess, sys
 prompt = sys.stdin.read()
 server = subprocess.Popen([{launcher!r}, "mcp", "serve", "channel"], stdin=subprocess.PIPE,
@@ -50,6 +52,7 @@ print("ANSWER " + json.dumps(reply["result"]["structuredContent"], sort_keys=Tru
 server.stdin.close()
 server.wait()
 """
+)
 
 
 class Tier1IntegrationTests(unittest.TestCase):
