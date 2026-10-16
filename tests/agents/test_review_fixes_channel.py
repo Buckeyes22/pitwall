@@ -137,8 +137,9 @@ class MailboxSummaryRewriteTests(unittest.TestCase):
 class OverCapPauseTests(_PauseHelpers, unittest.TestCase):
     """R4 (dispatch): the cap is enforced before pending asks are counted."""
 
-    _OVERCAP_HARNESS = """\
-#!/usr/bin/env python3
+    _OVERCAP_HARNESS = (
+        f"#!{sys.executable}\n"
+        + """\
 import os, sys
 sys.path.insert(0, {runtime!r})
 from pitwall.agents.mailbox import Mailbox
@@ -152,6 +153,7 @@ box.write_answer("0001", choice="a", answered_by="operator")
 box.write_ask(blocked_on="choice", question="two", options=opts, default="a", deadline_s=600)
 sys.exit(75)
 """
+    )
 
     def test_exit_75_with_only_an_over_cap_ask_is_a_failure_not_an_empty_pause(
         self,

@@ -48,6 +48,7 @@ _JSON_SECTION = {
     "qwen": "mcpServers",
     "agy": "mcpServers",
     "muse": "mcpServers",
+    "mcode": "mcpServers",
 }
 
 
@@ -194,6 +195,16 @@ def render_entry(harness: str, command: str) -> Any:
             "args": list(CHANNEL_ARGS),
             "env_vars": list(FORWARDED_ENV),
             "startup_timeout_sec": 30,
+        }
+    if harness == "mcode":
+        # MiniMax Code starts stdio servers with its own environment (verified with an
+        # env-recording server), honours "enabled": false, and ignores "disabled".
+        # timeout is in milliseconds and bounds a blocking ask.
+        return {
+            "command": command,
+            "args": list(CHANNEL_ARGS),
+            "enabled": True,
+            "timeout": TOOL_TIMEOUT_S * 1000,
         }
     if harness == "hermes":
         # Hermes starts stdio servers with an allowlisted environment plus the entry's env,

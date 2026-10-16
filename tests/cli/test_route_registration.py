@@ -74,8 +74,8 @@ def _routing_executable(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tupl
     executable = tmp_path / "fake-routing"
     log = tmp_path / "routing-calls.jsonl"
     executable.write_text(
-        """#!/usr/bin/env python3
-import json
+        f"#!{sys.executable}\n"
+        + """import json
 import os
 import shutil
 import sys

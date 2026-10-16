@@ -10,7 +10,7 @@
 - Google guide: [What's new in Gemini 4 Argon](https://ai.google.dev/gemini-api/docs/latest-model)
 - Model id: `gemini-4-argon` (stable, released 2026-10-13)
 - Route: `~/.claude/scripts/agy-shim.sh <prompt-file> --model gemini-4-argon [--effort low|medium|high]`
-- Default route: the shim still defaults to `gemini-3.8-flash` at medium effort. Antigravity serves Argon only on Google AI Ultra and Enterprise plans (and not in the Antigravity IDE), so pin it explicitly and confirm with `agy models` that the account lists it.
+- Default route: the shim still defaults to `gemini-3.8-flash` at medium effort. Antigravity serves Argon only on paid Google AI Pro, Ultra, and Enterprise plans (not Free or Plus), so pin it explicitly and confirm with `agy models` that the account lists it.
 
 Gemini 3.7 Flash and Gemini 3.5 Flash were deprecated on 2026-10-08. Google routes API requests for them to Gemini 3.8 Flash and Gemini 3.6 Flash respectively. Use `gemini-3.8-flash` for Flash work.
 

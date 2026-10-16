@@ -331,6 +331,8 @@ class RunStore:
             "events.jsonl",
             "stdout.log",
             "stderr.log",
+            "harness-output.jsonl",
+            "harness-usage.json",
             "result.json",
             "workspace.json",
             "changeset.json",

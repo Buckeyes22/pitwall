@@ -198,7 +198,7 @@ def test_extension_surfaces(tmp_path: Path) -> None:
     script = tmp_path / "surfaces.test.mjs"
     script.write_text(NODE_SURFACES, encoding="utf-8")
     completed = subprocess.run(  # noqa: S603  # reason: fixed argv, node resolved from PATH, no shell
-        [node, "--test", "--test-timeout=120000", str(script)],
+        [node, "--test", "--test-reporter=tap", "--test-timeout=120000", str(script)],
         capture_output=True,
         text=True,
         check=False,

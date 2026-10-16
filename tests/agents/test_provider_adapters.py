@@ -31,6 +31,7 @@ class ProviderAdapterTests(unittest.TestCase):
                 "grok",
                 "hermes",
                 "kimi",
+                "mcode",
                 "muse",
                 "opencode",
                 "pi",
@@ -423,7 +424,10 @@ class ProviderAdapterTests(unittest.TestCase):
                     "/bin/hermes",
                     b"repair fixture",
                     env,
-                    {"workspacePath": "/owned/isolated/worktree"},
+                    {
+                        "workspacePath": "/owned/isolated/worktree",
+                        "usageFile": "/run/harness-usage.json",
+                    },
                 )
                 self.assertEqual("/owned/isolated/worktree", prepared.env.get("TERMINAL_CWD"))
                 self.assertEqual(inherited, env)
@@ -431,16 +435,28 @@ class ProviderAdapterTests(unittest.TestCase):
     def test_hermes_prepare_respects_restricted_policy(self) -> None:
         adapter = get_adapter("hermes")
         request = adapter.parse(["prompt.md"], {}, Path("/tmp"))
-        prepared = adapter.prepare(request, "/bin/hermes", b"hello\n", UNRESTRICTED_ENV, {})
-        self.assertEqual(["/bin/hermes", "--yolo", "-z", "hello"], prepared.argv)
+        prepared = adapter.prepare(
+            request,
+            "/bin/hermes",
+            b"hello\n",
+            UNRESTRICTED_ENV,
+            {"usageFile": "/run/harness-usage.json"},
+        )
+        self.assertEqual(
+            ["/bin/hermes", "--yolo", "--usage-file", "/run/harness-usage.json", "-z", "hello"],
+            prepared.argv,
+        )
         restricted = adapter.prepare(
             request,
             "/bin/hermes",
             b"hello\n",
             {"PITWALL_AGENTS_UNRESTRICTED": "0"},
-            {},
+            {"usageFile": "/run/harness-usage.json"},
         )
-        self.assertEqual(["/bin/hermes", "-z", "hello"], restricted.argv)
+        self.assertEqual(
+            ["/bin/hermes", "--usage-file", "/run/harness-usage.json", "-z", "hello"],
+            restricted.argv,
+        )
 
     def test_pi_prepare_and_reserved_flags(self) -> None:
         adapter = get_adapter("pi")
@@ -460,6 +476,8 @@ class ProviderAdapterTests(unittest.TestCase):
                     "/bin/pi",
                     "-p",
                     "--no-session",
+                    "--mode",
+                    "json",
                     "--approve",
                     "--thinking",
                     "high",
@@ -943,7 +961,7 @@ class ProviderAdapterTests(unittest.TestCase):
         self.assertEqual("settings-model", request.model)
         self.assertIsNone(prepared.stdin)
         self.assertEqual("prompt", prepared.argv[prepared.argv.index("--prompt") + 1])
-        self.assertEqual("text", prepared.argv[prepared.argv.index("--output-format") + 1])
+        self.assertEqual("json", prepared.argv[prepared.argv.index("--output-format") + 1])
         self.assertIn("--yolo", prepared.argv)
 
     def test_qwen_settings_string_model_form_is_accepted(self) -> None:
@@ -1051,7 +1069,7 @@ class ProviderAdapterTests(unittest.TestCase):
                 "--print-timeout",
                 "1200s",
                 "--output-format",
-                "text",
+                "json",
                 "-p",
                 "prompt",
             ],
@@ -1193,6 +1211,7 @@ class ProviderAdapterTests(unittest.TestCase):
             "claude": ("CLAUDE_BIN", "/custom/claude"),
             "grok": ("GROK_BIN", "/custom/grok"),
             "kimi": ("KIMI_BIN", "/custom/kimi"),
+            "mcode": ("MCODE_BIN", "/custom/mcode"),
             "opencode": ("OPENCODE_BIN", "/custom/opencode"),
             "pi": ("PI_BIN", "/custom/pi"),
             "muse": ("MUSE_BIN", "/custom/muse"),
@@ -1225,12 +1244,13 @@ ALL_ADAPTERS = (
     "grok",
     "hermes",
     "kimi",
+    "mcode",
     "muse",
     "opencode",
     "pi",
     "qwen",
 )
-PROMPT_FILE_DATA = {"promptFile": "/run/prompt.deliver.md"}
+PROMPT_FILE_DATA = {"promptFile": "/run/prompt.deliver.md", "usageFile": "/run/harness-usage.json"}
 
 
 def _provider_argv(provider: str, *extra: str) -> list[str]:
@@ -1259,6 +1279,7 @@ UNRESTRICTED_MARKERS = {
     "goose": ("env", ("GOOSE_MODE", "auto")),
     "grok": ("argv", "--always-approve"),
     "hermes": ("argv", "--yolo"),
+    "mcode": ("argv-pair", ("--permission", "full")),
     "muse": ("argv", "--yolo"),
     "opencode": ("argv", "--dangerously-skip-permissions"),
     "pi": ("argv", "--approve"),
@@ -1346,10 +1367,12 @@ class ModelFlagTests(unittest.TestCase):
             for form in self.FORMS:
                 with self.subTest(provider=provider, form=form):
                     adapter = get_adapter(provider)
+                    model = "test-provider/picked-model" if provider == "mcode" else "picked-model"
+                    arguments = [argument.replace("picked-model", model) for argument in form]
                     request = adapter.parse(
-                        _provider_argv(provider, *form), UNRESTRICTED_ENV, Path("/tmp")
+                        _provider_argv(provider, *arguments), UNRESTRICTED_ENV, Path("/tmp")
                     )
-                    self.assertEqual("picked-model", request.model)
+                    self.assertEqual(model, request.model)
                     self.assertTrue(request.has_model_override)
 
     def test_shared_parser_last_flag_wins_and_reports_no_override_by_default(self) -> None:
@@ -1406,12 +1429,16 @@ class PromptDeliveryTests(unittest.TestCase):
                 self.assertEqual(
                     at_limit.decode(),
                     adapter.prepare(
-                        request, f"/bin/{provider}", at_limit, UNRESTRICTED_ENV, {}
+                        request, f"/bin/{provider}", at_limit, UNRESTRICTED_ENV, PROMPT_FILE_DATA
                     ).argv[-1],
                 )
                 with self.assertRaisesRegex(UsageError, str(ARGV_PROMPT_LIMIT_BYTES)):
                     adapter.prepare(
-                        request, f"/bin/{provider}", at_limit + b"x", UNRESTRICTED_ENV, {}
+                        request,
+                        f"/bin/{provider}",
+                        at_limit + b"x",
+                        UNRESTRICTED_ENV,
+                        PROMPT_FILE_DATA,
                     )
                 with self.assertRaisesRegex(UsageError, str(ARGV_PROMPT_LIMIT_BYTES)):
                     adapter.check_prompt_size(at_limit + b"x")

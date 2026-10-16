@@ -50,6 +50,25 @@ class ProcessTests(unittest.TestCase):
             (b"out", b"err"), ((self.root / "o").read_bytes(), (self.root / "e").read_bytes())
         )
 
+    def test_child_pwd_names_its_cwd_not_the_callers(self) -> None:
+        # opencode builds its session in $PWD, so a PWD inherited from the caller's
+        # checkout sent isolated writes there instead of into the worktree.
+        workspace = self.root / "workspace"
+        workspace.mkdir()
+        result = run_process(
+            [sys.executable, "-c", "import os, sys; sys.stdout.write(os.environ['PWD'])"],
+            env={**os.environ, "PWD": str(self.root)},
+            stdin=None,
+            stdout_path=self.root / "o",
+            stderr_path=self.root / "e",
+            timeout_seconds=HANG_GUARD_SECS,
+            cwd=workspace,
+            terminal_stdout_fd=None,
+            terminal_stderr_fd=None,
+        )
+        self.assertEqual(0, result.exit_code)
+        self.assertEqual(str(workspace), (self.root / "o").read_text())
+
     def test_abort_event_terminates_the_group_gracefully(self) -> None:
         import threading
 

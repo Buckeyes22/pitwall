@@ -256,6 +256,7 @@ class ChannelRegistrationPathTests(unittest.TestCase):
             "agy": ("mcpServers", "disabled", True),
             "cline": ("mcpServers", "disabled", True),
             "opencode": ("mcp", "enabled", False),
+            "mcode": ("mcpServers", "enabled", False),
         }
         for harness, (section, flag, value) in json_hosts.items():
             with self.subTest(harness), tempfile.TemporaryDirectory() as directory:

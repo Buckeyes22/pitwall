@@ -5,10 +5,12 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
+from pitwall.agents.resources import read_resource_json
 from pitwall.agents.result import (
     ResultError,
     validate_result,
 )
+from pitwall.agents.token_usage import TokenUsage
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -44,6 +46,61 @@ def valid_result() -> dict[str, object]:
 
 
 class ResultTests(unittest.TestCase):
+    def test_caller_and_usage_extensions_are_optional(self) -> None:
+        import jsonschema
+
+        schema = read_resource_json("schemas/dispatch-result.schema.json")
+        for extensions in (
+            {},
+            {"caller": {"session": "unknown", "source": "unknown"}},
+            {
+                "caller": {
+                    "session": "claude:root",
+                    "source": "inherited",
+                    "host": "claude",
+                    "parentDispatchId": "00000000-0000-4000-8000-000000000002",
+                },
+                "usage": TokenUsage(3, 1).to_public_dict(),
+            },
+            {
+                "caller": {
+                    "session": "unknown",
+                    "source": "unknown",
+                    "host": None,
+                    "parentDispatchId": None,
+                },
+                "usage": None,
+                "usageError": "codex reports no token usage",
+            },
+        ):
+            with self.subTest(extensions=extensions):
+                value = {**valid_result(), **extensions}
+                validate_result(value)
+                jsonschema.Draft202012Validator(schema).validate(value)
+
+    def test_caller_shape_is_checked_by_validator_and_schema(self) -> None:
+        import jsonschema
+
+        schema = read_resource_json("schemas/dispatch-result.schema.json")
+        for caller in (
+            None,
+            [],
+            "claude:root",
+            {},
+            {"session": "claude:root"},
+            {"session": 123, "source": "inherited"},
+            {"session": "claude:root", "source": None},
+            {"session": "claude:root", "source": "inherited", "host": 123},
+            {"session": "claude:root", "source": "inherited", "parentDispatchId": 123},
+            {"session": "claude:root", "source": "inherited", "unexpected": True},
+        ):
+            with self.subTest(caller=caller):
+                value = {**valid_result(), "caller": caller}
+                with self.assertRaisesRegex(ResultError, "caller"):
+                    validate_result(value)
+                with self.assertRaises(jsonschema.ValidationError):
+                    jsonschema.Draft202012Validator(schema).validate(value)
+
     def test_valid_result_is_accepted(self) -> None:
         validate_result(valid_result())
 

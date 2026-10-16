@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 
 import contextlib
 
+from .caller import SESSION_ENV, Caller, resolve_caller
 from .channel import (
     CHANNEL_ATTEMPT_ENV,
     CHANNEL_DISPATCH_ENV,
@@ -52,6 +53,7 @@ from .run_store import (
     state_root,
     utc_now,
 )
+from .token_usage import TokenUsage
 from .workspace import (
     UsageConfigurationError,
     WorkspaceError,
@@ -113,6 +115,9 @@ def _ledger_record(
     ask_ids: list[str] | None = None,
     channel: Mapping[str, Any] | None = None,
     soft_denial_reason: str | None = None,
+    caller: Caller | None = None,
+    usage: TokenUsage | None = None,
+    usage_error: str | None = None,
 ) -> dict[str, Any]:
     record: dict[str, Any] = {
         "ts": _legacy_timestamp(),
@@ -138,6 +143,14 @@ def _ledger_record(
         record.update(channel)
     if soft_denial_reason is not None:
         record["softDenialReason"] = soft_denial_reason
+    if caller is not None:
+        record["session"] = caller.session
+        if caller.parent_dispatch_id:
+            record["parentDispatchId"] = caller.parent_dispatch_id
+    if event == "finished":
+        record["usage"] = usage.to_public_dict() if usage is not None else None
+        if usage_error is not None:
+            record["usageError"] = usage_error
     if exit_code is not None:
         record["exit"] = exit_code
     if wall_seconds is not None:
@@ -422,6 +435,9 @@ def _base_result(
     arguments: list[str] | None = None,
     workspace: dict[str, Any] | None = None,
     route: ResolvedProfile | None = None,
+    caller: Caller | None = None,
+    usage: TokenUsage | None = None,
+    usage_error: str | None = None,
 ) -> dict[str, Any]:
     finished_at = utc_now()
     stdout_path = store.artifact("stdout.log")
@@ -466,9 +482,14 @@ def _base_result(
         "output": {"stdout": digest(stdout_path), "stderr": digest(stderr_path)},
         "artifacts": store.artifact_summary(),
         "integration": {"status": "not_applied", "appliedAt": None, "target": None},
+        "usage": usage.to_public_dict() if usage is not None else None,
     }
+    if usage_error is not None:
+        result["usageError"] = usage_error
     if route is not None:
         result["route"] = route.to_public_dict()
+    if caller is not None:
+        result["caller"] = caller.to_public_dict()
     return result
 
 
@@ -488,6 +509,7 @@ def _finish_early(
     workspace: dict[str, Any] | None = None,
     receipt: dict[str, Any] | None = None,
     route: ResolvedProfile | None = None,
+    caller: Caller | None = None,
 ) -> int:
     try:
         lifecycle.transition(state)
@@ -504,6 +526,7 @@ def _finish_early(
             arguments=arguments,
             workspace=workspace,
             route=route,
+            caller=caller,
         )
         validate_result(result)
         store.write_json("result.json", result)
@@ -785,6 +808,7 @@ def _dispatch_legacy(
         if exit_code is not None:
             return exit_code
     run.launch_child()
+    run.render_output()
     run.apply_soft_denial()
     return run.finish()
 
@@ -874,6 +898,7 @@ class _LegacyDispatch:
     def open_run(self) -> int | None:
         env, harness_id = self.env, self.harness_id
         self.dispatch_id = self.context.dispatch_id
+        self.caller = resolve_caller(self.env, start_pid=os.getppid())
         existing = RunStore(state_root(env), self.dispatch_id).path
         if existing.exists() and not self.resume_mode:
             print(
@@ -940,6 +965,7 @@ class _LegacyDispatch:
             workspace=self.routing.workspace,
             route=self.route_spec,
             revived=self.route_revived,
+            caller=self.caller,
             **fields,
         )
 
@@ -954,6 +980,7 @@ class _LegacyDispatch:
             request=self.request,
             leading_newline=False,
             route=self.route,
+            caller=self.caller,
             **fields,
         )
 
@@ -1179,7 +1206,11 @@ class _LegacyDispatch:
                 },
                 receipt=terminal_record if self.receipts else None,
             )
-        self.preflight_data = {**self.preflight_data, "workspacePath": str(self.workspace_path)}
+        self.preflight_data = {
+            **self.preflight_data,
+            "workspacePath": str(self.workspace_path),
+            "usageFile": str(self.store.artifact("harness-usage.json")),
+        }
         return None
 
     def launch_child(self) -> None:
@@ -1188,6 +1219,7 @@ class _LegacyDispatch:
         for key in _DISPATCHER_IDENTITY:
             harness_env.pop(key, None)
         harness_env[CHANNEL_DISPATCH_ENV] = self.dispatch_id
+        harness_env[SESSION_ENV] = self.caller.session
         harness_env[CHANNEL_STATE_ROOT_ENV] = str(state_root(env))
         harness_env[CHANNEL_ATTEMPT_ENV] = str(self.context.attempt)
         if self.harness_id == "claude":
@@ -1222,11 +1254,14 @@ class _LegacyDispatch:
                 # A managed launcher already captures the supervisor's own streams
                 # in launches/<id>/; copying child output there too doubled every byte.
                 managed = env.get(MANAGED_LAUNCH_ENV) == "1"
+                json_mode = self.adapter.output_mode == "json"
                 self.process_result = run_process(
                     self.prepared.argv,
                     env=self.prepared.env,
                     stdin=self.prepared.stdin,
-                    stdout_path=store.artifact("stdout.log"),
+                    stdout_path=store.artifact(
+                        "harness-output.jsonl" if json_mode else "stdout.log"
+                    ),
                     stderr_path=store.artifact("stderr.log"),
                     timeout_seconds=self.timeout_seconds,
                     cwd=self.workspace_path,
@@ -1234,7 +1269,7 @@ class _LegacyDispatch:
                     abort_event=self.abort,
                     abort_grace_seconds=self.grace,
                     watch=self.watcher,
-                    terminal_stdout_fd=None if managed else 1,
+                    terminal_stdout_fd=None if managed or json_mode else 1,
                     terminal_stderr_fd=None if managed else 2,
                     on_start=self.lifecycle.record_harness,
                 )
@@ -1243,6 +1278,43 @@ class _LegacyDispatch:
             if isinstance(exc, FileNotFoundError):
                 print(_missing_binary_hint(self.harness_id), file=sys.stderr)
             self.process_result = ProcessResult(127, None, False, False, 0, 0, 0)
+
+    def render_output(self) -> None:
+        self.usage: TokenUsage | None = None
+        self.usage_error: str | None = None
+        mode = self.adapter.output_mode
+        if mode == "usage-file":
+            path = self.store.artifact("harness-usage.json")
+            try:
+                self.usage = self.adapter.parse_usage_file(
+                    json.loads(path.read_text(encoding="utf-8"))
+                )
+            except (OSError, ValueError) as exc:
+                self.usage_error = f"no usage report: {exc.__class__.__name__}"
+            return
+        if mode != "json":
+            self.usage_error = f"{self.harness_id} reports no token usage"
+            return
+        raw_path = self.store.artifact("harness-output.jsonl")
+        raw = raw_path.read_bytes() if raw_path.is_file() else b""
+        parsed = self.adapter.parse_output(raw)
+        answer = parsed.answer
+        if parsed.usage is None and not answer:
+            answer = raw  # Never hide what the harness printed.
+        self.store.write_bytes("stdout.log", answer)
+        self.process_result = replace(self.process_result, stdout_bytes=len(answer))
+        if parsed.diagnostic:
+            with self.store.artifact("stderr.log").open("ab") as handle:
+                handle.write(parsed.diagnostic.encode() + b"\n")
+            print(f"{self.harness_id}-shim: {parsed.diagnostic}", file=sys.stderr)
+        if self.env.get(MANAGED_LAUNCH_ENV) != "1" and answer:
+            # os.write may write less than asked; a large answer must reach the caller whole.
+            view = memoryview(answer)
+            while view:
+                view = view[os.write(1, view) :]
+        self.usage = parsed.usage
+        if parsed.usage is None:
+            self.usage_error = parsed.diagnostic or "harness output carried no usage"
 
     def apply_soft_denial(self) -> None:
         result = self.process_result
@@ -1413,6 +1485,8 @@ class _LegacyDispatch:
             supervisor_timeout=result.timed_out,
             channel=channel_fields,
             soft_denial_reason=self.soft_denial_reason,
+            usage=self.usage,
+            usage_error=self.usage_error,
         )
         self.lifecycle.soft_denial_reason = self.soft_denial_reason
         self.lifecycle.transition(state)
@@ -1455,6 +1529,9 @@ class _LegacyDispatch:
                 arguments=self.prepared.sanitized_args,
                 workspace=self.workspace_result,
                 route=self.route,
+                caller=self.caller,
+                usage=self.usage,
+                usage_error=self.usage_error,
             )
             document["timeout"] = {"seconds": self.timeout_seconds, "expired": result.timed_out}
             validate_result(document)

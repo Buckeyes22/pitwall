@@ -48,7 +48,7 @@ def test_extension_suites_pass() -> None:
         "provider-extension.test.mjs",
     }
     completed = subprocess.run(  # noqa: S603  # reason: fixed argv, node resolved from PATH, no shell
-        [node, "--test", "--test-timeout=120000", *map(str, SUITES)],
+        [node, "--test", "--test-reporter=tap", "--test-timeout=120000", *map(str, SUITES)],
         capture_output=True,
         text=True,
         check=False,

@@ -3,7 +3,7 @@ name: subagent-model-routing
 description: >-
   Codex-native workflow for routing work to local external-model shims:
   Claude models through claude-shim.sh, Gemini through agy-shim.sh, Kimi through kimi-shim.sh, Grok 4.7 through grok-shim.sh,
-  GLM/MiniMax through opencode-shim.sh, and Qwen through qwen-shim.sh. Other local/self-hosted models route through
+  GLM/MiniMax through opencode-shim.sh, MiniMax Code through mcode-shim.sh, and Qwen through qwen-shim.sh. Other local/self-hosted models route through
   opencode-shim.sh as a custom provider, or directly through Pi, Hermes, Cline, goose, or dsh. Use when the user asks Codex to
   dispatch, compare, review, fan out, or sequence work across those local shims.
   This port avoids Claude Code orchestration surfaces and uses the shared
@@ -21,6 +21,7 @@ Use it when the user wants Codex to route work to non-Codex external model harne
 - `~/.claude/scripts/kimi-shim.sh` for Kimi models via the local Kimi Code CLI.
 - `~/.claude/scripts/grok-shim.sh` for Grok 4.7 via the local Grok Build CLI.
 - `~/.claude/scripts/opencode-shim.sh` for GLM, MiniMax, or local/self-hosted models via the local opencode wrapper.
+- `~/.claude/scripts/mcode-shim.sh <prompt-file> --model minimax/<model-id> [--effort low|medium|high|xhigh|max]` for MiniMax Code using the MiniMax account.
 
 Qwen (including local llama.cpp endpoints configured in `~/.qwen/.env`) routes through `~/.claude/scripts/qwen-shim.sh`; other local/self-hosted models are routed as custom providers through `opencode-shim.sh`, or directly through the model-agnostic harnesses below (Pi, Hermes, Cline, goose, dsh) — see the `## Routing a local model` section of `docs/agents/routing-readme.md` (or `docs/agents/attach-local-endpoint.md`) for an example.
 
@@ -33,6 +34,7 @@ Qwen (including local llama.cpp endpoints configured in `~/.qwen/.env`) routes t
 | goose | `~/.claude/scripts/goose-shim.sh <prompt-file> [flags]` | stdin | Model-agnostic; endpoint values are passed through the child environment. |
 | DeepSeek Harness (`dsh`) | `~/.claude/scripts/dsh-shim.sh <prompt-file> [flags]` | argv | Experimental, model-agnostic; dsh runs one managed default model at a time. |
 | ZCode | `~/.claude/scripts/zcode-shim.sh <prompt-file> [flags]` | argv | Model-bound to its saved model and account; no model or effort override. |
+| MiniMax Code | `~/.claude/scripts/mcode-shim.sh <prompt-file> --model minimax/<model-id> [flags]` | stdin | MiniMax account login; effort selection is available only on M3.1-Flash-Preview. |
 
 Do not route Codex back through `codex-shim.sh` from this package. The current Codex thread is already the native Codex harness; keep Codex implementation, synthesis, and verification inline, and use shims only for genuinely external model harnesses.
 
@@ -78,6 +80,7 @@ test -x ~/.claude/scripts/agy-shim.sh
 test -x ~/.claude/scripts/kimi-shim.sh
 test -x ~/.claude/scripts/opencode-shim.sh
 test -x ~/.claude/scripts/grok-shim.sh
+test -x ~/.claude/scripts/mcode-shim.sh
 mkdir -p /tmp/subagent-model-routing-pilot
 printf 'Reply with exactly: pong\n' > /tmp/subagent-model-routing-pilot/pong.md
 ~/.claude/scripts/kimi-shim.sh /tmp/subagent-model-routing-pilot/pong.md 2>/dev/null | grep -m1 -i pong
@@ -126,9 +129,9 @@ Exit codes a dispatch reports (the last line is always `SHIM-DONE exit=<n>`):
 - `130` Ctrl+C. The supervisor stops the harness's whole process group before it exits, so no child is orphaned, and the run is recorded as cancelled. Lifecycle hooks still pending for that event are skipped, each leaving a status file `{"skipped": "interrupted"}`.
 - `143` an abort (a `stop` steer not honored in time, or SIGTERM or SIGHUP to the supervisor), reported even when the harness itself exited `0`; `137` when the grace period ended in SIGKILL.
 
-The shared runtime is the `pitwall agents` command group. Run `pitwall agents doctor` before first use or when provider/plugin drift is suspected; its default path performs no discovery. Use explicit `doctor --discover-models` only when a catalog refresh is actually needed, and `doctor --probe-routes` only when route reachability needs checking. When a dispatch needs recovery or audit, use `pitwall agents runs list`, `runs show <id>`, or `runs logs <id> --channel both`; use `workflow list|show|cancel|resume` for graphs. Do not parse metadata after the sentinel because nothing may be printed there. Prompt bodies are not retained by default. Add `--routing-retain-prompt` only with explicit need and treat retained stdout/stderr/workflow context as sensitive artifacts.
+The shared runtime is the `pitwall agents` command group. Run `pitwall agents doctor` before first use or when provider/plugin drift is suspected; its default path performs no discovery. Use explicit `doctor --discover-models` only when a catalog refresh is actually needed, and `doctor --probe-routes` only when route reachability needs checking. When a dispatch needs recovery or audit, use `pitwall agents runs list`, `runs show <id>`, or `runs logs <id> --channel both`; use `workflow list|show|cancel|resume` for graphs. Check accumulated subagent usage with `pitwall agents runs usage --current`. Do not parse metadata after the sentinel because nothing may be printed there. Prompt bodies are not retained by default. Add `--routing-retain-prompt` only with explicit need and treat retained stdout/stderr/workflow context as sensitive artifacts.
 
-For an external write task that must not touch Codex's caller worktree, add `--routing-workspace isolated --routing-task-mode write` to the Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, dsh, or ZCode shim command. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. Native Codex implementation remains inline; do not route it back through `codex-shim` merely to obtain worktree isolation.
+For an external write task that must not touch Codex's caller worktree, add `--routing-workspace isolated --routing-task-mode write` to the Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, dsh, ZCode, or MiniMax Code shim command. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. Native Codex implementation remains inline; do not route it back through `codex-shim` merely to obtain worktree isolation.
 
 ### Route profiles
 
@@ -177,7 +180,7 @@ work, so a paused run resumes against its own worktree.
 
 The server picks its tool set by role. In your session (the orchestrator) it serves `dispatch_and_wait`, `wait_dispatch`, `answer_and_wait`, `steer_and_wait`, and the recovery tools `inbox` and `answer_ask`. `dispatch_and_wait` takes `prompt` plus either `route` (a configured route spec) or `provider` (a direct harness), never both; `workspace` (`shared`, `isolated`, or `auto`), `task_mode` (`read` or `write`), `base`, `timeout_seconds`, `max_asks`, `retain_prompt`, `extra_args`, and `wait_seconds` are optional, and `ask_support` must stay `true`. `answer_and_wait` takes the full `dispatch_id`, the four-digit `ask_id`, and a `choice` (an option id or `abort`); `steer_and_wait` takes `dispatch_id`, `kind`, `message`, and optional `requires_ack` and `deadline_s`; `wait_dispatch` takes `dispatch_id` or its `reattach_handle`. The dispatched child sees a different set, `ask_orchestrator`, `read_steering`, and `ack_steer`, which the dispatcher's prompt tells it to use. Every wait returns one event: `ask`, `defaulted`, `steer_ack`, `terminal`, `orphan`, or `still_running`, and each lists `defaults_applied`.
 
-`pitwall agents setup mcp` registers `pitwall-channel` in the user config of each installed harness: Claude Code, Codex, Copilot CLI, OpenCode, Kimi, Cline, Qwen Code, ZCode, Grok Build, Antigravity, Muse Code, Hermes, and goose. `dispatch_and_wait` refuses a child harness that has no registration or fails a short tool-list handshake, and names `setup mcp` as the fix. Pi and dsh have no registration, so it refuses them; report the refusal.
+`pitwall agents setup mcp` registers `pitwall-channel` in the user config of each installed harness: Claude Code, Codex, Copilot CLI, OpenCode, Kimi, Cline, Qwen Code, ZCode, MiniMax Code, Grok Build, Antigravity, Muse Code, Hermes, and goose. `dispatch_and_wait` refuses a child harness that has no registration or fails a short tool-list handshake, and names `setup mcp` as the fix. Pi and dsh have no registration, so it refuses them; report the refusal.
 
 The dispatcher appends the asking rules to the prompt; you do not write them. The model asks only when its default is dangerous and irreversible, gives 2–8 options with a real default and rationale, points at files instead of pasting diffs, and never asks what the worktree answers. A registered `pitwall-channel` server proves only that the child-side MCP tools are available; registration and a stdio handshake do not prove that this host receives events. Hosts without a demonstrated event-return path use the file fallback: write `mailbox/asks/NNNN.json` and exit 75 so the run can resume with the answer appended.
 
@@ -249,7 +252,7 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 - **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
 - **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
-- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-16. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 - Full reference: `references/model-prompting.md#gemini-through-antigravity`
 

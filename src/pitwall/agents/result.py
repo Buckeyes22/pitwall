@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import uuid
 from typing import Any
@@ -44,9 +45,49 @@ def validate_result(value: Any) -> None:
     if not isinstance(value, dict):
         raise ResultError("result must be an object")
     missing = REQUIRED_FIELDS - set(value)
-    extra = set(value) - REQUIRED_FIELDS - {"route"}
+    extra = set(value) - REQUIRED_FIELDS - {"route", "caller", "usage", "usageError"}
     if missing or extra:
         raise ResultError(f"result field mismatch: missing={sorted(missing)} extra={sorted(extra)}")
+    usage = value.get("usage")
+    if usage is not None:
+        counts = {"inputTokens", "outputTokens"}
+        optional_counts = {"cacheReadTokens", "cacheWriteTokens", "reasoningTokens", "totalTokens"}
+        if not isinstance(usage, dict) or set(usage) != counts | optional_counts | {
+            "costUsd",
+            "complete",
+            "source",
+        }:
+            raise ResultError("usage must contain exactly the public token usage fields")
+        for field in counts | optional_counts:
+            count = usage[field]
+            if count is None and field in optional_counts:
+                continue
+            if type(count) is not int or count < 0:
+                raise ResultError(f"usage {field} must be a non-negative integer")
+        cost = usage["costUsd"]
+        if cost is not None and (
+            isinstance(cost, bool)
+            or not isinstance(cost, (int, float))
+            or not math.isfinite(cost)
+            or cost < 0
+        ):
+            raise ResultError("usage costUsd must be a finite non-negative number or null")
+        if not isinstance(usage["complete"], bool) or not isinstance(usage["source"], str):
+            raise ResultError("usage complete must be boolean and source must be a string")
+    if "usageError" in value and not isinstance(value["usageError"], str):
+        raise ResultError("usageError must be a string")
+    if "caller" in value:
+        caller = value["caller"]
+        if (
+            not isinstance(caller, dict)
+            or not {"session", "source"} <= set(caller)
+            or not set(caller) <= {"session", "source", "host", "parentDispatchId"}
+            or not all(isinstance(caller[field], str) for field in ("session", "source"))
+        ):
+            raise ResultError("invalid caller metadata")
+        for field in ("host", "parentDispatchId"):
+            if caller.get(field) is not None and not isinstance(caller[field], str):
+                raise ResultError(f"caller {field} must be a string or null")
     if value["schemaVersion"] != 1:
         raise ResultError("unsupported result schema version")
     try:

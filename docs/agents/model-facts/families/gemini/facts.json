@@ -450,7 +450,7 @@
     },
     {
       "id": "gemini-agy-plan-availability",
-      "text": "Antigravity serves Gemini 4 Argon only on Google AI Ultra and Enterprise plans, and not in its IDE; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.",
+      "text": "agy serves Gemini 4 Argon on paid Google AI Pro, Ultra, and Enterprise plans, not on Free, Plus, or a Pro trial; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.",
       "applies": [
         "*"
       ],
@@ -461,7 +461,7 @@
         "card",
         "reference"
       ],
-      "reviewedAt": "2026-10-13"
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "gemini-thinking-dynamic",

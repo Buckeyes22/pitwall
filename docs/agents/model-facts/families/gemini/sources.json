@@ -9,10 +9,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:447fc4852bab152cf5555e136cf052d61562812898153e03f524069a6a4a288e",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:447fc4852bab152cf5555e136cf052d61562812898153e03f524069a6a4a288e",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:c7e173bd8057c0b7b14fa39528f2fbd612e5213f562657547cb5be5bbce2a4fa",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:c7e173bd8057c0b7b14fa39528f2fbd612e5213f562657547cb5be5bbce2a4fa",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "google-gemini-3-8-flash",
@@ -81,10 +81,10 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:abc5e831f5310b6794d320a1e988da19844fa7b90aaa86015021feb7c4404e9c",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:abc5e831f5310b6794d320a1e988da19844fa7b90aaa86015021feb7c4404e9c",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:23d25b063d695ce0fd36a7e7958ca92c49cc42dde6b8c512cb578e7aa5c81114",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:23d25b063d695ce0fd36a7e7958ca92c49cc42dde6b8c512cb578e7aa5c81114",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "google-prompting",
@@ -129,10 +129,10 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:59791020c4f3e4982a5efdabfb76ed8225c6734fbfca0ac21e33f5589b18c6f9",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:59791020c4f3e4982a5efdabfb76ed8225c6734fbfca0ac21e33f5589b18c6f9",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:ea927dc95e07d317b251da1222a96401c6ff225d7a4588e905cf8d1ef8f466ea",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:ea927dc95e07d317b251da1222a96401c6ff225d7a4588e905cf8d1ef8f466ea",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "antigravity-models",
@@ -141,10 +141,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:6abd24f6b76db10858cc0dce377cfc6a4288104bc0cd592a93b85cbbf1874f3e",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:6abd24f6b76db10858cc0dce377cfc6a4288104bc0cd592a93b85cbbf1874f3e",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:21c8d0707cf19d9ffe3054ae46fb2a5848b1b9bd4c7dcc59c560fd69081228d8",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:21c8d0707cf19d9ffe3054ae46fb2a5848b1b9bd4c7dcc59c560fd69081228d8",
+      "reviewedAt": "2026-10-16"
     }
   ],
   "notPublished": [],

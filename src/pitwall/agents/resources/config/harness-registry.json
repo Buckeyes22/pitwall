@@ -362,6 +362,90 @@
       },
       "routeFamilies": []
     },
+    "mcode": {
+      "displayName": "MiniMax Code (MiniMax account)",
+      "shim": "mcode-shim.sh",
+      "binaryCandidates": [
+        "mcode",
+        "$HOME/.minimax-code/bin/mcode"
+      ],
+      "binaryOverrideEnv": "MCODE_BIN",
+      "nativeHosts": [],
+      "promptDelivery": "stdin",
+      "harnessKind": "model-bound",
+      "endpointDelivery": "none",
+      "allowUnknownModels": false,
+      "defaultModel": {
+        "source": "registry",
+        "fallback": "minimax/MiniMax-M3.1-Flash-Preview"
+      },
+      "modelSelectors": [
+        "-m",
+        "--model"
+      ],
+      "effort": {
+        "kind": "harness-flag",
+        "key": "--effort",
+        "values": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "capabilities": {
+        "authProbe": false,
+        "configProbe": false,
+        "worktreeDispatch": true,
+        "structuredOutput": false
+      },
+      "models": {
+        "minimax/MiniMax-M3": {
+          "displayName": "MiniMax M3",
+          "aliases": [],
+          "effortValues": [],
+          "promptReference": "docs/prompting/minimax-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#minimax",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md",
+          "provenance": "model-facts:families/minimax"
+        },
+        "minimax/MiniMax-M2.7": {
+          "displayName": "MiniMax M2.7",
+          "aliases": [],
+          "effortValues": [],
+          "promptReference": "docs/prompting/minimax-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#minimax",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md",
+          "provenance": "model-facts:families/minimax"
+        },
+        "minimax/MiniMax-M2.7-highspeed": {
+          "displayName": "MiniMax M2.7",
+          "aliases": [],
+          "effortValues": [],
+          "promptReference": "docs/prompting/minimax-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#minimax",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md",
+          "provenance": "model-facts:families/minimax"
+        },
+        "minimax/MiniMax-M3.1-Flash-Preview": {
+          "displayName": "MiniMax M3.1 Flash Preview",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ],
+          "promptReference": "docs/prompting/minimax-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#minimax",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/minimax.md",
+          "provenance": "model-facts:families/minimax"
+        }
+      },
+      "routeFamilies": []
+    },
     "opencode": {
       "displayName": "OpenCode",
       "shim": "opencode-shim.sh",

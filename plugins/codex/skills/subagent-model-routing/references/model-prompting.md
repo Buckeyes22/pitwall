@@ -372,6 +372,7 @@ Putting critical instructions early is a field heuristic in this project, not a 
 ## MiniMax
 
 Route through `opencode-shim.sh minimax-coding-plan/MiniMax-M3.1-Flash-Preview <prompt-file>`.
+Or through MiniMax Code: `mcode-shim.sh <prompt-file> --model minimax/MiniMax-M3.1-Flash-Preview [--effort high]` (MiniMax account login; the only route besides Token Plan that serves M3.1).
 
 MiniMax has no dedicated official text-prompting guide in the canonical research set. Use a structured prompt with role, task, constraints, success criteria, and output shape. A planning phase can help coding work. `--thinking` controls reasoning-trace visibility; it is not an effort dial.
 
@@ -481,7 +482,7 @@ Prompt it as for Muse Code: goal, authorization boundary, validation commands, a
 
 ## Gemini through Antigravity
 
-Route Gemini with `agy-shim.sh <prompt-file> [flags]`. The shim defaults to `gemini-3.8-flash` at medium effort, always adds the dispatch workspace with `--add-dir`, and requests text output. Use `--model <base-id> --effort low|medium|high`, or pass an effort-suffixed live slug without `--effort`; Gemini 3.1 Pro supports only low and high in the verified catalog. Pin Gemini 4 Argon with `--model gemini-4-argon`; Antigravity offers it only on Google AI Ultra and Enterprise plans, so check `agy models` first.
+Route Gemini with `agy-shim.sh <prompt-file> [flags]`. The shim defaults to `gemini-3.8-flash` at medium effort, always adds the dispatch workspace with `--add-dir`, and requests text output. Use `--model <base-id> --effort low|medium|high`, or pass an effort-suffixed live slug without `--effort`; Gemini 3.1 Pro supports only low and high in the verified catalog. Pin Gemini 4 Argon with `--model gemini-4-argon`; Antigravity offers it only on paid Google AI Pro, Ultra, and Enterprise plans (not Free or Plus), so check `agy models` first.
 
 Use direct, precise instructions with the goal, constraints, success criteria, and output shape. Put critical behavior and formatting requirements first. Separate instructions, context, examples, and source material with consistent Markdown headings or XML-style tags. For long context, supply context first and put the exact task at the end. Add consistently formatted examples when the desired output is difficult to specify. Gemini is concise by default, so request detail explicitly when needed. Leave temperature, top-p, and top-k unset; Google deprecated them in July 2026 and Gemini 4 Argon ignores them.
 
@@ -493,7 +494,7 @@ Authentication is interactive unless Gemini API-key configuration is supplied, a
 - **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
 - **Stated by vendor:** Leave temperature, top_p, and top_k out of Gemini requests; Google deprecated all three in July 2026.
-- **Stated by harness:** Antigravity serves Gemini 4 Argon only on Google AI Ultra and Enterprise plans, and not in its IDE; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.
+- **Stated by harness:** agy serves Gemini 4 Argon on paid Google AI Pro, Ultra, and Enterprise plans, not on Free, Plus, or a Pro trial; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.
 - **Stated by vendor:** Gemini models think dynamically by default and scale effort to the request; set thinking_level only to cap cost or force depth.
 - **Stated by vendor (`gemini-4-argon`):** Medium is Gemini 4 Argon's default and Google's pick for most code and agent work. Keep high for the hardest reasoning, and test all three levels before settling on the lowest that passes.
 - **Stated by vendor (`gemini-4-argon`):** On Gemini 4 Argon, thinking and the answer share max_output_tokens. Keep that limit at 32,768 or more, and lower thinking_level rather than the limit when tokens must be saved.
@@ -505,11 +506,12 @@ Authentication is interactive unless Gemini API-key configuration is supplied, a
 - **Stated by vendor (`gemini-3.8-flash`):** Do not ask Gemini 3.8 Flash for minimal thinking; the API returns an error. Use low, medium, or high.
 - **Stated by harness:** In headless mode a tool needing approval is denied without failing the run (exit 0, notice on stderr). Shell commands ask by default, so grant them with permissions.allow or the skip flag.
 - **Stated by harness:** A pinned --model slug that agy does not recognise exits non-zero with an ERROR status instead of falling back, so a wrong slug fails loudly. List valid slugs with agy models.
-- **Stated by harness:** A headless run waits at most five minutes for a response by default; raise --print-timeout for long tasks.
+- **Stated by harness:** Since agy 1.2.6 a headless run has no default time limit, although the headless guide still says five minutes. Pass --print-timeout to bound a run; background tasks are kept until that deadline, capped at 30 minutes.
 - **Stated by harness:** Headless runs use cached credentials. Sign in once with an interactive agy session; an unauthenticated run without a terminal exits with an authentication required error.
 - **Stated by harness:** agy loads GEMINI.md and AGENTS.md from each directory up to the workspace root, plus global copies under ~/.gemini. Rules combine rather than replace, and neither file takes frontmatter.
 - **Stated by harness:** A custom subagent whose tools list has a misspelled or unknown tool name can hang. Check names such as view_file and run_command exactly.
-- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Stated by harness:** agy's --effort also takes xhigh and max, but only on models that publish those levels; on any other model it fails and lists the levels that model offers. agy models shows each model's slugs.
+- **Facts checked:** 2026-10-16. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 
 ## Muse Glimmer

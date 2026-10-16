@@ -16,7 +16,7 @@ route-shim.sh glimmer@opencode prompt.md   # override the harness (after profile
 route-shim.sh gpt-6.1-sol prompt.md        # any registry model id works without an entry
 ```
 
-`route-shim.sh <name>[@harness] <prompt-source> [--routing-*] [harness flags]` is the profile entrypoint over the fourteen harnesses. It resolves the profile, prints one stderr line (`route-shim: glimmer -> qwen meta-models/Muse-Glimmer-30B (endpoint gpu-1:8000)`), and hands off to the same dispatch path the provider shims use, so the `SHIM-DONE` sentinel, `SHIM_RESULT` receipts, run records, timeouts, worktrees, and lifecycle hooks all apply unchanged.
+`route-shim.sh <name>[@harness] <prompt-source> [--routing-*] [harness flags]` is the profile entrypoint over the fifteen harnesses. It resolves the profile, prints one stderr line (`route-shim: glimmer -> qwen meta-models/Muse-Glimmer-30B (endpoint gpu-1:8000)`), and hands off to the same dispatch path the provider shims use, so the `SHIM-DONE` sentinel, `SHIM_RESULT` receipts, run records, timeouts, worktrees, and lifecycle hooks all apply unchanged.
 
 ## Harnesses
 
@@ -37,6 +37,7 @@ route-shim.sh gpt-6.1-sol prompt.md        # any registry model id works without
 | Muse Code | model-bound | file | none | Receives a prompt-file path: a private copy for stdin prompts and ask-support runs. |
 | goose | model-agnostic | stdin | none | Endpoint values use process environment variables. |
 | ZCode (`zcode`) | model-bound | argv | none | The saved ZCode model and account; see [ZCode](zcode.md). |
+| MiniMax Code (`mcode`) | model-bound | stdin | none | Registered MiniMax account models; JSON output records token usage; see [MiniMax Code](mcode.md). |
 | DeepSeek Harness (`dsh`) | model-agnostic | argv | managed `settings.yaml` | Experimental; managed mapping carries `apiKeyEnv`, never a key value. |
 
 ## Where things live
@@ -165,7 +166,7 @@ Effective effort follows route `effort` → `harnesses.<harness>.effort` → non
 
 1. `name` → an `[agents.profiles.models]` entry; else a registry model id or alias; else a model id claimed by a harness's route family (`gemini-3.8-flash-high` → agy, `qwen3-coder-next` → qwen); else, when the name contains `/` and the default harness is model-agnostic, a pass-through; else exit `64`.
 2. Harness = `@override` → the entry's `harness` → (`endpoint` present ? `defaults.endpointHarness` : the model's vendor harness, else `defaults.harness`).
-3. Validation before any child starts: a model-bound harness (codex, claude, grok, kimi, agy, muse, zcode) must own the model and cannot take an endpoint; an endpoint needs an agnostic harness. Qwen and goose receive endpoint values through per-process environment variables; opencode, Pi, Cline, dsh, and Hermes must be synced first; a named `apiKeyEnv` must be set. Invalid combinations (a model-bound harness that does not own the model, an endpoint on a model-bound harness, or an endpoint on a harness that accepts none) exit `64`. A missing sync or an unset `apiKeyEnv` exits `78`. Both print the fix on stderr and write no ledger row.
+3. Validation before any child starts: a model-bound harness (codex, claude, grok, kimi, agy, muse, zcode, mcode) must own the model and cannot take an endpoint; an endpoint needs an agnostic harness. Qwen and goose receive endpoint values through per-process environment variables; opencode, Pi, Cline, dsh, and Hermes must be synced first; a named `apiKeyEnv` must be set. Invalid combinations (a model-bound harness that does not own the model, an endpoint on a model-bound harness, or an endpoint on a harness that accepts none) exit `64`. A missing sync or an unset `apiKeyEnv` exits `78`. Both print the fix on stderr and write no ledger row.
 4. The harness argv is built from the registry's model selectors, then endpoint hook argv, harness `args`, effective effort, route `args`, and caller flags. For opencode endpoint entries the model argument is `<name>/<model>` because the synced provider key is the route name, while dsh's profile supplies its model and emits no model argv.
 
 Exit codes: `64` malformed spec / unknown name / invalid combo; `78` incomplete configuration; everything else exactly as the provider shim would return.

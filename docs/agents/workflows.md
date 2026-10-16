@@ -1,6 +1,6 @@
 # Host-neutral dependency workflows
 
-`pitwall agents workflow` executes versioned JSON dependency graphs over the same fourteen transport shims used by direct dispatch. It is a local, foreground scheduler: there is no daemon, database, UI, or background control plane.
+`pitwall agents workflow` executes versioned JSON dependency graphs over the same fifteen transport shims used by direct dispatch. It is a local, foreground scheduler: there is no daemon, database, UI, or background control plane.
 
 Use the runner when Codex or Copilot needs durable dependency ordering, bounded concurrency, retries, verification, cancellation, or resume. In Claude Code, native Workflow remains the default for Claude-hosted graphs. The host-neutral runner is appropriate there only for an explicitly requested external-only graph.
 

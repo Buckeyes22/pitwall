@@ -9,11 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- MiniMax Code joins as the fifteenth provider harness (`mcode-shim.sh`). It sends prompts on
+  stdin, selects an explicit registered `minimax/...` model, runs in JSON output mode, and records
+  reported token usage. `--effort` is available for M3.1-Flash-Preview; dispatch defaults to
+  `--permission smart` and uses `full` when `PITWALL_AGENTS_UNRESTRICTED=1`. Smart-mode refusals
+  containing `HOST_CAPABILITY_UNAVAILABLE` are recorded as exit 77. The channel registers in
+  `~/.minimax/mcp.json`, and optional setup uses the npm installer recipe.
+
+- Dispatch records now include the launching session and normalized token usage from eight
+  harnesses, and `pitwall agents runs usage` reports accumulated usage by session.
+
 - Gemini 4 Argon (`gemini-4-argon`) is a registered `agy` route with low, medium, and high effort,
   and its facts and guidance are in the Gemini model facts. The Gemini prompting reference now
   follows the model-card layout of the Claude references, and Google's Gemini 4 Argon model card is
   kept as Markdown in `docs/prompting/model-cards/`. The `agy` default stays `gemini-3.8-flash`,
-  because Antigravity offers Argon only on Google AI Ultra and Enterprise plans.
+  because Antigravity offers Argon only on paid Google AI Pro, Ultra, and Enterprise plans (not Free or Plus).
 - Muse Wonder (`muse-wonder-1.0`, preview) is a registered `muse` route with its own model-facts
   family, capability card, and prompting reference built from Meta's model card, which is kept as
   Markdown in `docs/prompting/model-cards/`. Muse Wonder Full is recorded without a route because
@@ -22,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   skill gains a Muse Code section.
 
 ### Changed
+
+- Claude, Codex, OpenCode, Grok, Pi, Qwen, and Antigravity run in their JSON output modes inside
+  dispatches; callers still receive plain answer text.
 
 - Gemini 3.7 Flash and Gemini 3.5 Flash are recorded as retired on 2026-10-08, with successors
   `gemini-3.8-flash` and `gemini-3.6-flash`, and are dropped from the Gemini capability card.
@@ -39,6 +52,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   listing them; the `agy` sandbox default no longer cites the Antigravity app's preset table.
 
 ### Fixed
+
+- `pitwall agents runs discard` again removes an isolated worktree whose branch and Git metadata
+  are already gone. Git 2.56 reports such a worktree as "gitfile does not point to a valid
+  repository" instead of "not a git repository", and the discard refused the cleanup.
+
+- Harness children now see `PWD` set to their working directory. OpenCode builds its session from
+  `$PWD`, so isolated dispatches started from another checkout wrote into that checkout instead of
+  their worktree.
 
 - `pitwall agents setup harnesses` installs Hermes again: its upstream installer changed, so the
   pinned digest no longer matched and setup refused it. The new script was reviewed and re-pinned.

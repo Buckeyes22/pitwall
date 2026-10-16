@@ -25,6 +25,7 @@ Distill the pitwall ledger. Work inline (no dispatch needed):
    - `shim:"qwen"`: all observations -> `qwen.md`.
    - `shim:"muse"` -> by model string: `muse-wonder*` -> `muse-wonder.md`, `muse-spark*` -> `muse-spark.md` (the shim's default model is `muse-wonder-1.0`).
    - `shim:"zcode"` -> `harnesses/zcode.md` (saved-selection label; do not infer a model family).
+   - `shim:"mcode"` -> family from the model id (`minimax/...` -> `minimax.md`).
    - `shim:"pi"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.
    - `shim:"dsh"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.
    - `shim:"hermes"` -> the card owning the model string (`*Muse-Glimmer*` -> `muse-glimmer.md`, `deepseek*` -> `deepseek.md`, `gemma*` -> `gemma.md`, `zai-*`/`glm-*` -> `glm.md`, `minimax*` -> `minimax.md`, `qwen*` -> `qwen.md`); otherwise report the record as unmapped.

@@ -15,6 +15,7 @@ from pathlib import Path
 from unittest import mock
 
 from pitwall.agents import managed_channel, pids
+from pitwall.agents.caller import Caller
 from pitwall.agents.channel import (
     ChannelConfig,
     epoch_of,
@@ -621,6 +622,11 @@ class ManagedChannelEdgeTests(unittest.TestCase):
                 "pitwall.agents.managed_channel._execution_argv", return_value=["/missing/launcher"]
             ),
             mock.patch("pitwall.agents.managed_channel._process_identity", return_value=None),
+            # Popen is patched process-wide; on macOS the session lookup would call ps through it.
+            mock.patch(
+                "pitwall.agents.caller.resolve_caller",
+                return_value=Caller("test:session", "inherited", "test", None),
+            ),
             mock.patch(
                 "pitwall.agents.managed_channel.subprocess.Popen", return_value=process
             ) as popen,

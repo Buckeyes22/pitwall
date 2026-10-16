@@ -400,6 +400,32 @@
         "login",
         "zai"
       ]
+    },
+    "mcode": {
+      "documentationUrl": "https://agent.minimax.io/docs/cli/quick-start",
+      "platforms": {
+        "darwin": {
+          "kind": "npm",
+          "package": "@minimax-ai/code",
+          "version": "0.6.12"
+        },
+        "linux": {
+          "kind": "npm",
+          "package": "@minimax-ai/code",
+          "version": "0.6.12"
+        }
+      },
+      "allowedRedirectHosts": [
+        "registry.npmjs.org"
+      ],
+      "verifyArgs": [
+        "--version"
+      ],
+      "authArgs": [
+        "login",
+        "--region",
+        "global"
+      ]
     }
   }
 }

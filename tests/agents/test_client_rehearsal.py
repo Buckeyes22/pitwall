@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import tomllib
 import unittest
@@ -200,8 +201,8 @@ class ClientRehearsalTests(unittest.TestCase):
         log = self.root / "copilot-commands.jsonl"
         fake = self.bin / "copilot"
         fake.write_text(
-            """#!/usr/bin/env python3
-import json
+            f"#!{sys.executable}\n"
+            + """import json
 import os
 from pathlib import Path
 import sys

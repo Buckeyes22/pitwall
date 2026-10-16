@@ -195,6 +195,7 @@ CHANNEL_HARNESSES = (
     "muse",
     "hermes",
     "goose",
+    "mcode",
 )
 #: Harnesses whose user config nests the server map below more than one key.
 CHANNEL_NESTED_SECTION: dict[str, tuple[str, ...]] = {"zcode": ("mcp", "servers")}
@@ -237,6 +238,9 @@ def channel_config_path(harness_id: str, env: Mapping[str, str], home: Path) -> 
         return _path("${HERMES_HOME:-~/.hermes}/config.yaml", env, home)
     if harness_id == "goose":
         return _path("${XDG_CONFIG_HOME:-~/.config}/goose/config.yaml", env, home)
+    if harness_id == "mcode":
+        # MiniMax Code reads user-scope servers from mcpServers in its data directory.
+        return home / ".minimax" / "mcp.json"
     raise KeyError(harness_id)
 
 

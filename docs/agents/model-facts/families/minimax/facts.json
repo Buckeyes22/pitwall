@@ -10,6 +10,11 @@
         {
           "harness": "opencode",
           "model": "minimax-coding-plan/MiniMax-M3"
+        },
+        {
+          "harness": "mcode",
+          "model": "minimax/MiniMax-M3",
+          "register": true
         }
       ],
       "facts": {
@@ -121,7 +126,18 @@
       "status": "current",
       "displayName": "MiniMax M2.7",
       "artifact": "MiniMaxAI/MiniMax-M2.7",
-      "routes": [],
+      "routes": [
+        {
+          "harness": "mcode",
+          "model": "minimax/MiniMax-M2.7",
+          "register": true
+        },
+        {
+          "harness": "mcode",
+          "model": "minimax/MiniMax-M2.7-highspeed",
+          "register": true
+        }
+      ],
       "facts": {
         "contextWindow": {
           "value": 204800,
@@ -234,6 +250,11 @@
         {
           "harness": "opencode",
           "model": "minimax-coding-plan/MiniMax-M3.1-Flash-Preview"
+        },
+        {
+          "harness": "mcode",
+          "model": "minimax/MiniMax-M3.1-Flash-Preview",
+          "register": true
         }
       ],
       "facts": {
@@ -471,5 +492,7 @@
       ],
       "reviewedAt": "2026-09-28"
     }
-  ]
+  ],
+  "promptReference": "prompting/minimax-prompting-reference.md",
+  "runtimeReference": "references/model-prompting.md#minimax"
 }

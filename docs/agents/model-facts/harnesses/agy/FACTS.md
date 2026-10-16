@@ -18,10 +18,11 @@
 
 - Stated by harness (agy-headless, Permissions in headless mode): In headless mode a tool needing approval is denied without failing the run (exit 0, notice on stderr). Shell commands ask by default, so grant them with permissions.allow or the skip flag.
 - Stated by harness (agy-headless, Select a model, effort, or agent): A pinned --model slug that agy does not recognise exits non-zero with an ERROR status instead of falling back, so a wrong slug fails loudly. List valid slugs with agy models.
-- Stated by harness (agy-headless, Flag reference, --print-timeout row): A headless run waits at most five minutes for a response by default; raise --print-timeout for long tasks.
+- Stated by harness (agy-changelog, CLI v1.2.6, headless timeout; CLI v1.2.9, background tasks): Since agy 1.2.6 a headless run has no default time limit, although the headless guide still says five minutes. Pass --print-timeout to bound a run; background tasks are kept until that deadline, capped at 30 minutes.
 - Stated by harness (agy-headless, Run a single prompt, Note): Headless runs use cached credentials. Sign in once with an interactive agy session; an unauthenticated run without a terminal exits with an authentication required error.
 - Stated by harness (agy-rules, Where rules are stored; YAML frontmatter and activation modes): agy loads GEMINI.md and AGENTS.md from each directory up to the workspace root, plus global copies under ~/.gemini. Rules combine rather than replace, and neither file takes frontmatter.
 - Stated by harness (agy-subagents, Frontmatter Configuration, Known Issue): A custom subagent whose tools list has a misspelled or unknown tool name can hang. Check names such as view_file and run_command exactly.
+- Stated by harness (agy-effort, Available levels; error messages): agy's --effort also takes xhigh and max, but only on models that publish those levels; on any other model it fails and lists the levels that model offers. agy models shows each model's slugs.
 
 ## Disagreements
 
@@ -40,9 +41,11 @@ None.
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
 | agy-headless | harness | harness | 2026-10-13 | <https://antigravity.google/docs/cli/headless.md> |
-| agy-reference | harness | harness | 2026-10-13 | <https://antigravity.google/docs/cli/reference.md> |
-| agy-permissions | harness | harness | 2026-10-13 | <https://antigravity.google/docs/permissions.md> |
-| agy-sandbox | harness | harness | 2026-10-13 | <https://antigravity.google/docs/sandbox.md> |
-| agy-rules | harness | harness | 2026-10-13 | <https://antigravity.google/docs/rules.md> |
-| agy-subagents | harness | harness | 2026-10-13 | <https://antigravity.google/docs/subagents.md> |
-| agy-best-practices | harness | guidance | 2026-10-13 | <https://antigravity.google/docs/cli/best-practices.md> |
+| agy-reference | harness | harness | 2026-10-16 | <https://antigravity.google/docs/cli/reference.md> |
+| agy-permissions | harness | harness | 2026-10-16 | <https://antigravity.google/docs/permissions.md> |
+| agy-sandbox | harness | harness | 2026-10-16 | <https://antigravity.google/docs/sandbox.md> |
+| agy-rules | harness | harness | 2026-10-16 | <https://antigravity.google/docs/rules.md> |
+| agy-subagents | harness | harness | 2026-10-16 | <https://antigravity.google/docs/subagents.md> |
+| agy-best-practices | harness | guidance | 2026-10-16 | <https://antigravity.google/docs/cli/best-practices.md> |
+| agy-changelog | harness | changes | 2026-10-16 | <https://antigravity.google/docs/changelog.md> |
+| agy-effort | harness | effort | 2026-10-16 | <https://antigravity.google/docs/cli/commands/effort.md> |

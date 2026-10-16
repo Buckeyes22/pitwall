@@ -11,7 +11,9 @@ import unittest
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from unittest import mock
 
+import pitwall.agents.workspace as workspace_module
 from pitwall.agents.run_store import (
     RunStore,
     cleanup_runs,
@@ -409,6 +411,29 @@ class WorkspaceTests(unittest.TestCase):
         self.assertFalse(owned.exists())
         result = json.loads(result_path.read_text(encoding="utf-8"))
         self.assertEqual("discarded", result["integration"]["status"])
+
+    def test_discard_recognizes_both_wordings_of_a_broken_gitfile(self) -> None:
+        # Git before 2.56 reports a gitfile whose target is gone as "not a git repository";
+        # 2.56 and later say "gitfile does not point to a valid repository".
+        messages = (
+            b"fatal: not a git repository: /repo/.git/worktrees/wt\n",
+            b"fatal: gitfile does not point to a valid repository: /wt/.git\n",
+        )
+        real_run_git = workspace_module._run_git
+        for message in messages:
+            with self.subTest(message=message):
+                dispatch_id = self.fixture.dispatch_id()
+                owned = self._orphan_owned_worktree(dispatch_id)
+                self.fixture.terminal_result(dispatch_id)
+
+                def run_git(argv, *, cwd, message=message, owned=owned, **kwargs):
+                    if argv == ["rev-parse", "--git-dir"] and Path(cwd) == owned:
+                        return subprocess.CompletedProcess(["git", *argv], 128, b"", message)
+                    return real_run_git(argv, cwd=cwd, **kwargs)
+
+                with mock.patch.object(workspace_module, "_run_git", side_effect=run_git):
+                    discard_run(self.fixture.env, dispatch_id, yes=True)
+                self.assertFalse(owned.exists())
 
     def test_discard_with_a_gone_branch_never_deletes_outside_the_owned_path(self) -> None:
         dispatch_id = self.fixture.dispatch_id()

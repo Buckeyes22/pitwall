@@ -2,17 +2,74 @@
 
 from __future__ import annotations
 
+import os
 import tempfile
 import unittest
 import uuid
 from unittest import mock
 
+from pitwall.agents.caller import SESSION_ENV, Caller
 from pitwall.agents.managed_channel import LaunchRequest, start_dispatch
 from pitwall.agents.run_store import MANAGED_LAUNCH_ENV
 from tests.agents.shim_test_support import ShimSandbox
 
 
 class ManagedLaunchOutputTests(unittest.TestCase):
+    def test_launcher_stamps_the_session_before_detaching(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        process = mock.Mock(pid=4242)
+        env = {"PITWALL_AGENTS_STATE_HOME": temporary.name}
+        with (
+            mock.patch(
+                "pitwall.agents.managed_channel._execution_argv", return_value=["/missing/launcher"]
+            ),
+            mock.patch("pitwall.agents.managed_channel._process_identity", return_value=None),
+            mock.patch(
+                "pitwall.agents.managed_channel.subprocess.Popen", return_value=process
+            ) as popen,
+            mock.patch("pitwall.agents.managed_channel.threading.Thread"),
+            mock.patch(
+                "pitwall.agents.caller.resolve_caller",
+                return_value=Caller("codex:pid:123:linux:456", "host-process", "codex", None),
+            ) as resolve,
+        ):
+            start_dispatch(
+                env,
+                LaunchRequest(
+                    dispatch_id=str(uuid.uuid4()), route=None, harness="codex", prompt="launch"
+                ),
+            )
+        resolve.assert_called_once_with(env, start_pid=os.getpid())
+        self.assertEqual("codex:pid:123:linux:456", popen.call_args.kwargs["env"][SESSION_ENV])
+        self.assertNotIn(SESSION_ENV, env)
+
+    def test_launcher_preserves_an_inherited_session_over_the_host_session(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        process = mock.Mock(pid=4242)
+        with (
+            mock.patch(
+                "pitwall.agents.managed_channel._execution_argv", return_value=["/missing/launcher"]
+            ),
+            mock.patch("pitwall.agents.managed_channel._process_identity", return_value=None),
+            mock.patch(
+                "pitwall.agents.managed_channel.subprocess.Popen", return_value=process
+            ) as popen,
+            mock.patch("pitwall.agents.managed_channel.threading.Thread"),
+        ):
+            start_dispatch(
+                {
+                    "PITWALL_AGENTS_STATE_HOME": temporary.name,
+                    SESSION_ENV: "claude:root",
+                    "CLAUDE_CODE_SESSION_ID": "other",
+                },
+                LaunchRequest(
+                    dispatch_id=str(uuid.uuid4()), route=None, harness="codex", prompt="launch"
+                ),
+            )
+        self.assertEqual("claude:root", popen.call_args.kwargs["env"][SESSION_ENV])
+
     def test_managed_launch_does_not_mirror_child_output(self) -> None:
         sandbox = ShimSandbox()
         self.addCleanup(sandbox.cleanup)

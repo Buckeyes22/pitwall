@@ -14,7 +14,7 @@
 ## Statements
 
 - Stated by vendor (google-changelog, July 21, 2026, Deprecated parameters): Leave temperature, top_p, and top_k out of Gemini requests; Google deprecated all three in July 2026.
-- Stated by harness (antigravity-models, Reasoning model, plan table and footnotes): Antigravity serves Gemini 4 Argon only on Google AI Ultra and Enterprise plans, and not in its IDE; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.
+- Stated by harness (antigravity-models, Reasoning model, plan table and footnotes): agy serves Gemini 4 Argon on paid Google AI Pro, Ultra, and Enterprise plans, not on Free, Plus, or a Pro trial; 3.7 Flash, 3.6 Flash, and 3.1 Pro are Enterprise only. Run agy models to see what an account can pin.
 - Stated by vendor (google-thinking, Controlling thinking): Gemini models think dynamically by default and scale effort to the request; set thinking_level only to cap cost or force depth.
 - Stated by vendor (google-latest-model, Understanding thinking levels): Medium is Gemini 4 Argon's default and Google's pick for most code and agent work. Keep high for the hardest reasoning, and test all three levels before settling on the lowest that passes.
 - Stated by vendor (google-latest-model, Setting output token limits): On Gemini 4 Argon, thinking and the answer share max_output_tokens. Keep that limit at 32,768 or more, and lower thinking_level rather than the limit when tokens must be saved.
@@ -41,15 +41,15 @@ None recorded.
 
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
-| google-gemini-4-argon | vendor | model | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/models/gemini-4-argon> |
+| google-gemini-4-argon | vendor | model | 2026-10-16 | <https://ai.google.dev/gemini-api/docs/models/gemini-4-argon> |
 | google-gemini-3-8-flash | vendor | model | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash.md.txt> |
 | google-whats-new-3-8 | vendor | changes | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.8> |
 | google-gemini-3-7-flash | vendor | model | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/models/gemini-3.7-flash.md.txt> |
 | google-gemini-3-5-flash | vendor | model | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash.md.txt> |
 | google-gemini-3-1-pro | vendor | model | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview.md.txt> |
-| google-thinking | vendor | effort | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/thinking.md.txt> |
+| google-thinking | vendor | effort | 2026-10-16 | <https://ai.google.dev/gemini-api/docs/thinking.md.txt> |
 | google-prompting | vendor | guidance | 2026-09-28 | <https://ai.google.dev/gemini-api/docs/prompting-strategies.md.txt> |
 | google-long-decode | vendor | guidance | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/long-decode.md.txt> |
 | google-latest-model | vendor | changes | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/latest-model.md.txt> |
-| google-changelog | vendor | changes | 2026-10-13 | <https://ai.google.dev/gemini-api/docs/changelog.md.txt> |
-| antigravity-models | harness | model | 2026-10-13 | <https://antigravity.google/docs/models.md> |
+| google-changelog | vendor | changes | 2026-10-16 | <https://ai.google.dev/gemini-api/docs/changelog.md.txt> |
+| antigravity-models | harness | model | 2026-10-16 | <https://antigravity.google/docs/models.md> |

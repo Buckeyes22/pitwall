@@ -96,6 +96,7 @@ class MarketplaceManifestTests(unittest.TestCase):
                 "grok-shim",
                 "hermes-shim",
                 "kimi-shim",
+                "mcode-shim",
                 "muse-shim",
                 "opencode-shim",
                 "pi-shim",

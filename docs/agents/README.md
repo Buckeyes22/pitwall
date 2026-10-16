@@ -25,7 +25,8 @@ see the [migration guide](../operator/agents-migration.md).
 - [`routes.md`](routes.md): agent profiles (`name@harness`) in the `[agents.profiles]` tables of
   `pitwall.toml`, and the `pitwall agents profiles` commands.
 - [`harness-registry.md`](harness-registry.md) and [`harness-cli-setup.md`](harness-cli-setup.md):
-  the fourteen harnesses and their optional installer.
+  the fifteen provider harnesses and their optional installer.
+- [`mcode.md`](mcode.md): MiniMax Code installation, login, routes, permissions, and channel setup.
 - [`architecture.md`](architecture.md), [`run-records.md`](run-records.md),
   [`lifecycle-hooks.md`](lifecycle-hooks.md), [`doctor.md`](doctor.md),
   [`worktree-dispatch.md`](worktree-dispatch.md), [`workflows.md`](workflows.md): the runtime.

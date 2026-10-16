@@ -5,7 +5,7 @@ description: >-
   <name[@harness]> <prompt-file> and returns stdout verbatim. Dispatches a
   named route profile from the user's pitwall.toml through whichever non-Claude
   harness it resolves to (agy, cline, codex, dsh, goose, grok, hermes, kimi,
-  muse, opencode, pi, qwen, or zcode). Never use it for Claude models; Claude work
+  muse, mcode, opencode, pi, qwen, or zcode). Never use it for Claude models; Claude work
   stays native in this host.
 model: sonnet
 color: purple

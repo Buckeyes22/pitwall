@@ -25,7 +25,7 @@ def _agy_prompt(args: list[str]) -> str | None:
         if flag not in args or args.index(flag) + 1 >= len(args):
             return None
     has_model = "--model" in args or "-m" in args or any(arg.startswith("--model=") for arg in args)
-    if not has_model or args[args.index("--output-format") + 1] != "text":
+    if not has_model or args[args.index("--output-format") + 1] != "json":
         return None
     return args[-1]
 

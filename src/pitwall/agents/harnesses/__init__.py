@@ -12,6 +12,7 @@ from .goose import GooseAdapter
 from .grok import GrokAdapter
 from .hermes import HermesAdapter
 from .kimi import KimiAdapter
+from .mcode import MCodeAdapter
 from .muse import MuseAdapter
 from .opencode import OpenCodeAdapter
 from .pi import PiAdapter
@@ -28,6 +29,7 @@ _ADAPTERS: dict[str, type[HarnessAdapter]] = {
     "goose": GooseAdapter,
     "hermes": HermesAdapter,
     "kimi": KimiAdapter,
+    "mcode": MCodeAdapter,
     "muse": MuseAdapter,
     "opencode": OpenCodeAdapter,
     "pi": PiAdapter,

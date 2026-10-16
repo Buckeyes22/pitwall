@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from pitwall.agents.errors import UsageError
+from pitwall.agents.token_usage import ParsedOutput, TokenUsage
 
 #: Largest prompt an adapter may place in argv. Linux caps one argument at
 #: MAX_ARG_STRLEN (128 KiB); the margin leaves room for the flag around it.
@@ -108,6 +109,19 @@ class HarnessAdapter:
     # copies the prompt into the dispatch's private run directory (mode 0600)
     # for every dispatch and removes it when the run ends.
     private_prompt_file = False
+    # How dispatch reads the harness's answer and usage: "text" passes stdout through;
+    # "json" parses machine-readable stdout back into the answer; "usage-file" reads a
+    # report written beside stdout.
+    output_mode = "text"
+
+    def parse_output(self, raw: bytes) -> ParsedOutput:
+        """Answer text and token usage from the harness's raw stdout (json mode)."""
+        return ParsedOutput(raw, None)
+
+    def parse_usage_file(self, data: Any) -> TokenUsage | None:
+        """Token usage from the harness's own report file (usage-file mode)."""
+        del data
+        return None
 
     def detect_soft_denial(self, exit_code: int, stderr_tail: bytes) -> str | None:
         """A reason when the harness exited 0 without doing the work; None otherwise.
