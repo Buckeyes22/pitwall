@@ -4,7 +4,7 @@
 
 **Goal:** Ship one branch (`fix/agents-child-pwd`) that (a) makes every harness child see `PWD` equal to its
 working directory, so isolated opencode dispatches stop writing into the source checkout, and (b) adds
-MiniMax Code (`mcode exec`) as Pitwall's sixteenth harness with shim, registry, installer, channel
+MiniMax Code (`mcode exec`) as Pitwall's fifteenth harness with shim, registry, installer, channel
 registration, docs, plugins, and release-acceptance bindings.
 
 **Architecture:** The PWD fix lives in `_start_supervised` (`src/pitwall/agents/process.py`), the one
@@ -19,6 +19,17 @@ come from the MiniMax model-facts unit (`register: true` routes), not hand-writt
 
 **Spec:** This plan; the design facts it argues from are the probe evidence below (all observed on the development workstation,
 2026-10-15, with `mcode` 0.6.12 logged in to a Global account).
+
+## Execution notes (2026-10-15, on `feat/session-usage`, PR #20)
+
+- Task 1 (PWD fix) and the session-usage plan landed first on this branch.
+- Task 2 is already on `public/main` (#17/#18): the opencode route uses `minimax-coding-plan/`, the
+  registry example and hand-written references are corrected, and the stale "no route reaches it"
+  claim is gone. Its only remaining item, the facts unit's top-level `promptReference` and
+  `runtimeReference`, moves to Task 3 Step 5.
+- The registry has 14 harnesses, so mcode is the fifteenth; `test_install` goes 15 -> 16 (shims
+  include the route shim). The release-acceptance denominator starts at 1327, so Task 5 is
+  `total 1327 -> 1330`.
 
 ## Probe evidence (the spec)
 
@@ -622,7 +633,9 @@ Register it in `harnesses/__init__.py`: `from .mcode import MCodeAdapter` and `"
 }
 ```
 
-- [ ] **Step 5: Register the models through the facts** — in `families/minimax/facts.json` add to each model's `routes`:
+- [ ] **Step 5: Register the models through the facts** — in `families/minimax/facts.json` first add the top-level
+  `"promptReference": "prompting/minimax-prompting-reference.md"` and
+  `"runtimeReference": "references/model-prompting.md#minimax"` (left over from Task 2), then add to each model's `routes`:
 
 | facts model | route to add |
 |---|---|
@@ -816,7 +829,7 @@ git commit -s -m "feat(agents): register the channel server with MiniMax Code"
 
 **Files:**
 - Modify: `release_acceptance/surface-test-map.json` — two entries
-- Modify: `release_acceptance/denominator.json` — `total 1322 → 1325`, `counts["routing:provider"] 14 → 15`, `counts["routing:shim"] 15 → 16`, `counts["routing_contracts:provider"] 14 → 15`, new `reason` prefix
+- Modify: `release_acceptance/denominator.json` — `total 1327 → 1330`, `counts["routing:provider"] 14 → 15`, `counts["routing:shim"] 15 → 16`, `counts["routing_contracts:provider"] 14 → 15`, new `reason` prefix
 - Regenerate: `release_acceptance/reviewed-bindings.json` (and any per-family binding file the tool rewrites)
 
 **Interfaces:**
@@ -843,7 +856,7 @@ git commit -s -m "feat(agents): register the channel server with MiniMax Code"
 Both use `"framework": "unittest"` (the zcode entries were corrected to that in `83a7c32d`, because both test classes are `unittest.TestCase`); set it so in both entries above.
 
 - [ ] **Step 2: Denominator** — set the counts above and prepend to `reason`:
-  `2026-10-15: add MiniMax Code provider, adapter contract, and shim, each bound to hermetic registry/journey checks; previous total 1322. Previous note: ` followed by the existing text.
+  `2026-10-15: add MiniMax Code provider, adapter contract, and shim, each bound to hermetic registry/journey checks; previous total 1327. Previous note: ` followed by the existing text.
 
 - [ ] **Step 3: Bind and check**
 
