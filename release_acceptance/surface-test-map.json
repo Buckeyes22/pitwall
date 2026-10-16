@@ -590,6 +590,12 @@
       "proof_lane": "hermetic",
       "reviewed_oracle": "the muse registry entry agrees with its adapter's contract"
     },
+    "routing:provider:mcode": {
+      "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "The MiniMax Code registry entry agrees with its adapter contract and its facts-registered models"
+    },
     "routing:provider:opencode": {
       "test_node_id": "tests/agents/test_registry.py::RegistryTests::test_registry_adapter_contracts_are_aligned",
       "framework": "unittest",
@@ -2095,6 +2101,12 @@
       "framework": "pytest",
       "proof_lane": "hermetic",
       "reviewed_oracle": "Enter on a model opens its dossier as Markdown with the body and the variants table"
+    },
+    "routing:adapter:mcode": {
+      "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
+      "framework": "unittest",
+      "proof_lane": "hermetic",
+      "reviewed_oracle": "MiniMax Code receives the stdin prompt, dispatch workspace, explicit permission policy, one --model, and the effort flag; child failure propagates"
     },
     "routing:adapter:zcode": {
       "test_node_id": "tests/agents/test_journeys.py::J40ShimsJourney::test_every_harness_shim",
