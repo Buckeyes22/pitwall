@@ -19,5 +19,5 @@
 - **Stated by vendor (`gemini-4-argon`):** Hard Gemini 4 Argon prompts can take several minutes. Give the client at least a 15-minute timeout, or run the request in the background.
 - **Stated by vendor (`gemini-3.8-flash`):** Gemini 3.8 Flash spends more tokens on long agentic tasks by design; lower thinking_level to low for everyday work to cut cost.
 - **Stated by vendor (`gemini-3.8-flash`):** Do not ask Gemini 3.8 Flash for minimal thinking; the API returns an error. Use low, medium, or high.
-- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-16. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->

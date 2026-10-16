@@ -125,17 +125,17 @@
     },
     {
       "id": "agy-print-timeout",
-      "text": "A headless run waits at most five minutes for a response by default; raise --print-timeout for long tasks.",
+      "text": "Since agy 1.2.6 a headless run has no default time limit, although the headless guide still says five minutes. Pass --print-timeout to bound a run; background tasks are kept until that deadline, capped at 30 minutes.",
       "applies": [
         "*"
       ],
       "class": "harness",
-      "source": "agy-headless",
-      "locator": "Flag reference, --print-timeout row",
+      "source": "agy-changelog",
+      "locator": "CLI v1.2.6, headless timeout; CLI v1.2.9, background tasks",
       "surfaces": [
         "reference"
       ],
-      "reviewedAt": "2026-09-28"
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "agy-unauthenticated-headless",
@@ -178,6 +178,20 @@
         "reference"
       ],
       "reviewedAt": "2026-09-28"
+    },
+    {
+      "id": "agy-effort-levels",
+      "text": "agy's --effort also takes xhigh and max, but only on models that publish those levels; on any other model it fails and lists the levels that model offers. agy models shows each model's slugs.",
+      "applies": [
+        "*"
+      ],
+      "class": "harness",
+      "source": "agy-effort",
+      "locator": "Available levels; error messages",
+      "surfaces": [
+        "reference"
+      ],
+      "reviewedAt": "2026-10-16"
     }
   ]
 }

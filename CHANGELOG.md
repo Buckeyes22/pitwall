@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and its facts and guidance are in the Gemini model facts. The Gemini prompting reference now
   follows the model-card layout of the Claude references, and Google's Gemini 4 Argon model card is
   kept as Markdown in `docs/prompting/model-cards/`. The `agy` default stays `gemini-3.8-flash`,
-  because Antigravity offers Argon only on Google AI Ultra and Enterprise plans.
+  because Antigravity offers Argon only on paid Google AI Pro, Ultra, and Enterprise plans (not Free or Plus).
 - Muse Wonder (`muse-wonder-1.0`, preview) is a registered `muse` route with its own model-facts
   family, capability card, and prompting reference built from Meta's model card, which is kept as
   Markdown in `docs/prompting/model-cards/`. Muse Wonder Full is recorded without a route because

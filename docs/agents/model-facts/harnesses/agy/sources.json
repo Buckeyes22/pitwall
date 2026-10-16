@@ -10,7 +10,7 @@
       "fetch": "http",
       "format": "markdown",
       "observedHash": "sha256:ca5fdbf7321fa43ec9dfb5ef519ad8d5ff06e8892ae078586c68fe424a274b66",
-      "observedAt": "2026-10-13",
+      "observedAt": "2026-10-16",
       "reviewedHash": "sha256:ca5fdbf7321fa43ec9dfb5ef519ad8d5ff06e8892ae078586c68fe424a274b66",
       "reviewedAt": "2026-10-13"
     },
@@ -21,10 +21,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:4cb95fafadd4d9a0404279bd695bac3dc8049c4ade6e190e9f26d931882e9d67",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:4cb95fafadd4d9a0404279bd695bac3dc8049c4ade6e190e9f26d931882e9d67",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:3d9b607882662a8051eb951b01fda7e79bc16e1dedc32990ecde191f58a09be4",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:3d9b607882662a8051eb951b01fda7e79bc16e1dedc32990ecde191f58a09be4",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "agy-permissions",
@@ -33,10 +33,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:73ce7e54256f8c7670b5d176b516393ce7ffac407e3f24baec37ea4a69ac9d95",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:73ce7e54256f8c7670b5d176b516393ce7ffac407e3f24baec37ea4a69ac9d95",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:5b764ef5c73074de470b50d32f66efd962a506fbd106d016f11d9791d96cd372",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:5b764ef5c73074de470b50d32f66efd962a506fbd106d016f11d9791d96cd372",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "agy-sandbox",
@@ -45,10 +45,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:c9184146fe8b5a94a4f3eccb98ee5c7dcc29aa6648256750b2c1c15df46c5a52",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:c9184146fe8b5a94a4f3eccb98ee5c7dcc29aa6648256750b2c1c15df46c5a52",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:45eb24c5dcba4840520c7b2b24b431ec9851ca46d9bac715c52dc1215ad3f842",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:45eb24c5dcba4840520c7b2b24b431ec9851ca46d9bac715c52dc1215ad3f842",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "agy-rules",
@@ -57,10 +57,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:58921aca2bf34718ed05008fc829a954a4b57dccc1a87e4c4689921e87b246d8",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:58921aca2bf34718ed05008fc829a954a4b57dccc1a87e4c4689921e87b246d8",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:e090ffe8a80aaf25e2ce1fec4bb3e663809de08a7d5c513878d8baa67b292f3a",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:e090ffe8a80aaf25e2ce1fec4bb3e663809de08a7d5c513878d8baa67b292f3a",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "agy-subagents",
@@ -69,10 +69,10 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:dc341deb81b309ff9488bc7b9c939f76e55da570bbea342d69b61ee8feea2cad",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:dc341deb81b309ff9488bc7b9c939f76e55da570bbea342d69b61ee8feea2cad",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:385986f5d1bc97b2b543047e468b1ae0c9c29de6c58e808ef09514e86f261e02",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:385986f5d1bc97b2b543047e468b1ae0c9c29de6c58e808ef09514e86f261e02",
+      "reviewedAt": "2026-10-16"
     },
     {
       "id": "agy-best-practices",
@@ -81,10 +81,34 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:0a48350132e5f5ab115ea548962713c51135e4a25ee6ef43965c27cee1018d1a",
-      "observedAt": "2026-10-13",
-      "reviewedHash": "sha256:0a48350132e5f5ab115ea548962713c51135e4a25ee6ef43965c27cee1018d1a",
-      "reviewedAt": "2026-10-13"
+      "observedHash": "sha256:ef6f0677435cc47b584fffcb16a3e5b74551665a6b14e2064407adcad9e8708e",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:ef6f0677435cc47b584fffcb16a3e5b74551665a6b14e2064407adcad9e8708e",
+      "reviewedAt": "2026-10-16"
+    },
+    {
+      "id": "agy-changelog",
+      "url": "https://antigravity.google/docs/changelog.md",
+      "kind": "harness",
+      "pageType": "changes",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6121a2f8b073c53b0daa5661f2b87c44ef5e74755634ca6bf371b2f37544ee24",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:6121a2f8b073c53b0daa5661f2b87c44ef5e74755634ca6bf371b2f37544ee24",
+      "reviewedAt": "2026-10-16"
+    },
+    {
+      "id": "agy-effort",
+      "url": "https://antigravity.google/docs/cli/commands/effort.md",
+      "kind": "harness",
+      "pageType": "effort",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:6d02ab84502b1de6f8fca329cd433c1917402d5373a66d6cac6b9dc2cbc38f9a",
+      "observedAt": "2026-10-16",
+      "reviewedHash": "sha256:6d02ab84502b1de6f8fca329cd433c1917402d5373a66d6cac6b9dc2cbc38f9a",
+      "reviewedAt": "2026-10-16"
     }
   ],
   "notPublished": [

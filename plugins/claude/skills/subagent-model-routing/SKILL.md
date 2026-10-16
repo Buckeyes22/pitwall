@@ -240,7 +240,7 @@ If your CLI has MCP tools configured, prompts may direct their use.
 - **Context:** `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro`: 1,048,576 tokens, output 65,536.
 - **Effort:** `gemini-4-argon`, `gemini-3.8-flash`: low, medium, high (default medium); `gemini-3.6-flash`: minimal, low, medium, high (default medium); `gemini-3.1-pro`: low, medium, high (default high).
 - **Effort on other values:** `gemini-3.8-flash`: other values are rejected.
-- **Facts checked:** 2026-10-13. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
+- **Facts checked:** 2026-10-16. Sources: `docs/agents/model-facts/families/gemini/FACTS.md`.
 <!-- MODEL-FACTS:gemini END -->
 - Full reference: `references/model-prompting.md#gemini-through-antigravity`
 
