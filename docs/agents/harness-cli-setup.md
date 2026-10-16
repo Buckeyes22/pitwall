@@ -1,6 +1,6 @@
 # Optional harness CLI setup
 
-`pitwall agents setup harnesses` is an explicit, dependency-free checkbox installer for the optional CLI harnesses used by the transport shims: Codex, Claude Code, Antigravity CLI, Grok Build, Kimi Code, OpenCode, Qwen Code, Pi, Hermes Agent, Cline CLI, Muse Code, goose, DeepSeek Harness (`dsh`), and ZCode (manual installation). The harness executables are not bundled with Pitwall.
+`pitwall agents setup harnesses` is an explicit, dependency-free checkbox installer for the optional CLI harnesses used by the transport shims: Codex, Claude Code, Antigravity CLI, Grok Build, Kimi Code, OpenCode, Qwen Code, Pi, Hermes Agent, Cline CLI, Muse Code, goose, DeepSeek Harness (`dsh`), ZCode, and MiniMax Code. The harness executables are not bundled with Pitwall.
 
 ## Selector behavior
 
@@ -111,6 +111,7 @@ The manifest's installer sources were last verified on 2026-10-09 (`sourceVerifi
 | Muse Code | `https://dev.meta.ai/install.sh` | reviewed SHA-256 pinned | [Meta Muse Code](https://developer.meta.com/ai/products/muse-code/) |
 | goose | `https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh` | reviewed SHA-256 pinned; `stable` is a moving tag, so the pin goes stale whenever the script it serves changes | [goose installation](https://goose-docs.ai/docs/getting-started/installation/) |
 | ZCode | manual build/install; existing CLI supported | no canonical pinned public CLI installer | [Official source](https://github.com/zai-org/ZCode/blob/main/README.md) |
+| MiniMax Code | npm package `@minimax-ai/code@0.6.12` | npm recipe; no reviewed checksum | [Official quick start](https://agent.minimax.io/docs/cli/quick-start) |
 | DeepSeek Harness (`dsh`) | npm `@deepseek-ai/dsh@0.1.1-rc.2` | no reviewed checksum; `--ignore-scripts` | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) |
 
 The runtime does not use npm as a universal fallback. It runs npm only for an explicit, pinned npm recipe. If a first-party standalone installer is unavailable or changes its redirect target, setup fails with the documentation link rather than guessing another package-manager command.
@@ -261,3 +262,9 @@ The ZCode adapter uses an already installed CLI and its saved account/model.
 The `manual` recipe has no download or execution fields: when ZCode is missing,
 setup returns a failed result with the official build/install documentation. An
 installed binary is kept. See [ZCode account route](zcode.md).
+
+## MiniMax Code
+
+The MiniMax Code recipe installs `@minimax-ai/code@0.6.12` from npm and verifies the CLI with
+`mcode --version`. npm recipes do not have a reviewed checksum. Setup does not authenticate; sign in
+with `mcode login --region global` after installation. See [MiniMax Code setup](mcode.md).

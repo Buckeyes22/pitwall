@@ -87,7 +87,7 @@ Its shim and hook entry points do not load the broker's web, database, or queue 
 The HTTP connection shown above does not make a broker deployment a prerequisite for installing
 Agent Routing.
 
-There are **14 dispatch harnesses** and **13 channel registrations**. Channel support includes
+There are **15 dispatch harnesses** and **14 channel registrations**. Channel support includes
 the dispatch harnesses other than Pi and dsh, which have no MCP client, plus GitHub Copilot CLI.
 The channel connection in the diagram applies only to supported MCP clients.
 

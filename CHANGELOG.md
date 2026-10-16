@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- MiniMax Code joins as the fifteenth provider harness (`mcode-shim.sh`). It sends prompts on
+  stdin, selects an explicit registered `minimax/...` model, runs in JSON output mode, and records
+  reported token usage. `--effort` is available for M3.1-Flash-Preview; dispatch defaults to
+  `--permission smart` and uses `full` when `PITWALL_AGENTS_UNRESTRICTED=1`. Smart-mode refusals
+  containing `HOST_CAPABILITY_UNAVAILABLE` are recorded as exit 77. The channel registers in
+  `~/.minimax/mcp.json`, and optional setup uses the npm installer recipe.
+
 - Dispatch records now include the launching session and normalized token usage from eight
   harnesses, and `pitwall agents runs usage` reports accumulated usage by session.
 

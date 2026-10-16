@@ -222,3 +222,12 @@ The Claude tripwires recognize both `zcode-shim` and `pitwall:zcode-shim`
 observations in the harness card rather than assigning them to a GLM model family.
 The release acceptance denominator adds the provider, shim and adapter surfaces,
 bound to the hermetic registry and journey tests (`release_acceptance/surface-test-map.json`).
+
+## MiniMax Code route
+
+`pitwall.agents.harnesses.mcode:MCodeAdapter` dispatches to MiniMax Code with one explicitly
+registered `minimax/...` model, stdin prompt delivery, the prepared workspace, and `smart` or
+`full` permission mode. JSON output records the answer and token usage. M3.1-Flash-Preview is the
+default and the only registered route with effort selection. A smart-mode
+`HOST_CAPABILITY_UNAVAILABLE` refusal is reported as exit `77`. User-scope channel registration is
+stored in `~/.minimax/mcp.json` under `mcpServers`. See [MiniMax Code](../agents/mcode.md).

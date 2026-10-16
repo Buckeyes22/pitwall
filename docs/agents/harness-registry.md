@@ -20,7 +20,7 @@ Semantic validation supplements `src/pitwall/agents/resources/schemas/harness-re
 - `routes.generated.md`
 - `harness-registry.generated.json`
 
-`pitwall agents install` copies both into each host plugin's `skills/subagent-model-routing/references/`. All three hosts (Claude, Codex, Copilot) receive the identical generated catalog covering all fourteen providers, including each host's own native provider. Unknown provider-supported model IDs remain pass-through; the catalog is guidance, not a live availability claim.
+`pitwall agents install` copies both into each host plugin's `skills/subagent-model-routing/references/`. All three hosts (Claude, Codex, Copilot) receive the identical generated catalog covering all fifteen providers, including each host's own native provider. Unknown provider-supported model IDs remain pass-through; the catalog is guidance, not a live availability claim.
 
 Some registry fields are generated from `model-facts/` by `tools/agents/sync_model_facts.py`: a model's
 `displayName`, `effortValues`, and `provenance`, and a model family's `contextWindow`,

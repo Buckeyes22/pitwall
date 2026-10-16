@@ -30,6 +30,7 @@ safe thing to try, common confusions, a check question, and where to read more.
 - [MCP and agent clients](mcp-and-agent-clients.md)
 - [Subscription usage](subscription-usage.md)
 - [ZCode account routing](zcode-routing.md)
+- [MiniMax Code routing](mcode-routing.md)
 - [The TUI (terminal dashboard)](the-tui.md)
 - [Pi Workbench baseline](pi-workbench-baseline.md)
 

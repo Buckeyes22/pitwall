@@ -5,13 +5,13 @@ You probably pay for more than one AI coding subscription. Delegating a task bet
 **Pitwall Agent Routing** is the `pitwall agents` command group of the one `pitwall` package. It makes that handoff
 explicit with three pieces:
 
-- **Fourteen thin CLI shims** (`codex-shim.sh`, `claude-shim.sh`, `agy-shim.sh`, `kimi-shim.sh`, `opencode-shim.sh`, `grok-shim.sh`, `qwen-shim.sh`, `pi-shim.sh`, `hermes-shim.sh`, `cline-shim.sh`, `muse-shim.sh`, `goose-shim.sh`, `zcode-shim.sh`, and experimental `dsh-shim.sh`), plus `route-shim.sh`, which dispatches a named model/harness profile through any of them, backed by a shared local Python runtime. `agy-shim.sh` routes Gemini through the Antigravity CLI. They dispatch a prompt to another agentic CLI and return the answer with a `SHIM-DONE exit=<n>` sentinel, while retaining private run records for inspection and recovery.
+- **Fifteen provider shims** (`codex-shim.sh`, `claude-shim.sh`, `agy-shim.sh`, `kimi-shim.sh`, `opencode-shim.sh`, `grok-shim.sh`, `qwen-shim.sh`, `pi-shim.sh`, `hermes-shim.sh`, `cline-shim.sh`, `muse-shim.sh`, `goose-shim.sh`, `zcode-shim.sh`, `mcode-shim.sh`, and experimental `dsh-shim.sh`), plus `route-shim.sh`, for sixteen shell entrypoints total. The route shim dispatches a named model/harness profile through any provider shim, backed by a shared local Python runtime. `agy-shim.sh` routes Gemini through the Antigravity CLI. They dispatch a prompt to another agentic CLI and return the answer with a `SHIM-DONE exit=<n>` sentinel, while retaining private run records for inspection and recovery.
 - **A routing skill** that defines when to delegate, which model to use, and how to phrase the dispatch, plus **tripwire guardrails** that catch silent delegation failures (missing sentinel, nonzero exit, truncated output) before they enter your context as usable results.
 - **A model ledger** that records every dispatch's wall time, exit code, and outcome, so routing decisions improve from your own observations rather than someone else's defaults.
 
 It's built for **Claude Code, Codex, and GitHub Copilot CLI users** who want to route work through the other installed agentic CLIs. Each host stays native for its own model family: Claude Code uses native Claude agents, Codex keeps Codex work inline, and shims handle cross-harness delegation.
 
-`pitwall agents install` writes the `pitwall` shim layer under `~/.claude/scripts/`: the fourteen shims plus `route-shim.sh`. Each shim is a two-line wrapper around `pitwall agents _shim`. The shims are `codex-shim.sh` (GPT models via Codex), `claude-shim.sh` (Claude models via Claude Code), `agy-shim.sh` (Gemini through Antigravity CLI), `kimi-shim.sh` (Kimi models via Kimi Code), `grok-shim.sh` (Grok via Grok Build), `qwen-shim.sh` (Qwen and any OpenAI-compatible endpoint via Qwen Code, local llama.cpp included), `opencode-shim.sh` (GLM, MiniMax, local models, and any OpenCode provider), `pi-shim.sh`, `hermes-shim.sh`, `cline-shim.sh`, `muse-shim.sh`, `goose-shim.sh`, `zcode-shim.sh` (the saved ZCode model/account), and experimental `dsh-shim.sh`. `route-shim.sh <name[@harness]> <prompt-file>` dispatches a named agent profile.
+`pitwall agents install` writes the `pitwall` shim layer under `~/.claude/scripts/`: fifteen provider shims plus `route-shim.sh`. Each shim is a two-line wrapper around `pitwall agents _shim`. The shims are `codex-shim.sh` (GPT models via Codex), `claude-shim.sh` (Claude models via Claude Code), `agy-shim.sh` (Gemini through Antigravity CLI), `kimi-shim.sh` (Kimi models via Kimi Code), `grok-shim.sh` (Grok via Grok Build), `qwen-shim.sh` (Qwen and any OpenAI-compatible endpoint via Qwen Code, local llama.cpp included), `opencode-shim.sh` (GLM, MiniMax, local models, and any OpenCode provider), `pi-shim.sh`, `hermes-shim.sh`, `cline-shim.sh`, `muse-shim.sh`, `goose-shim.sh`, `zcode-shim.sh` (the saved ZCode model/account), `mcode-shim.sh` (registered MiniMax account models), and experimental `dsh-shim.sh`. `route-shim.sh <name[@harness]> <prompt-file>` dispatches a named agent profile.
 
 ## How this compares
 
@@ -25,7 +25,7 @@ It's built for **Claude Code, Codex, and GitHub Copilot CLI users** who want to 
 
 - **Python 3.14** and `uv`. Installing the release wheel with `uv tool install` puts the `pitwall` command on your `PATH` with its own interpreter.
 - Nothing else: the shims run Python-supervised child process groups themselves, so there is no `timeout` or `gtimeout` prerequisite.
-- **Provider CLIs**: install any transport harnesses you plan to use—[Codex](https://github.com/openai/codex), [Claude Code](https://code.claude.com/docs/en/getting-started), [Antigravity CLI](https://antigravity.google/docs/cli/install/), [Grok Build](https://docs.x.ai/build/overview), [Kimi Code](https://moonshotai.github.io/kimi-code/), [Qwen Code](https://github.com/QwenLM/qwen-code), [OpenCode](https://opencode.ai), Pi, Hermes Agent, Cline CLI, [Muse Code](https://developer.meta.com/ai/products/muse-code/), [goose](https://goose-docs.ai/docs/getting-started/installation/), ZCode, and experimental dsh. Interactive bootstrap offers a checkbox installer for missing CLIs; manual provider installation remains supported.
+- **Provider CLIs**: install any transport harnesses you plan to use—[Codex](https://github.com/openai/codex), [Claude Code](https://code.claude.com/docs/en/getting-started), [Antigravity CLI](https://antigravity.google/docs/cli/install/), [Grok Build](https://docs.x.ai/build/overview), [Kimi Code](https://moonshotai.github.io/kimi-code/), [Qwen Code](https://github.com/QwenLM/qwen-code), [OpenCode](https://opencode.ai), Pi, Hermes Agent, Cline CLI, [Muse Code](https://developer.meta.com/ai/products/muse-code/), [goose](https://goose-docs.ai/docs/getting-started/installation/), ZCode, [MiniMax Code](mcode.md), and experimental dsh. Interactive bootstrap offers a checkbox installer for missing CLIs; manual provider installation remains supported.
 - **Provider authentication** remains a separate post-install step: `codex login`, `claude auth login`, `grok login` (or `XAI_API_KEY`), `kimi login`, `opencode auth login`, `hermes setup`, and `cline auth`. Muse 1.3+ API-key setup reads from stdin with `muse auth set --provider meta --api-key-stdin`; do not put the key in command arguments. OpenCode also needs at least one configured provider (`opencode models`); Qwen Code reads its endpoint and key from `~/.qwen/.env`; Pi verifies its configured provider with `pi --list-models`, dsh endpoint credentials are an `apiKeyEnv` in its generated profile, and Antigravity CLI (`agy`) authenticates through an interactive sign-in flow (or `GEMINI_API_KEY` in API-key mode).
 - GitHub Copilot CLI users also need that CLI installed; the transport shims invoke Codex, Claude Code, Kimi Code, Grok Build, Qwen Code, or OpenCode independently of the host client.
 
@@ -541,9 +541,9 @@ The shim logs `event: started` when dispatch begins and `event: finished` when i
 
 | Client | Marketplace | Package | Dispatch style |
 |--------|-------------|---------|----------------|
-| Claude Code | `pitwall-local` | [`plugins/claude`](../../plugins/claude/README.md) (plugin `pitwall`) | native Claude + the other thirteen registered harness transports (Codex, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, dsh); flat dispatch + managed-dispatch DAG orchestration |
-| Codex | `pitwall-local` | [`plugins/codex`](../../plugins/codex/README.md) (plugin `pitwall-codex`) | native Codex + direct or dependency-workflow dispatch to the other thirteen (Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, dsh) |
-| GitHub Copilot CLI | `pitwall-local` | [`plugins/copilot`](../../plugins/copilot/README.md) (plugin `pitwall-copilot`) | direct or dependency-workflow dispatch through all fourteen shims |
+| Claude Code | `pitwall-local` | [`plugins/claude`](../../plugins/claude/README.md) (plugin `pitwall`) | native Claude + the other fourteen registered harness transports (Codex, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, MiniMax Code, dsh); flat dispatch + managed-dispatch DAG orchestration |
+| Codex | `pitwall-local` | [`plugins/codex`](../../plugins/codex/README.md) (plugin `pitwall-codex`) | native Codex + direct or dependency-workflow dispatch to the other fourteen (Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, MiniMax Code, dsh) |
+| GitHub Copilot CLI | `pitwall-local` | [`plugins/copilot`](../../plugins/copilot/README.md) (plugin `pitwall-copilot`) | direct or dependency-workflow dispatch through all fifteen provider shims |
 
 ```text
 plugins/claude/                         # Claude skill, agents, commands, hooks
@@ -571,3 +571,10 @@ For a ZCode CLI already signed into Z.AI, add a `zcode` profile with model
 `zcode-default` and harness `zcode`. This uses ZCode's saved model and account
 without another API key. See [ZCode setup and dispatch](zcode.md) for commands,
 permission modes and the documented limits on per-run overrides.
+
+### MiniMax Code login
+
+For MiniMax Code, add a profile with one of the registered `minimax/...` model IDs and harness
+`mcode`. The default is `minimax/MiniMax-M3.1-Flash-Preview`; only that route supports `--effort`.
+Dispatch runs use JSON output and record MiniMax Code's reported token usage. See
+[MiniMax Code setup and dispatch](mcode.md) for login and permission behavior.

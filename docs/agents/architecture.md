@@ -6,7 +6,7 @@ This document defines the compatibility and ownership boundaries for the local A
 
 The project remains a local plugin and command-line transport layer. It does not run a daemon, web UI, SQLite service, tmux control plane, mobile client, or persistent agent-team service. The shared runtime adds bounded process supervision, local run artifacts, non-destructive diagnostics, opt-in worktrees, and a foreground JSON dependency scheduler to the existing one-shot shims.
 
-`pitwall agents install` writes fifteen public shell entrypoints under `~/.claude/scripts/`: one shim per registered harness plus the route shim. Each is a two-line wrapper, `exec pitwall agents _shim <harness> "$@"`:
+`pitwall agents install` writes sixteen public shell entrypoints under `~/.claude/scripts/`: fifteen provider shims plus the route shim. Each is a two-line wrapper, `exec pitwall agents _shim <harness> "$@"`:
 
 - `codex-shim.sh`
 - `claude-shim.sh`
@@ -22,6 +22,7 @@ The project remains a local plugin and command-line transport layer. It does not
 - `muse-shim.sh`
 - `goose-shim.sh`
 - `zcode-shim.sh`
+- `mcode-shim.sh`
 - `dsh-shim.sh`
 
 Their prompt-source syntax, forwarded provider arguments, exit status, ledger behavior, and final `SHIM-DONE exit=<n>` line are public compatibility surfaces. `tests/agents/test_shim_contract.py` pins this behavior.
@@ -30,9 +31,9 @@ Their prompt-source syntax, forwarded provider arguments, exit status, ledger be
 
 Client-native routing boundaries are intentional:
 
-- Claude Code keeps Claude work in native Agent or Workflow calls and exposes Codex, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, and dsh transports.
-- Codex keeps GPT/Codex work in the native Codex harness and exposes Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, and dsh transports.
-- GitHub Copilot may invoke all fourteen provider transports.
+- Claude Code keeps Claude work in native Agent or Workflow calls and exposes Codex, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, MiniMax Code, and dsh transports.
+- Codex keeps GPT/Codex work in the native Codex harness and exposes Claude, Gemini, Kimi, Grok, Qwen, OpenCode, Pi, Hermes, Cline, Muse, goose, ZCode, MiniMax Code, and dsh transports.
+- GitHub Copilot may invoke all fifteen provider transports.
 
 Generated route assets may share a canonical registry, but client-specific prose, commands, agents, hooks, and manifests must remain separate. Claude-only Workflow and Stop-hook instructions must never misroute into the Codex or Copilot packages.
 
@@ -54,7 +55,7 @@ Python 3.14 pitwall agents runtime
   └── fail-open lifecycle events/hooks
 ```
 
-The wrappers only hand off to `pitwall agents _shim`, which imports no broker, web, or database module. Provider adapters own binary resolution, model parsing, provider argv, prompt delivery, permission flags, and provider-specific telemetry. The shared runtime owns timeout/cancellation, streaming, the sentinel, run state, artifact permissions, ledger writes, and lifecycle hooks.
+The wrappers only hand off to `pitwall agents _shim`, which imports no broker, web, or database module. Provider adapters own binary resolution, model parsing, provider argv, prompt delivery, permission flags, and provider-specific telemetry. MiniMax Code uses JSON output and records its reported token usage. The shared runtime owns timeout/cancellation, streaming, the sentinel, run state, artifact permissions, ledger writes, and lifecycle hooks.
 
 `route-shim.sh` adds a resolver above the same runtime: it reads the `[agents.profiles]` tables of `pitwall.toml`, picks the harness from the route, validates the combination before any child starts, and calls the provider dispatch path with route metadata. No provider adapter changes behavior for routed dispatches.
 
@@ -93,7 +94,7 @@ The Python supervisor owns the timeout and process-group termination. There is n
 
 ## Prompt exposure
 
-Grok Build, Pi, and Muse Code take the prompt as a file path (`file` delivery). Grok Build and Pi always receive a private mode-`0600` copy, `prompt.deliver.md` in the run directory. Muse Code receives that copy when the prompt came from stdin or the run has ask support, and otherwise the caller's own file path. The runtime removes `prompt.deliver.md` after the run unless the prompt is retained (see [run records](run-records.md#the-delivery-prompt)). Claude Code, Codex, OpenCode, and goose receive prompts on stdin. The rest, Antigravity CLI, Kimi Code, Qwen Code, Hermes Agent, Cline CLI, ZCode, and dsh, pass prompt bodies in argv, which can expose them to same-user process inspection while the provider runs. On-disk retention controls do not mitigate argv visibility. Changing those providers to stdin or a file requires separately verified CLI support.
+Grok Build, Pi, and Muse Code take the prompt as a file path (`file` delivery). Grok Build and Pi always receive a private mode-`0600` copy, `prompt.deliver.md` in the run directory. Muse Code receives that copy when the prompt came from stdin or the run has ask support, and otherwise the caller's own file path. The runtime removes `prompt.deliver.md` after the run unless the prompt is retained (see [run records](run-records.md#the-delivery-prompt)). Claude Code, Codex, OpenCode, goose, and MiniMax Code receive prompts on stdin. The rest, Antigravity CLI, Kimi Code, Qwen Code, Hermes Agent, Cline CLI, ZCode, and dsh, pass prompt bodies in argv, which can expose them to same-user process inspection while the provider runs. On-disk retention controls do not mitigate argv visibility. Changing those providers to stdin or a file requires separately verified CLI support.
 
 ## Hooks and failure policy
 

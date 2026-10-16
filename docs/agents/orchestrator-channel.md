@@ -99,6 +99,7 @@ Session isolation: run state is private to your OS user (`0700`/`0600`). It is n
 | Cline | `${CLINE_MCP_SETTINGS_PATH}` else `${CLINE_DATA_DIR:-${CLINE_DIR:-~/.cline}/data}/settings/cline_mcp_settings.json` | `timeout: 3660` |
 | Qwen Code | `${QWEN_CODE_HOME:-~/.qwen}/settings.json` → `mcpServers` (other settings keys are preserved) | `timeout: 3660000` (parent env is inherited) |
 | ZCode | `~/.zcode/cli/config.json` → `mcp.servers` | `enabled: true`, `timeoutMs: 3660000` (parent env is inherited) |
+| MiniMax Code | `~/.minimax/mcp.json` → `mcpServers` | `enabled: true`, `timeout: 3660000` milliseconds (parent env is inherited) |
 | Grok Build | `~/.grok/config.toml` managed block | `enabled = true` (parent env is inherited) |
 | Antigravity (`agy`) | `~/.gemini/config/mcp_config.json` → `mcpServers` | `disabled: false` (parent env is inherited, so no `env` block) |
 | Muse Code | `${XDG_CONFIG_HOME:-~/.config}/muse/settings.json` → `mcpServers` | `env_vars`, `startup_timeout_sec = 30`; `schema_version: 1` is added when the file has none, because Muse rejects settings without it |
