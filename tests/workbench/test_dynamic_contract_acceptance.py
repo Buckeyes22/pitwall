@@ -27,7 +27,7 @@ def test_dynamic_contract_acceptance_suite_passes() -> None:
     if node is None:
         pytest.skip("node is not installed; the Pi extension suites need Node 22 or newer")
     completed = subprocess.run(  # noqa: S603  # reason: fixed argv, node resolved from PATH, no shell
-        [node, "--test", "--test-timeout=120000", str(SUITE)],
+        [node, "--test", "--test-reporter=tap", "--test-timeout=120000", str(SUITE)],
         capture_output=True,
         text=True,
         check=False,

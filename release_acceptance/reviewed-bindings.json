@@ -17376,8 +17376,8 @@
     {
       "surface_id": "routing:mcp:orchestrator:answer_and_wait",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_event_channel.py:192",
-      "test_source_sha256": "878df2ca93c02852f420685eaa0ff52c9e27afc2c9b6a61ab5d78e5e628a96c0",
+      "source": "tests/agents/test_mcp_event_channel.py:197",
+      "test_source_sha256": "f312118bf27318a95884fdac471d5215c6b0a28de825d6af10b103db030907d0",
       "reviewed_oracle": "answer_and_wait answers the ask and returns the terminal result",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
@@ -17404,8 +17404,8 @@
     {
       "surface_id": "routing:mcp:orchestrator:dispatch_and_wait",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_event_channel.py:192",
-      "test_source_sha256": "878df2ca93c02852f420685eaa0ff52c9e27afc2c9b6a61ab5d78e5e628a96c0",
+      "source": "tests/agents/test_mcp_event_channel.py:197",
+      "test_source_sha256": "f312118bf27318a95884fdac471d5215c6b0a28de825d6af10b103db030907d0",
       "reviewed_oracle": "dispatch_and_wait returns the child's ask without an inbox round trip",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
@@ -17432,8 +17432,8 @@
     {
       "surface_id": "routing:mcp:orchestrator:steer_and_wait",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_event_channel.py:466",
-      "test_source_sha256": "878df2ca93c02852f420685eaa0ff52c9e27afc2c9b6a61ab5d78e5e628a96c0",
+      "source": "tests/agents/test_mcp_event_channel.py:471",
+      "test_source_sha256": "f312118bf27318a95884fdac471d5215c6b0a28de825d6af10b103db030907d0",
       "reviewed_oracle": "steer_and_wait returns the child's steer acknowledgement",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
@@ -17446,8 +17446,8 @@
     {
       "surface_id": "routing:mcp:orchestrator:wait_dispatch",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_event_channel.py:359",
-      "test_source_sha256": "878df2ca93c02852f420685eaa0ff52c9e27afc2c9b6a61ab5d78e5e628a96c0",
+      "source": "tests/agents/test_mcp_event_channel.py:364",
+      "test_source_sha256": "f312118bf27318a95884fdac471d5215c6b0a28de825d6af10b103db030907d0",
       "reviewed_oracle": "wait_dispatch reattaches a restarted parent to the unanswered ask",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",

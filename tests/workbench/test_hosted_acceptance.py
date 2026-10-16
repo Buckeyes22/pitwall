@@ -90,7 +90,7 @@ def test_accounting_defaults_to_the_private_agent_directory_and_honors_an_explic
     if node is None:
         pytest.skip("node is not installed; the Pi extension suites need Node 22 or newer")
     completed = subprocess.run(  # noqa: S603  # reason: fixed argv, node resolved from PATH, no shell
-        [node, "--test", "--test-timeout=60000", str(ACCOUNTING_SUITE)],
+        [node, "--test", "--test-reporter=tap", "--test-timeout=60000", str(ACCOUNTING_SUITE)],
         capture_output=True,
         text=True,
         check=False,
