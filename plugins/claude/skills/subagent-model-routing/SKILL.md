@@ -297,7 +297,7 @@ Use this part when a task is multi-step with dependencies and you want the actua
 
 - **Managed dispatches**: deterministic dependency ordering with `dispatch_and_wait`, `answer_and_wait`, `wait_dispatch`, and `steer_and_wait`. Each call returns a child ask or terminal event to the Claude parent.
 - **The Workflow tool**: a legacy, deterministic non-interactive DAG surface with `agent()`, `pipeline()`, `parallel()`, `phase()`, and resume. Its shim nodes do not provide a proven parent ask/answer channel.
-- **The shims**: `codex-shim` routes GPT work through codex; `agy-shim` routes Gemini through Antigravity; `kimi-shim` routes Kimi through Kimi Code; `grok-shim` routes Grok 4.7 through Grok Build; `qwen-shim` routes Qwen (and any OpenAI-compatible endpoint) through Qwen Code; `pi-shim` wraps Pi with config-synced endpoint delivery; `hermes-shim` wraps Hermes Agent with config-synced endpoint delivery; `cline-shim` wraps Cline CLI with config-synced endpoint delivery; `muse-shim` wraps Meta Muse Code as a model-bound harness; `goose-shim` wraps goose with environment endpoint delivery; `dsh-shim` wraps the experimental DeepSeek Harness with config-synced profile delivery; `zcode-shim` wraps ZCode with its saved model and account; `route-shim` dispatches a named route profile (`name[@harness]`) through whichever non-Claude harness it resolves to; `opencode-shim` routes GLM, MiniMax, OpenCode Go subscription models (`opencode-go/*`), and custom/local providers through opencode. They run the CLI and return stdout verbatim.
+- **The shims**: `codex-shim` routes GPT work through codex; `agy-shim` routes Gemini through Antigravity; `kimi-shim` routes Kimi through Kimi Code; `grok-shim` routes Grok 4.7 through Grok Build; `qwen-shim` routes Qwen (and any OpenAI-compatible endpoint) through Qwen Code; `pi-shim` wraps Pi with config-synced endpoint delivery; `hermes-shim` wraps Hermes Agent with config-synced endpoint delivery; `cline-shim` wraps Cline CLI with config-synced endpoint delivery; `muse-shim` wraps Meta Muse Code as a model-bound harness; `goose-shim` wraps goose with environment endpoint delivery; `dsh-shim` wraps the experimental DeepSeek Harness with config-synced profile delivery; `zcode-shim` wraps ZCode with its saved model and account; `mcode-shim` wraps MiniMax Code using the MiniMax account and explicit model ID; `route-shim` dispatches a named route profile (`name[@harness]`) through whichever non-Claude harness it resolves to; `opencode-shim` routes GLM, MiniMax, OpenCode Go subscription models (`opencode-go/*`), and custom/local providers through opencode. They run the CLI and return stdout verbatim.
 - **`pi-shim`** wraps Pi with config-synced endpoint delivery.
 - **`hermes-shim`** wraps Hermes Agent with config-synced endpoint delivery.
 - **`cline-shim`** wraps Cline CLI with config-synced endpoint delivery.
@@ -305,6 +305,7 @@ Use this part when a task is multi-step with dependencies and you want the actua
 - **`goose-shim`** wraps goose with environment endpoint delivery.
 - **`dsh-shim`** wraps the experimental DeepSeek Harness with config-synced profile delivery.
 - **`zcode-shim`** wraps ZCode with its saved model and account.
+- **`mcode-shim`** wraps MiniMax Code; provide a registered `minimax/...` model with `--model`.
 
 Invoking this skill activates the Claude routing guard before child work begins. Use managed dispatches for every child that may ask the parent.
 
@@ -391,7 +392,7 @@ agent("Run verbatim: ~/.claude/scripts/codex-shim.sh /tmp/dag-x/n1.md",
 
 - **No `schema`.** You want the shim's raw stdout, not a structured object forced by the Workflow layer. Prefer filesystem artifacts for structured output.
 - **`agentType` carries the shim system prompt** into the node.
-- **The names are namespaced.** Use `pitwall:codex-shim`, `pitwall:agy-shim`, `pitwall:kimi-shim`, `pitwall:grok-shim`, `pitwall:qwen-shim`, `pitwall:pi-shim`, `pitwall:hermes-shim`, `pitwall:cline-shim`, `pitwall:muse-shim`, `pitwall:goose-shim`, `pitwall:dsh-shim`, `pitwall:zcode-shim`, and `pitwall:opencode-shim`. A bare shim name or a typo can misroute to a default node. If the plugin is ever renamed, the namespace prefix changes with it: a stale-but-well-formed prefix fails loudly with *'agent type not found'* (verified 2026-07-28 on a live pilot) — a clean error, not a fallback — whereas a typo'd agent name falls back to a default subagent without erroring.
+- **The names are namespaced.** Use `pitwall:codex-shim`, `pitwall:agy-shim`, `pitwall:kimi-shim`, `pitwall:grok-shim`, `pitwall:qwen-shim`, `pitwall:pi-shim`, `pitwall:hermes-shim`, `pitwall:cline-shim`, `pitwall:muse-shim`, `pitwall:goose-shim`, `pitwall:dsh-shim`, `pitwall:zcode-shim`, `pitwall:mcode-shim`, and `pitwall:opencode-shim`. A bare shim name or a typo can misroute to a default node. If the plugin is ever renamed, the namespace prefix changes with it: a stale-but-well-formed prefix fails loudly with *'agent type not found'* (verified 2026-07-28 on a live pilot) — a clean error, not a fallback — whereas a typo'd agent name falls back to a default subagent without erroring.
 - **Argument shape differs:** `codex-shim.sh <file> [flags]`; `agy-shim.sh <file> [flags]`; `kimi-shim.sh <file> [flags]`; `grok-shim.sh <file> [flags]`; `qwen-shim.sh <file> [flags]`; `route-shim.sh <name[@harness]> <file> [flags]`; `opencode-shim.sh <provider/model> <file> [flags]`.
 
 Author nodes only through helpers. Keep helper definitions on one line so the audit can match them:
@@ -414,6 +415,7 @@ const muse = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/muse-shim.
 const goose = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/goose-shim.sh ${file}`, { agentType: 'pitwall:goose-shim', model: 'sonnet', ...o })
 const dsh = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/dsh-shim.sh ${file}`, { agentType: 'pitwall:dsh-shim', model: 'sonnet', ...o })
 const zcode = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/zcode-shim.sh ${file}`, { agentType: 'pitwall:zcode-shim', model: 'sonnet', ...o })
+const mcode = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/mcode-shim.sh ${file} --model minimax/MiniMax-M3.1-Flash-Preview`, { agentType: 'pitwall:mcode-shim', model: 'sonnet', ...o })
 const route   = (spec, file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/route-shim.sh ${spec} ${file}`, { agentType: 'pitwall:route-shim', model: 'sonnet', ...o })
 const glm     = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh zai-coding-plan/glm-5.3 ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
 const minimax = (file, o = {}) => agent(`Run verbatim: ~/.claude/scripts/opencode-shim.sh minimax-coding-plan/MiniMax-M3.1-Flash-Preview ${file}`, { agentType: 'pitwall:opencode-shim', model: 'sonnet', ...o })
@@ -599,22 +601,22 @@ wc -l /tmp/dag-feature/impl-*.ts
 
 ## The routing gate
 
-**Layer 0 -- helpers only.** Nodes are created through `codex()`, `agy()`, `grok()`, `kimi()`, `qwen()`, `pi()`, `hermes()`, `cline()`, `muse()`, `goose()`, `dsh()`, `zcode()`, `route()`, `glm()`, and `minimax()` helpers only.
+**Layer 0 -- helpers only.** Nodes are created through `codex()`, `agy()`, `grok()`, `kimi()`, `qwen()`, `pi()`, `hermes()`, `cline()`, `muse()`, `goose()`, `dsh()`, `zcode()`, `mcode()`, `route()`, `glm()`, and `minimax()` helpers only.
 
-**Layer 1 -- hard rule.** Every `agent(` call site must carry one of the namespaced `codex-shim`, `agy-shim`, `kimi-shim`, `grok-shim`, `qwen-shim`, `pi-shim`, `hermes-shim`, `cline-shim`, `muse-shim`, `goose-shim`, `dsh-shim`, `zcode-shim`, `route-shim`, or `opencode-shim` agent types.
+**Layer 1 -- hard rule.** Every `agent(` call site must carry one of the namespaced `codex-shim`, `agy-shim`, `kimi-shim`, `grok-shim`, `qwen-shim`, `pi-shim`, `hermes-shim`, `cline-shim`, `muse-shim`, `goose-shim`, `dsh-shim`, `zcode-shim`, `mcode-shim`, `route-shim`, or `opencode-shim` agent types.
 
 **Layer 2 -- mechanical audit before launch.**
 
 ```bash
 S=/tmp/dag-<task>/script.mjs
 total=$(grep -cE '\bagent\(' "$S")
-defs=$(grep -cE '^\s*const (codex|grok|kimi|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|glm|minimax) *=.*\bagent\(' "$S")
+defs=$(grep -cE '^\s*const (codex|grok|kimi|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|mcode|glm|minimax) *=.*\bagent\(' "$S")
 [ "$total" -eq "$defs" ] || { echo "MISROUTE: $total agent( sites but only $defs helper defs"; exit 1; }
 types=$(grep -oE "agentType: *'[^']+'" "$S" || true)
-bad=$(printf '%s\n' "$types" | grep -vE "^agentType: *'pitwall:(codex|kimi|opencode|grok|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode)-shim'$" || true)
+bad=$(printf '%s\n' "$types" | grep -vE "^agentType: *'pitwall:(codex|kimi|opencode|grok|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|mcode)-shim'$" || true)
 [ -z "$bad" ] || { echo "MISROUTE: bad/non-namespaced agentType:"; printf '%s\n' "$bad"; exit 1; }
 [ "$(printf '%s\n' "$types" | grep -c .)" -eq "$defs" ] || { echo "MISROUTE: missing agentType in helper"; exit 1; }
-bad_models=$(grep -E '^\s*const (codex|grok|kimi|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|glm|minimax) *=.*\bagent\(' "$S" | grep -vE "model: *['\"]sonnet['\"]" || true)
+bad_models=$(grep -E '^\s*const (codex|grok|kimi|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|mcode|glm|minimax) *=.*\bagent\(' "$S" | grep -vE "model: *['\"]sonnet['\"]" || true)
 [ -z "$bad_models" ] || { echo "MISROUTE: helper missing model: 'sonnet':"; printf '%s\n' "$bad_models"; exit 1; }
 printf '%s\n' "$types" | sort | uniq -c
 ```
@@ -636,7 +638,7 @@ printf '%s\n' "$types" | sort | uniq -c
 - All node prompt files exist before launch.
 - Every read path is written by an upstream node.
 - Judgment edges are segment boundaries.
-- The current contract permits the namespaced codex, agy, kimi, grok, qwen, pi, hermes, cline, muse, goose, dsh, zcode, route, and opencode shim agent types. The historical pilot below predates the dedicated Kimi, Qwen, and Antigravity transports.
+- The current contract permits the namespaced codex, agy, kimi, grok, qwen, pi, hermes, cline, muse, goose, dsh, zcode, mcode, route, and opencode shim agent types. The historical pilot below predates the dedicated Kimi, Qwen, and Antigravity transports.
 - Artifacts are verified on disk after the run.
 
 ## Parsing node returns
@@ -732,7 +734,7 @@ printf 'Reply with exactly: pong\n' > /tmp/dag-pilot/pong.md
 
 S=/tmp/dag-pilot/pilot.mjs
 total=$(grep -cE '\bagent\(' "$S")
-defs=$(grep -cE '^\s*const (codex|grok|kimi|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|glm|minimax) *=.*\bagent\(' "$S")
+defs=$(grep -cE '^\s*const (codex|grok|kimi|qwen|route|agy|pi|hermes|cline|muse|goose|dsh|zcode|mcode|glm|minimax) *=.*\bagent\(' "$S")
 [ "$total" -eq "$defs" ] && echo "audit OK" || echo "MISROUTE"
 
 python3 - "$S" <<'PY'
@@ -755,7 +757,7 @@ PY
 ## See also -- DAG layer
 
 - `src/pitwall/agents/harnesses/*.py` in this repo: the harness implementations behind the `~/.claude/scripts/*-shim.sh` wrappers that `pitwall agents install` writes.
-- `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode}-shim.md`: transport agent definitions registered under their namespaced shim agent types.
+- `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode,mcode}-shim.md`: transport agent definitions registered under their namespaced shim agent types.
 - `plugins/claude/commands/dag-routing.md`: managed dependency-ordered routing entry command.
 - `plugins/claude/skills/subagent-model-routing/ARCHITECTURE.md`: architecture reference.
 - `references/model-prompting.md`: self-contained runtime model prompting reference.
@@ -819,13 +821,13 @@ Use `opencode auth list` to check configured providers. Use `kimi login`, `codex
 
 ## Architecture in one paragraph -- transport layer
 
-Thirteen external CLIs, thirteen harness families. Antigravity handles Gemini routes through the user's Google tier and authentication. Kimi Code handles Kimi routes through the user's Kimi CLI configuration. Qwen Code handles Qwen routes and any OpenAI-compatible endpoint named in `~/.qwen/.env`. Pi, Hermes, Cline, goose, and dsh support configured endpoints through their respective delivery mechanisms; Muse Code and ZCode are model-bound (ZCode uses its saved model and account). `opencode` handles GLM, MiniMax, and custom/local providers. `codex` handles GPT routes through the user's Codex CLI login. Grok Build handles Grok 4.7 through `grok` authentication or `XAI_API_KEY`. A flat dispatch spawns the matching Sonnet transport subagent, runs its standalone shim, and returns the CLI stream. The final line of a complete run is `SHIM-DONE exit=<n>`.
+Fifteen provider harnesses, including native Claude Code and MiniMax Code. Antigravity handles Gemini routes through the user's Google tier and authentication. Kimi Code handles Kimi routes through the user's Kimi CLI configuration. Qwen Code handles Qwen routes and any OpenAI-compatible endpoint named in `~/.qwen/.env`. Pi, Hermes, Cline, goose, and dsh support configured endpoints through their respective delivery mechanisms; Muse Code, ZCode, and MiniMax Code are model-bound (ZCode uses its saved model and account; MiniMax Code uses the MiniMax account). `opencode` handles GLM, MiniMax, and custom/local providers. `codex` handles GPT routes through the user's Codex CLI login. Grok Build handles Grok 4.7 through `grok` authentication or `XAI_API_KEY`. A flat dispatch spawns the matching Sonnet transport subagent, runs its standalone shim, and returns the CLI stream. The final line of a complete run is `SHIM-DONE exit=<n>`.
 
 The shared runtime is the `pitwall agents` command group, which also keeps private structured run records. Run `pitwall agents doctor` before first use or when provider/plugin drift is suspected; its default path performs no discovery. Use explicit `doctor --discover-models` only for a deliberate catalog refresh, and `doctor --probe-routes` only to check route reachability. For recovery, use `pitwall agents runs list`, `runs show <id>`, or `runs logs <id> --channel both`; no routing metadata may be appended after the sentinel. Prompt bodies are not retained by default. Add `--routing-retain-prompt` only when explicitly needed, and treat retained model output as potentially sensitive.
 
 Claude's native Workflow tool remains the default and enforcement target for Claude-hosted DAGs. A child that needs parent input must use the managed event-return tools instead of a Workflow shim node. The shared `pitwall agents workflow run ... --host claude` runner is only for an explicitly requested external-only graph over any registered non-Claude harness (validation rejects a `claude` task), and it must never be used to route Claude through `claude-shim`. A task route may optionally select an existing named profile with `"name": "<route-name>"`; keep `provider` and `model` beside it as the expected resolved identity because the scheduler rejects mismatches before starting the run. Its `--host` value is self-declared advisory metadata, so the existing tripwire hooks remain the actual enforcement layer.
 
-For a non-Claude-native write task (any of the thirteen harnesses) that must not touch Claude's caller worktree, add `--routing-workspace isolated --routing-task-mode write` to the managed dispatch request or shim invocation. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. Claude work remains on native `Agent`/Workflow surfaces only in ordinary or explicitly non-interactive sessions; a routing-active session uses the managed event path and the launch guard enforces that boundary.
+For a non-Claude-native write task (any registered external harness) that must not touch Claude's caller worktree, add `--routing-workspace isolated --routing-task-mode write` to the managed dispatch request or shim invocation. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. Claude work remains on native `Agent`/Workflow surfaces only in ordinary or explicitly non-interactive sessions; a routing-active session uses the managed event path and the launch guard enforces that boundary.
 
 ## Picking the model
 
@@ -862,6 +864,7 @@ For a non-Claude-native write task (any of the thirteen harnesses) that must not
 | `pitwall:goose-shim` -> goose | configured goose default | override with `--model` |
 | `pitwall:dsh-shim` -> DeepSeek Harness (experimental) | configured dsh default | profile-defined |
 | `pitwall:zcode-shim` -> ZCode | saved ZCode model and account (`zcode-default`) | none: no model or effort override |
+| `pitwall:mcode-shim` -> MiniMax Code | `minimax/MiniMax-M3.1-Flash-Preview` (default), `minimax/MiniMax-M3`, `minimax/MiniMax-M2.7[-highspeed]` | `--effort` on M3.1 only; MiniMax login |
 | `pitwall:route-shim` -> any non-Claude harness | a route name from `pitwall agents profiles list` | `name@harness` overrides the profile's harness; exit `78` = needs `profiles sync` or a key variable |
 | `pitwall:opencode-shim` -> local/custom | any configured provider/model | use `opencode models` to find the route |
 
@@ -907,7 +910,7 @@ PreToolUse guard blocks direct shim launches, so use the managed tools.
 
 The server picks its tool set by role. In your session (the orchestrator) it serves `dispatch_and_wait`, `wait_dispatch`, `answer_and_wait`, `steer_and_wait`, and the recovery tools `inbox` and `answer_ask`. `dispatch_and_wait` takes `prompt` plus either `route` (a configured route spec) or `provider` (a direct harness), never both; `workspace` (`shared`, `isolated`, or `auto`), `task_mode` (`read` or `write`), `base`, `timeout_seconds`, `max_asks`, `retain_prompt`, `extra_args`, and `wait_seconds` are optional, and `ask_support` must stay `true`. `answer_and_wait` takes the full `dispatch_id`, the four-digit `ask_id`, and a `choice` (an option id or `abort`); `steer_and_wait` takes `dispatch_id`, `kind`, `message`, and optional `requires_ack` and `deadline_s`; `wait_dispatch` takes `dispatch_id` or its `reattach_handle`. The dispatched child sees a different set, `ask_orchestrator`, `read_steering`, and `ack_steer`, which the dispatcher's prompt tells it to use. Every wait returns one event: `ask`, `defaulted`, `steer_ack`, `terminal`, `orphan`, or `still_running`, and each lists `defaults_applied`.
 
-`pitwall agents setup mcp` registers `pitwall-channel` in the user config of each installed harness: Claude Code, Codex, Copilot CLI, OpenCode, Kimi, Cline, Qwen Code, ZCode, Grok Build, Antigravity, Muse Code, Hermes, and goose. `dispatch_and_wait` refuses a child harness that has no registration or fails a short tool-list handshake, and names `setup mcp` as the fix. Pi and dsh have no registration, so it refuses them; report the refusal.
+`pitwall agents setup mcp` registers `pitwall-channel` in the user config of each installed harness: Claude Code, Codex, Copilot CLI, OpenCode, Kimi, Cline, Qwen Code, ZCode, MiniMax Code, Grok Build, Antigravity, Muse Code, Hermes, and goose. `dispatch_and_wait` refuses a child harness that has no registration or fails a short tool-list handshake, and names `setup mcp` as the fix. Pi and dsh have no registration, so it refuses them; report the refusal.
 
 The dispatcher appends the asking rules to the prompt; you do not write them. The model asks only when its default is dangerous and irreversible, gives 2–8 options with a real default and rationale, points at files instead of pasting diffs, and never asks what the worktree answers. A registered `pitwall-channel` server proves only that the child-side MCP tools are available; registration and a stdio handshake do not prove that the Claude parent receives events.
 
@@ -1164,8 +1167,8 @@ Expected complete shim output ends with `SHIM-DONE exit=<n>`.
 
 ## See also
 
-- The shim scripts `~/.claude/scripts/{codex,agy,kimi,opencode,grok,qwen,pi,hermes,cline,muse,goose,dsh,zcode,route}-shim.sh` are generated by `pitwall agents install` (two-line wrappers around `pitwall agents _shim <target>`); the harness code lives in `src/pitwall/agents/harnesses/*.py` in this repo.
-- `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode}-shim.md`.
+- The shim scripts `~/.claude/scripts/{codex,agy,kimi,opencode,grok,qwen,pi,hermes,cline,muse,goose,dsh,zcode,mcode,route}-shim.sh` are generated by `pitwall agents install` (two-line wrappers around `pitwall agents _shim <target>`); the harness code lives in `src/pitwall/agents/harnesses/*.py` in this repo.
+- `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode,mcode}-shim.md`.
 - `plugins/claude/skills/subagent-model-routing/ARCHITECTURE.md`.
 - `references/model-prompting.md` for the self-contained runtime model reference.
 - `plugins/claude/README.md` for installation and custom-provider routing.

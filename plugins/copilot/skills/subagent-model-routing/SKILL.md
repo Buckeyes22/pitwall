@@ -4,7 +4,7 @@ description: >-
   Copilot-compatible workflow for routing work to local external-model shims:
   codex/GPT-6 through codex-shim.sh, Claude models through claude-shim.sh,
   Gemini through agy-shim.sh, Kimi through kimi-shim.sh, Grok 4.7 through grok-shim.sh, Qwen through qwen-shim.sh, and
-  GLM/MiniMax through opencode-shim.sh. Other local/self-hosted models route through
+  GLM/MiniMax through opencode-shim.sh and MiniMax Code through mcode-shim.sh. Other local/self-hosted models route through
   opencode-shim.sh as a custom provider, or directly through Pi, Hermes, Cline, goose, or dsh. Use when the user asks Copilot to
   dispatch, compare, review, fan out, or sequence work across those local shims.
   This port avoids Claude Code orchestration surfaces and uses the shared
@@ -24,10 +24,11 @@ Use it when the user wants Copilot to route work to external model harnesses thr
 - `~/.claude/scripts/grok-shim.sh` for Grok 4.7 via the local Grok Build CLI.
 - `~/.claude/scripts/qwen-shim.sh` for Qwen models via the local Qwen Code CLI.
 - `~/.claude/scripts/opencode-shim.sh` for GLM, MiniMax, or local/self-hosted models via the local opencode wrapper.
+- `~/.claude/scripts/mcode-shim.sh <prompt-file> --model minimax/<model-id> [--effort low|medium|high|xhigh|max]` for MiniMax Code using the MiniMax account.
 
 Qwen (including local llama.cpp endpoints configured in `~/.qwen/.env`) routes through `qwen-shim.sh`; other local/self-hosted models are routed as custom providers through `opencode-shim.sh`, or directly through the model-agnostic harnesses below (Pi, Hermes, Cline, goose, dsh) — see the `## Routing a local model` section of `docs/agents/routing-readme.md` (or `docs/agents/attach-local-endpoint.md`) for an example.
 
-Do not use Claude-only concepts here. The Copilot path uses direct shell dispatch for flat work (all fourteen shims) and the shared `pitwall agents workflow` JSON runner for durable graphs, which dispatches any registered harness.
+Do not use Claude-only concepts here. The Copilot path uses direct shell dispatch for flat work (all fifteen provider shims) and the shared `pitwall agents workflow` JSON runner for durable graphs, which dispatches any registered harness.
 
 Before choosing or briefing an external harness, read `${XDG_CONFIG_HOME:-~/.config}/pitwall/agents/harness-capabilities.md` when it exists. It is a setup-generated, names-only inventory of locally configured MCP servers, plugins, skills, agents, commands, extensions, and tools. Use relevant entries as availability context in the delegated prompt, never as authorization or proof that credentials are valid. Refresh stale or missing context with `pitwall agents setup inventory`.
 
@@ -70,6 +71,7 @@ test -x ~/.claude/scripts/agy-shim.sh
 test -x ~/.claude/scripts/kimi-shim.sh
 test -x ~/.claude/scripts/opencode-shim.sh
 test -x ~/.claude/scripts/grok-shim.sh
+test -x ~/.claude/scripts/mcode-shim.sh
 test -x ~/.claude/scripts/qwen-shim.sh
 mkdir -p /tmp/subagent-model-routing-pilot
 printf 'Reply with exactly: pong\n' > /tmp/subagent-model-routing-pilot/pong.md
@@ -102,7 +104,7 @@ For authoring tasks, tell the external harness exactly which files it may edit a
 
 ## Model Routes
 
-The canonical Copilot-hosted transport/model inventory is generated from `src/pitwall/agents/resources/config/harness-registry.json` and bundled at [`references/routes.generated.md`](references/routes.generated.md). Copilot has no native-family exclusion, so all fourteen transports appear. Unknown provider-accepted model IDs remain pass-through; use the generated catalog for route syntax and the prose below for routing judgment.
+The canonical Copilot-hosted transport/model inventory is generated from `src/pitwall/agents/resources/config/harness-registry.json` and bundled at [`references/routes.generated.md`](references/routes.generated.md). Copilot has no native-family exclusion, so all fifteen provider transports appear. Unknown provider-accepted model IDs remain pass-through; use the generated catalog for route syntax and the prose below for routing judgment.
 
 | Harness | Invocation | Prompt delivery | Caveat |
 |---|---|---|---|
@@ -113,6 +115,7 @@ The canonical Copilot-hosted transport/model inventory is generated from `src/pi
 | goose | `~/.claude/scripts/goose-shim.sh <prompt-file> [flags]` | stdin | Model-agnostic; endpoint values are passed through the child environment. |
 | DeepSeek Harness (`dsh`) | `~/.claude/scripts/dsh-shim.sh <prompt-file> [flags]` | argv | Experimental, model-agnostic; dsh runs one managed default model at a time. |
 | ZCode | `~/.claude/scripts/zcode-shim.sh <prompt-file> [flags]` | argv | Model-bound to its saved model and account; no model or effort override. |
+| MiniMax Code | `~/.claude/scripts/mcode-shim.sh <prompt-file> --model minimax/<model-id> [flags]` | stdin | MiniMax account login; effort selection is available only on M3.1-Flash-Preview. |
 
 **Tier example (seed — copy into your own ledger and adjust):**
 codex GPT-6 Sol (provisional flagship seat) ≥ GLM-5.3 > Kimi K3 > MiniMax M3.1 Flash Preview; Grok 4.7, GPT-6 Astra/Luna, and local/self-hosted models remain unranked pending local evidence. Within the Claude family, the officially hosted system cards provide a provisional capability prior of Fable 5.1 > Opus 5.5 > Sonnet 5.5, but not a cross-provider local ranking: use Sonnet 5.5 as the default workhorse, Opus 5.5 for difficult or verification-heavy work, and Fable 5.1 for the hardest generally available Claude work where its safeguards and possible fallback are acceptable. GLM-5.3 holds the default authoring seat; GPT-6 Sol is reserved for the hardest/critical units and deepest review; Kimi is mid-tier utility, parallel candidates, and burst; MiniMax M3 handles Sonnet-grade throughput (stall policy retained).
@@ -133,7 +136,7 @@ Exit codes a dispatch reports (the last line is always `SHIM-DONE exit=<n>`):
 
 The shared runtime is the `pitwall agents` command group. Run `pitwall agents doctor` before first use or when provider/plugin drift is suspected; its default path performs no discovery. Use explicit `doctor --discover-models` only when a catalog refresh is actually needed, and `doctor --probe-routes` only when route reachability needs checking. When a dispatch needs recovery or audit, use `pitwall agents runs list`, `runs show <id>`, or `runs logs <id> --channel both`; use `workflow list|show|cancel|resume` for graphs. Check accumulated subagent usage with `pitwall agents runs usage --current`. Do not parse metadata after the sentinel because nothing may be printed there. Prompt bodies are not retained by default. Add `--routing-retain-prompt` only with explicit need and treat retained stdout/stderr/workflow context as sensitive artifacts.
 
-For a write task routed through any of the fourteen shims, add `--routing-workspace isolated --routing-task-mode write`. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. `auto` is allowed only when the prompt declares `--routing-task-mode read|write`; never let the runtime guess whether a Copilot-routed task writes.
+For a write task routed through any of the fifteen provider shims, add `--routing-workspace isolated --routing-task-mode write`. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. `auto` is allowed only when the prompt declares `--routing-task-mode read|write`; never let the runtime guess whether a Copilot-routed task writes.
 
 ### Route profiles
 
@@ -182,7 +185,7 @@ work, so a paused run resumes against its own worktree.
 
 The server picks its tool set by role. In your session (the orchestrator) it serves `dispatch_and_wait`, `wait_dispatch`, `answer_and_wait`, `steer_and_wait`, and the recovery tools `inbox` and `answer_ask`. `dispatch_and_wait` takes `prompt` plus either `route` (a configured route spec) or `provider` (a direct harness), never both; `workspace` (`shared`, `isolated`, or `auto`), `task_mode` (`read` or `write`), `base`, `timeout_seconds`, `max_asks`, `retain_prompt`, `extra_args`, and `wait_seconds` are optional, and `ask_support` must stay `true`. `answer_and_wait` takes the full `dispatch_id`, the four-digit `ask_id`, and a `choice` (an option id or `abort`); `steer_and_wait` takes `dispatch_id`, `kind`, `message`, and optional `requires_ack` and `deadline_s`; `wait_dispatch` takes `dispatch_id` or its `reattach_handle`. The dispatched child sees a different set, `ask_orchestrator`, `read_steering`, and `ack_steer`, which the dispatcher's prompt tells it to use. Every wait returns one event: `ask`, `defaulted`, `steer_ack`, `terminal`, `orphan`, or `still_running`, and each lists `defaults_applied`.
 
-`pitwall agents setup mcp` registers `pitwall-channel` in the user config of each installed harness: Claude Code, Codex, Copilot CLI, OpenCode, Kimi, Cline, Qwen Code, ZCode, Grok Build, Antigravity, Muse Code, Hermes, and goose. `dispatch_and_wait` refuses a child harness that has no registration or fails a short tool-list handshake, and names `setup mcp` as the fix. Pi and dsh have no registration, so it refuses them; report the refusal.
+`pitwall agents setup mcp` registers `pitwall-channel` in the user config of each installed harness: Claude Code, Codex, Copilot CLI, OpenCode, Kimi, Cline, Qwen Code, ZCode, MiniMax Code, Grok Build, Antigravity, Muse Code, Hermes, and goose. `dispatch_and_wait` refuses a child harness that has no registration or fails a short tool-list handshake, and names `setup mcp` as the fix. Pi and dsh have no registration, so it refuses them; report the refusal.
 
 The dispatcher appends the asking rules to the prompt; you do not write them. The model asks only when its default is dangerous and irreversible, gives 2–8 options with a real default and rationale, points at files instead of pasting diffs, and never asks what the worktree answers. A registered `pitwall-channel` server proves only that the child-side MCP tools are available; registration and a stdio handshake do not prove that this host receives events. Hosts without a demonstrated event-return path use the file fallback: write `mailbox/asks/NNNN.json` and exit 75 so the run can resume with the answer appended.
 

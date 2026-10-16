@@ -41,6 +41,7 @@ SHIM_TYPES = {
     "hermes-shim",
     "kimi-shim",
     "muse-shim",
+    "mcode-shim",
     "pi-shim",
     "qwen-shim",
     "zcode-shim",
@@ -54,6 +55,7 @@ SHIM_TYPES = {
     "pitwall:hermes-shim",
     "pitwall:kimi-shim",
     "pitwall:muse-shim",
+    "pitwall:mcode-shim",
     "pitwall:pi-shim",
     "pitwall:qwen-shim",
     "pitwall:zcode-shim",
@@ -65,11 +67,11 @@ SHIM_INVOCATION_RE = re.compile(
     r"(?:^|[;&|(`]|\n)\s*"
     r"(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*"
     r"(?:(?:\S*/)?(?:bash|sh)\s+(?:-\w+\s+)*|env\s+(?:\S+\s+)*|timeout\s+\S+\s+)?"
-    r"[\"']?(?:\S*/)?(?:codex|claude|cline|dsh|opencode|grok|goose|hermes|kimi|muse|pi|qwen|zcode|route|agy)-shim\.sh[\"']?(?:\s|$)",
+    r"[\"']?(?:\S*/)?(?:codex|claude|cline|dsh|opencode|grok|goose|hermes|kimi|muse|mcode|pi|qwen|zcode|route|agy)-shim\.sh[\"']?(?:\s|$)",
     re.IGNORECASE,
 )
 SHIM_BASENAME_RE = re.compile(
-    r"^(codex|claude|cline|dsh|opencode|grok|goose|hermes|kimi|muse|pi|qwen|zcode|route|agy)-shim\.sh$",
+    r"^(codex|claude|cline|dsh|opencode|grok|goose|hermes|kimi|muse|mcode|pi|qwen|zcode|route|agy)-shim\.sh$",
     re.IGNORECASE,
 )
 ASSIGNMENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=.*$")

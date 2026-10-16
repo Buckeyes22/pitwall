@@ -304,6 +304,24 @@ class QwenTripwireCoverageTests(unittest.TestCase):
                 )
 
 
+class MCodeTripwireCoverageTests(unittest.TestCase):
+    MCODE_DISPATCHES = (
+        ("bash", bash_entry("~/.claude/scripts/mcode-shim.sh /tmp/prompt.md")),
+        ("namespaced agent", agent_entry("pitwall:mcode-shim")),
+    )
+
+    def test_both_hooks_treat_mcode_as_a_dispatch(self) -> None:
+        for label, dispatch in self.MCODE_DISPATCHES:
+            with self.subTest(dispatch=label):
+                dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
+                self.assertEqual("block", dag["decision"] if dag else None)
+                self.assertIn("TRIPWIRE", str(dag["reason"]))
+
+                ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this"), dispatch])
+                self.assertEqual("block", ledger["decision"] if ledger else None)
+                self.assertIn("LEDGER", str(ledger["reason"]))
+
+
 class ClineTripwireCoverageTests(unittest.TestCase):
     CLINE_DISPATCHES = (
         ("bash", bash_entry("~/.claude/scripts/cline-shim.sh /tmp/prompt.md")),

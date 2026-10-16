@@ -2,6 +2,8 @@
 
 How a native `Workflow` DAG delegates each node to a non-Claude model. This is the legacy, non-interactive mechanism: its shim nodes have no parent ask/answer channel, and in a routing-active session the launch guard denies a Workflow whose script launches a shim. Routed DAG nodes there run as managed `dispatch_and_wait` calls (`SKILL.md` Part A). This is the mechanism layer behind `SKILL.md`; read `SKILL.md` first for how to *use* it. Shared transport substrate (model catalog, response parsing, auth pre-flight, failure modes) lives in `SKILL.md` Part B — this doc stops at the shim boundary and points there.
 
+The registry has fifteen provider harnesses and sixteen shims including `route-shim`.
+
 Epistemic note: the `Workflow`-tool hooks and resume semantics are documented behavior; the script *transform* (§2) is inferred from observed behavior (top-level `await`/`return` work; `meta` must be a literal) and verified empirically via `node --check`; the journaling files (§6) and the routing path (§3) are **observed from the real pilot run** (date anonymized).
 
 ## 1. The path of a node (one diagram)
@@ -19,7 +21,7 @@ Workflow runtime  ── background task, returns runId immediately; <notificati
   │  each work node is:  agent("Run verbatim: …/codex-shim.sh <file>", { agentType: 'pitwall:codex-shim', model: 'sonnet' })
   ▼
 Workflow agent  ── ONE per node. agentType resolves in the SAME registry as the Agent tool →
-  │               adopts the codex-shim / agy-shim / kimi-shim / grok-shim / qwen-shim / pi-shim / hermes-shim / cline-shim / muse-shim / goose-shim / dsh-shim / opencode-shim / route-shim system prompt (Sonnet transport):
+  │               adopts the codex-shim / agy-shim / kimi-shim / grok-shim / qwen-shim / pi-shim / hermes-shim / cline-shim / muse-shim / goose-shim / dsh-shim / mcode-shim / opencode-shim / route-shim system prompt (Sonnet transport):
   │               "find the command in the prompt, run it via Bash with timeout:1200000,
   │                return stdout verbatim." NO schema ⇒ raw stdout is the node's return value.
   ▼
@@ -56,7 +58,7 @@ The script is plain JavaScript (NOT TypeScript), executed in a sandbox by the `W
 
 ## 3. agentType resolution — how a node becomes a model
 
-`opts.agentType` is "resolved from the same registry as the `Agent` tool." Under the plugin install the registered names are namespaced as `pitwall:codex-shim`, `pitwall:agy-shim`, `pitwall:kimi-shim`, `pitwall:grok-shim`, `pitwall:qwen-shim`, `pitwall:pi-shim`, `pitwall:hermes-shim`, `pitwall:cline-shim`, `pitwall:muse-shim`, `pitwall:goose-shim`, `pitwall:dsh-shim`, `pitwall:route-shim`, and `pitwall:opencode-shim` (agent defs live in this plugin's `agents/`, Sonnet, `color:` only, no `background`). When a node sets `agentType: 'pitwall:codex-shim'`:
+`opts.agentType` is "resolved from the same registry as the `Agent` tool." Under the plugin install the registered names are namespaced as `pitwall:codex-shim`, `pitwall:agy-shim`, `pitwall:kimi-shim`, `pitwall:grok-shim`, `pitwall:qwen-shim`, `pitwall:pi-shim`, `pitwall:hermes-shim`, `pitwall:cline-shim`, `pitwall:muse-shim`, `pitwall:goose-shim`, `pitwall:dsh-shim`, `pitwall:mcode-shim`, `pitwall:route-shim`, and `pitwall:opencode-shim` (agent defs live in this plugin's `agents/`, Sonnet, `color:` only, no `background`). When a node sets `agentType: 'pitwall:codex-shim'`:
 
 1. The workflow agent for that node is instantiated with the **codex-shim system prompt** ("find the command, run via Bash `timeout: 1200000`, return stdout verbatim, never use any tool but Bash").
 2. The node's `prompt` ("Run verbatim: ~/.claude/scripts/codex-shim.sh …") IS the command the transport agent looks for.
@@ -137,11 +139,11 @@ subagent-model-routing Part A       ── DAG topology, node=agentType-routed-h
 subagent-model-routing Part B       ── model catalog/picking, response parsing, auth pre-flight, failure modes,
   (SKILL.md Part B (flat dispatch & shared transport substrate))       suppression-shortcut, per-provider headroom, Why-Sonnet, cost/quota
         │ drives ▼
-plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh}-shim.md ── the Sonnet transport agent contracts (find-command → Bash → verbatim)
+plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,mcode}-shim.md ── the Sonnet transport agent contracts (find-command → Bash → verbatim)
         │ exec ▼
 ~/.claude/scripts/*-shim.sh ── thin wrappers installed by scripts/install.sh from the bundled scripts/
         │ supervise ▼
-codex / agy / kimi / opencode / grok / qwen / pi / hermes / cline / muse / goose / dsh CLI ── agentic harness around the external model
+codex / agy / kimi / opencode / grok / qwen / pi / hermes / cline / muse / goose / dsh / mcode CLI ── agentic harness around the external model
 ```
 
 The cut is clean: this skill never re-derives anything below the dashed line. If a node misbehaves because of *transport* (auth, parsing, stalls, rate), the fix is in Part B's shared transport layer; the DAG is correct once transport is.
@@ -157,6 +159,6 @@ The cut is clean: this skill never re-derives anything below the dashed line. If
 - `plugins/claude/skills/subagent-model-routing/SKILL.md` — operational skill (flat dispatch + DAG orchestration).
 - `plugins/claude/skills/subagent-model-routing/ARCHITECTURE.md` — this file (DAG mechanism/internals).
 - `plugins/claude/commands/dag-routing.md` — `/pitwall:dag-routing <task>` command stub (delegates external nodes through managed dispatches).
-- `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode}-shim.md` — Sonnet transport agent contracts.
-- `~/.claude/scripts/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode}-shim.sh` — shim wrappers written by `pitwall agents install`.
+- `plugins/claude/agents/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode,mcode}-shim.md` — Sonnet transport agent contracts.
+- `~/.claude/scripts/{codex,kimi,opencode,grok,qwen,route,agy,pi,hermes,cline,muse,goose,dsh,zcode,mcode}-shim.sh` — shim wrappers written by `pitwall agents install`.
 - Workflow tool — `agent()`/`pipeline()`/`parallel()`/`phase()`/`log()`/`budget`/`args`/`workflow()`, `agentType`, `resumeFromRunId`/`scriptPath`.

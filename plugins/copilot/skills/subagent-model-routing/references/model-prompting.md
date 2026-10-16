@@ -372,6 +372,7 @@ Putting critical instructions early is a field heuristic in this project, not a 
 ## MiniMax
 
 Route through `opencode-shim.sh minimax-coding-plan/MiniMax-M3.1-Flash-Preview <prompt-file>`.
+Or through MiniMax Code: `mcode-shim.sh <prompt-file> --model minimax/MiniMax-M3.1-Flash-Preview [--effort high]` (MiniMax account login; the only route besides Token Plan that serves M3.1).
 
 MiniMax has no dedicated official text-prompting guide in the canonical research set. Use a structured prompt with role, task, constraints, success criteria, and output shape. A planning phase can help coding work. `--thinking` controls reasoning-trace visibility; it is not an effort dial.
 
