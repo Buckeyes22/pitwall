@@ -22,7 +22,10 @@
 
 ## Pending sources
 
-None.
+- longcat-quick-start: changed since it was reviewed
+- longcat-chat-api: changed since it was reviewed
+- longcat-faq: changed since it was reviewed
+- longcat-change-log: changed since it was reviewed
 
 ## Not published
 

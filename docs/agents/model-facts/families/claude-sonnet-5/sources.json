@@ -21,8 +21,8 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:60ab9707701eb92ea0b21059de490d49fd93b81e194d4e442c03133c26dac118",
-      "observedAt": "2026-10-12",
+      "observedHash": "sha256:27ab718e399fa9ece31ce6dd6fb779fa8c291e49c52b4bf92d3c2aaead050ce0",
+      "observedAt": "2026-10-19",
       "reviewedHash": "sha256:b1e19946cd2519c76463fadfb2d5d3ff84ec0e74c199e10d8e431f7fd8db63bc",
       "reviewedAt": "2026-10-07"
     },
@@ -57,8 +57,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:8f65d1b1463bc7e24fa0eeeadd290278162b1f26c56be6190a1db510de8d7ca0",
-      "observedAt": "2026-10-12",
+      "observedHash": "sha256:cf781dd9bd0954efc98d52e09a5967a743e89b3bcfa762571501e0e1e5c712eb",
+      "observedAt": "2026-10-19",
       "reviewedHash": "sha256:97564dd12585dd2a63da10f08f828861426e8175db00b3aa68ea46838d402f82",
       "reviewedAt": "2026-10-07"
     },
@@ -105,8 +105,8 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:5d8f26d67706678eaed7e238e482490604f75de3fc2ca084fd9e74e8599a77be",
-      "observedAt": "2026-10-12",
+      "observedHash": "sha256:ba9f6bd962f1905e1204f67da213e38dc60d25a4640218afa485a81e8b71bbe5",
+      "observedAt": "2026-10-19",
       "reviewedHash": "sha256:3ce232593b681d09b061b1caeeb91959cf2ab9df4320ba9c2867e004bd2ca799",
       "reviewedAt": "2026-10-07"
     }

@@ -26,7 +26,9 @@ None recorded.
 
 ## Pending sources
 
-None.
+- kimi-code-command: changed since it was reviewed
+- kimi-code-config: changed since it was reviewed
+- kimi-code-providers: changed since it was reviewed
 
 ## Not published
 

@@ -27,6 +27,7 @@ None recorded.
 
 ## Pending sources
 
+- hermes-cli: changed since it was reviewed
 - hermes-configuration: changed since it was reviewed
 - hermes-security: changed since it was reviewed
 

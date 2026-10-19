@@ -9,8 +9,8 @@
       "pageType": "model",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:366a90e0bee23b5f7ff7157d1df95c7a77cb072add76f0f57be6c7a20680a63d",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:e196792fe06aea1c0e695f9003c49c74c46c1e77445579d38654de470b01d2be",
+      "observedAt": "2026-10-19",
       "reviewedHash": "sha256:366a90e0bee23b5f7ff7157d1df95c7a77cb072add76f0f57be6c7a20680a63d",
       "reviewedAt": "2026-09-28"
     },
@@ -21,8 +21,8 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:2b9b4cafc28cf4b8617146f9adc1c6a867f358ee5001eb2bdd4ea058d7e8283c",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:a12fc08900d750a40477ca8550be99398ba7bc03f786b233e9e7b6f7b4bd5542",
+      "observedAt": "2026-10-19",
       "reviewedHash": "sha256:2b9b4cafc28cf4b8617146f9adc1c6a867f358ee5001eb2bdd4ea058d7e8283c",
       "reviewedAt": "2026-09-28"
     },
@@ -33,8 +33,8 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:d4eeb4d74e55d984a4f270ba00fcfabc8942f26c1b765fc1c7929985554dc51b",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:48de8966975ac5c0e5e2eda88882226aa651cf2c11010d691b431d7bed6cfa49",
+      "observedAt": "2026-10-19",
       "reviewedHash": "sha256:d4eeb4d74e55d984a4f270ba00fcfabc8942f26c1b765fc1c7929985554dc51b",
       "reviewedAt": "2026-09-28"
     },
@@ -46,8 +46,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
-      "observedHash": "revision:2cba9e42aa026125f3ed06c6d98c1db82f7ca027",
-      "observedAt": "2026-10-12",
+      "observedHash": "revision:314113f8a7dadb388215396ba5fbee2c610a04d6",
+      "observedAt": "2026-10-19",
       "reviewedHash": "revision:dba1be0a40aa45a94ad051997016db3960a90277",
       "reviewedAt": "2026-09-28"
     },

@@ -30,6 +30,9 @@ None recorded.
 
 ## Pending sources
 
+- muse-code-configuration: changed since it was reviewed
+- muse-code-permissions: changed since it was reviewed
+- muse-code-extending: changed since it was reviewed
 - muse-code-changelog: changed since it was reviewed
 
 ## Not published

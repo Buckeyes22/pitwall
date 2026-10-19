@@ -24,7 +24,10 @@ None recorded.
 
 ## Pending sources
 
+- dsh-providers: changed since it was reviewed
 - dsh-readme: changed since it was reviewed
+- dsh-permission-presets: changed since it was reviewed
+- dsh-subagent: changed since it was reviewed
 
 ## Not published
 

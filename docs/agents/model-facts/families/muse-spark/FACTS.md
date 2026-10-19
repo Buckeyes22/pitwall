@@ -28,7 +28,10 @@ None recorded.
 ## Pending sources
 
 - meta-models: changed since it was reviewed
+- meta-reasoning: changed since it was reviewed
+- meta-coding-agents: changed since it was reviewed
 - muse-code-changelog: changed since it was reviewed
+- muse-code-configuration: changed since it was reviewed
 
 ## Not published
 

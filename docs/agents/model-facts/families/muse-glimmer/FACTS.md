@@ -18,7 +18,8 @@ None recorded.
 
 ## Pending sources
 
-None.
+- meta-muse-glimmer: changed since it was reviewed
+- meta-muse-glimmer-prompting: changed since it was reviewed
 
 ## Not published
 

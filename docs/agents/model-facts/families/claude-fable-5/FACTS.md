@@ -45,6 +45,7 @@ None recorded.
 - anthropic-deprecations: changed since it was reviewed
 - cc-model-config: changed since it was reviewed
 - anthropic-fable-5-1: changed since it was reviewed
+- anthropic-fable-5-1-prompting: changed since it was reviewed
 - anthropic-fable-5-1-whats-new: changed since it was reviewed
 - anthropic-fable-5-1-migration: changed since it was reviewed
 

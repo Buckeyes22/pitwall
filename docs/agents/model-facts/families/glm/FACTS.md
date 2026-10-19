@@ -31,6 +31,8 @@ None recorded.
 - zai-coding-best-practice: changed since it was reviewed
 - zai-migrate: changed since it was reviewed
 - zai-release-notes: changed since it was reviewed
+- hf-glm-5.3: changed since it was reviewed
+- hf-glm-5.3-flash: changed since it was reviewed
 
 ## Not published
 

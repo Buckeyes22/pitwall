@@ -29,6 +29,7 @@ None recorded.
 
 ## Pending sources
 
+- codex-non-interactive: changed since it was reviewed
 - codex-sandboxing: changed since it was reviewed
 - codex-permissions: changed since it was reviewed
 - codex-subagents: changed since it was reviewed

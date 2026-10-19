@@ -94,8 +94,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "zai-org/GLM-5.3",
-      "observedHash": "revision:aca966e4e02791568aa6a4ced368624b3d897f42",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:ba32f8c19c8738e2c57c71798c601d477a7bf844",
+      "observedAt": "2026-10-19",
       "reviewedHash": "revision:aca966e4e02791568aa6a4ced368624b3d897f42",
       "reviewedAt": "2026-09-28"
     },
@@ -107,8 +107,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "zai-org/GLM-5.3-Flash",
-      "observedHash": "revision:eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:46a050bec13002ad29ee795c16e61cf4fa3c4a9c",
+      "observedAt": "2026-10-19",
       "reviewedHash": "revision:eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
       "reviewedAt": "2026-09-28"
     },

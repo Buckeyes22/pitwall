@@ -115,7 +115,7 @@
           "note": "The vendor says thinking blocks should be returned with tool results, so a tool loop keeps them."
         },
         "revision": {
-          "value": "aca966e4e02791568aa6a4ced368624b3d897f42",
+          "value": "ba32f8c19c8738e2c57c71798c601d477a7bf844",
           "method": "extracted",
           "evidence": [
             {
@@ -262,7 +262,7 @@
           "note": "The vendor says thinking blocks should be returned with tool results, so a tool loop keeps them."
         },
         "revision": {
-          "value": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+          "value": "46a050bec13002ad29ee795c16e61cf4fa3c4a9c",
           "method": "extracted",
           "evidence": [
             {

@@ -28,6 +28,9 @@
 
 ## Pending sources
 
+- deepseek-pricing: changed since it was reviewed
+- deepseek-thinking: changed since it was reviewed
+- deepseek-updates: changed since it was reviewed
 - hf-deepseek-v4.1-flash: changed since it was reviewed
 
 ## Not published
