@@ -63,6 +63,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A Pi dispatch whose every provider attempt failed (Pi still exits 0) now reports exit 77
+  with Pi's error instead of an empty success. Dispatch reads the raw JSON stream of JSON-mode
+  harnesses when it looks for a soft denial.
+
 - `certifi` 2026.10.19 replaces 2026.7.22 in the lock, closing PYSEC-2026-4320; the license
   review, policy pin and SBOM follow the new version.
 

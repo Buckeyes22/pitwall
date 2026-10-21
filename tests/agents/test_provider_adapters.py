@@ -1154,6 +1154,41 @@ class ProviderAdapterTests(unittest.TestCase):
         self.assertIsNone(adapter.detect_soft_denial(1, marker))
         self.assertIsNone(get_adapter("codex").detect_soft_denial(0, marker))
 
+    def test_pi_provider_failure_after_exit_zero_is_a_soft_denial(self) -> None:
+        # Captured from a live run: Pi retried a dead endpoint three times, then exited 0.
+        failed_turn = {
+            "role": "assistant",
+            "content": [],
+            "stopReason": "error",
+            "errorMessage": "Connection error.",
+        }
+        tail = b"\n".join(
+            json.dumps(event).encode()
+            for event in (
+                {"type": "agent_end", "messages": [failed_turn], "willRetry": False},
+                {
+                    "type": "auto_retry_end",
+                    "success": False,
+                    "attempt": 3,
+                    "finalError": "Connection error.",
+                },
+                {"type": "agent_settled", "aborted": False},
+            )
+        )
+        adapter = get_adapter("pi")
+        reason = adapter.detect_soft_denial(0, b'{"partial line\n' + tail + b"\n")
+        self.assertIsNotNone(reason)
+        self.assertIn("Connection error.", reason or "")
+        self.assertIsNone(adapter.detect_soft_denial(1, tail))
+        answered = {
+            "role": "assistant",
+            "content": [{"type": "text", "text": "ok"}],
+            "stopReason": "stop",
+        }
+        good = json.dumps({"type": "agent_end", "messages": [answered]}).encode()
+        self.assertIsNone(adapter.detect_soft_denial(0, good + b"\n"))
+        self.assertIsNone(adapter.detect_soft_denial(0, b"ordinary diagnostics\n"))
+
     def test_hermes_soft_denial_detection_uses_the_last_non_empty_line(self) -> None:
         adapter = get_adapter("hermes")
         failure = b"diagnostic\nHTTP 401: Missing Authentication header\n\n"

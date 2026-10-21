@@ -1353,7 +1353,8 @@ class _LegacyDispatch:
         if result.exit_code != 0 or result.timed_out or result.cancelled:
             return
         output_tails: list[bytes] = []
-        for artifact_name in ("stderr.log", "stdout.log"):
+        # JSON-mode harnesses report a failed turn in their raw stream, not on stderr.
+        for artifact_name in ("stderr.log", "stdout.log", "harness-output.jsonl"):
             try:
                 output_tails.append(
                     self.store.artifact(artifact_name).read_bytes()[-_OUTPUT_TAIL_BYTES:]
