@@ -715,7 +715,7 @@ def _answer_or_escalate(
     emitter: Any,
 ) -> None:
     """Give each new pending ask to the policy answerer, or escalate it to the operator."""
-    from .channel import answer_ask
+    from .channel import answer_ask, load_channel_config
     from .channel_policy import escalation_reason, request_choice
     from .mailbox import MailboxError
 
@@ -747,7 +747,18 @@ def _answer_or_escalate(
                     reason = f"policy answer rejected: {exc}"
             else:
                 reason = decision.reason
-        emitter.emit("ask.escalated", {"askId": ask_id, "reason": reason})
+        config = load_channel_config(store.path)
+        emitter.emit(
+            "ask.escalated",
+            {
+                "askId": ask_id,
+                "reason": reason,
+                "orchestratorSession": (
+                    config.orchestrator_session if config is not None else None
+                ),
+                "harness": config.harness if config is not None else None,
+            },
+        )
         print(
             f"pitwall agents: workflow {controller.state['workflowId']} task {task_id}: ask {ask_id} "
             f"needs the operator ({reason}); answer with "

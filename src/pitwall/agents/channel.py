@@ -114,6 +114,24 @@ def write_channel_config(store: RunStore, config: ChannelConfig) -> None:
     store.write_json(CHANNEL_ARTIFACT, config.to_json())
 
 
+def ask_event_data(
+    ask: Mapping[str, Any], config: ChannelConfig | None, tier: str
+) -> dict[str, Any]:
+    """Return the session-scoped lifecycle payload for a newly opened ask."""
+    return {
+        "askId": str(ask.get("ask_id", "")),
+        "question": str(ask.get("question", "")),
+        "options": list(ask.get("options") or []),
+        "default": ask.get("default"),
+        "deadlineS": ask.get("deadline_s"),
+        "blockedOn": ask.get("blocked_on"),
+        "severity": ask.get("severity"),
+        "tier": tier,
+        "orchestratorSession": config.orchestrator_session if config is not None else None,
+        "harness": config.harness if config is not None else None,
+    }
+
+
 def parse_max_asks(raw: str, *, source: str) -> int:
     try:
         value = int(raw)

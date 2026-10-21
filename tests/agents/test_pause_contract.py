@@ -109,6 +109,41 @@ class _PauseHelpers(unittest.TestCase):
 
 
 class PauseContractTests(_PauseHelpers, unittest.TestCase):
+    def test_tier4_pause_emits_created_for_each_pending_ask(self) -> None:
+        sandbox = ShimSandbox()
+        self.sandboxes.append(sandbox)
+        self._install_ask_then_exit_harness(sandbox)
+        env = sandbox.environment(
+            PITWALL_AGENTS_DISPATCH_ID=DISPATCH_ID,
+            PITWALL_AGENTS_ASK_SUPPORT="1",
+            CLAUDE_CODE_SESSION_ID="sess-pause",
+            FAKE_PAUSE_MODE="ask",
+        )
+        result = subprocess.run(
+            [str(PITWALL), "agents", "dispatch", "codex", str(sandbox.prompt())],
+            capture_output=True,
+            env=env,
+            check=False,
+        )
+        self.assertEqual(75, result.returncode, result.stderr)
+        run_dir = self._run_dir(sandbox)
+        events = [
+            json.loads(line)
+            for line in (run_dir / "events.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        created = [event for event in events if event["event"] == "ask.created"]
+        self.assertEqual(1, len(created))
+        self.assertEqual(
+            ("0001", "4", "sess-pause"),
+            (
+                created[0]["data"]["askId"],
+                created[0]["data"]["tier"],
+                created[0]["data"]["orchestratorSession"],
+            ),
+        )
+        event_names = [event["event"] for event in events]
+        self.assertLess(event_names.index("ask.created"), event_names.index("dispatch.paused"))
+
     def test_exit_75_with_unresolved_ask_is_paused_not_failed(self) -> None:
         sandbox = ShimSandbox()
         self.sandboxes.append(sandbox)

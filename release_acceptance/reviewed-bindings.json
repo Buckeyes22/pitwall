@@ -17460,8 +17460,8 @@
     {
       "surface_id": "routing:mcp:subagent:ack_steer",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_subagent_tools.py:280",
-      "test_source_sha256": "24eebb57f05fb82d1a9ca6d203ed87c130b8710a7705a833aedf3faeccb06240",
+      "source": "tests/agents/test_mcp_subagent_tools.py:335",
+      "test_source_sha256": "0541cb6485939d02c8b201a6d3fb1a18cfd6fd3120e1573834d6b54ccaf8bce1",
       "reviewed_oracle": "ack_steer acknowledges delivered steering",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
@@ -17474,8 +17474,8 @@
     {
       "surface_id": "routing:mcp:subagent:ask_orchestrator",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_subagent_tools.py:98",
-      "test_source_sha256": "24eebb57f05fb82d1a9ca6d203ed87c130b8710a7705a833aedf3faeccb06240",
+      "source": "tests/agents/test_mcp_subagent_tools.py:103",
+      "test_source_sha256": "0541cb6485939d02c8b201a6d3fb1a18cfd6fd3120e1573834d6b54ccaf8bce1",
       "reviewed_oracle": "ask_orchestrator blocks until the operator answers",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
@@ -17488,8 +17488,8 @@
     {
       "surface_id": "routing:mcp:subagent:read_steering",
       "framework": "unittest",
-      "source": "tests/agents/test_mcp_subagent_tools.py:280",
-      "test_source_sha256": "24eebb57f05fb82d1a9ca6d203ed87c130b8710a7705a833aedf3faeccb06240",
+      "source": "tests/agents/test_mcp_subagent_tools.py:335",
+      "test_source_sha256": "0541cb6485939d02c8b201a6d3fb1a18cfd6fd3120e1573834d6b54ccaf8bce1",
       "reviewed_oracle": "read_steering delivers pending steering",
       "proof_lane": "hermetic",
       "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",

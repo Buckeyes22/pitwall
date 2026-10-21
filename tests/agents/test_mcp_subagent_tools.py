@@ -56,7 +56,12 @@ class SubagentToolTests(unittest.TestCase):
         write_channel_config(
             self.store,
             ChannelConfig(
-                DISPATCH_ID, timeout_seconds=600.0, attempt_started_epoch=time.time(), tier="1"
+                DISPATCH_ID,
+                timeout_seconds=600.0,
+                attempt_started_epoch=time.time(),
+                tier="1",
+                orchestrator_session="sess-a",
+                harness="opencode",
             ),
         )
         self.env = {
@@ -114,6 +119,37 @@ class SubagentToolTests(unittest.TestCase):
             (payload["choice"], payload["answered_by"], payload["resolved_by"]),
         )
 
+    def test_ask_emits_created_event_with_session(self) -> None:
+        thread, _box = self._call_in_background(_ask_args())
+        ask_file = self.store.path / "mailbox" / "asks" / "0001.json"
+        self._wait_for(ask_file)
+        answer_ask(
+            self.operator_env,
+            DISPATCH_ID,
+            "0001",
+            choice="b",
+            answered_by="operator",
+            note=None,
+            harness="operator",
+        )
+        thread.join(HANG_GUARD_SECS)
+        events = [
+            json.loads(line)
+            for line in self.store.artifact("events.jsonl").read_text().splitlines()
+        ]
+        created = [event for event in events if event["event"] == "ask.created"]
+        self.assertEqual(1, len(created))
+        self.assertEqual(
+            ("0001", "Which suffix?", "1", "sess-a", "opencode"),
+            (
+                created[0]["data"]["askId"],
+                created[0]["data"]["question"],
+                created[0]["data"]["tier"],
+                created[0]["data"]["orchestratorSession"],
+                created[0]["data"]["harness"],
+            ),
+        )
+
     def test_concurrent_identical_asks_reenter_the_same_ask(self) -> None:
         from pitwall.agents.mailbox import Mailbox
 
@@ -129,17 +165,21 @@ class SubagentToolTests(unittest.TestCase):
 
         def widened(box: Mailbox) -> list[dict]:
             asks = original(box)
-            if threading.current_thread().name.startswith("ask-caller") and not getattr(
-                seen, "waited", False
+            if (
+                threading.current_thread().name.startswith("ask-caller")
+                and getattr(seen, "in_write", False)
+                and not getattr(seen, "waited", False)
             ):
                 seen.waited = True  # only each caller's first lookup is held
                 contention.hold()
             return asks
 
         def counted(box: Mailbox, **kwargs: Any) -> dict:
+            seen.in_write = True
             try:
                 return original_write(box, **kwargs)
             finally:
+                seen.in_write = False
                 written.release()
 
         outcomes: list[object] = []
@@ -181,6 +221,13 @@ class SubagentToolTests(unittest.TestCase):
             [o["ask_id"] if isinstance(o, dict) else repr(o) for o in outcomes],
         )
         self.assertEqual(1, len(list((self.store.path / "mailbox" / "asks").glob("*.json"))))
+        events = [
+            json.loads(line)
+            for line in self.store.artifact("events.jsonl").read_text().splitlines()
+        ]
+        created = [event for event in events if event["event"] == "ask.created"]
+        self.assertLessEqual(len(created), 2)
+        self.assertTrue(all(event["data"]["askId"] == "0001" for event in created))
 
     def test_deadline_returns_the_default_and_records_it(self) -> None:
         reply = self.client.call(
@@ -199,6 +246,8 @@ class SubagentToolTests(unittest.TestCase):
             ["ask.escalated", "ask.resolved"],
             [e["event"] for e in events if e["event"] in ("ask.escalated", "ask.resolved")],
         )
+        escalated = next(event for event in events if event["event"] == "ask.escalated")
+        self.assertEqual("sess-a", escalated["data"]["orchestratorSession"])
 
     def test_d1_cap_clamps_the_requested_deadline(self) -> None:
         thread, _box = self._call_in_background(_ask_args(deadline_s=3600))
@@ -262,6 +311,12 @@ class SubagentToolTests(unittest.TestCase):
         self.assertEqual("b", first_box["result"]["structuredContent"]["choice"])
         self.assertEqual(("0001", "b"), (again_box["ask_id"], again_box["choice"]))
         self.assertEqual(1, len(self.store.mailbox().asks()))
+        events = [
+            json.loads(line)
+            for line in self.store.artifact("events.jsonl").read_text().splitlines()
+        ]
+        created = [event for event in events if event["event"] == "ask.created"]
+        self.assertEqual(["0001"], [event["data"]["askId"] for event in created])
 
     def test_cap_and_disabled_channel_are_refusals(self) -> None:
         write_channel_config(

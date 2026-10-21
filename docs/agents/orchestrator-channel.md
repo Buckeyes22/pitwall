@@ -240,6 +240,6 @@ Raw channel Q&A is private and expires with its run: `runs cleanup` removes the 
 
 ## Events and ledger
 
-Lifecycle events: `dispatch.paused` (with `reason`), `dispatch.resumed`, `ask.resolved` (`askId`, `resolvedBy`), `ask.escalated`, `steer.sent`, `steer.acked`, `steer.unacked`, `steer.failed` (a steer whose publish failed after its `steer.sent` was logged), and `dispatch.cancelled`. Hooks receive them like any other event; see `docs/agents/lifecycle-hooks.md`.
+Lifecycle events: `dispatch.paused` (with `reason`), `dispatch.resumed`, `ask.created` (`askId`, `question`, `options`, `default`, `deadlineS`, `blockedOn`, `severity`, `tier`, `orchestratorSession`, `harness`), `ask.resolved` (`askId`, `resolvedBy`), `ask.escalated` (`askId`, `reason`, `orchestratorSession`, `harness`), `steer.sent`, `steer.acked`, `steer.unacked`, `steer.failed` (a steer whose publish failed after its `steer.sent` was logged), and `dispatch.cancelled`. Hooks receive them like any other event; see `docs/agents/lifecycle-hooks.md`.
 
 The `finished` ledger row gains channel aggregates whenever the run has a mailbox (§9.3): `askCount`, `askRatePerHour` (covers every attempt across pauses), `askResolutions` (`"<ask-id>:<answered-by>"`), `steerCount`, `steerAckLatencyS`, and `unackedSteerIds` (blocking steers still unacknowledged at exit). These are routing-quality signal, never question content.

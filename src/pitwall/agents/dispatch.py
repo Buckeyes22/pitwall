@@ -29,6 +29,7 @@ from .channel import (
     ORCHESTRATOR_SESSION_ENV,
     ChannelConfig,
     SteerWatcher,
+    ask_event_data,
     expire_overdue,
     ledger_fields,
     load_channel_config,
@@ -570,7 +571,8 @@ def _finish_paused(
     ``SHIM-DONE exit=75`` sentinel plus this recorded ``paused``
     classification.
     """
-    pending_ids = [ask["ask_id"] for ask in store.mailbox().pending_asks()]
+    pending_asks = store.mailbox().pending_asks()
+    pending_ids = [ask["ask_id"] for ask in pending_asks]
     pause_record = None
     try:
         pause_record = _ledger_record(
@@ -611,6 +613,9 @@ def _finish_paused(
                 "workspace": workspace_result,
             },
         )
+        config = load_channel_config(store.path)
+        for ask in pending_asks:
+            emitter.emit("ask.created", ask_event_data(ask, config, config.tier if config else "4"))
         emitter.emit_dispatch_paused(
             {"askIds": pending_ids, "exitCode": process_result.exit_code, "reason": reason}
         )

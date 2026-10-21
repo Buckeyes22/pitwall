@@ -52,8 +52,9 @@ The orchestrator channel emits through the same pipeline:
 
 - `dispatch.paused` — the run paused on an unresolved ask (`askIds`, `exitCode`, `reason`: `question` or `orphaned-ask`)
 - `dispatch.resumed` — `runs resume` re-entered a paused run (`attempt`)
+- `ask.created` — a new question was opened (`askId`, `question`, `options`, `default`, `deadlineS`, `blockedOn`, `severity`, `tier`, `orchestratorSession`, `harness`)
 - `ask.resolved` — an ask received its answer (`askId`, `resolvedBy`: `operator`, `orchestrator`, `default`, or `policy:<model>`)
-- `ask.escalated` — an ask needs a human: it waited past half its effective deadline in a tier-1 session, or the workflow scheduler could not auto-answer it (`askId`, `reason`)
+- `ask.escalated` — an ask needs a human: it waited past half its effective deadline in a tier-1 session, or the workflow scheduler could not auto-answer it (`askId`, `reason`, `orchestratorSession`, `harness`)
 - `steer.sent` — the orchestrator sent a steering directive (`steerId`, `kind`)
 - `steer.acked` — the subagent acknowledged a steering directive (`steerId`)
 - `steer.failed` — a steer was logged as sent but could not be published (`steerId`, `kind`)
