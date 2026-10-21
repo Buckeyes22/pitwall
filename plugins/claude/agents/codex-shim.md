@@ -27,10 +27,10 @@ plugin's `agents/` dir (registered as `pitwall:codex-shim`); the `~/.opencode/ag
 twins must carry NEITHER `color` nor `background`. `color: purple` tints this subagent's
 row/label so parallel dispatches are distinguishable (opencode-shim uses cyan).
 
-The transport is synchronous: the subagent blocks on the shim command and returns
-stdout in the tool result. Backgrounded Agent or Bash calls are forbidden because
-they detach the child from the answerable Pitwall channel. Use the managed
-`dispatch_and_wait` MCP tool for routed external work.
+The subagent blocks on the shim command and returns stdout in the tool result.
+This Agent may itself run in the background; the shim connects its own Pitwall
+channel to the launching Claude session, so no `dispatch_and_wait` launch is
+needed for routed external work.
 
 The opencode copy in ~/.opencode/agents/ must carry NEITHER `color` nor `background`.
 Separate files (distinct inodes) — do not blind-sync one onto the other.
@@ -71,6 +71,8 @@ NEVER background the work:
   on a job that has not finished. This is the known false-success failure mode.
 - NEVER add `&`, `nohup`, or `setsid` to the command itself. One foreground, blocking
   Bash call is the contract.
+
+Channel: the shim connects itself to this Claude session when the pitwall-asks monitor is running, so the command needs no channel flag. This Agent may itself run in the background; your one Bash call stays in the foreground. If the final line is SHIM-DONE exit=75, return the full stdout followed by the line: PAUSED — the child asked a question; answer it with answer_ask, then resume with pitwall agents runs resume <dispatch-id>
 
 COMPLETION CHECK — before you report, Verify BOTH:
 
