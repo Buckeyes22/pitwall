@@ -435,3 +435,10 @@ Chris asked to relax the rule Task 6 kept. A native `Workflow` node is a subagen
 - [ ] **Step 4: Run them and confirm they pass.** `uv run pytest tests/agents/test_claude_tripwires.py tests/agents/test_launch_guard_locks.py tests/agents/test_direct_shim_ask_docs.py tests/agents/test_parity.py tests/agents/test_shim_agent_contract.py -q && make docs-check`, then `make regen-bindings` and `uv run pytest tests/release_acceptance -q`.
 - [ ] **Step 5: Commit.** `git commit -s -m "feat(plugin): launch guard allows Workflow scripts whose nodes are shim agents"`
 - [ ] **Step 6: Live check.** Add to Task 11: a native `Workflow` with one `pitwall:opencode-shim` node running the ask prompt, launched in the scratch session, delivers a `PITWALL ASK` and finishes with `SHIM-DONE exit=0`.
+
+### Task 13 (continuation, 2026-10-21): Defects the Task 11 live checks found
+
+Both fixed test-first and committed during the live run.
+
+- [x] **`ask.created` carried no options** (`566f85b0`). The mailbox stores an ask's options under `context.options`, but `channel.ask_event_data` read `ask["options"]`, so every `PITWALL ASK` line showed `options:` with nothing after it. `test_ask_emits_created_event_with_session` now asserts the options.
+- [x] **A Pi run whose provider requests all failed was recorded as an empty success** (`80859575`). Pi exits 0 after its retry loop gives up, and the failure appears only in its JSON stream. `apply_soft_denial` now also scans `harness-output.jsonl`, and `PiAdapter.detect_soft_denial` reports exit 77 with Pi's error. Tests: `test_pi_provider_failure_after_exit_zero_is_a_soft_denial`, `test_failed_provider_turn_in_the_raw_stream_becomes_exit_77`.
