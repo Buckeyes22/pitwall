@@ -413,3 +413,25 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
     - repeat this step until it passes.
 - [ ] **Step 12: Monitor longevity.** Leave the session idle for 35 minutes, then confirm the heartbeat file's mtime is under 30 seconds old and repeat Step 5. Expected: the notification still arrives. The docs say plugin monitors run until the session ends.
 - [ ] **Step 13: Record evidence.** Write `docs/evidence/2026-10-16-agent-dispatch-channel-live.md` with each step's command, the dispatch IDs and the observed lines. Commit with `git commit -s -m "docs(evidence): live two-way Agent dispatch across tiers"`.
+
+### Task 12 (continuation, 2026-10-21): The launch guard allows Workflow scripts with shim nodes
+
+Chris asked to relax the rule Task 6 kept. A native `Workflow` node is a subagent of the launching session, so its Bash call carries that session's `CLAUDE_CODE_SESSION_ID` (see "Verified facts") and the Task 4 default connects its shim exactly as it does for a shim `Agent`. Denying a Workflow script for containing shim nodes no longer protects anything.
+
+**Files:**
+- Modify: `plugins/claude/hooks/launch-guard.py` (`_workflow_launch`, its docstring, the `workflow` comment in `main`, the imports)
+- Modify: `plugins/claude/hooks/launch_guard_shell.py` only to delete constants that no code or test uses any more
+- Modify: `tests/agents/test_claude_tripwires.py` (`test_workflow_denied_only_when_it_launches_external_models`)
+- Modify the docs that say Workflow shim nodes are denied or non-interactive: `plugins/claude/skills/subagent-model-routing/SKILL.md` (intro bullet, Part A bullets and paragraph, Section 0, `## Legacy Workflow pre-flight`, the routing-active paragraph near line 935, `## Dispatch mechanics`, the Part B paragraph near line 829), `ARCHITECTURE.md`, `plugins/claude/README.md`, `plugins/claude/commands/dag-routing.md`, `docs/agents/orchestrator-channel.md`, `docs/agents/lifecycle-hooks.md`, and the `CHANGELOG.md` `### Changed` entry Task 9 wrote
+
+**Interfaces:**
+- `_workflow_launch` returns `"workflow-uninspectable"` when the script cannot be read (unchanged), the `command_launch(script)` kind when the script launches a raw provider CLI, and `None` otherwise. Shim agent types, shim helpers and `*-shim.sh` paths are no longer reasons to deny.
+
+**Existing test whose expectation changes:** `test_workflow_denied_only_when_it_launches_external_models` keeps its uninspectable cases (`/nonexistent/workflow.js`, `{"name": "saved-workflow"}`) denied and gains a raw-provider case (`await agent("Run verbatim: codex exec hi")`, denied); its two shim cases (`agentType: 'pitwall:codex-shim'`, `codex('review the diff')`) move to allowed.
+
+- [ ] **Step 1: Write the failing test** `test_workflow_with_shim_nodes_is_allowed`: with the routing marker active, Workflow scripts using each of `agentType: 'pitwall:<h>-shim'` for every `plugins/claude/agents/*-shim.md`, the skill's `codex(...)` helper, and `Run verbatim: ~/.claude/scripts/opencode-shim.sh /tmp/x.md` are allowed, both inline (`script`) and from a `scriptPath` file. Edit the existing test as described above.
+- [ ] **Step 2: Run them and confirm they fail.** `uv run pytest tests/agents/test_claude_tripwires.py -q -k "workflow"`.
+- [ ] **Step 3: Implement** the Interfaces change, and rewrite the listed doc passages: a Workflow DAG whose nodes are shim agents is allowed in a routing-active session, each node's shim connects to this session through the `pitwall-asks` monitor exactly like a shim `Agent`, and an unreadable Workflow script or a raw provider launch is still denied. Keep the legacy Workflow examples and helper patterns; drop only the claims that they cannot ask the parent or must not run in a routing-active session.
+- [ ] **Step 4: Run them and confirm they pass.** `uv run pytest tests/agents/test_claude_tripwires.py tests/agents/test_launch_guard_locks.py tests/agents/test_direct_shim_ask_docs.py tests/agents/test_parity.py tests/agents/test_shim_agent_contract.py -q && make docs-check`, then `make regen-bindings` and `uv run pytest tests/release_acceptance -q`.
+- [ ] **Step 5: Commit.** `git commit -s -m "feat(plugin): launch guard allows Workflow scripts whose nodes are shim agents"`
+- [ ] **Step 6: Live check.** Add to Task 11: a native `Workflow` with one `pitwall:opencode-shim` node running the ask prompt, launched in the scratch session, delivers a `PITWALL ASK` and finishes with `SHIM-DONE exit=0`.
