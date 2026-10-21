@@ -34,9 +34,6 @@ from launch_guard_leases import (
 )
 from launch_guard_markers import lease_live, marker_path, marker_root
 from launch_guard_shell import (
-    PROMPT_SHIM_RE,
-    SHIM_AGENT_TYPES,
-    SHIM_HELPER_RE,
     command_launch,
     managed_channel_tool,
     routing_command_expansion,
@@ -45,12 +42,11 @@ from launch_guard_shell import (
 
 
 def _workflow_launch(tool_input: Mapping[str, Any]) -> str | None:
-    """Return a launch kind when a Workflow names an external model launch.
+    """Return a launch kind when a Workflow launches a raw provider CLI.
 
-    A native Workflow whose script is inspectable and launches no shim or
-    harness is allowed: its nodes run as this session's children, so a
-    recognizable launch a node attempts is caught at its own tool call.
-    A Workflow whose script cannot be read is not protected and is denied.
+    Inspectable Workflow shim nodes connect their own channel to this session,
+    so shim agent types, helpers and shim paths are allowed. A Workflow whose
+    script cannot be read is not protected and is denied.
     """
 
     script = tool_input.get("script")
@@ -62,14 +58,15 @@ def _workflow_launch(tool_input: Mapping[str, Any]) -> str | None:
             script = None
     if script is None:
         return "workflow-uninspectable"
-    lowered = script.lower()
-    if (
-        any(agent_type in lowered for agent_type in SHIM_AGENT_TYPES)
-        or SHIM_HELPER_RE.search(script)
-        or PROMPT_SHIM_RE.search(script)
-        or command_launch(script)
-    ):
-        return "workflow-shim"
+    launch = command_launch(script)
+    if launch is not None:
+        return launch
+    # Workflow agent prompts can direct a child to execute one literal shell
+    # command. Inspect that command with the same classifier used for Bash.
+    for command in re.findall(r"Run verbatim:\s*([^'\"\n]+)", script, re.IGNORECASE):
+        launch = command_launch(command)
+        if launch is not None:
+            return launch
     return None
 
 
@@ -164,10 +161,8 @@ def main() -> int:
         # native Agent whose own input launches a raw provider CLI is denied.
         kind = command_launch(str(tool_input.get("prompt") or ""))
     elif tool_name.lower() == "workflow":
-        # Native Workflow nodes run as this session's children, so an
-        # inspectable script that launches no external model is allowed; an
-        # uninspectable script is denied because its launches are not
-        # protected.
+        # Workflow shim nodes connect their own channel. Raw provider launches
+        # and scripts we cannot inspect remain denied.
         kind = _workflow_launch(tool_input)
     if kind is None:
         return 0

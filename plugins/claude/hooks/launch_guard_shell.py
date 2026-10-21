@@ -34,10 +34,6 @@ SHIM_BASENAMES = frozenset(
         "zcode-shim.sh",
     }
 )
-SHIM_AGENT_TYPES = frozenset(
-    {name.removesuffix(".sh") for name in SHIM_BASENAMES}
-    | {f"pitwall:{name.removesuffix('.sh')}" for name in SHIM_BASENAMES}
-)
 HARNESS_BASENAMES = frozenset(
     {
         "agy",
@@ -77,16 +73,6 @@ ASSIGNMENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=.*$")
 HEREDOC_RE = re.compile(
     r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1[^\n]*\n(?:.*?\n)*?\s*\2[ \t]*(?:\n|$)",
     re.DOTALL,
-)
-PROMPT_SHIM_RE = re.compile(
-    r"(?:~/?|/|\./|\.\./|scripts/|[\s`'\"(])[^\s`'\")]*"
-    r"(?:agy|claude|cline|codex|dsh|goose|grok|hermes|kimi|mcode|muse|opencode|pi|qwen|route|zcode)"
-    r"-shim\.sh"
-    r"(?=\s|$|[`'\")])",
-    re.IGNORECASE,
-)
-SHIM_HELPER_RE = re.compile(
-    r"\b(?:codex|agy|grok|kimi|qwen|pi|hermes|cline|muse|goose|dsh|route|glm|minimax)\s*\("
 )
 ROUTING_SKILL_NAMES = frozenset(
     {

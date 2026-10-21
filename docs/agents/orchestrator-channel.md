@@ -172,7 +172,7 @@ Launch external-model work with a native `Agent` whose `subagent_type` is `pitwa
 
 For tier 1, the child asks through `ask_orchestrator`; answer its question with `answer_ask`. For tier 4, answer the file-contract ask and resume the run with `pitwall agents runs resume <dispatch-id>`. Use `steer_and_wait` to steer a running shim. `dispatch_and_wait` remains available in non-interactive sessions without plugin monitors and returns asks through its managed event channel.
 
-The launch guard permits shim Agents to connect their own channel. It still denies native `Workflow` scripts that contain shim nodes in a routing-active session; do not use Workflow shim nodes as a routed dispatch path.
+The launch guard permits shim Agents and inspectable native `Workflow` scripts with shim nodes to connect their own channel. It continues to deny recognizable raw provider launches and Workflow scripts it cannot inspect in routing-active sessions.
 
 ## Recovery and operator commands
 

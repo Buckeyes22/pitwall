@@ -1,6 +1,6 @@
 # DAG Model Routing — Architecture & Internals
 
-This document describes the legacy native `Workflow` DAG mechanism and its shim internals. Claude Code's normal external-model path is a native `Agent` with `subagent_type: pitwall:<harness>-shim`; the `pitwall-asks` monitor delivers its questions. The launch guard still denies native `Workflow` scripts that contain shim nodes in a routing-active session. This is the mechanism layer behind the legacy examples in `SKILL.md`; read that file first for current dispatch guidance. Shared transport substrate (model catalog, response parsing, auth pre-flight, failure modes) lives in `SKILL.md` — this doc stops at the shim boundary and points there.
+This document describes the native `Workflow` DAG mechanism and its shim internals. Claude Code's normal external-model path is a native `Agent` with `subagent_type: pitwall:<harness>-shim`; the `pitwall-asks` monitor delivers its questions. Workflow shim nodes connect to the same session through that monitor. The launch guard allows inspectable Workflow shim nodes and denies raw provider launches or scripts it cannot inspect. This is the mechanism layer behind the Workflow examples in `SKILL.md`; read that file first for current dispatch guidance. Shared transport substrate (model catalog, response parsing, auth pre-flight, failure modes) lives in `SKILL.md` — this doc stops at the shim boundary and points there.
 
 The registry has fifteen provider harnesses and sixteen shims including `route-shim`.
 

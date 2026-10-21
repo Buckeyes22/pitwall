@@ -44,7 +44,7 @@ v0.3 hooks are fail-open. Invalid JSON, malformed definitions, missing commands,
 
 Recursive routing is bounded by the hook-depth environment value. A malformed external value is treated as depth zero, while a depth of three or greater prevents further hook execution.
 
-These hooks do not replace Claude Code's package-specific hooks. In routing-active sessions, the launch guard allows shim Agents to connect their own channel and still denies native `Workflow` scripts containing shim nodes; the Stop hooks remain the host's enforcement and advisory layer. Runtime hooks are portable local automation.
+These hooks do not replace Claude Code's package-specific hooks. In routing-active sessions, the launch guard allows shim Agents and inspectable `Workflow` scripts with shim nodes to connect their own channel, and denies recognizable raw provider launches or Workflow scripts it cannot inspect; the Stop hooks remain the host's enforcement and advisory layer. Runtime hooks are portable local automation.
 
 ## Channel events
 

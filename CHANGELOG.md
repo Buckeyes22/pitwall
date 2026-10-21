@@ -39,8 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Unflagged shims enable ask support only while the launching Claude session has a fresh monitor
   heartbeat. `--routing-ask-support` still forces it on and `--routing-no-ask-support` forces it
-  off. The launch guard and DAG tripwire policy now permit shim Agent dispatch; native `Workflow`
-  scripts containing shim nodes remain denied by the launch guard in routing-active sessions.
+  off. The launch guard and DAG tripwire policy permit shim Agent dispatch and inspectable native
+  `Workflow` scripts with shim nodes; recognizable raw provider launches and uninspectable
+  Workflow scripts remain denied in routing-active sessions.
 
 - Claude, Codex, OpenCode, Grok, Pi, Qwen, and Antigravity run in their JSON output modes inside
   dispatches; callers still receive plain answer text.

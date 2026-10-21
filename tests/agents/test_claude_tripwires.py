@@ -770,8 +770,7 @@ class LaunchGuardTests(unittest.TestCase):
 
     def test_workflow_denied_only_when_it_launches_external_models(self) -> None:
         denied = (
-            {"script": "await agent('x', {agentType: 'pitwall:codex-shim'})"},
-            {"script": "await codex('review the diff')"},
+            {"script": "await agent('Run verbatim: codex exec hi')"},
             {"scriptPath": "/nonexistent/workflow.js"},
             {"name": "saved-workflow"},
         )
@@ -784,6 +783,28 @@ class LaunchGuardTests(unittest.TestCase):
                 self._payload("Workflow", {"script": "await agent('summarise README')"})
             )
         )
+
+    def test_workflow_with_shim_nodes_is_allowed(self) -> None:
+        shim_names = sorted(
+            path.stem for path in (ROOT / "plugins" / "claude" / "agents").glob("*-shim.md")
+        )
+        self.assertTrue(shim_names)
+        scripts = [
+            f"await agent('x', {{agentType: 'pitwall:{harness}'}})" for harness in shim_names
+        ]
+        scripts.extend(
+            (
+                "await codex('review the diff')",
+                "await agent('Run verbatim: ~/.claude/scripts/opencode-shim.sh /tmp/x.md')",
+            )
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            for index, script in enumerate(scripts):
+                script_path = Path(temp_dir) / f"workflow-{index}.js"
+                script_path.write_text(script, encoding="utf-8")
+                for tool_input in ({"script": script}, {"scriptPath": str(script_path)}):
+                    with self.subTest(script=script, tool_input=tool_input):
+                        self.assertIsNone(run_launch_guard(self._payload("Workflow", tool_input)))
 
     def test_dispatch_terminal_releases_one_lease_and_preserves_sibling(self) -> None:
         first = self._payload("mcp__pitwall-channel__dispatch_and_wait", {"route": "codex"})

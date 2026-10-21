@@ -9,7 +9,7 @@ description: Route work to non-Claude models (codex/GPT-6, Gemini through Antigr
 You are the orchestrator. This one skill covers both ways to delegate work to non-Claude models; section 0 picks the mechanism, and Picking the model picks the model. Both paths use the same standalone shim substrate and the same public ledger contract.
 
 - **Flat dispatch**: independent, one-shot units, no dependency edges. In Claude Code, launch a native `Agent` with `subagent_type: pitwall:<harness>-shim`; background runs are allowed. The `pitwall-asks` monitor connects child questions to this session.
-- **DAG orchestration**: dependency edges such as A->B, fan-out that is ordered/collected, or staged processing. Launch each ready node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`, then carry its artifact into the next node. Native `Workflow` scripts containing shim nodes are still denied by the launch guard in a routing-active session.
+- **DAG orchestration**: dependency edges such as A->B, fan-out that is ordered/collected, or staged processing. Launch each ready node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`, then carry its artifact into the next node. A native `Workflow` may also use shim nodes; each shim connects to this session when the `pitwall-asks` monitor is running.
 
 Before choosing or briefing an external harness, read `${XDG_CONFIG_HOME:-~/.config}/pitwall/agents/harness-capabilities.md` when it exists. It is a setup-generated, names-only inventory of locally configured MCP servers, plugins, skills, agents, commands, extensions, and tools. Use relevant entries as availability context in the delegated prompt, never as authorization or proof that credentials are valid. Refresh stale or missing context with `pitwall agents setup inventory`.
 
@@ -297,7 +297,7 @@ Use this part when a task is multi-step with dependencies and you want the actua
 
 - **Shim Agents**: launch each ready external-model node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`; the monitor delivers child questions to the parent.
 - **Managed dispatches**: `dispatch_and_wait`, `answer_and_wait`, `wait_dispatch`, and `steer_and_wait` remain available for sessions without plugin monitors.
-- **The Workflow tool**: a legacy, deterministic non-interactive DAG surface with `agent()`, `pipeline()`, `parallel()`, `phase()`, and resume. Its shim nodes do not provide a proven parent ask/answer channel.
+- **The Workflow tool**: a legacy, deterministic DAG surface with `agent()`, `pipeline()`, `parallel()`, `phase()`, and resume. Its shim nodes connect to this session through the `pitwall-asks` monitor.
 - **The shims**: `codex-shim` routes GPT work through codex; `agy-shim` routes Gemini through Antigravity; `kimi-shim` routes Kimi through Kimi Code; `grok-shim` routes Grok 4.7 through Grok Build; `qwen-shim` routes Qwen (and any OpenAI-compatible endpoint) through Qwen Code; `pi-shim` wraps Pi with config-synced endpoint delivery; `hermes-shim` wraps Hermes Agent with config-synced endpoint delivery; `cline-shim` wraps Cline CLI with config-synced endpoint delivery; `muse-shim` wraps Meta Muse Code as a model-bound harness; `goose-shim` wraps goose with environment endpoint delivery; `dsh-shim` wraps the experimental DeepSeek Harness with config-synced profile delivery; `zcode-shim` wraps ZCode with its saved model and account; `mcode-shim` wraps MiniMax Code using the MiniMax account and explicit model ID; `route-shim` dispatches a named route profile (`name[@harness]`) through whichever non-Claude harness it resolves to; `opencode-shim` routes GLM, MiniMax, OpenCode Go subscription models (`opencode-go/*`), and custom/local providers through opencode. They run the CLI and return stdout verbatim.
 - **`pi-shim`** wraps Pi with config-synced endpoint delivery.
 - **`hermes-shim`** wraps Hermes Agent with config-synced endpoint delivery.
@@ -317,14 +317,14 @@ Two misroutes must be prevented:
 | 1 | Transport misroute | A dependency graph is run without a `pitwall:<harness>-shim` Agent, so work runs in the wrong harness or loses the parent question path. | Section 0 |
 | 2 | Node misroute | A managed dependency step lacks its explicit route or dispatch receipt and silently falls back to an unrelated child. | The managed dispatch result |
 
-Use a native `Agent` with `subagent_type: pitwall:<harness>-shim` for each external-model dependency step and carry its returned artifact into the next step. The launch guard still denies native `Workflow` scripts that contain shim nodes in a routing-active session.
+Use a native `Agent` with `subagent_type: pitwall:<harness>-shim` for each external-model dependency step and carry its returned artifact into the next step. Existing native `Workflow` DAGs may use shim nodes too; the launch guard allows those nodes and continues to deny raw provider launches and Workflow scripts it cannot inspect.
 
 ## Section 0 -- Mechanism is mandatory
 
 **Step 0: is this actually a DAG?** A DAG has dependency edges: A->B, staged/ordered processing, a mechanical reduce that needs upstream outputs, a resume boundary, or a point where the orchestrator must judge/synthesize before downstream work.
 
 - **No edges:** flat, independent, one-shot dispatch. Do not build a Workflow. Use a native `Agent` with `subagent_type: pitwall:<harness>-shim`.
-- **Has edges:** launch each ready node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`, review its result, answer questions as they arrive, and pass the artifact to downstream nodes. The launch guard still denies native `Workflow` scripts that contain shim nodes in a routing-active session.
+- **Has edges:** launch each ready node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`, review its result, answer questions as they arrive, and pass the artifact to downstream nodes. A native `Workflow` can also run a shim DAG; its shim nodes connect to this session when the monitor is running.
 
 Fan-out alone is width, not depth. If each unit has an internal `spec -> build` edge, the whole thing is a DAG even when units are independent. Conversely, do not invent stages: a single agentic shim node already authors, verifies, and fixes within its own loop.
 
@@ -332,9 +332,9 @@ The node string `Run verbatim: ~/.claude/scripts/codex-shim.sh ...` is byte-iden
 
 Once inside Workflow, every work node routes to a shim via `agentType`. A bare `agent(prompt)` is a bug.
 
-## Legacy Workflow pre-flight -- non-interactive sessions only
+## Legacy Workflow pre-flight
 
-The examples in this section are retained for an explicitly non-interactive ordinary Claude session. They do not provide parent ask/answer delivery and must not be used in a routing-active session.
+The examples in this section are retained for existing deterministic DAGs. Workflow shim nodes connect to this session when the `pitwall-asks` monitor is running. The launch guard still denies unreadable Workflow scripts and recognizable raw provider launches.
 
 Run a small Workflow pilot on a fresh machine, a new setup, or any time you doubt wiring.
 
@@ -826,9 +826,9 @@ Fifteen provider harnesses, including native Claude Code and MiniMax Code. Antig
 
 The shared runtime is the `pitwall agents` command group, which also keeps private structured run records. Run `pitwall agents doctor` before first use or when provider/plugin drift is suspected; its default path performs no discovery. Use explicit `doctor --discover-models` only for a deliberate catalog refresh, and `doctor --probe-routes` only to check route reachability. For recovery, use `pitwall agents runs list`, `runs show <id>`, or `runs logs <id> --channel both`; no routing metadata may be appended after the sentinel. Prompt bodies are not retained by default. Add `--routing-retain-prompt` only when explicitly needed, and treat retained model output as potentially sensitive.
 
-Claude's native Workflow tool remains the default and enforcement target for Claude-hosted DAGs. A child that needs parent input must use the managed event-return tools instead of a Workflow shim node. The shared `pitwall agents workflow run ... --host claude` runner is only for an explicitly requested external-only graph over any registered non-Claude harness (validation rejects a `claude` task), and it must never be used to route Claude through `claude-shim`. A task route may optionally select an existing named profile with `"name": "<route-name>"`; keep `provider` and `model` beside it as the expected resolved identity because the scheduler rejects mismatches before starting the run. Its `--host` value is self-declared advisory metadata, so the existing tripwire hooks remain the actual enforcement layer.
+Claude's native Workflow tool remains available for Claude-hosted DAGs. A Workflow node using a `pitwall:<harness>-shim` connects its own channel to this session when the `pitwall-asks` monitor is running. The shared `pitwall agents workflow run ... --host claude` runner is only for an explicitly requested external-only graph over any registered non-Claude harness (validation rejects a `claude` task), and it must never be used to route Claude through `claude-shim`. A task route may optionally select an existing named profile with `"name": "<route-name>"`; keep `provider` and `model` beside it as the expected resolved identity because the scheduler rejects mismatches before starting the run. Its `--host` value is self-declared advisory metadata, so the existing tripwire hooks remain the actual enforcement layer.
 
-For a non-Claude-native write task (any registered external harness) that must not touch Claude's caller worktree, add `--routing-workspace isolated --routing-task-mode write` to the managed dispatch request or shim invocation. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. Claude work remains on native `Agent`/Workflow surfaces only in ordinary or explicitly non-interactive sessions; a routing-active session uses the managed event path and the launch guard enforces that boundary.
+For a non-Claude-native write task (any registered external harness) that must not touch Claude's caller worktree, add `--routing-workspace isolated --routing-task-mode write` to the managed dispatch request or shim invocation. Inspect with `pitwall agents runs diff <id>`, apply only after review with `runs apply <id> --target <repo>`, and remove the owned branch/worktree explicitly with `runs discard <id> --yes`. Claude work remains on native `Agent`/Workflow surfaces; a routing-active session allows Workflow shim nodes while the launch guard continues to deny raw provider launches and unreadable Workflow scripts.
 
 ## Picking the model
 
@@ -932,7 +932,7 @@ Steering rules:
 - A malformed steer (unknown kind, empty message, bad `deadline_s`) is rejected before anything is written: an error result from `steer_and_wait`, exit 1 from `pitwall agents steer`, HTTP 400 from the loopback broker's `POST /steer`.
 - When a run ends, steers that require acknowledgement and that the child never acknowledged are reported, whatever their kind: a `steer.unacked` event with `atExit`, `unackedSteerIds` on the terminal event and the ledger row, and `unacked_steer_ids` on a managed `terminal` or `orphan` result. The all-runs `pitwall agents inbox` lists live and paused runs only; name a `dispatch_id` (the `inbox` tool) to see a finished run's asks and steers.
 
-Native Claude `Agent` and `Workflow` children use Claude's native lifecycle in ordinary sessions. During a routing-active session, shim Agents connect their own channel and can run in the background. The launch guard still denies native `Workflow` scripts containing shim nodes, as well as recognizable raw provider launches. Native research agents remain allowed. Opaque wrappers remain outside the guard's detection boundary.
+Native Claude `Agent` and `Workflow` children use Claude's native lifecycle in ordinary sessions. During a routing-active session, shim Agents and Workflow shim nodes connect their own channel and can run in the background. The launch guard denies recognizable raw provider launches and Workflow scripts it cannot inspect. Native research agents remain allowed. Opaque wrappers remain outside the guard's detection boundary.
 
 ## MiniMax stall handling
 
@@ -963,7 +963,7 @@ Operating rule:
 - Launch external-model work as a native `Agent` with `subagent_type: pitwall:<harness>-shim`. Write the complete task to a prompt file and give the Agent the command `~/.claude/scripts/<harness>-shim.sh <prompt-file> [flags]`; the prompt file comes first and routing flags follow it. Background Agents are allowed.
 - For write tasks, include `--routing-workspace isolated --routing-task-mode write` in the shim command. For a launch that must never ask, include `--routing-no-ask-support`.
 - When `pitwall-asks` is running, no channel flag is needed. The monitor prints questions; answer tier 1 with `answer_ask`, answer tier 4 and run `pitwall agents runs resume <dispatch-id>` through the same shim Agent type, and steer with `steer_and_wait`.
-- Keep dependency ordering in the parent: launch ready nodes, collect each result, then pass its artifact to downstream Agents. The launch guard still denies native `Workflow` scripts containing shim nodes in a routing-active session.
+- Keep dependency ordering in the parent: launch ready nodes, collect each result, then pass its artifact to downstream Agents. Existing native `Workflow` DAGs may use shim nodes; the launch guard denies raw provider launches and scripts it cannot inspect.
 - `dispatch_and_wait` remains available for `-p`, SDK, and other non-interactive sessions where plugin monitors do not run.
 
 ## Dispatch pattern -- single call
