@@ -6,8 +6,10 @@ Harness shims and the steering hook run once per tool call, so ``pitwall agents 
 
 from __future__ import annotations
 
+import select
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 FORBIDDEN = (
@@ -47,3 +49,42 @@ def test_shim_path_imports_no_heavy_modules(tmp_path: Path) -> None:
         loaded = sorted(name for name in modules if name.split(".")[0] in FORBIDDEN)
         assert loaded == [], command
         assert "pitwall.agents.dispatch" in modules, command
+
+
+def test_inbox_watch_imports_no_heavy_modules(tmp_path: Path) -> None:
+    process = subprocess.Popen(
+        [sys.executable, "-X", "importtime", "-m", "pitwall", "agents", "inbox", "--watch"],
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+        text=True,
+        env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path)},
+    )
+    stderr_lines: list[str] = []
+    try:
+        assert process.stderr is not None
+        deadline = time.monotonic() + 20
+        while time.monotonic() < deadline:
+            ready, _, _ = select.select([process.stderr], [], [], 0.1)
+            if not ready:
+                continue
+            line = process.stderr.readline()
+            if not line:
+                break
+            stderr_lines.append(line)
+            if "| pitwall.agents.ask_watch" in line:
+                break
+    finally:
+        if process.poll() is None:
+            process.terminate()
+        _, remaining = process.communicate(timeout=5)
+        stderr_lines.append(remaining)
+    stderr = "".join(stderr_lines)
+    modules = {
+        line.rsplit("|", 1)[1].strip()
+        for line in stderr.splitlines()
+        if line.startswith("import time:") and "|" in line
+    }
+    assert "pitwall.agents.ask_watch" in modules, stderr[-1200:]
+    loaded = sorted(name for name in modules if name.split(".")[0] in FORBIDDEN)
+    assert loaded == []

@@ -3038,7 +3038,35 @@
       "generated": "journey-rule"
     },
     {
+      "surface_id": "cli:argument:src/pitwall/agents/cli.py:_add_doctor_commands:inbox_parser:--all-sessions",
+      "framework": "pytest",
+      "source": "tests/release/test_cli_all_commands_journey.py:234",
+      "test_source_sha256": "d91ed643edd8ccc2422b0924d694106aad4b49870c864bc906af590ed6308f7b",
+      "reviewed_oracle": "the argument is registered at its source line on the parser of the command that owns it, and that command's --help names it",
+      "proof_lane": "release",
+      "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
+      "reviewer": "root journey review (journey-coverage plan, Task 14)",
+      "review_state": "journey_bound_execution_by_harness",
+      "status": "not_run",
+      "test_node_id": "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+      "generated": "journey-rule"
+    },
+    {
       "surface_id": "cli:argument:src/pitwall/agents/cli.py:_add_doctor_commands:inbox_parser:--json",
+      "framework": "pytest",
+      "source": "tests/release/test_cli_all_commands_journey.py:234",
+      "test_source_sha256": "d91ed643edd8ccc2422b0924d694106aad4b49870c864bc906af590ed6308f7b",
+      "reviewed_oracle": "the argument is registered at its source line on the parser of the command that owns it, and that command's --help names it",
+      "proof_lane": "release",
+      "limits": "hermetic fixtures and loopback fakes; no paid provider or live RunPod call",
+      "reviewer": "root journey review (journey-coverage plan, Task 14)",
+      "review_state": "journey_bound_execution_by_harness",
+      "status": "not_run",
+      "test_node_id": "tests/release/test_cli_all_commands_journey.py::test_every_argument_surface_is_registered_and_documented",
+      "generated": "journey-rule"
+    },
+    {
+      "surface_id": "cli:argument:src/pitwall/agents/cli.py:_add_doctor_commands:inbox_parser:--watch",
       "framework": "pytest",
       "source": "tests/release/test_cli_all_commands_journey.py:234",
       "test_source_sha256": "d91ed643edd8ccc2422b0924d694106aad4b49870c864bc906af590ed6308f7b",

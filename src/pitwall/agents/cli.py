@@ -39,7 +39,6 @@ from .broker import (
 )
 from .capability_inventory import write_inventory
 from .channel import answer_ask
-from .dispatch import dispatch_legacy, resume_legacy
 from .doctor import run_doctor
 from .endpoints import DiscoveryError, discover_models
 from .errors import EX_CONFIG, ProfileConfigError, ProfileSyncError, UsageError
@@ -289,11 +288,34 @@ def _format_remaining(seconds: int) -> str:
     return f"{seconds // 3600}h"
 
 
-def _inbox(json_output: bool) -> int:
+def _inbox(json_output: bool, watch: bool = False, all_sessions: bool = False) -> int:
     """List unresolved asks and unacked steers across all runs.
 
     Same view the broker's ``GET /inbox`` serves; one schema, one builder.
     """
+    if watch:
+        from .ask_watch import watch as watch_asks
+        from .paths import state_root
+
+        stop = threading.Event()
+
+        def request_stop(_signum: int, _frame: Any) -> None:
+            stop.set()
+
+        previous_int = signal.signal(signal.SIGINT, request_stop)
+        previous_term = signal.signal(signal.SIGTERM, request_stop)
+        try:
+            session_id = None if all_sessions else os.environ.get("CLAUDE_CODE_SESSION_ID")
+            return watch_asks(
+                state_root(os.environ) / "events.jsonl",
+                os.environ,
+                session_id,
+                out=sys.stdout,
+                stop=stop,
+            )
+        finally:
+            signal.signal(signal.SIGINT, previous_int)
+            signal.signal(signal.SIGTERM, previous_term)
     inbox = read_channel_inbox(os.environ, None)
     asks = inbox["asks"]
     steers = inbox["steers"]
@@ -1735,6 +1757,12 @@ def _add_doctor_commands(subparsers: Any) -> None:
         "inbox", help="List the questions running dispatches are waiting on."
     )
     inbox_parser.add_argument("--json", action="store_true", dest="json_output")
+    inbox_parser.add_argument(
+        "--watch", action="store_true", help="Stream questions for this session."
+    )
+    inbox_parser.add_argument(
+        "--all-sessions", action="store_true", help="Watch questions from every session."
+    )
     answer = subparsers.add_parser("answer", help="Answer a question a running dispatch asked.")
     answer.add_argument("dispatch_id")
     answer.add_argument("ask_id")
@@ -1954,6 +1982,8 @@ def main(argv: list[str] | None = None) -> int:
 
         return mcp_server.main(os.environ)
     if args.command in {"dispatch", "_shim"}:
+        from .dispatch import dispatch_legacy
+
         if args.harness == "route":
             return dispatch_profile(args.harness_args)
         return dispatch_legacy(args.harness, args.harness_args)
@@ -1969,7 +1999,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "harnesses":
         return _harnesses(args.json_output)
     if args.command == "inbox":
-        return _inbox(args.json_output)
+        return _inbox(args.json_output, args.watch, args.all_sessions)
     if args.command == "answer":
         return _answer(
             args.dispatch_id,
@@ -2048,6 +2078,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.runs_command == "discard":
         return _runs_discard(args.dispatch_id, args.yes)
     if args.runs_command == "resume":
+        from .dispatch import resume_legacy
+
         return resume_legacy(args.dispatch_id, environ=os.environ)
     if args.runs_command == "stop":
         return _runs_stop(args.dispatch_id, args.message, args.grace)

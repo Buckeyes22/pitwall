@@ -76,6 +76,7 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
 - Heartbeat constants: `WATCHER_HEARTBEAT_S = 5.0` (refresh interval) and `WATCHER_STALE_S = 30.0` (age after which a listener counts as gone).
 - Tests stay hermetic: no live credentials or paid providers outside Task 11. Chris authorized (2026-10-16) Task 11's real-model runs on opencode and pi and the release install, gated on Steps 1–3 passing.
 - Any task that changes a test bound in `release_acceptance/reviewed-bindings.json`, or adds a CLI argument, ends with `make regen-bindings` and commits `release_acceptance/reviewed-bindings*.json`.
+- A task that adds an argparse argument also raises `release_acceptance/denominator.json` (`counts`, `total`, and a dated `reason` that keeps the previous note), or `tests/release_acceptance/test_denominator.py` fails. Task 3 adds two (`cli_arguments` 490 -> 492).
 - Commits carry DCO `-s`.
 
 ## Review Focus
