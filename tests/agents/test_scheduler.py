@@ -28,6 +28,7 @@ from pitwall.agents.run_store import (
 from pitwall.agents.scheduler import (
     AttemptOutcome,
     WorkflowRunError,
+    _ProductionRunner,
     _StateController,
     cancel_workflow,
     list_workflows,
@@ -672,6 +673,33 @@ class ProductionRunnerTests(ProductionEnvMixin, SchedulerFixture):
         )
         self.assertTrue(resume["askSupport"])
         self.assertEqual(2, resume["maxAsks"])
+
+    def test_task_without_ask_support_opts_out_explicitly(self) -> None:
+        runner = _ProductionRunner(self.registry, self.env)
+        workflow_dir = self.root / "argv-capture"
+        workflow_dir.mkdir()
+        invocation: list[list[str]] = []
+
+        def capture(command, child_env, env, repo_root, dispatch_id, stdout_path, stderr_path):
+            invocation.append(command)
+            return AttemptOutcome(dispatch_id, "succeeded", 0)
+
+        with mock.patch.object(runner, "_launch", side_effect=capture):
+            outcome = runner(
+                "agent",
+                {**task(), "workspace": "shared", "timeoutSeconds": 600},
+                b"prompt",
+                1,
+                "00000000-0000-4000-8000-0000000000e3",
+                "wf-test",
+                workflow_dir,
+                self.env,
+                self.repo,
+            )
+
+        self.assertEqual("succeeded", outcome.status)
+        self.assertEqual(1, len(invocation))
+        self.assertIn("--routing-no-ask-support", invocation[0])
 
     def test_cli_cancel_interrupts_active_dispatch_and_leaves_resumable_state(self) -> None:
         env = self.production_env(FAKE_SLEEP_SECS="30")

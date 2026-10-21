@@ -39,11 +39,15 @@ ${PITWALL_AGENTS_STATE_HOME:-${XDG_STATE_HOME:-~/.local/state}/pitwall/agents}/r
 ## Enabling asks
 
 ```bash
-pitwall agents dispatch codex prompt.md --routing-ask-support            # flag
-pitwall agents dispatch codex prompt.md --routing-max-asks 3             # cap: 1..50
-PITWALL_AGENTS_ASK_SUPPORT=1 ...                                        # environment equivalent
-PITWALL_AGENTS_MAX_ASKS=3 ...                                           # environment equivalent
+pitwall agents dispatch codex prompt.md --routing-ask-support            # force on
+pitwall agents dispatch codex prompt.md --routing-no-ask-support          # force off
+pitwall agents dispatch codex prompt.md --routing-max-asks 3              # cap: 1..50
+PITWALL_AGENTS_ASK_SUPPORT=1 ...                                         # force on
+PITWALL_AGENTS_ASK_SUPPORT=0 ...                                         # force off
+PITWALL_AGENTS_MAX_ASKS=3 ...                                            # cap: 1..50
 ```
+
+When the launching Claude Code session runs the `pitwall-asks` monitor, its fresh watcher heartbeat turns ask support on automatically for shim dispatches in that session. With no fresh listener, ask support stays off. `--routing-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=1` force it on; `--routing-no-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=0` force it off. An explicit routing flag takes precedence over the environment setting. Workflow tasks keep their existing opt-in behavior: `askSupport` enables the channel, and tasks without it explicitly opt out.
 
 The ask cap defaults to 5 per run and survives resume via `channel.json`/`resume.json`. Ask-prone dispatches should use `--routing-workspace isolated` so a paused run resumes against its own worktree, and `runs diff` can show the operator exactly what the subagent changed so far.
 

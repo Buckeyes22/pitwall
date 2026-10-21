@@ -318,6 +318,8 @@ class _ProductionRunner:
         args.extend(["--routing-workspace", task["workspace"], "--routing-task-mode", task["mode"]])
         if task.get("askSupport"):
             args.append("--routing-ask-support")
+        else:
+            args.append("--routing-no-ask-support")
         if task.get("maxAsks"):
             args.append(f"--routing-max-asks={task['maxAsks']}")
         command = [*self.execution.argv, "_shim", command_harness, *args]

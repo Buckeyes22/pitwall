@@ -32,6 +32,7 @@ from .channel import (
     ask_event_data,
     expire_overdue,
     ledger_fields,
+    listener_active,
     load_channel_config,
     parse_max_asks,
     write_channel_config,
@@ -211,7 +212,7 @@ class RoutingOptions:
     workspace: str = "shared"
     task_mode: str | None = None
     base: str | None = None
-    ask_support: bool = False
+    ask_support: bool | None = None
     max_asks: int | None = None
 
 
@@ -262,6 +263,10 @@ def _strip_routing_args(argv: list[str]) -> tuple[list[str], RoutingOptions]:
             options.ask_support = True
             index += 1
             continue
+        if argument == "--routing-no-ask-support":
+            options.ask_support = False
+            index += 1
+            continue
         matched = False
         for flag, field, choices in (
             ("--routing-workspace", "workspace", {"shared", "isolated", "auto"}),
@@ -303,6 +308,18 @@ def _strip_routing_args(argv: list[str]) -> tuple[list[str], RoutingOptions]:
     except UsageConfigurationError as exc:
         raise UsageError(str(exc)) from exc
     return forwarded, options
+
+
+def resolve_ask_support(routing: RoutingOptions, env: Mapping[str, str]) -> bool:
+    """Resolve explicit ask-support choices before consulting the session listener."""
+    if routing.ask_support is not None:
+        return routing.ask_support
+    ask_support_env = env.get("PITWALL_AGENTS_ASK_SUPPORT")
+    if ask_support_env == "1":
+        return True
+    if ask_support_env == "0":
+        return False
+    return listener_active(env, env.get(ORCHESTRATOR_SESSION_ENV))
 
 
 class Lifecycle:
@@ -1041,9 +1058,7 @@ class _LegacyDispatch:
                 request.source, None, retain_prompt=False, error="unreadable prompt source"
             )
             return self._fail_before_start(66)
-        self.ask_support = (
-            self.routing.ask_support or self.env.get("PITWALL_AGENTS_ASK_SUPPORT") == "1"
-        )
+        self.ask_support = resolve_ask_support(self.routing, self.env)
         self.previous_channel = load_channel_config(self.store.path)
         self.max_asks = self.routing.max_asks or (
             self.previous_channel.max_asks if self.previous_channel else DEFAULT_MAX_ASKS
