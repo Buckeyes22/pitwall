@@ -36,7 +36,7 @@ pytestmark = [pytest.mark.release, pytest.mark.integration, pytest.mark.journey_
 ROOT = Path(__file__).resolve().parents[2]
 # Tripwire: the number of CLI surfaces (commands plus arguments) the journey must exercise.
 # A new command or flag changes it; update this one number with the change.
-EXPECTED_CLI_SURFACES = 490
+EXPECTED_CLI_SURFACES = 492
 FIXTURES: dict[str, dict[str, Any]] = json.loads(
     (Path(__file__).parent / "cli_fixtures.json").read_text()
 )
