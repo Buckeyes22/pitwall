@@ -38,7 +38,7 @@ from .broker import (
     webhook_secret_export_env,
 )
 from .capability_inventory import write_inventory
-from .channel import answer_ask
+from .channel import ORCHESTRATOR_SESSION_ENV, answer_ask
 from .doctor import run_doctor
 from .endpoints import DiscoveryError, discover_models
 from .errors import EX_CONFIG, ProfileConfigError, ProfileSyncError, UsageError
@@ -305,7 +305,7 @@ def _inbox(json_output: bool, watch: bool = False, all_sessions: bool = False) -
         previous_int = signal.signal(signal.SIGINT, request_stop)
         previous_term = signal.signal(signal.SIGTERM, request_stop)
         try:
-            session_id = None if all_sessions else os.environ.get("CLAUDE_CODE_SESSION_ID")
+            session_id = None if all_sessions else os.environ.get(ORCHESTRATOR_SESSION_ENV)
             return watch_asks(
                 state_root(os.environ) / "events.jsonl",
                 os.environ,
