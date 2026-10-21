@@ -26,6 +26,7 @@ from .channel import (
     CHANNEL_ATTEMPT_ENV,
     CHANNEL_DISPATCH_ENV,
     CHANNEL_STATE_ROOT_ENV,
+    ORCHESTRATOR_SESSION_ENV,
     ChannelConfig,
     SteerWatcher,
     expire_overdue,
@@ -1093,6 +1094,17 @@ class _LegacyDispatch:
                 if self.previous_channel
                 else 0,
                 tier=self.channel_tier,
+                orchestrator_session=(
+                    None
+                    if self.env.get(MANAGED_LAUNCH_ENV) == "1"
+                    else self.env.get(ORCHESTRATOR_SESSION_ENV)
+                    or (
+                        self.previous_channel.orchestrator_session
+                        if self.previous_channel
+                        else None
+                    )
+                ),
+                harness=self.harness_id,
             ),
         )
 

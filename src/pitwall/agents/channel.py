@@ -36,6 +36,7 @@ if TYPE_CHECKING:
 CHANNEL_DISPATCH_ENV = "PITWALL_AGENTS_CHANNEL_DISPATCH_ID"
 CHANNEL_STATE_ROOT_ENV = "PITWALL_AGENTS_CHANNEL_STATE_ROOT"
 CHANNEL_ATTEMPT_ENV = "PITWALL_AGENTS_CHANNEL_ATTEMPT"
+ORCHESTRATOR_SESSION_ENV = "CLAUDE_CODE_SESSION_ID"
 CHANNEL_ARTIFACT = "channel.json"
 MAX_ASKS_CEILING = 50
 TIERS = ("1", "4")
@@ -50,6 +51,8 @@ class ChannelConfig:
     attempt_started_epoch: float = 0.0
     wall_seconds_prior: int = 0
     tier: str = "4"
+    orchestrator_session: str | None = None
+    harness: str | None = None
 
     def deadline_cap_s(self, at_epoch: float) -> int:
         """D1: ``min(3600, 15% of the remaining attempt timeout)`` at *at_epoch*."""
@@ -65,6 +68,8 @@ class ChannelConfig:
             "attemptStartedEpoch": self.attempt_started_epoch,
             "wallSecondsPrior": self.wall_seconds_prior,
             "tier": self.tier,
+            "orchestratorSession": self.orchestrator_session,
+            "harness": self.harness,
         }
 
 
@@ -80,6 +85,12 @@ def _config_from_json(doc: Any) -> ChannelConfig | None:
             attempt_started_epoch=float(doc["attemptStartedEpoch"]),
             wall_seconds_prior=int(doc["wallSecondsPrior"]),
             tier=str(doc["tier"]),
+            orchestrator_session=(
+                str(doc["orchestratorSession"])
+                if doc.get("orchestratorSession") is not None
+                else None
+            ),
+            harness=str(doc["harness"]) if doc.get("harness") is not None else None,
         )
     except KeyError, TypeError, ValueError:
         return None
