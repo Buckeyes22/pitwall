@@ -140,7 +140,7 @@ def watch(
     seen: set[tuple[str, str, str]] = set()
     try:
         offset = _tail_offset(events_path)
-    except Exception as exc:
+    except Exception as exc:  # reason: an unreadable log at start must not stop the watcher
         _report_error(exc)
         offset = 0
     last_heartbeat = 0.0
@@ -160,20 +160,20 @@ def watch(
                 return
             seen.add(key)
             print(format_ask_line(event), file=out, flush=True)
-        except Exception as exc:
+        except Exception as exc:  # reason: one bad event must not stop the watcher
             _report_error(exc)
 
     if heartbeat is not None:
         try:
             _write_heartbeat(heartbeat, session_id or "")
             last_heartbeat = time.monotonic()
-        except Exception as exc:
+        except Exception as exc:  # reason: a failed heartbeat write is retried next interval
             _report_error(exc)
 
     try:
         for event in open_ask_events(env, session_id):
             announce(event)
-    except Exception as exc:
+    except Exception as exc:  # reason: an unreadable backlog must not stop the watcher
         _report_error(exc)
 
     while not stop.is_set():
@@ -201,10 +201,12 @@ def watch(
                             parsed = json.loads(raw_line)
                             if isinstance(parsed, dict):
                                 announce(parsed)
-                        except Exception as exc:
+                        except (
+                            Exception
+                        ) as exc:  # reason: a malformed log line is skipped, not fatal
                             _report_error(exc)
             stop.wait(poll_s)
-        except Exception as exc:
+        except Exception as exc:  # reason: the watcher ends only on stop; any poll error is retried
             _report_error(exc)
             stop.wait(poll_s)
 
