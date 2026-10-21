@@ -45,7 +45,7 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
   - The route shim resolves to one of these.
 - **Session ID.** `CLAUDE_CODE_SESSION_ID` holds the **parent** session's ID in the main session's Bash, in a subagent's Bash and in a Monitor process. The live probe on 2026-10-16 showed `7a876bee-…` in all three. The value changes on `/clear`.
   - The docs say stdio MCP servers receive it too ([env-vars](https://code.claude.com/docs/en/env-vars)), so a managed `dispatch_and_wait` launch would inherit it. Task 1 excludes managed launches.
-- **Child MCP servers run the installed release, not `PATH`.** The child configs name an absolute binary: `~/.config/opencode/opencode.json` and `~/.codex/config.toml` both run `/home/chris/.local/share/pitwall/releases/20261015-v0.3.0a1-public-44281034/.venv/bin/pitwall mcp serve channel`.
+- **Child MCP servers run the installed release, not `PATH`.** The child configs name an absolute binary: `~/.config/opencode/opencode.json` and `~/.codex/config.toml` both run `~/.local/share/pitwall/releases/20261015-v0.3.0a1-public-44281034/.venv/bin/pitwall mcp serve channel`.
   - Codex passes only whitelisted env vars to it, so the child-side MCP server must read the session from the channel record, never from its env.
   - Live checks need the branch installed as a release.
 - **Plugin monitors**:
@@ -66,7 +66,7 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
 ## Global Constraints
 
 - Python 3.14 only. `uv run` or `.venv/bin/python`, never bare `python`.
-- Worktree setup before any task: `cd /home/chris/git/pitwall-agent-dispatch && uv sync --frozen --extra dev --python 3.14.7`.
+- Worktree setup before any task: `cd <worktree> && uv sync --frozen --extra dev --python 3.14.7`.
 - Hook files under `plugins/claude/hooks/` stay stdlib-only. The watcher module must not import fastapi, uvicorn, asyncpg, redis, arq, textual, runpod, mcp or prometheus_client (`tests/test_startup_imports.py`).
 - `pitwall.agents` never imports broker services, repositories or `pitwall.db` (`tests/test_agents_import_direction.py`).
 - The `## Asking and steering through the orchestrator channel` section keeps every needle `tests/agents/test_parity.py::test_channel_discipline_is_taught_everywhere` checks, in all three host skills.
@@ -74,7 +74,7 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
 - No launch is blocked to enforce the channel. The guard's existing marker-scoped rules for raw provider CLIs, `pitwall agents workflow run|resume` and uninspectable `Workflow` scripts are unchanged.
 - An explicit choice always wins over the default: `--routing-ask-support` or `PITWALL_AGENTS_ASK_SUPPORT=1` forces the channel on; `--routing-no-ask-support` or `PITWALL_AGENTS_ASK_SUPPORT=0` forces it off.
 - Heartbeat constants: `WATCHER_HEARTBEAT_S = 5.0` (refresh interval) and `WATCHER_STALE_S = 30.0` (age after which a listener counts as gone).
-- Tests stay hermetic: no live credentials or paid providers outside Task 11. Chris authorized (2026-10-16) Task 11's real-model runs on opencode and pi and the release install, gated on Steps 1–3 passing.
+- Tests stay hermetic: no live credentials or paid providers outside Task 11. The maintainer authorized (2026-10-16) Task 11's real-model runs on opencode and pi and the release install, gated on Steps 1–3 passing.
 - Any task that changes a test bound in `release_acceptance/reviewed-bindings.json`, or adds a CLI argument, ends with `make regen-bindings` and commits `release_acceptance/reviewed-bindings*.json`.
 - A task that adds an argparse argument also raises `release_acceptance/denominator.json` (`counts`, `total`, and a dated `reason` that keeps the previous note), or `tests/release_acceptance/test_denominator.py` fails. Task 3 adds two (`cli_arguments` 490 -> 492).
 - Commits carry DCO `-s`.
@@ -366,7 +366,7 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
 ### Task 10: Remove the conflicting workstation instruction
 
 **Files:**
-- Modify: `/home/chris/.claude/CLAUDE.md` (outside the repo; no commit). In the `## Multi-agent lanes` section, replace the bullet `Long shim dispatches (over 15 minutes expected) go through codex-shim-bg.sh, never inside an Agent's Bash call. Wait with one Monitor on the exit_code file, not sleep loops.`
+- Modify: `~/.claude/CLAUDE.md` (outside the repo; no commit). In the `## Multi-agent lanes` section, replace the bullet `Long shim dispatches (over 15 minutes expected) go through codex-shim-bg.sh, never inside an Agent's Bash call. Wait with one Monitor on the exit_code file, not sleep loops.`
 
 - [ ] **Step 1: Replace it with:** `Pitwall subagents launch as a pitwall:<harness>-shim Agent (background allowed). The shim connects its own channel while the pitwall-asks monitor runs, and questions arrive as PITWALL ASK notifications.`
 - [ ] **Step 2: Verify.** Run `grep -n 'shim-bg\|pitwall-asks' ~/.claude/CLAUDE.md`. Expected: only the new line, naming `pitwall-asks`.
@@ -416,7 +416,7 @@ Nothing is blocked to enforce the channel. With no listener (`-p`, SDK, scripts,
 
 ### Task 12 (continuation, 2026-10-21): The launch guard allows Workflow scripts with shim nodes
 
-Chris asked to relax the rule Task 6 kept. A native `Workflow` node is a subagent of the launching session, so its Bash call carries that session's `CLAUDE_CODE_SESSION_ID` (see "Verified facts") and the Task 4 default connects its shim exactly as it does for a shim `Agent`. Denying a Workflow script for containing shim nodes no longer protects anything.
+The maintainer asked to relax the rule Task 6 kept. A native `Workflow` node is a subagent of the launching session, so its Bash call carries that session's `CLAUDE_CODE_SESSION_ID` (see "Verified facts") and the Task 4 default connects its shim exactly as it does for a shim `Agent`. Denying a Workflow script for containing shim nodes no longer protects anything.
 
 **Files:**
 - Modify: `plugins/claude/hooks/launch-guard.py` (`_workflow_launch`, its docstring, the `workflow` comment in `main`, the imports)
