@@ -12,7 +12,7 @@ a reviewed pull request. Three runtime packages received explicit approval:
 | Package | Detected expression | Approved disposition |
 | --- | --- | --- |
 | `paramiko` 5.0.0 | `LGPL-2.1` | Unmodified pure-Python source and upstream license are preserved in each published image; Pitwall imposes no restriction on replacement, modification, or reverse engineering of the library |
-| `certifi` 2026.7.22 | `MPL-2.0` | Unmodified covered files and upstream license are preserved in each published image; Pitwall files remain separately licensed |
+| `certifi` 2026.10.19 | `MPL-2.0` | Unmodified covered files and upstream license are preserved in each published image; Pitwall files remain separately licensed |
 | `tqdm` 4.70.1 | `MPL-2.0 AND MIT` | Unmodified source files and the upstream combined license notice are preserved in each published image; Pitwall files remain separately licensed |
 
 The GitHub Release wheel and sdist do not vendor these dependencies. Exact wheel

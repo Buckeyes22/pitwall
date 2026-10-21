@@ -62,6 +62,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `certifi` 2026.10.19 replaces 2026.7.22 in the lock, closing PYSEC-2026-4320; the license
+  review, policy pin and SBOM follow the new version.
+
 - `pitwall agents runs discard` again removes an isolated worktree whose branch and Git metadata
   are already gone. Git 2.56 reports such a worktree as "gitfile does not point to a valid
   repository" instead of "not a git repository", and the discard refused the cleanup.
