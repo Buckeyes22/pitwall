@@ -217,6 +217,20 @@ class ClaudeTripwireTests(unittest.TestCase):
         )
         self.assertIsNone(response)
 
+    def test_dag_tripwire_accepts_shim_agents_and_shim_bash(self) -> None:
+        skill_active = agent_entry("pitwall:qwen-shim")
+        skill_active["attributionSkill"] = "pitwall:subagent-model-routing"
+        response = run_hook(
+            DAG_TRIPWIRE,
+            [
+                user_entry(DAG_COMMAND),
+                skill_active,
+                agent_entry("pitwall:qwen-shim"),
+                bash_entry("~/.claude/scripts/qwen-shim.sh /tmp/prompt.md"),
+            ],
+        )
+        self.assertIsNone(response)
+
     def test_ledger_append_satisfies_ledger_tripwire(self) -> None:
         response = run_hook(
             LEDGER_TRIPWIRE,
@@ -274,12 +288,11 @@ class QwenTripwireCoverageTests(unittest.TestCase):
         ("legacy bare agent", agent_entry("qwen-shim")),
     )
 
-    def test_dag_tripwire_blocks_direct_qwen_dispatch_without_workflow(self) -> None:
+    def test_dag_tripwire_accepts_direct_qwen_shim_agents(self) -> None:
         for label, dispatch in self.QWEN_DISPATCHES:
             with self.subTest(dispatch=label):
                 response = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertEqual("block", response["decision"] if response else None)
-                self.assertIn("TRIPWIRE", str(response["reason"]))
+                self.assertIsNone(response)
 
     def test_ledger_tripwire_nudges_after_qwen_dispatch_without_note(self) -> None:
         for label, dispatch in self.QWEN_DISPATCHES:
@@ -315,8 +328,7 @@ class MCodeTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.MCODE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertEqual("block", dag["decision"] if dag else None)
-                self.assertIn("TRIPWIRE", str(dag["reason"]))
+                self.assertIsNone(dag)
 
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this"), dispatch])
                 self.assertEqual("block", ledger["decision"] if ledger else None)
@@ -333,7 +345,7 @@ class ClineTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.CLINE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Cline"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -348,7 +360,7 @@ class PiTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.PI_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Pi"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -363,7 +375,7 @@ class DshTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.DSH_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to dsh"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -378,7 +390,7 @@ class HermesTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.HERMES_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Hermes"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -393,7 +405,7 @@ class GooseTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.GOOSE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to goose"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -408,7 +420,7 @@ class MuseTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.MUSE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Muse"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -423,7 +435,7 @@ class AgyTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.AGY_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Gemini"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -454,7 +466,7 @@ class RouteShimTripwireTests(unittest.TestCase):
         for label, dispatch in self.ROUTE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
         self.assertIsNone(

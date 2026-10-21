@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
-"""dag-tripwire.py — Stop-hook backstop for the dag-routing TRANSPORT misroute.
+"""dag-tripwire.py — Stop-hook backstop for dag-routing host and model boundaries.
 
-Fires a one-time checkpoint (decision:block) when, in the CURRENT turn:
-  1. the /dag-routing slash command was invoked OR the subagent-model-routing skill is active
-     (including plugin-namespaced skill attribution), AND
-  2. >= 1 shim was dispatched DIRECTLY — Bash `*-shim.sh` (non-pong), or
-     Agent subagent_type in the namespaced plugin shims (or legacy bare shim names), AND
-  3. ZERO `Workflow` or managed `dispatch_and_wait` tool calls happened.
+Fires a one-time checkpoint (decision:block) when, in the CURRENT turn, the /dag-routing
+slash command was invoked OR the subagent-model-routing skill is active (including
+plugin-namespaced skill attribution), AND one of these boundaries was crossed:
+  - `pitwall agents workflow run|resume --host <non-claude>` (shared-runner boundary),
+  - a Claude model routed through `route-shim.sh` (Claude stays native),
+  - a Claude model passed to `agy-shim.sh` (agy is for Gemini models).
 
-That triple is the transport misroute: a DAG was requested but executed as loose shells /
-direct Agent dispatch instead of managed `dispatch_and_wait` calls (a native `Workflow` also
-silences it). It does NOT fire on:
-  - dev sessions that merely mention the skill (keys on command marker / skill attribution, not mentions),
-  - mid-setup turns or clarifying pauses (requires an actual direct-shim dispatch),
-  - correct runs (a Workflow call silences it).
-It DOES fire on a deliberate "not-a-DAG -> flat direct dispatch" inside the command/skill
-context; the checkpoint text lets you confirm that and continue — that's by design, since
-the misroute and that legitimate case share an observable signature.
+A `pitwall:<harness>-shim` Agent or a `*-shim.sh` Bash launch is a connected transport
+(the shim joins the orchestrator channel itself), so direct shim dispatch is not blocked.
+It does NOT fire on dev sessions that merely mention the skill (keys on command marker /
+skill attribution, not mentions).
 
 Fail-safe: any parse problem -> exit 0 (never blocks spuriously).
 Loop-safe: if stop_hook_active is set, exit 0.
@@ -24,7 +19,6 @@ Disable: disable/remove the pitwall plugin, or delete its hooks/hooks.json "Stop
 """
 
 import json
-import re
 import sys
 
 from dag_tripwire_shims import (
@@ -34,7 +28,6 @@ from dag_tripwire_shims import (
     agy_models,
     native_claude_route,
     route_specs,
-    shim_invoked,
     workflow_runner_calls,
 )
 
@@ -61,13 +54,6 @@ def tool_uses(e):
         for b in c:
             if isinstance(b, dict) and b.get("type") == "tool_use":
                 yield b
-
-
-def managed_dispatch_tool(name: object) -> bool:
-    """A managed event-return dispatch is a valid DAG node boundary."""
-
-    lowered = str(name or "").lower()
-    return lowered.startswith("mcp__pitwall-channel__") and lowered.endswith("__dispatch_and_wait")
 
 
 def dag_context_invoked(turn):
@@ -115,10 +101,7 @@ def main():
     if not invoked:
         return 0
 
-    # 2) Tally Workflow/managed dispatch vs. direct shim dispatch among main-loop tool calls this turn.
-    workflow_used = False
-    managed_dispatch_used = False
-    direct_shim = False
+    # 2) Tally boundary crossings among main-loop tool calls this turn.
     runner_host_violation = None
     claude_route = None
     agy_claude_model = None
@@ -126,12 +109,7 @@ def main():
         for b in tool_uses(e):
             name = b.get("name")
             inp = b.get("input") or {}
-            if name == "Workflow":
-                workflow_used = True
-            elif managed_dispatch_tool(name):
-                managed_dispatch_used = True
-            elif name == "Agent" and inp.get("subagent_type") in SHIM_TYPES:
-                direct_shim = True
+            if name == "Agent" and inp.get("subagent_type") in SHIM_TYPES:
                 for spec in route_specs(str(inp.get("prompt", ""))):
                     if native_claude_route(spec):
                         claude_route = spec
@@ -140,7 +118,6 @@ def main():
                         agy_claude_model = model
             elif name == "Bash":
                 cmd = str(inp.get("command", ""))
-                low = cmd.lower()
                 for action, host in workflow_runner_calls(cmd):
                     if host != "claude":
                         runner_host_violation = (action, host)
@@ -150,10 +127,6 @@ def main():
                 for model in agy_models(cmd):
                     if model.lower().startswith("claude"):
                         agy_claude_model = model
-                if shim_invoked(cmd) and not (
-                    re.search(r"\bpong\.md\b", low) or "reply with exactly" in low
-                ):
-                    direct_shim = True
 
     if runner_host_violation is not None:
         action, host = runner_host_violation
@@ -185,20 +158,6 @@ def main():
         print(json.dumps({"decision": "block", "reason": reason}))
         return 0
 
-    if workflow_used or managed_dispatch_used or not direct_shim:
-        return 0
-
-    # 3) Misroute signature confirmed -> one-time checkpoint fed back to the model.
-    reason = (
-        "dag-routing TRIPWIRE: /dag-routing or the subagent-model-routing skill was active this turn and shims were "
-        "dispatched DIRECTLY (Bash/Agent) with NO managed `dispatch_and_wait` or `Workflow` tool call. "
-        "Per the skill's §0 this is the TRANSPORT MISROUTE: a DAG must run through managed "
-        "`dispatch_and_wait` calls, answered with `answer_and_wait`, not loose shells / direct "
-        "Agent dispatch / inline Opus. ACTION: if this is a DAG, redo it with managed dispatches. If you "
-        "DELIBERATELY concluded it is NOT a DAG and used a direct shim as the non-interactive "
-        "fallback on purpose, state that explicitly and continue."
-    )
-    print(json.dumps({"decision": "block", "reason": reason}))
     return 0
 
 
