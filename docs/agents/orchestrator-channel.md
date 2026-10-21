@@ -164,6 +164,16 @@ The dispatcher gives every harness `PITWALL_AGENTS_CHANNEL_DISPATCH_ID`, `PITWAL
 
 `pitwall agents doctor` reports `channel.mcp_server` (a local stdio handshake per role and protocol era), `channel.registration` per installed channel harness, and `channel.interactive_delivery` as untested by default; see [Doctor](doctor.md#channel-checks). A fresh installed-host exchange is required to prove live delivery. Tier 1 calls emit `ask.escalated` once an ask has waited half its effective deadline, so an operator hook can pull the human in before the default fires.
 
+## Agent-tool dispatch from Claude Code
+
+In interactive Claude Code sessions, the `pitwall-asks` monitor runs `pitwall agents inbox --watch`. It prints `PITWALL ASK` lines for questions associated with the session and refreshes a heartbeat every five seconds; after 30 seconds without a refresh, the listener is treated as gone. Plugin monitors do not run in `-p`, SDK, or scripted sessions.
+
+Launch external-model work with a native `Agent` whose `subagent_type` is `pitwall:<harness>-shim`. While the monitor heartbeat is fresh, an unflagged shim enables ask support automatically. `--routing-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=1` force it on; `--routing-no-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=0` force it off. Without a fresh listener or an explicit enable, ask support stays off.
+
+For tier 1, the child asks through `ask_orchestrator`; answer its question with `answer_ask`. For tier 4, answer the file-contract ask and resume the run with `pitwall agents runs resume <dispatch-id>`. Use `steer_and_wait` to steer a running shim. `dispatch_and_wait` remains available in non-interactive sessions without plugin monitors and returns asks through its managed event channel.
+
+The launch guard permits shim Agents to connect their own channel. It still denies native `Workflow` scripts that contain shim nodes in a routing-active session; do not use Workflow shim nodes as a routed dispatch path.
+
 ## Recovery and operator commands
 
 ```bash

@@ -5,8 +5,8 @@ Grok 4.7, Kimi, Qwen, GLM, MiniMax, Pi, Hermes, Cline, Muse Code, goose, dsh, ZC
 over the repo-installed codex/agy/kimi/opencode/grok/qwen/pi/hermes/cline/muse/goose/dsh/zcode/mcode shims. The primary `subagent-model-routing` skill handles
 **both** dispatch shapes; an internal §0 decision picks which:
 
-- **Flat dispatch** — independent, one-shot units (no dependency edges). In a routing-active session, one managed `dispatch_and_wait` call per unit; direct shims are a foreground, non-interactive fallback.
-- **DAG orchestration** — dependency edges (A→B, fan-out you collect/order). Managed dispatches in dependency order (`dispatch_and_wait`, `answer_and_wait`, `wait_dispatch`, `steer_and_wait`); the native `Workflow` tool is the legacy non-interactive mode.
+- **Flat dispatch** — independent, one-shot units (no dependency edges). Launch a native `Agent` with `subagent_type: pitwall:<harness>-shim`; the `pitwall-asks` monitor delivers questions and background Agents are allowed.
+- **DAG orchestration** — dependency edges (A→B, fan-out you collect/order). Launch ready nodes as shim Agents and carry their artifacts in dependency order. Native `Workflow` scripts containing shim nodes remain denied in routing-active sessions.
 
 **Why one skill, not two:** flat-vs-DAG is a *branch over shared substrate*, not two separate tools. The model-picking logic, the roster, and the transport lore are needed by **both** paths, so they live **once, inline**, in-context for every task — no "referenced but not loaded" gap. (`/pitwall:dag-routing` is the entry command; §0 down-routes a flat task to the flat half on its own.)
 
@@ -30,7 +30,7 @@ claude plugin validate <pitwall>/plugins/claude
 - `commands/model-facts.md` — the `/pitwall:model-facts` command: review changed vendor, harness, host and Hugging Face sources and update the model facts.
 - `agents/{codex,agy,kimi,opencode,grok,qwen,route,pi,hermes,cline,muse,goose,dsh,zcode,mcode}-shim.md` — the Sonnet transport agent contracts.
 - `monitors/monitors.json` — the `pitwall-asks` monitor, which runs `pitwall agents inbox --watch` in every interactive session.
-- `hooks/` — the `PreToolUse` steering gate (fails closed; exempts the `pitwall-channel` tools `read_steering`, `ack_steer`, and `ask_orchestrator` by exact server name), the launch guard (denies recognizable direct shim, harness, and backgrounded launches once the routing skill or a managed `dispatch_and_wait` call activates the session marker; its `PostToolUse`, `Stop`, and `SessionEnd` entries release the dispatch leases and clear the marker), and the Stop-hook tripwires (one flags a DAG run that misrouted to direct dispatch, the other a direct shim run with a non-ok outcome and no ledger note). Disable via the plugin or `hooks/hooks.json`.
+- `hooks/` — the `PreToolUse` steering gate (fails closed; exempts the `pitwall-channel` tools `read_steering`, `ack_steer`, and `ask_orchestrator` by exact server name), the launch guard (once the routing skill or a managed `dispatch_and_wait` call activates the session marker, it denies recognizable raw provider launches and native `Workflow` scripts that contain shim nodes, while shim Agents and `*-shim.sh` commands are allowed because they connect their own channel; its `PostToolUse`, `Stop`, and `SessionEnd` entries release the dispatch leases and clear the marker), and the Stop-hook tripwires (one flags Claude models routed through `route-shim` or `agy-shim`, the other a direct shim run with a non-ok outcome and no ledger note). Disable via the plugin or `hooks/hooks.json`.
 
 ## Subagent questions: the `pitwall-asks` monitor
 
@@ -56,7 +56,7 @@ Named route profiles (`pitwall agents profiles list`, `pitwall agents setup prof
 
 Write dispatches through any non-Claude shim can opt into `--routing-workspace isolated --routing-task-mode write`; review with `pitwall agents runs diff`, apply explicitly, and discard the retained worktree explicitly. Claude work remains native to Claude Code's Agent/Workflow surfaces.
 
-Claude-hosted dependency graphs that route external models run as managed `dispatch_and_wait` calls (`/pitwall:dag-routing`); native Workflow shim nodes are a legacy, non-interactive mode. The shared `pitwall agents workflow run workflow.json --host claude` command is available only for explicitly requested external-only graphs (any registered non-Claude harness) and does not replace `/dag-routing` or the tripwire hooks. The self-declared host value is advisory; observed Claude tool use remains the enforcement signal.
+Claude-hosted external-model work uses native shim Agents. The `pitwall-asks` monitor reports their questions; `dispatch_and_wait` remains available for `-p`, SDK, and other sessions where plugin monitors do not run. The launch guard still denies native Workflow scripts containing shim nodes in routing-active sessions. The shared `pitwall agents workflow run workflow.json --host claude` command is available only for explicitly requested external-only graphs and does not replace `/dag-routing` or the tripwire hooks. The self-declared host value is advisory; observed Claude tool use remains the enforcement signal.
 
 Model discovery is explicit with `pitwall agents doctor --discover-models`; the default doctor and dispatch preflight never run it.
 

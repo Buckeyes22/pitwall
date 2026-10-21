@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Claude Code routing now uses `pitwall:<harness>-shim` Agent dispatch with the `pitwall-asks`
+  monitor. New `ask.created` events identify the parent session, and `pitwall agents inbox --watch`
+  reports questions while keeping the session listener heartbeat fresh.
+
 - MiniMax Code joins as the fifteenth provider harness (`mcode-shim.sh`). It sends prompts on
   stdin, selects an explicit registered `minimax/...` model, runs in JSON output mode, and records
   reported token usage. `--effort` is available for M3.1-Flash-Preview; dispatch defaults to
@@ -32,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   skill gains a Muse Code section.
 
 ### Changed
+
+- Unflagged shims enable ask support only while the launching Claude session has a fresh monitor
+  heartbeat. `--routing-ask-support` still forces it on and `--routing-no-ask-support` forces it
+  off. The launch guard and DAG tripwire policy now permit shim Agent dispatch; native `Workflow`
+  scripts containing shim nodes remain denied by the launch guard in routing-active sessions.
 
 - Claude, Codex, OpenCode, Grok, Pi, Qwen, and Antigravity run in their JSON output modes inside
   dispatches; callers still receive plain answer text.

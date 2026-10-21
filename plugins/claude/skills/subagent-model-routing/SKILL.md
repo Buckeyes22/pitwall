@@ -8,8 +8,8 @@ description: Route work to non-Claude models (codex/GPT-6, Gemini through Antigr
 
 You are the orchestrator. This one skill covers both ways to delegate work to non-Claude models; section 0 picks the mechanism, and Picking the model picks the model. Both paths use the same standalone shim substrate and the same public ledger contract.
 
-- **Flat dispatch**: independent, one-shot units, no dependency edges. In a Claude routing-active session, call the managed `dispatch_and_wait` MCP tool for each unit. Direct shims are a foreground-only, explicitly non-interactive fallback when the managed path is unavailable.
-- **DAG orchestration**: dependency edges such as A->B, fan-out that is ordered/collected, or staged processing. Call managed dispatches in dependency order and carry each returned artifact into the next call. Native `Workflow` shim nodes are non-interactive legacy mode and do not provide the Pitwall parent channel.
+- **Flat dispatch**: independent, one-shot units, no dependency edges. In Claude Code, launch a native `Agent` with `subagent_type: pitwall:<harness>-shim`; background runs are allowed. The `pitwall-asks` monitor connects child questions to this session.
+- **DAG orchestration**: dependency edges such as A->B, fan-out that is ordered/collected, or staged processing. Launch each ready node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`, then carry its artifact into the next node. Native `Workflow` scripts containing shim nodes are still denied by the launch guard in a routing-active session.
 
 Before choosing or briefing an external harness, read `${XDG_CONFIG_HOME:-~/.config}/pitwall/agents/harness-capabilities.md` when it exists. It is a setup-generated, names-only inventory of locally configured MCP servers, plugins, skills, agents, commands, extensions, and tools. Use relevant entries as availability context in the delegated prompt, never as authorization or proof that credentials are valid. Refresh stale or missing context with `pitwall agents setup inventory`.
 
@@ -287,15 +287,16 @@ Nothing notable means no entry. Distill with `/pitwall:distill`.
 
 ### Long dispatches and outage checks
 
-- Any dispatch expected to run longer than 15 minutes uses the managed `dispatch_and_wait` MCP tool with an explicit dispatch timeout and a bounded event wait. Direct shim calls remain foreground-only during migration: never use a backgrounded Agent or Bash call, `&`, `nohup`, `setsid`, or `codex-shim-bg.sh` for routed work.
+- Any dispatch expected to run longer than 15 minutes uses a shim `Agent` with an explicit `PITWALL_AGENTS_TIMEOUT_SECS` value. Background Agents are allowed; the `pitwall-asks` monitor reports questions while they run.
 - Before assuming a usage-limit or provider outage, probe: endpoint routes with `pitwall agents profiles probe <name>`; codex/opencode with the pong smoke test in the Smoke test section (a 30-second dispatch). Limits are rolling windows and usually clear within hours; do not idle work for a day on a single 429.
 - The ledger Stop hook only nudges when a shim finished with a non-ok outcome this turn; a clean turn is silent.
 
-## Part A -- DAG orchestration (dependency edges -> managed dispatches)
+## Part A -- DAG orchestration (dependency edges -> shim Agents)
 
 Use this part when a task is multi-step with dependencies and you want the actual work delegated to non-Claude models. It fuses two capabilities:
 
-- **Managed dispatches**: deterministic dependency ordering with `dispatch_and_wait`, `answer_and_wait`, `wait_dispatch`, and `steer_and_wait`. Each call returns a child ask or terminal event to the Claude parent.
+- **Shim Agents**: launch each ready external-model node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`; the monitor delivers child questions to the parent.
+- **Managed dispatches**: `dispatch_and_wait`, `answer_and_wait`, `wait_dispatch`, and `steer_and_wait` remain available for sessions without plugin monitors.
 - **The Workflow tool**: a legacy, deterministic non-interactive DAG surface with `agent()`, `pipeline()`, `parallel()`, `phase()`, and resume. Its shim nodes do not provide a proven parent ask/answer channel.
 - **The shims**: `codex-shim` routes GPT work through codex; `agy-shim` routes Gemini through Antigravity; `kimi-shim` routes Kimi through Kimi Code; `grok-shim` routes Grok 4.7 through Grok Build; `qwen-shim` routes Qwen (and any OpenAI-compatible endpoint) through Qwen Code; `pi-shim` wraps Pi with config-synced endpoint delivery; `hermes-shim` wraps Hermes Agent with config-synced endpoint delivery; `cline-shim` wraps Cline CLI with config-synced endpoint delivery; `muse-shim` wraps Meta Muse Code as a model-bound harness; `goose-shim` wraps goose with environment endpoint delivery; `dsh-shim` wraps the experimental DeepSeek Harness with config-synced profile delivery; `zcode-shim` wraps ZCode with its saved model and account; `mcode-shim` wraps MiniMax Code using the MiniMax account and explicit model ID; `route-shim` dispatches a named route profile (`name[@harness]`) through whichever non-Claude harness it resolves to; `opencode-shim` routes GLM, MiniMax, OpenCode Go subscription models (`opencode-go/*`), and custom/local providers through opencode. They run the CLI and return stdout verbatim.
 - **`pi-shim`** wraps Pi with config-synced endpoint delivery.
@@ -307,23 +308,23 @@ Use this part when a task is multi-step with dependencies and you want the actua
 - **`zcode-shim`** wraps ZCode with its saved model and account.
 - **`mcode-shim`** wraps MiniMax Code; provide a registered `minimax/...` model with `--model`.
 
-Invoking this skill activates the Claude routing guard before child work begins. Use managed dispatches for every child that may ask the parent.
+Invoking this skill activates the Claude routing guard before child work begins. Use shim Agents for external-model work; their channel is enabled while the `pitwall-asks` monitor heartbeat is fresh.
 
 Two misroutes must be prevented:
 
 | # | Misroute | What it looks like | Gate |
 |---|---|---|---|
-| 1 | Transport misroute | A dependency graph is run through direct `Agent`, shell, or native Workflow shim calls instead of managed dispatches. The models may run, but the parent event channel is absent. | Section 0 |
+| 1 | Transport misroute | A dependency graph is run without a `pitwall:<harness>-shim` Agent, so work runs in the wrong harness or loses the parent question path. | Section 0 |
 | 2 | Node misroute | A managed dependency step lacks its explicit route or dispatch receipt and silently falls back to an unrelated child. | The managed dispatch result |
 
-When a child may ask the orchestrator, use the managed `dispatch_and_wait` / `answer_and_wait` tools for each dependency step and carry the returned artifact into the next step. Workflow shim nodes are a non-interactive mode; they must not be presented as a working parent conversation.
+Use a native `Agent` with `subagent_type: pitwall:<harness>-shim` for each external-model dependency step and carry its returned artifact into the next step. The launch guard still denies native `Workflow` scripts that contain shim nodes in a routing-active session.
 
 ## Section 0 -- Mechanism is mandatory
 
 **Step 0: is this actually a DAG?** A DAG has dependency edges: A->B, staged/ordered processing, a mechanical reduce that needs upstream outputs, a resume boundary, or a point where the orchestrator must judge/synthesize before downstream work.
 
-- **No edges:** flat, independent, one-shot dispatch. Do not build a Workflow. Use Part B.
-- **Has edges:** call `dispatch_and_wait` for each node whose prerequisites are complete, review its event, answer with `answer_and_wait` when needed, and pass the terminal artifact to the next node. Use native `Workflow({ scriptPath })` only in an explicitly non-interactive ordinary session; its shim nodes cannot ask the parent. Do not run an interactive DAG as direct `Agent` calls or direct shell invocations.
+- **No edges:** flat, independent, one-shot dispatch. Do not build a Workflow. Use a native `Agent` with `subagent_type: pitwall:<harness>-shim`.
+- **Has edges:** launch each ready node as a native `Agent` with `subagent_type: pitwall:<harness>-shim`, review its result, answer questions as they arrive, and pass the artifact to downstream nodes. The launch guard still denies native `Workflow` scripts that contain shim nodes in a routing-active session.
 
 Fan-out alone is width, not depth. If each unit has an internal `spec -> build` edge, the whole thing is a DAG even when units are independent. Conversely, do not invent stages: a single agentic shim node already authors, verifies, and fixes within its own loop.
 
@@ -625,7 +626,7 @@ printf '%s\n' "$types" | sort | uniq -c
 
 | Thought | Reality |
 |---|---|
-| "I will just batch direct shim calls." | Transport misroute. Use managed dispatches for routing-active DAGs; Workflow is legacy non-interactive mode only. |
+| "I will just batch direct shim calls." | Give each unit its own `pitwall:<harness>-shim` Agent so Pitwall records each run and the monitor can deliver questions. |
 | "This node is trivial." | Trivial work still routes through a shim helper. |
 | "Synthesis can be one quick node." | Synthesis is a segment boundary and stays inline. |
 | "The workflow can pick the model." | You choose the model in the helper command. |
@@ -894,19 +895,25 @@ Keep pong probes tool-free.
 
 ## Asking and steering through the orchestrator channel
 
-A dispatched model can ask you a blocking question mid-task instead of guessing. For routed work,
-call the managed `dispatch_and_wait` tool on the `pitwall-channel` MCP server (`pitwall agents setup mcp`
-registers it for this host). It starts the child with the channel on and returns the child's next ask
-or its terminal result; answer with `answer_and_wait`, keep waiting with `wait_dispatch`, and redirect
-with `steer_and_wait`. A shim you run yourself (`*-shim.sh`, `route-shim.sh`) is non-interactive: its
-child hears nothing about the channel unless you pass `--routing-ask-support` (cap it with
-`--routing-max-asks N`; the default is 5), and on a harness with a registered `pitwall-channel`
-server it then gets the tier-1 asking rules: the child blocks in `ask_orchestrator`, you answer with
-`pitwall agents answer` while it runs, and it continues and can finish without ever pausing (an
-unanswered ask applies its default). Without a registered channel the child can only pause on the
-file contract (exit 75) until you run `pitwall agents runs resume`. Prefer `--routing-workspace isolated` for ask-prone shim
-work, so a paused run resumes against its own worktree. In a routing-active Claude session the
-PreToolUse guard blocks direct shim launches, so use the managed tools.
+The `pitwall-asks` monitor runs `pitwall agents inbox --watch` in each interactive Claude Code
+session. When a shim Agent asks a question, the monitor prints a `PITWALL ASK` line. With a
+registered `pitwall-channel` server, answer tier-1 asks using `answer_ask`; the child waits in
+`ask_orchestrator` and continues after your answer. For tier 4, answer the ask and then resume it
+with `pitwall agents runs resume <dispatch-id>` through the same shim Agent type. Steer a live run
+with `steer_and_wait`.
+
+The watcher keeps a heartbeat fresh while it runs. An unflagged shim enables ask support only when
+the launching session's heartbeat is fresh. `--routing-ask-support` or
+`PITWALL_AGENTS_ASK_SUPPORT=1` forces it on; `--routing-no-ask-support` or
+`PITWALL_AGENTS_ASK_SUPPORT=0` forces it off. Without a listener, a direct shim keeps today's
+behavior. A tier-4 run with ask support can pause with exit 75; resume it after answering. Use
+`--routing-workspace isolated` for ask-prone write tasks so resumed work stays in its worktree.
+Without a registered channel server, a child cannot ask through tier 1 and uses the tier-4 file
+contract when ask support is enabled.
+
+`dispatch_and_wait` remains the alternative for `-p`, SDK, and other sessions where plugin monitors
+do not run. It returns asks and results through the managed event channel; answer with
+`answer_and_wait`, continue with `wait_dispatch`, and steer with `steer_and_wait`.
 
 The server picks its tool set by role. In your session (the orchestrator) it serves `dispatch_and_wait`, `wait_dispatch`, `answer_and_wait`, `steer_and_wait`, and the recovery tools `inbox` and `answer_ask`. `dispatch_and_wait` takes `prompt` plus either `route` (a configured route spec) or `provider` (a direct harness), never both; `workspace` (`shared`, `isolated`, or `auto`), `task_mode` (`read` or `write`), `base`, `timeout_seconds`, `max_asks`, `retain_prompt`, `extra_args`, and `wait_seconds` are optional, and `ask_support` must stay `true`. `answer_and_wait` takes the full `dispatch_id`, the four-digit `ask_id`, and a `choice` (an option id or `abort`); `steer_and_wait` takes `dispatch_id`, `kind`, `message`, and optional `requires_ack` and `deadline_s`; `wait_dispatch` takes `dispatch_id` or its `reattach_handle`. The dispatched child sees a different set, `ask_orchestrator`, `read_steering`, and `ack_steer`, which the dispatcher's prompt tells it to use. Every wait returns one event: `ask`, `defaulted`, `steer_ack`, `terminal`, `orphan`, or `still_running`, and each lists `defaults_applied`.
 
@@ -914,7 +921,7 @@ The server picks its tool set by role. In your session (the orchestrator) it ser
 
 The dispatcher appends the asking rules to the prompt; you do not write them. The model asks only when its default is dangerous and irreversible, gives 2–8 options with a real default and rationale, points at files instead of pasting diffs, and never asks what the worktree answers. A registered `pitwall-channel` server proves only that the child-side MCP tools are available; registration and a stdio handshake do not prove that the Claude parent receives events.
 
-For Claude-hosted routing, use the managed `dispatch_and_wait` MCP tool. It returns the next ask or terminal event; answer with `answer_and_wait`, continue with `wait_dispatch`, and steer with `steer_and_wait`. Do not make `inbox` polling part of the normal path. Keep `inbox`, `answer`, and `runs resume` as recovery tools for older file-contract callers until installed event-driven acceptance passes. If managed event tools are unavailable, use the documented file fallback and report that interactive delivery is unverified.
+For Claude-hosted routing, use native shim Agents and the `pitwall-asks` monitor. Keep `dispatch_and_wait` for non-interactive sessions without plugin monitors. `inbox`, `answer_ask`, and `runs resume` are also available for recovery and tier-4 asks.
 
 For recovery from an older file-contract caller, run `pitwall agents inbox` to inspect unresolved asks, `pitwall agents answer <dispatch-id> <ask-id> <choice>` to record a choice, and `pitwall agents runs resume <dispatch-id>` for a paused run. Use `pitwall agents steer <dispatch-id> --kind scope --message "…"` to redirect a running dispatch or `pitwall agents runs stop <dispatch-id>` to end it gracefully. Escalate dangerous and irreversible defaults to the operator.
 
@@ -925,7 +932,7 @@ Steering rules:
 - A malformed steer (unknown kind, empty message, bad `deadline_s`) is rejected before anything is written: an error result from `steer_and_wait`, exit 1 from `pitwall agents steer`, HTTP 400 from the loopback broker's `POST /steer`.
 - When a run ends, steers that require acknowledgement and that the child never acknowledged are reported, whatever their kind: a `steer.unacked` event with `atExit`, `unackedSteerIds` on the terminal event and the ledger row, and `unacked_steer_ids` on a managed `terminal` or `orphan` result. The all-runs `pitwall agents inbox` lists live and paused runs only; name a `dispatch_id` (the `inbox` tool) to see a finished run's asks and steers.
 
-Native Claude `Agent` and `Workflow` children use Claude's native lifecycle in ordinary sessions. During a routing-active session, use the managed dispatch tool for external-model child work; the PreToolUse guard blocks shim and provider launches — `pitwall:*shim`, direct `*-shim.sh`, provider CLI, `pitwall agents dispatch`, and backgrounded Bash calls — including launches a native `Agent` attempts through its own tool calls, while native research agents remain allowed. Opaque wrappers remain outside its detection boundary.
+Native Claude `Agent` and `Workflow` children use Claude's native lifecycle in ordinary sessions. During a routing-active session, shim Agents connect their own channel and can run in the background. The launch guard still denies native `Workflow` scripts containing shim nodes, as well as recognizable raw provider launches. Native research agents remain allowed. Opaque wrappers remain outside the guard's detection boundary.
 
 ## MiniMax stall handling
 
@@ -951,39 +958,35 @@ Operating rule:
 - Authoring/generation can use any agentic shim, but must be verified by deterministic project gates.
 - Bare non-tool completions are not a review route.
 
-## Dispatch mechanics (managed event channel)
+## Dispatch mechanics
 
-- In a Claude routing-active session, launch children only through `dispatch_and_wait`. It returns an ask, a terminal receipt, a bounded `still_running` handle, or an honest orphan/error result.
-- Set `route` or `provider`, include the complete task in `prompt`, and set `workspace`, `task_mode`, `timeout_seconds`, and `ask_support` deliberately.
-- Answer a returned ask with `answer_and_wait`, reattach with `wait_dispatch`, and steer with `steer_and_wait`. Do not run a model-driven `inbox` loop.
-- Fire independent managed dispatches in one message when you need throughput. A sibling terminal result must not release another active dispatch.
-- Direct shims and native `Agent` calls are foreground-only, non-interactive fallback surfaces outside routing-active sessions. Never background them or put them behind `&`, `nohup`, `setsid`, or an opaque wrapper.
+- Launch external-model work as a native `Agent` with `subagent_type: pitwall:<harness>-shim`. Write the complete task to a prompt file and give the Agent the command `~/.claude/scripts/<harness>-shim.sh <prompt-file> [flags]`; the prompt file comes first and routing flags follow it. Background Agents are allowed.
+- For write tasks, include `--routing-workspace isolated --routing-task-mode write` in the shim command. For a launch that must never ask, include `--routing-no-ask-support`.
+- When `pitwall-asks` is running, no channel flag is needed. The monitor prints questions; answer tier 1 with `answer_ask`, answer tier 4 and run `pitwall agents runs resume <dispatch-id>` through the same shim Agent type, and steer with `steer_and_wait`.
+- Keep dependency ordering in the parent: launch ready nodes, collect each result, then pass its artifact to downstream Agents. The launch guard still denies native `Workflow` scripts containing shim nodes in a routing-active session.
+- `dispatch_and_wait` remains available for `-p`, SDK, and other non-interactive sessions where plugin monitors do not run.
 
 ## Dispatch pattern -- single call
 
-1. Decide the route and effort flags.
-2. Put the task and expected artifacts in the dispatch prompt; use an isolated workspace for write tasks.
-3. Call the managed MCP tool and follow its returned event.
+1. Choose the harness and route, then prepare the shim command and effort flags.
+2. Write the task and expected artifacts to a prompt file (here `/tmp/forecast-parser.md`); add the isolated workspace and write-task flags after it for edits.
+3. Launch a `pitwall:<harness>-shim` Agent and follow its result or any `PITWALL ASK` from the monitor.
 
 ```text
-mcp__pitwall-channel__dispatch_and_wait({
-  "provider": "codex",
-  "prompt": "Inspect the forecast module, implement the parser, run its decisive tests, and report artifact paths.",
-  "workspace": "isolated",
-  "task_mode": "write",
-  "timeout_seconds": 1200,
-  "ask_support": true,
-  "wait_seconds": 30
+Agent({
+  "subagent_type": "pitwall:codex-shim",
+  "run_in_background": true,
+  "prompt": "Run verbatim: ~/.claude/scripts/codex-shim.sh /tmp/forecast-parser.md --routing-workspace isolated --routing-task-mode write"
 })
 ```
 
-The result is a structured child event. If it is an ask, answer it with the full dispatch and ask IDs; if it is `still_running`, use its reattach handle; if it is terminal, inspect the listed artifacts and rerun the decisive host checks.
+Collect the Agent result and inspect its artifacts. If the monitor prints a question, answer it with `answer_ask` for tier 1; for tier 4, answer it and resume the run with `pitwall agents runs resume <dispatch-id>`.
 
 ## Dispatch pattern -- parallel N (throughput priority)
 
 1. Prepare all prompts and artifact paths.
-2. Call `dispatch_and_wait` once per independent unit in one assistant message.
-3. Handle each event independently. Do not treat completion delivery as proof that the child can ask the parent.
+2. Launch one `pitwall:<harness>-shim` Agent per independent unit.
+3. Handle each result independently. The monitor reports questions from those runs.
 
 For rate-limit waves, reduce fan-out or choose another configured route. Retry MiniMax only for its documented stall, up to three times. Keep provider headroom conservative until the ledger proves higher concurrency.
 
