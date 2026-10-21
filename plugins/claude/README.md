@@ -29,7 +29,16 @@ claude plugin validate <pitwall>/plugins/claude
 - `commands/distill.md` — the `/pitwall:distill` ledger-promotion command.
 - `commands/model-facts.md` — the `/pitwall:model-facts` command: review changed vendor, harness, host and Hugging Face sources and update the model facts.
 - `agents/{codex,agy,kimi,opencode,grok,qwen,route,pi,hermes,cline,muse,goose,dsh,zcode,mcode}-shim.md` — the Sonnet transport agent contracts.
+- `monitors/monitors.json` — the `pitwall-asks` monitor, which runs `pitwall agents inbox --watch` in every interactive session.
 - `hooks/` — the `PreToolUse` steering gate (fails closed; exempts the `pitwall-channel` tools `read_steering`, `ack_steer`, and `ask_orchestrator` by exact server name), the launch guard (denies recognizable direct shim, harness, and backgrounded launches once the routing skill or a managed `dispatch_and_wait` call activates the session marker; its `PostToolUse`, `Stop`, and `SessionEnd` entries release the dispatch leases and clear the marker), and the Stop-hook tripwires (one flags a DAG run that misrouted to direct dispatch, the other a direct shim run with a non-ok outcome and no ledger note). Disable via the plugin or `hooks/hooks.json`.
+
+## Subagent questions: the `pitwall-asks` monitor
+
+The plugin declares one monitor, `pitwall-asks`, which runs `pitwall agents inbox --watch`. It prints every question a Pitwall subagent asks in this session as a `PITWALL ASK` line, including questions already open when it starts. Answer a tier-1 question with `answer_ask`; answer a tier-4 question and then resume the run with `pitwall agents runs resume <dispatch-id>`.
+
+While it runs, the watcher keeps a heartbeat file fresh under the Pitwall state root (`watchers/<session-id>.json`). That fresh heartbeat is what turns a shim's channel on by itself: a launch with no channel flag connects to this session's orchestrator only while the listener is alive, so a `-p`, SDK, script or CI launch with no listener behaves exactly as before. The heartbeat goes stale after 30 seconds without a refresh.
+
+Monitors run only in interactive sessions; `claude -p`, the SDK, and scripted runs do not start one. A plugin update needs a session restart before the monitor picks up the new manifest. To disable it, disable the whole plugin with `/plugin`, or remove the `pitwall-asks` entry from `monitors/monitors.json` in the installed plugin directory.
 
 ## Shared runtime prerequisite
 

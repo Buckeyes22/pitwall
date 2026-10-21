@@ -1,0 +1,8 @@
+[
+  {
+    "name": "pitwall-asks",
+    "command": "pitwall agents inbox --watch",
+    "description": "Pitwall subagent questions waiting on this session",
+    "when": "always"
+  }
+]
