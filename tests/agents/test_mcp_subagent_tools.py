@@ -149,6 +149,7 @@ class SubagentToolTests(unittest.TestCase):
                 created[0]["data"]["harness"],
             ),
         )
+        self.assertEqual(OPTIONS, created[0]["data"]["options"])
 
     def test_concurrent_identical_asks_reenter_the_same_ask(self) -> None:
         from pitwall.agents.mailbox import Mailbox

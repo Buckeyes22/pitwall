@@ -149,7 +149,7 @@ def ask_event_data(
     return {
         "askId": str(ask.get("ask_id", "")),
         "question": str(ask.get("question", "")),
-        "options": list(ask.get("options") or []),
+        "options": list((ask.get("context") or {}).get("options") or []),
         "default": ask.get("default"),
         "deadlineS": ask.get("deadline_s"),
         "blockedOn": ask.get("blocked_on"),
