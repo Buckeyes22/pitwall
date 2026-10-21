@@ -25,11 +25,13 @@ SHIM_BASENAMES = frozenset(
         "grok-shim.sh",
         "hermes-shim.sh",
         "kimi-shim.sh",
+        "mcode-shim.sh",
         "muse-shim.sh",
         "opencode-shim.sh",
         "pi-shim.sh",
         "qwen-shim.sh",
         "route-shim.sh",
+        "zcode-shim.sh",
     }
 )
 SHIM_AGENT_TYPES = frozenset(
@@ -49,10 +51,12 @@ HARNESS_BASENAMES = frozenset(
         "grok",
         "hermes",
         "kimi",
+        "mcode",
         "muse",
         "opencode",
         "pi",
         "qwen",
+        "zcode",
     }
 )
 SHELL_WRAPPERS = frozenset(
@@ -76,7 +80,8 @@ HEREDOC_RE = re.compile(
 )
 PROMPT_SHIM_RE = re.compile(
     r"(?:~/?|/|\./|\.\./|scripts/|[\s`'\"(])[^\s`'\")]*"
-    r"(?:agy|claude|cline|codex|dsh|goose|grok|hermes|kimi|muse|opencode|pi|qwen|route)-shim\.sh"
+    r"(?:agy|claude|cline|codex|dsh|goose|grok|hermes|kimi|mcode|muse|opencode|pi|qwen|route|zcode)"
+    r"-shim\.sh"
     r"(?=\s|$|[`'\")])",
     re.IGNORECASE,
 )
@@ -192,13 +197,11 @@ def _segment_launch(tokens: list[str]) -> str | None:
         if base in {"bash", "sh", "zsh"}:
             nested = _nested_shell_command(tokens, index + 1)
             return command_launch(nested) if nested is not None else None
-        if base in SHIM_BASENAMES:
-            return "shim"
         if base in HARNESS_BASENAMES:
             return "provider"
         if base == "pitwall" and index + 2 < len(tokens) and tokens[index + 1] == "agents":
             if tokens[index + 2] == "dispatch":
-                return "dispatcher"
+                return None
             if (
                 index + 3 < len(tokens)
                 and tokens[index + 2] == "workflow"
@@ -218,10 +221,6 @@ def command_launch(command: str | None) -> str | None:
         try:
             tokens = shlex.split(segment, posix=True)
         except ValueError:
-            # An incomplete shell string is still worth blocking when it has an
-            # unmistakable shim basename at the executable boundary.
-            if re.search(r"(?:^|[ /])(?:[A-Za-z0-9_.-]+/)?[a-z]+-shim\.sh(?:\s|$)", segment, re.I):
-                return "shim"
             continue
         found = _segment_launch(tokens)
         if found:

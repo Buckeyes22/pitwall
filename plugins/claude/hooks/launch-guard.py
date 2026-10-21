@@ -159,17 +159,10 @@ def main() -> int:
     elif tool_name.lower() == "agent":
         # Native research agents are allowed because the host runs PreToolUse
         # on a subagent's own tool calls under the parent session_id, so a
-        # shim or harness launch the agent attempts is still denied at that
-        # call. Only deny a native Agent whose own input names an external
-        # launch.
-        subagent_type = str(tool_input.get("subagent_type") or "").lower()
-        if subagent_type in SHIM_AGENT_TYPES:
-            kind = "shim-agent"
-        else:
-            prompt = str(tool_input.get("prompt") or "")
-            kind = command_launch(prompt)
-            if kind is None and PROMPT_SHIM_RE.search(prompt):
-                kind = "shim-agent"
+        # provider launch the agent attempts is still denied at that call.
+        # Shim Agents and shim Bash calls connect their own channel, so only a
+        # native Agent whose own input launches a raw provider CLI is denied.
+        kind = command_launch(str(tool_input.get("prompt") or ""))
     elif tool_name.lower() == "workflow":
         # Native Workflow nodes run as this session's children, so an
         # inspectable script that launches no external model is allowed; an
@@ -180,11 +173,9 @@ def main() -> int:
         return 0
 
     return_code = _decision(
-        f"Blocked disconnected external-model launch (recognized {kind}). Use the managed "
-        "Pitwall MCP `dispatch_and_wait` tool, which returns answerable child events; "
-        "do not use a direct shim/harness command or a backgrounded Agent/Bash call. "
-        "The session-scoped routing marker is active. "
-        "Opaque wrappers are outside the guard's detection boundary."
+        f"Blocked direct external-model launch (recognized {kind}). Launch it through a "
+        "pitwall:<harness>-shim Agent, a ~/.claude/scripts/<harness>-shim.sh command, "
+        "or dispatch_and_wait, so Pitwall records the run and connects its channel."
     )
     json.dump(return_code, sys.stdout)
     return 0
