@@ -59,10 +59,16 @@ def _start(
         daemon=True,
     )
     thread.start()
+    if session is not None:
+        # The watcher writes its heartbeat only after it has taken its starting log
+        # offset; appending before that would land behind the offset and never print.
+        heartbeat = channel.watcher_heartbeat_path(env, session)
+        assert heartbeat is not None
+        _wait_for(heartbeat.exists)
     return stop, out, thread
 
 
-def _wait_for(predicate: Any, timeout: float = 2.0) -> None:
+def _wait_for(predicate: Any, timeout: float = 10.0) -> None:
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         if predicate():
