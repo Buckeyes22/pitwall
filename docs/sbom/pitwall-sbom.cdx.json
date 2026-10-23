@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:5688fa20-2225-477c-8dcf-0c910e82ee68",
+  "serialNumber": "urn:uuid:e60b25f5-04a8-4b7c-b0e0-9dca475cc018",
   "metadata": {
-    "timestamp": "2026-10-21T02:00:19.522759533Z",
+    "timestamp": "2026-10-23T23:15:20.475036355Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -146,10 +146,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "brotli-18@1.2.0",
+      "bom-ref": "brotli-18@1.2.1",
       "name": "brotli",
-      "version": "1.2.0",
-      "purl": "pkg:pypi/brotli@1.2.0",
+      "version": "1.2.1",
+      "purl": "pkg:pypi/brotli@1.2.1",
       "properties": [
         {
           "name": "uv:package:marker",
@@ -954,7 +954,7 @@
         "aiohappyeyeballs-4@2.7.1",
         "aiosignal-7@1.4.0",
         "attrs-13@26.1.0",
-        "brotli-18@1.2.0",
+        "brotli-18@1.2.1",
         "brotlicffi-19@1.2.0.2",
         "frozenlist-33@1.8.0",
         "multidict-58@6.9.1",
@@ -1023,7 +1023,7 @@
       ]
     },
     {
-      "ref": "brotli-18@1.2.0"
+      "ref": "brotli-18@1.2.1"
     },
     {
       "ref": "brotlicffi-19@1.2.0.2",

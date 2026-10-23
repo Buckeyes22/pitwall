@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `certifi` 2026.10.19 replaces 2026.7.22 in the lock, closing PYSEC-2026-4320; the license
   review, policy pin and SBOM follow the new version.
+- `brotli` 1.2.1 replaces 1.2.0 in the lock, closing PYSEC-2026-4322 (GHSA-9v8h-qqgm-4m35).
 
 - `pitwall agents runs discard` again removes an isolated worktree whose branch and Git metadata
   are already gone. Git 2.56 reports such a worktree as "gitfile does not point to a valid
