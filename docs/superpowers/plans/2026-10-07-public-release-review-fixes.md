@@ -290,9 +290,11 @@ def _install_reference_errors(version: str) -> list[str]:
     for relative in filter(None, listed.split("\0")):
         try:
             text = (ROOT / relative).read_text(encoding="utf-8")
-        except (UnicodeDecodeError, FileNotFoundError):
+        except UnicodeDecodeError, FileNotFoundError:
             continue
-        historical = relative.startswith("docs/releases/") and relative != f"docs/releases/v{version}.md"
+        historical = (
+            relative.startswith("docs/releases/") and relative != f"docs/releases/v{version}.md"
+        )
         for number, line in enumerate(text.splitlines(), start=1):
             if BARE_INSTALL.search(line):
                 errors.append(
@@ -563,8 +565,10 @@ def test_profile_review_accepts_reviewed_dev_only_gpl() -> None:
             "dev": {"rfc3987": {"version": "1.3.8", "license": "GNU GPLv3+"}}
         },
     }
-    rows = [{"name": "rfc3987", "version": "1.3.8", "license": "GNU GPLv3+"},
-            {"name": "special", "version": "2", "license": "MPL-2.0"}]
+    rows = [
+        {"name": "rfc3987", "version": "1.3.8", "license": "GNU GPLv3+"},
+        {"name": "special", "version": "2", "license": "MPL-2.0"},
+    ]
     assert _module().evaluate(rows, policy, profile="dev") == []
     assert _module().evaluate(rows, policy, profile="base") == [
         "rfc3987 1.3.8: denied license 'GNU GPLv3+'"
@@ -767,11 +771,13 @@ Append to `tests/security/test_license_policy.py`:
 
 ```python
 def test_npm_lock_rows_read_name_version_license() -> None:
-    lock = {"packages": {
-        "": {"name": "root"},
-        "node_modules/@scope/a": {"version": "1.0.0", "license": "MIT"},
-        "node_modules/b/node_modules/c": {"version": "2.0.0"},
-    }}
+    lock = {
+        "packages": {
+            "": {"name": "root"},
+            "node_modules/@scope/a": {"version": "1.0.0", "license": "MIT"},
+            "node_modules/b/node_modules/c": {"version": "2.0.0"},
+        }
+    }
     assert _module().npm_lock_rows(lock) == [
         {"name": "@scope/a", "version": "1.0.0", "license": "MIT"},
         {"name": "c", "version": "2.0.0", "license": "UNKNOWN"},
@@ -816,11 +822,13 @@ def npm_lock_rows(lock: dict[str, Any]) -> list[dict[str, str]]:
             continue
         name = entry.get("name") or path.rsplit("node_modules/", 1)[1]
         license_value = entry.get("license")
-        rows.append({
-            "name": name,
-            "version": str(entry.get("version", "")),
-            "license": str(license_value) if license_value else "UNKNOWN",
-        })
+        rows.append(
+            {
+                "name": name,
+                "version": str(entry.get("version", "")),
+                "license": str(license_value) if license_value else "UNKNOWN",
+            }
+        )
     return rows
 ```
 
@@ -1017,13 +1025,24 @@ def test_notice_reproduces_the_omniroute_mit_notice() -> None:
 
 
 def test_notice_disclaims_affiliation_with_every_named_provider() -> None:
-    for name in ("RunPod", "OpenAI", "Anthropic", "Google", "GitHub", "Vast.ai", "Together", "Lambda"):
+    for name in (
+        "RunPod",
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "GitHub",
+        "Vast.ai",
+        "Together",
+        "Lambda",
+    ):
         assert name in NOTICE, name
     assert "interoperability" in NOTICE
 
 
 def test_committed_sbom_describes_the_current_version_and_lock() -> None:
-    version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"][
+        "version"
+    ]
     sbom = json.loads((ROOT / "docs/sbom/pitwall-sbom.cdx.json").read_text(encoding="utf-8"))
     assert sbom["metadata"]["component"]["version"] == version
     lock = tomllib.loads((ROOT / "uv.lock").read_text(encoding="utf-8"))
@@ -1243,7 +1262,10 @@ def test_runbooks_use_the_current_version_and_no_component_tags() -> None:
     assert f"git tag -s v{version}" in releasing
     assert "git tag -v" in releasing
     assert "0.1.0a2" not in releasing
-    for relative in ("docs/release/external-release-gates.md", "docs/release/repository-settings-checklist.md"):
+    for relative in (
+        "docs/release/external-release-gates.md",
+        "docs/release/repository-settings-checklist.md",
+    ):
         text = _read(relative)
         assert "agent-routing/v" not in text and "gateway/v" not in text, relative
 
@@ -1721,10 +1743,8 @@ and `FROM $PYTHON_IMAGE AS runtime` with
 `tests/test_dockerfiles.py::_stages`:
 
 ```python
-    parts = re.split(
-        r"^FROM python:3\.14\.7-slim@sha256:[0-9a-f]{64} AS (\w+)\n", text, flags=re.M
-    )
-    assert parts[0].strip() == ""
+parts = re.split(r"^FROM python:3\.14\.7-slim@sha256:[0-9a-f]{64} AS (\w+)\n", text, flags=re.M)
+assert parts[0].strip() == ""
 ```
 
 `docs/legal/container-image-licenses.md` (Task 6) names the same digest. A Dependabot base-image
