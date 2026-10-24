@@ -16,6 +16,7 @@ from typing import Any, BinaryIO
 from .channel import (
     CHANNEL_DISPATCH_ENV,
     CHANNEL_STATE_ROOT_ENV,
+    ask_event_data,
     effective_deadline_s,
     epoch_of,
     load_channel_config,
@@ -320,6 +321,7 @@ class SubagentTools:
                 "asks are not enabled for this dispatch; proceed with your best judgment and state the assumption in your report"
             )
         box = store.mailbox()
+        existing_ask_ids = {str(item["ask_id"]) for item in box.pending_asks()}
         question = str(args.get("question", ""))
         requested = args.get("deadline_s")
         cap = config.deadline_cap_s(time.time())
@@ -346,6 +348,8 @@ class SubagentTools:
             raise ToolError(f"{exc}; proceed with your default") from exc
         except MailboxError as exc:
             raise ToolError(f"invalid ask: {exc}") from exc
+        if str(ask["ask_id"]) not in existing_ask_ids:
+            self._emitter(store).emit("ask.created", ask_event_data(ask, config, config.tier))
         return self._await(store, ask, cancel, progress)
 
     def _await(
@@ -358,7 +362,8 @@ class SubagentTools:
         ask_id = str(ask["ask_id"])
         answer_file = store.path / "mailbox" / "answers" / f"{ask_id}.json"
         created = epoch_of(ask.get("created_at")) or time.time()
-        effective = effective_deadline_s(ask, load_channel_config(store.path))
+        config = load_channel_config(store.path)
+        effective = effective_deadline_s(ask, config)
         deadline_at = created + effective
         escalate_at = created + effective / 2
         escalated = False
@@ -369,7 +374,14 @@ class SubagentTools:
                 escalated = True
                 self._emitter(store).emit(
                     "ask.escalated",
-                    {"askId": ask_id, "reason": "unanswered past half its deadline"},
+                    {
+                        "askId": ask_id,
+                        "reason": "unanswered past half its deadline",
+                        "orchestratorSession": (
+                            config.orchestrator_session if config is not None else None
+                        ),
+                        "harness": config.harness if config is not None else None,
+                    },
                 )
             remaining = deadline_at - now
             if remaining <= 0:

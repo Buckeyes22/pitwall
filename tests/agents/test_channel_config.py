@@ -13,6 +13,7 @@ from pathlib import Path
 
 from pitwall.agents.channel import (
     ChannelConfig,
+    _config_from_json,
     effective_deadline_s,
     load_channel_config,
     write_channel_config,
@@ -72,6 +73,28 @@ class ChannelConfigTests(unittest.TestCase):
             doc = {**config.to_json(), **bad}
             self.store.write_json("channel.json", doc)
             self.assertIsNone(load_channel_config(self.store.path), bad)
+
+    def test_channel_config_round_trips_orchestrator_session_and_harness(self) -> None:
+        config = ChannelConfig(DISPATCH_ID, orchestrator_session="sess-a", harness="opencode")
+
+        loaded = _config_from_json(config.to_json())
+
+        self.assertIsNotNone(loaded)
+        assert loaded is not None
+        self.assertEqual("sess-a", loaded.orchestrator_session)
+        self.assertEqual("opencode", loaded.harness)
+
+    def test_channel_config_without_session_keys_still_loads(self) -> None:
+        doc = ChannelConfig(DISPATCH_ID).to_json()
+        doc.pop("orchestratorSession", None)
+        doc.pop("harness", None)
+
+        loaded = _config_from_json(doc)
+
+        self.assertIsNotNone(loaded)
+        assert loaded is not None
+        self.assertIsNone(loaded.orchestrator_session)
+        self.assertIsNone(loaded.harness)
 
     def test_d1_cap_clamps_the_effective_deadline(self) -> None:
         started = time.time()
@@ -149,6 +172,25 @@ class DispatchCapTests(unittest.TestCase):
         self.assertEqual(
             2, json.loads((run_dir / "resume.json").read_text(encoding="utf-8"))["maxAsks"]
         )
+
+    def test_shim_records_claude_session_on_channel_record(self) -> None:
+        result = self._dispatch(CLAUDE_CODE_SESSION_ID="sess-a")
+
+        self.assertEqual(75, result.returncode, result.stderr)
+        config = load_channel_config(self._run_dir())
+        self.assertIsNotNone(config)
+        assert config is not None
+        self.assertEqual("sess-a", config.orchestrator_session)
+        self.assertEqual("codex", config.harness)
+
+    def test_managed_launch_records_no_orchestrator_session(self) -> None:
+        result = self._dispatch(CLAUDE_CODE_SESSION_ID="sess-a", PITWALL_AGENTS_MANAGED_LAUNCH="1")
+
+        self.assertEqual(75, result.returncode, result.stderr)
+        config = load_channel_config(self._run_dir())
+        self.assertIsNotNone(config)
+        assert config is not None
+        self.assertIsNone(config.orchestrator_session)
 
     def test_env_sets_the_cap_and_bad_values_are_usage_errors(self) -> None:
         self.assertEqual(75, self._dispatch(PITWALL_AGENTS_MAX_ASKS="3").returncode)

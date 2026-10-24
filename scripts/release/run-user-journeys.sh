@@ -682,7 +682,7 @@ j35() {
 # ------------------------------------------------- J36 every CLI command and argument (database)
 j36() {
     local id=J36 ok=1
-    check ${id} "all CLI command paths and 485 argument surfaces through the entry points" \
+    check ${id} "all CLI command paths and 492 argument surfaces through the entry points" \
         uv run --frozen pytest -q -m release tests/release/test_cli_all_commands_journey.py \
         -p no:randomly || ok=0
     [ ${ok} -eq 1 ] && journey_pass "${id} every CLI command and argument"

@@ -36,6 +36,29 @@ class PiAdapter(HarnessAdapter):
     binary_override_env = "PI_BIN"
     endpoint_delivery = "config-sync"
 
+    def detect_soft_denial(self, exit_code: int, stderr_tail: bytes) -> str | None:
+        # Pi exits 0 even when every provider attempt failed; its JSON stream's
+        # final turn says so (stopReason "error", or a retry loop that gave up).
+        if exit_code != 0:
+            return None
+        error: str | None = None
+        for event in json_lines(stderr_tail):
+            kind = event.get("type")
+            if kind == "agent_start":
+                error = None
+            elif kind == "agent_end":
+                messages = event.get("messages")
+                last = messages[-1] if isinstance(messages, list) and messages else {}
+                if isinstance(last, dict) and last.get("stopReason") == "error":
+                    error = str(last.get("errorMessage") or "provider request failed")
+                else:
+                    error = None
+            elif kind == "auto_retry_end" and event.get("success") is False:
+                error = str(event.get("finalError") or error or "provider request failed")
+        if error is None:
+            return None
+        return f"pi exited 0 after its provider request failed ({error}); reporting exit 77"
+
     def parse_output(self, raw: bytes) -> ParsedOutput:
         usage: TokenUsage | None = None
         text = ""

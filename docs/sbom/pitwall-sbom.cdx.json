@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:4301f5fb-3318-473a-b65e-823d1e1183d8",
+  "serialNumber": "urn:uuid:e60b25f5-04a8-4b7c-b0e0-9dca475cc018",
   "metadata": {
-    "timestamp": "2026-10-09T02:04:27.728507472Z",
+    "timestamp": "2026-10-23T23:15:20.475036355Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -146,10 +146,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "brotli-18@1.2.0",
+      "bom-ref": "brotli-18@1.2.1",
       "name": "brotli",
-      "version": "1.2.0",
-      "purl": "pkg:pypi/brotli@1.2.0",
+      "version": "1.2.1",
+      "purl": "pkg:pypi/brotli@1.2.1",
       "properties": [
         {
           "name": "uv:package:marker",
@@ -172,10 +172,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "certifi-20@2026.7.22",
+      "bom-ref": "certifi-20@2026.10.19",
       "name": "certifi",
-      "version": "2026.7.22",
-      "purl": "pkg:pypi/certifi@2026.7.22"
+      "version": "2026.10.19",
+      "purl": "pkg:pypi/certifi@2026.10.19"
     },
     {
       "type": "library",
@@ -954,7 +954,7 @@
         "aiohappyeyeballs-4@2.7.1",
         "aiosignal-7@1.4.0",
         "attrs-13@26.1.0",
-        "brotli-18@1.2.0",
+        "brotli-18@1.2.1",
         "brotlicffi-19@1.2.0.2",
         "frozenlist-33@1.8.0",
         "multidict-58@6.9.1",
@@ -1023,7 +1023,7 @@
       ]
     },
     {
-      "ref": "brotli-18@1.2.0"
+      "ref": "brotli-18@1.2.1"
     },
     {
       "ref": "brotlicffi-19@1.2.0.2",
@@ -1032,7 +1032,7 @@
       ]
     },
     {
-      "ref": "certifi-20@2026.7.22"
+      "ref": "certifi-20@2026.10.19"
     },
     {
       "ref": "cffi-21@2.1.1",
@@ -1136,7 +1136,7 @@
     {
       "ref": "httpcore-37@1.0.9",
       "dependsOn": [
-        "certifi-20@2026.7.22",
+        "certifi-20@2026.10.19",
         "h11-35@0.16.0"
       ]
     },
@@ -1154,7 +1154,7 @@
       "ref": "httpx-40@0.28.1",
       "dependsOn": [
         "anyio-10@4.15.1",
-        "certifi-20@2026.7.22",
+        "certifi-20@2026.10.19",
         "httpcore-37@1.0.9",
         "idna-43@3.20"
       ]
@@ -1458,7 +1458,7 @@
     {
       "ref": "requests-94@2.34.2",
       "dependsOn": [
-        "certifi-20@2026.7.22",
+        "certifi-20@2026.10.19",
         "charset-normalizer-22@3.5.2",
         "idna-43@3.20",
         "urllib3-115@2.8.0"
@@ -1518,7 +1518,7 @@
     {
       "ref": "sentry-sdk-101@2.71.0",
       "dependsOn": [
-        "certifi-20@2026.7.22",
+        "certifi-20@2026.10.19",
         "urllib3-115@2.8.0"
       ]
     },

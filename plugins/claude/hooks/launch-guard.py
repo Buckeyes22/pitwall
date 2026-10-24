@@ -34,9 +34,6 @@ from launch_guard_leases import (
 )
 from launch_guard_markers import lease_live, marker_path, marker_root
 from launch_guard_shell import (
-    PROMPT_SHIM_RE,
-    SHIM_AGENT_TYPES,
-    SHIM_HELPER_RE,
     command_launch,
     managed_channel_tool,
     routing_command_expansion,
@@ -45,12 +42,11 @@ from launch_guard_shell import (
 
 
 def _workflow_launch(tool_input: Mapping[str, Any]) -> str | None:
-    """Return a launch kind when a Workflow names an external model launch.
+    """Return a launch kind when a Workflow launches a raw provider CLI.
 
-    A native Workflow whose script is inspectable and launches no shim or
-    harness is allowed: its nodes run as this session's children, so a
-    recognizable launch a node attempts is caught at its own tool call.
-    A Workflow whose script cannot be read is not protected and is denied.
+    Inspectable Workflow shim nodes connect their own channel to this session,
+    so shim agent types, helpers and shim paths are allowed. A Workflow whose
+    script cannot be read is not protected and is denied.
     """
 
     script = tool_input.get("script")
@@ -62,14 +58,15 @@ def _workflow_launch(tool_input: Mapping[str, Any]) -> str | None:
             script = None
     if script is None:
         return "workflow-uninspectable"
-    lowered = script.lower()
-    if (
-        any(agent_type in lowered for agent_type in SHIM_AGENT_TYPES)
-        or SHIM_HELPER_RE.search(script)
-        or PROMPT_SHIM_RE.search(script)
-        or command_launch(script)
-    ):
-        return "workflow-shim"
+    launch = command_launch(script)
+    if launch is not None:
+        return launch
+    # Workflow agent prompts can direct a child to execute one literal shell
+    # command. Inspect that command with the same classifier used for Bash.
+    for command in re.findall(r"Run verbatim:\s*([^'\"\n]+)", script, re.IGNORECASE):
+        launch = command_launch(command)
+        if launch is not None:
+            return launch
     return None
 
 
@@ -159,32 +156,21 @@ def main() -> int:
     elif tool_name.lower() == "agent":
         # Native research agents are allowed because the host runs PreToolUse
         # on a subagent's own tool calls under the parent session_id, so a
-        # shim or harness launch the agent attempts is still denied at that
-        # call. Only deny a native Agent whose own input names an external
-        # launch.
-        subagent_type = str(tool_input.get("subagent_type") or "").lower()
-        if subagent_type in SHIM_AGENT_TYPES:
-            kind = "shim-agent"
-        else:
-            prompt = str(tool_input.get("prompt") or "")
-            kind = command_launch(prompt)
-            if kind is None and PROMPT_SHIM_RE.search(prompt):
-                kind = "shim-agent"
+        # provider launch the agent attempts is still denied at that call.
+        # Shim Agents and shim Bash calls connect their own channel, so only a
+        # native Agent whose own input launches a raw provider CLI is denied.
+        kind = command_launch(str(tool_input.get("prompt") or ""))
     elif tool_name.lower() == "workflow":
-        # Native Workflow nodes run as this session's children, so an
-        # inspectable script that launches no external model is allowed; an
-        # uninspectable script is denied because its launches are not
-        # protected.
+        # Workflow shim nodes connect their own channel. Raw provider launches
+        # and scripts we cannot inspect remain denied.
         kind = _workflow_launch(tool_input)
     if kind is None:
         return 0
 
     return_code = _decision(
-        f"Blocked disconnected external-model launch (recognized {kind}). Use the managed "
-        "Pitwall MCP `dispatch_and_wait` tool, which returns answerable child events; "
-        "do not use a direct shim/harness command or a backgrounded Agent/Bash call. "
-        "The session-scoped routing marker is active. "
-        "Opaque wrappers are outside the guard's detection boundary."
+        f"Blocked direct external-model launch (recognized {kind}). Launch it through a "
+        "pitwall:<harness>-shim Agent, a ~/.claude/scripts/<harness>-shim.sh command, "
+        "or dispatch_and_wait, so Pitwall records the run and connects its channel."
     )
     json.dump(return_code, sys.stdout)
     return 0

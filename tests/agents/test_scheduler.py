@@ -28,6 +28,7 @@ from pitwall.agents.run_store import (
 from pitwall.agents.scheduler import (
     AttemptOutcome,
     WorkflowRunError,
+    _ProductionRunner,
     _StateController,
     cancel_workflow,
     list_workflows,
@@ -603,6 +604,56 @@ class ProductionRunnerTests(ProductionEnvMixin, SchedulerFixture):
         self.assertEqual("agent", result["taskId"])
         self.assertEqual(attempt["dispatchId"], result["dispatchId"])
 
+    def test_workflow_escalation_carries_session(self) -> None:
+        from pitwall.agents.channel import ChannelConfig, write_channel_config
+        from pitwall.agents.events import EventEmitter
+        from pitwall.agents.run_store import RunStore
+        from pitwall.agents.scheduler import _answer_or_escalate, _AutoAnswer
+
+        dispatch_id = "00000000-0000-4000-8000-0000000000e2"
+        store = RunStore(state_root(self.env), dispatch_id)
+        store.path.mkdir(parents=True)
+        write_channel_config(
+            store,
+            ChannelConfig(
+                dispatch_id,
+                orchestrator_session="sess-a",
+                harness="opencode",
+            ),
+        )
+        ask = store.mailbox().write_ask(
+            blocked_on="destructive",
+            question="Delete the old schema?",
+            options=[{"id": "a", "text": "Delete"}, {"id": "b", "text": "Keep"}],
+            default="b",
+            deadline_s=60,
+            severity="blocking",
+        )
+        workflow_dir = self.root / "workflow"
+        workflow_dir.mkdir()
+        controller = _StateController(workflow_dir, {"workflowId": "wf-test", "tasks": {}})
+        emitter = EventEmitter(store, harness="workflow", model="channel")
+
+        _answer_or_escalate(
+            [ask],
+            set(),
+            "agent",
+            dispatch_id,
+            controller,
+            self.env,
+            _AutoAnswer(None, None, 0.0, "no autoAnswer route is configured"),
+            store,
+            emitter,
+        )
+
+        events = [
+            json.loads(line)
+            for line in store.artifact("events.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        escalated = next(event for event in events if event["event"] == "ask.escalated")
+        self.assertEqual("sess-a", escalated["data"]["orchestratorSession"])
+        self.assertEqual("opencode", escalated["data"]["harness"])
+
     def test_ask_support_task_dispatches_with_channel_flags(self) -> None:
         env = self.production_env()
         asking = task()
@@ -622,6 +673,33 @@ class ProductionRunnerTests(ProductionEnvMixin, SchedulerFixture):
         )
         self.assertTrue(resume["askSupport"])
         self.assertEqual(2, resume["maxAsks"])
+
+    def test_task_without_ask_support_opts_out_explicitly(self) -> None:
+        runner = _ProductionRunner(self.registry, self.env)
+        workflow_dir = self.root / "argv-capture"
+        workflow_dir.mkdir()
+        invocation: list[list[str]] = []
+
+        def capture(command, child_env, env, repo_root, dispatch_id, stdout_path, stderr_path):
+            invocation.append(command)
+            return AttemptOutcome(dispatch_id, "succeeded", 0)
+
+        with mock.patch.object(runner, "_launch", side_effect=capture):
+            outcome = runner(
+                "agent",
+                {**task(), "workspace": "shared", "timeoutSeconds": 600},
+                b"prompt",
+                1,
+                "00000000-0000-4000-8000-0000000000e3",
+                "wf-test",
+                workflow_dir,
+                self.env,
+                self.repo,
+            )
+
+        self.assertEqual("succeeded", outcome.status)
+        self.assertEqual(1, len(invocation))
+        self.assertIn("--routing-no-ask-support", invocation[0])
 
     def test_cli_cancel_interrupts_active_dispatch_and_leaves_resumable_state(self) -> None:
         env = self.production_env(FAKE_SLEEP_SECS="30")

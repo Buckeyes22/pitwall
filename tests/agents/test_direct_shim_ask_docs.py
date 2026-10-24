@@ -71,3 +71,23 @@ def test_skill_resume_command_is_a_real_agents_subcommand(host: str) -> None:
     assert resumes
     for words in resumes:
         assert _command_exists(tuple(word for word in words if not word.startswith("<")))
+
+
+def test_claude_skill_teaches_agent_dispatch() -> None:
+    text = SKILLS["claude"].read_text(encoding="utf-8")
+    mechanics = re.search(
+        r"^## Dispatch mechanics\b(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+    )
+
+    assert mechanics is not None
+    section = mechanics.group(1)
+    for phrase in (
+        "pitwall:<harness>-shim",
+        "pitwall-asks",
+        "--routing-no-ask-support",
+        "answer_ask",
+        "steer_and_wait",
+        "pitwall agents runs resume",
+    ):
+        assert phrase in section
+    assert "foreground-only, non-interactive fallback" not in section

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Claude Code routing now uses `pitwall:<harness>-shim` Agent dispatch with the `pitwall-asks`
+  monitor. New `ask.created` events identify the parent session, and `pitwall agents inbox --watch`
+  reports questions while keeping the session listener heartbeat fresh.
+
 - MiniMax Code joins as the fifteenth provider harness (`mcode-shim.sh`). It sends prompts on
   stdin, selects an explicit registered `minimax/...` model, runs in JSON output mode, and records
   reported token usage. `--effort` is available for M3.1-Flash-Preview; dispatch defaults to
@@ -33,6 +37,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Unflagged shims enable ask support only while the launching Claude session has a fresh monitor
+  heartbeat. `--routing-ask-support` still forces it on and `--routing-no-ask-support` forces it
+  off. The launch guard and DAG tripwire policy permit shim Agent dispatch and inspectable native
+  `Workflow` scripts with shim nodes; recognizable raw provider launches and uninspectable
+  Workflow scripts remain denied in routing-active sessions.
+
 - Claude, Codex, OpenCode, Grok, Pi, Qwen, and Antigravity run in their JSON output modes inside
   dispatches; callers still receive plain answer text.
 
@@ -52,6 +62,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   listing them; the `agy` sandbox default no longer cites the Antigravity app's preset table.
 
 ### Fixed
+
+- A Pi dispatch whose every provider attempt failed (Pi still exits 0) now reports exit 77
+  with Pi's error instead of an empty success. Dispatch reads the raw JSON stream of JSON-mode
+  harnesses when it looks for a soft denial.
+
+- `certifi` 2026.10.19 replaces 2026.7.22 in the lock, closing PYSEC-2026-4320; the license
+  review, policy pin and SBOM follow the new version.
+- `brotli` 1.2.1 replaces 1.2.0 in the lock, closing PYSEC-2026-4322 (GHSA-9v8h-qqgm-4m35).
 
 - `pitwall agents runs discard` again removes an isolated worktree whose branch and Git metadata
   are already gone. Git 2.56 reports such a worktree as "gitfile does not point to a valid

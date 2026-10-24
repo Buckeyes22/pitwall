@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import importlib
 import json
 import os
 import shutil
@@ -216,6 +217,20 @@ class ClaudeTripwireTests(unittest.TestCase):
         )
         self.assertIsNone(response)
 
+    def test_dag_tripwire_accepts_shim_agents_and_shim_bash(self) -> None:
+        skill_active = agent_entry("pitwall:qwen-shim")
+        skill_active["attributionSkill"] = "pitwall:subagent-model-routing"
+        response = run_hook(
+            DAG_TRIPWIRE,
+            [
+                user_entry(DAG_COMMAND),
+                skill_active,
+                agent_entry("pitwall:qwen-shim"),
+                bash_entry("~/.claude/scripts/qwen-shim.sh /tmp/prompt.md"),
+            ],
+        )
+        self.assertIsNone(response)
+
     def test_ledger_append_satisfies_ledger_tripwire(self) -> None:
         response = run_hook(
             LEDGER_TRIPWIRE,
@@ -273,12 +288,11 @@ class QwenTripwireCoverageTests(unittest.TestCase):
         ("legacy bare agent", agent_entry("qwen-shim")),
     )
 
-    def test_dag_tripwire_blocks_direct_qwen_dispatch_without_workflow(self) -> None:
+    def test_dag_tripwire_accepts_direct_qwen_shim_agents(self) -> None:
         for label, dispatch in self.QWEN_DISPATCHES:
             with self.subTest(dispatch=label):
                 response = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertEqual("block", response["decision"] if response else None)
-                self.assertIn("TRIPWIRE", str(response["reason"]))
+                self.assertIsNone(response)
 
     def test_ledger_tripwire_nudges_after_qwen_dispatch_without_note(self) -> None:
         for label, dispatch in self.QWEN_DISPATCHES:
@@ -314,8 +328,7 @@ class MCodeTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.MCODE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertEqual("block", dag["decision"] if dag else None)
-                self.assertIn("TRIPWIRE", str(dag["reason"]))
+                self.assertIsNone(dag)
 
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this"), dispatch])
                 self.assertEqual("block", ledger["decision"] if ledger else None)
@@ -332,7 +345,7 @@ class ClineTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.CLINE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Cline"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -347,7 +360,7 @@ class PiTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.PI_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Pi"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -362,7 +375,7 @@ class DshTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.DSH_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to dsh"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -377,7 +390,7 @@ class HermesTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.HERMES_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Hermes"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -392,7 +405,7 @@ class GooseTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.GOOSE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to goose"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -407,7 +420,7 @@ class MuseTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.MUSE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Muse"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -422,7 +435,7 @@ class AgyTripwireCoverageTests(unittest.TestCase):
         for label, dispatch in self.AGY_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this to Gemini"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
 
@@ -453,7 +466,7 @@ class RouteShimTripwireTests(unittest.TestCase):
         for label, dispatch in self.ROUTE_DISPATCHES:
             with self.subTest(dispatch=label):
                 dag = run_hook(DAG_TRIPWIRE, [user_entry(DAG_COMMAND), dispatch])
-                self.assertIn("TRIPWIRE", str(dag["reason"]) if dag else "")
+                self.assertIsNone(dag)
                 ledger = run_hook(LEDGER_TRIPWIRE, [user_entry("route this"), dispatch])
                 self.assertIn("LEDGER", str(ledger["reason"]) if ledger else "")
         self.assertIsNone(
@@ -569,30 +582,25 @@ class LaunchGuardTests(unittest.TestCase):
             "tool_input": tool_input,
         }
 
-    def test_blocks_foreground_and_background_shims_before_execution(self) -> None:
+    def test_allows_foreground_and_background_shims(self) -> None:
         for command in (
             "~/.claude/scripts/codex-shim.sh prompt.md",
             "~/.claude/scripts/opencode-shim.sh prompt.md &",
             "bash -lc 'exec ~/.claude/scripts/kimi-shim.sh prompt.md'",
         ):
             with self.subTest(command=command):
-                response = run_launch_guard(self._payload("Bash", {"command": command}))
-                self.assertEqual("deny", response["hookSpecificOutput"]["permissionDecision"])
-                self.assertIn(
-                    "dispatch_and_wait", response["hookSpecificOutput"]["permissionDecisionReason"]
-                )
+                self.assertIsNone(run_launch_guard(self._payload("Bash", {"command": command})))
 
     def test_blocks_recognizable_direct_harness_and_dispatcher_launches(self) -> None:
         for command in (
             "claude --print 'do work'",
             "env FOO=bar codex --help",
-            "pitwall agents dispatch codex prompt.md",
             "pitwall agents workflow run graph.json --host claude",
         ):
             with self.subTest(command=command):
                 self.assertIsNotNone(run_launch_guard(self._payload("Bash", {"command": command})))
 
-    def test_blocks_namespaced_and_prompted_shim_agents(self) -> None:
+    def test_allows_namespaced_and_prompted_shim_agents(self) -> None:
         namespaced = self._payload(
             "Agent",
             {"subagent_type": "pitwall:codex-shim", "run_in_background": True},
@@ -607,8 +615,55 @@ class LaunchGuardTests(unittest.TestCase):
         )
         for payload in (namespaced, prompted):
             with self.subTest(payload=payload):
-                response = run_launch_guard(payload)
+                self.assertIsNone(run_launch_guard(payload))
+
+    def test_every_plugin_shim_launch_is_allowed(self) -> None:
+        shims = sorted(
+            path.stem for path in (ROOT / "plugins" / "claude" / "agents").glob("*-shim.md")
+        )
+        self.assertTrue(shims)
+        for harness in shims:
+            commands = (
+                f"~/.claude/scripts/{harness}-shim.sh p.md",
+                f"~/.claude/scripts/{harness}-shim.sh p.md &",
+            )
+            for command in commands:
+                payload = self._payload("Bash", {"command": command})
+                payload["agent_id"] = "a1b2c3"
+                with self.subTest(command=command):
+                    self.assertIsNone(run_launch_guard(payload))
+            for background in (True, False):
+                payload = self._payload(
+                    "Agent",
+                    {
+                        "subagent_type": f"pitwall:{harness}-shim",
+                        "run_in_background": background,
+                    },
+                )
+                payload["agent_id"] = "a1b2c3"
+                with self.subTest(agent=f"pitwall:{harness}-shim", background=background):
+                    self.assertIsNone(run_launch_guard(payload))
+
+    def test_raw_provider_clis_stay_denied(self) -> None:
+        for command in ("zcode -p hi", "mcode run x"):
+            with self.subTest(command=command):
+                response = run_launch_guard(self._payload("Bash", {"command": command}))
                 self.assertEqual("deny", response["hookSpecificOutput"]["permissionDecision"])
+                self.assertIn(
+                    "pitwall:<harness>-shim",
+                    response["hookSpecificOutput"]["permissionDecisionReason"],
+                )
+
+    def test_guard_knows_every_plugin_shim_agent(self) -> None:
+        hooks = str(HOOKS)
+        if hooks not in sys.path:
+            sys.path.insert(0, hooks)
+        self.addCleanup(sys.path.remove, hooks)
+        launch_guard_shell = importlib.import_module("launch_guard_shell")
+        agents = {path.stem for path in (ROOT / "plugins" / "claude" / "agents").glob("*-shim.md")}
+        known = {name.removesuffix(".sh") for name in launch_guard_shell.SHIM_BASENAMES}
+        self.assertLessEqual(agents, known)
+        self.assertEqual({"claude-shim"}, known - agents)
 
     def test_allows_managed_channel_and_native_tools(self) -> None:
         cases = (
@@ -637,11 +692,10 @@ class LaunchGuardTests(unittest.TestCase):
             with self.subTest(tool_input=tool_input):
                 self.assertIsNone(run_launch_guard(self._payload("Agent", tool_input)))
 
-    def test_native_agent_shim_bash_call_is_denied(self) -> None:
+    def test_native_agent_shim_bash_call_is_allowed(self) -> None:
         payload = self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"})
         payload["agent_id"] = "a1b2c3"
-        response = run_launch_guard(payload)
-        self.assertEqual("deny", response["hookSpecificOutput"]["permissionDecision"])
+        self.assertIsNone(run_launch_guard(payload))
 
     def test_session_end_clears_the_routing_marker(self) -> None:
         session_end = {
@@ -649,7 +703,7 @@ class LaunchGuardTests(unittest.TestCase):
             "session_id": "9f35b460-6c1b-4075-8f9e-f3bb5a5c2e24",
         }
         self.assertIsNone(run_launch_guard(session_end))
-        direct = self._payload("Bash", {"command": "codex-shim.sh prompt.md"})
+        direct = self._payload("Bash", {"command": "codex --help"})
         self.assertIsNone(run_launch_guard(direct, active=False))
 
     def test_dag_command_expansion_activates_before_first_child_launch(self) -> None:
@@ -663,7 +717,7 @@ class LaunchGuardTests(unittest.TestCase):
             "prompt": "/pitwall:dag-routing run a graph",
         }
         self.assertIsNone(run_launch_guard(expansion, active=False))
-        first_launch = self._payload("Bash", {"command": "codex-shim.sh prompt.md"})
+        first_launch = self._payload("Bash", {"command": "codex --help"})
         response = run_launch_guard(first_launch, active=None)
         self.assertEqual("deny", response["hookSpecificOutput"]["permissionDecision"])
 
@@ -679,7 +733,7 @@ class LaunchGuardTests(unittest.TestCase):
         self.assertIsNone(run_launch_guard(expansion, active=False))
         self.assertIsNone(
             run_launch_guard(
-                self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"}),
+                self._payload("Bash", {"command": "codex --help"}),
                 active=None,
             )
         )
@@ -700,7 +754,7 @@ class LaunchGuardTests(unittest.TestCase):
         self.assertIsNone(run_launch_guard(stop, active=None))
         self.assertIsNone(
             run_launch_guard(
-                self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"}),
+                self._payload("Bash", {"command": "codex --help"}),
                 active=None,
             )
         )
@@ -709,15 +763,14 @@ class LaunchGuardTests(unittest.TestCase):
         skill = self._payload("Skill", {"skill": "subagent-model-routing"})
         self.assertIsNone(run_launch_guard(skill, active=False))
         response = run_launch_guard(
-            self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"}),
+            self._payload("Bash", {"command": "codex --help"}),
             active=None,
         )
         self.assertEqual("deny", response["hookSpecificOutput"]["permissionDecision"])
 
     def test_workflow_denied_only_when_it_launches_external_models(self) -> None:
         denied = (
-            {"script": "await agent('x', {agentType: 'pitwall:codex-shim'})"},
-            {"script": "await codex('review the diff')"},
+            {"script": "await agent('Run verbatim: codex exec hi')"},
             {"scriptPath": "/nonexistent/workflow.js"},
             {"name": "saved-workflow"},
         )
@@ -730,6 +783,28 @@ class LaunchGuardTests(unittest.TestCase):
                 self._payload("Workflow", {"script": "await agent('summarise README')"})
             )
         )
+
+    def test_workflow_with_shim_nodes_is_allowed(self) -> None:
+        shim_names = sorted(
+            path.stem for path in (ROOT / "plugins" / "claude" / "agents").glob("*-shim.md")
+        )
+        self.assertTrue(shim_names)
+        scripts = [
+            f"await agent('x', {{agentType: 'pitwall:{harness}'}})" for harness in shim_names
+        ]
+        scripts.extend(
+            (
+                "await codex('review the diff')",
+                "await agent('Run verbatim: ~/.claude/scripts/opencode-shim.sh /tmp/x.md')",
+            )
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            for index, script in enumerate(scripts):
+                script_path = Path(temp_dir) / f"workflow-{index}.js"
+                script_path.write_text(script, encoding="utf-8")
+                for tool_input in ({"script": script}, {"scriptPath": str(script_path)}):
+                    with self.subTest(script=script, tool_input=tool_input):
+                        self.assertIsNone(run_launch_guard(self._payload("Workflow", tool_input)))
 
     def test_dispatch_terminal_releases_one_lease_and_preserves_sibling(self) -> None:
         first = self._payload("mcp__pitwall-channel__dispatch_and_wait", {"route": "codex"})
@@ -761,7 +836,7 @@ class LaunchGuardTests(unittest.TestCase):
             ],
         )
         blocked = run_launch_guard(
-            self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"}),
+            self._payload("Bash", {"command": "codex --help"}),
             active=None,
         )
         self.assertEqual("deny", blocked["hookSpecificOutput"]["permissionDecision"])
@@ -981,7 +1056,7 @@ class LaunchGuardTests(unittest.TestCase):
         )
 
         blocked = run_launch_guard(
-            self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"}),
+            self._payload("Bash", {"command": "codex --help"}),
             active=None,
         )
         self.assertEqual("deny", blocked["hookSpecificOutput"]["permissionDecision"])
@@ -1050,9 +1125,7 @@ class LaunchGuardTests(unittest.TestCase):
     def test_managed_dispatch_activates_the_session_marker(self) -> None:
         dispatch = self._payload("mcp__pitwall-channel__dispatch_and_wait", {"route": "codex"})
         self.assertIsNone(run_launch_guard(dispatch, active=False))
-        blocked = run_launch_guard(
-            self._payload("Bash", {"command": "~/.claude/scripts/codex-shim.sh prompt.md"})
-        )
+        blocked = run_launch_guard(self._payload("Bash", {"command": "codex --help"}))
         self.assertEqual("deny", blocked["hookSpecificOutput"]["permissionDecision"])
 
     def test_opaque_wrappers_are_outside_detection_boundary(self) -> None:

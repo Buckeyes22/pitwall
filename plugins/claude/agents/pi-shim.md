@@ -31,6 +31,8 @@ Never background the work. Do not set `run_in_background`, append `&`, or add
 `nohup`/`setsid`. Pi coding agent is an agentic loop and the transport must wait for its
 real terminal status.
 
+Channel: the shim connects itself to this Claude session when the pitwall-asks monitor is running, so the command needs no channel flag. This Agent may itself run in the background; your one Bash call stays in the foreground. If the final line is SHIM-DONE exit=75, return the full stdout followed by the line: PAUSED — the child asked a question; answer it with answer_ask, then resume with pitwall agents runs resume <dispatch-id>
+
 Before returning, verify both:
 
 1. The final stdout line is `SHIM-DONE exit=<n>`.

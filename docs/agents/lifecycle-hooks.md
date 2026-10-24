@@ -44,7 +44,7 @@ v0.3 hooks are fail-open. Invalid JSON, malformed definitions, missing commands,
 
 Recursive routing is bounded by the hook-depth environment value. A malformed external value is treated as depth zero, while a depth of three or greater prevents further hook execution.
 
-These hooks do not replace Claude Code's package-specific Stop hooks. Claude's ledger and DAG tripwires remain the host enforcement/advisory layer; runtime hooks are portable local automation.
+These hooks do not replace Claude Code's package-specific hooks. In routing-active sessions, the launch guard allows shim Agents and inspectable `Workflow` scripts with shim nodes to connect their own channel, and denies recognizable raw provider launches or Workflow scripts it cannot inspect; the Stop hooks remain the host's enforcement and advisory layer. Runtime hooks are portable local automation.
 
 ## Channel events
 
@@ -52,8 +52,9 @@ The orchestrator channel emits through the same pipeline:
 
 - `dispatch.paused` — the run paused on an unresolved ask (`askIds`, `exitCode`, `reason`: `question` or `orphaned-ask`)
 - `dispatch.resumed` — `runs resume` re-entered a paused run (`attempt`)
+- `ask.created` — a new question was opened (`askId`, `question`, `options`, `default`, `deadlineS`, `blockedOn`, `severity`, `tier`, `orchestratorSession`, `harness`)
 - `ask.resolved` — an ask received its answer (`askId`, `resolvedBy`: `operator`, `orchestrator`, `default`, or `policy:<model>`)
-- `ask.escalated` — an ask needs a human: it waited past half its effective deadline in a tier-1 session, or the workflow scheduler could not auto-answer it (`askId`, `reason`)
+- `ask.escalated` — an ask needs a human: it waited past half its effective deadline in a tier-1 session, or the workflow scheduler could not auto-answer it (`askId`, `reason`, `orchestratorSession`, `harness`)
 - `steer.sent` — the orchestrator sent a steering directive (`steerId`, `kind`)
 - `steer.acked` — the subagent acknowledged a steering directive (`steerId`)
 - `steer.failed` — a steer was logged as sent but could not be published (`steerId`, `kind`)

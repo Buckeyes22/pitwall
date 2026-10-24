@@ -26,10 +26,13 @@ from .channel import (
     CHANNEL_ATTEMPT_ENV,
     CHANNEL_DISPATCH_ENV,
     CHANNEL_STATE_ROOT_ENV,
+    ORCHESTRATOR_SESSION_ENV,
     ChannelConfig,
     SteerWatcher,
+    ask_event_data,
     expire_overdue,
     ledger_fields,
+    listener_active,
     load_channel_config,
     parse_max_asks,
     write_channel_config,
@@ -209,7 +212,7 @@ class RoutingOptions:
     workspace: str = "shared"
     task_mode: str | None = None
     base: str | None = None
-    ask_support: bool = False
+    ask_support: bool | None = None
     max_asks: int | None = None
 
 
@@ -260,6 +263,10 @@ def _strip_routing_args(argv: list[str]) -> tuple[list[str], RoutingOptions]:
             options.ask_support = True
             index += 1
             continue
+        if argument == "--routing-no-ask-support":
+            options.ask_support = False
+            index += 1
+            continue
         matched = False
         for flag, field, choices in (
             ("--routing-workspace", "workspace", {"shared", "isolated", "auto"}),
@@ -301,6 +308,18 @@ def _strip_routing_args(argv: list[str]) -> tuple[list[str], RoutingOptions]:
     except UsageConfigurationError as exc:
         raise UsageError(str(exc)) from exc
     return forwarded, options
+
+
+def resolve_ask_support(routing: RoutingOptions, env: Mapping[str, str]) -> bool:
+    """Resolve explicit ask-support choices before consulting the session listener."""
+    if routing.ask_support is not None:
+        return routing.ask_support
+    ask_support_env = env.get("PITWALL_AGENTS_ASK_SUPPORT")
+    if ask_support_env == "1":
+        return True
+    if ask_support_env == "0":
+        return False
+    return listener_active(env, env.get(ORCHESTRATOR_SESSION_ENV))
 
 
 class Lifecycle:
@@ -569,7 +588,8 @@ def _finish_paused(
     ``SHIM-DONE exit=75`` sentinel plus this recorded ``paused``
     classification.
     """
-    pending_ids = [ask["ask_id"] for ask in store.mailbox().pending_asks()]
+    pending_asks = store.mailbox().pending_asks()
+    pending_ids = [ask["ask_id"] for ask in pending_asks]
     pause_record = None
     try:
         pause_record = _ledger_record(
@@ -610,6 +630,9 @@ def _finish_paused(
                 "workspace": workspace_result,
             },
         )
+        config = load_channel_config(store.path)
+        for ask in pending_asks:
+            emitter.emit("ask.created", ask_event_data(ask, config, config.tier if config else "4"))
         emitter.emit_dispatch_paused(
             {"askIds": pending_ids, "exitCode": process_result.exit_code, "reason": reason}
         )
@@ -1035,9 +1058,7 @@ class _LegacyDispatch:
                 request.source, None, retain_prompt=False, error="unreadable prompt source"
             )
             return self._fail_before_start(66)
-        self.ask_support = (
-            self.routing.ask_support or self.env.get("PITWALL_AGENTS_ASK_SUPPORT") == "1"
-        )
+        self.ask_support = resolve_ask_support(self.routing, self.env)
         self.previous_channel = load_channel_config(self.store.path)
         self.max_asks = self.routing.max_asks or (
             self.previous_channel.max_asks if self.previous_channel else DEFAULT_MAX_ASKS
@@ -1093,6 +1114,17 @@ class _LegacyDispatch:
                 if self.previous_channel
                 else 0,
                 tier=self.channel_tier,
+                orchestrator_session=(
+                    None
+                    if self.env.get(MANAGED_LAUNCH_ENV) == "1"
+                    else self.env.get(ORCHESTRATOR_SESSION_ENV)
+                    or (
+                        self.previous_channel.orchestrator_session
+                        if self.previous_channel
+                        else None
+                    )
+                ),
+                harness=self.harness_id,
             ),
         )
 
@@ -1321,7 +1353,8 @@ class _LegacyDispatch:
         if result.exit_code != 0 or result.timed_out or result.cancelled:
             return
         output_tails: list[bytes] = []
-        for artifact_name in ("stderr.log", "stdout.log"):
+        # JSON-mode harnesses report a failed turn in their raw stream, not on stderr.
+        for artifact_name in ("stderr.log", "stdout.log", "harness-output.jsonl"):
             try:
                 output_tails.append(
                     self.store.artifact(artifact_name).read_bytes()[-_OUTPUT_TAIL_BYTES:]

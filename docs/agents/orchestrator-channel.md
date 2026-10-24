@@ -39,11 +39,15 @@ ${PITWALL_AGENTS_STATE_HOME:-${XDG_STATE_HOME:-~/.local/state}/pitwall/agents}/r
 ## Enabling asks
 
 ```bash
-pitwall agents dispatch codex prompt.md --routing-ask-support            # flag
-pitwall agents dispatch codex prompt.md --routing-max-asks 3             # cap: 1..50
-PITWALL_AGENTS_ASK_SUPPORT=1 ...                                        # environment equivalent
-PITWALL_AGENTS_MAX_ASKS=3 ...                                           # environment equivalent
+pitwall agents dispatch codex prompt.md --routing-ask-support            # force on
+pitwall agents dispatch codex prompt.md --routing-no-ask-support          # force off
+pitwall agents dispatch codex prompt.md --routing-max-asks 3              # cap: 1..50
+PITWALL_AGENTS_ASK_SUPPORT=1 ...                                         # force on
+PITWALL_AGENTS_ASK_SUPPORT=0 ...                                         # force off
+PITWALL_AGENTS_MAX_ASKS=3 ...                                            # cap: 1..50
 ```
+
+When the launching Claude Code session runs the `pitwall-asks` monitor, its fresh watcher heartbeat turns ask support on automatically for shim dispatches in that session. With no fresh listener, ask support stays off. `--routing-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=1` force it on; `--routing-no-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=0` force it off. An explicit routing flag takes precedence over the environment setting. Workflow tasks keep their existing opt-in behavior: `askSupport` enables the channel, and tasks without it explicitly opt out.
 
 The ask cap defaults to 5 per run and survives resume via `channel.json`/`resume.json`. Ask-prone dispatches should use `--routing-workspace isolated` so a paused run resumes against its own worktree, and `runs diff` can show the operator exactly what the subagent changed so far.
 
@@ -160,6 +164,16 @@ The dispatcher gives every harness `PITWALL_AGENTS_CHANNEL_DISPATCH_ID`, `PITWAL
 
 `pitwall agents doctor` reports `channel.mcp_server` (a local stdio handshake per role and protocol era), `channel.registration` per installed channel harness, and `channel.interactive_delivery` as untested by default; see [Doctor](doctor.md#channel-checks). A fresh installed-host exchange is required to prove live delivery. Tier 1 calls emit `ask.escalated` once an ask has waited half its effective deadline, so an operator hook can pull the human in before the default fires.
 
+## Agent-tool dispatch from Claude Code
+
+In interactive Claude Code sessions, the `pitwall-asks` monitor runs `pitwall agents inbox --watch`. It prints `PITWALL ASK` lines for questions associated with the session and refreshes a heartbeat every five seconds; after 30 seconds without a refresh, the listener is treated as gone. Plugin monitors do not run in `-p`, SDK, or scripted sessions.
+
+Launch external-model work with a native `Agent` whose `subagent_type` is `pitwall:<harness>-shim`. While the monitor heartbeat is fresh, an unflagged shim enables ask support automatically. `--routing-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=1` force it on; `--routing-no-ask-support` and `PITWALL_AGENTS_ASK_SUPPORT=0` force it off. Without a fresh listener or an explicit enable, ask support stays off.
+
+For tier 1, the child asks through `ask_orchestrator`; answer its question with `answer_ask`. For tier 4, answer the file-contract ask and resume the run with `pitwall agents runs resume <dispatch-id>`. Use `steer_and_wait` to steer a running shim. `dispatch_and_wait` remains available in non-interactive sessions without plugin monitors and returns asks through its managed event channel.
+
+The launch guard permits shim Agents and inspectable native `Workflow` scripts with shim nodes to connect their own channel. It continues to deny recognizable raw provider launches and Workflow scripts it cannot inspect in routing-active sessions.
+
 ## Recovery and operator commands
 
 ```bash
@@ -240,6 +254,6 @@ Raw channel Q&A is private and expires with its run: `runs cleanup` removes the 
 
 ## Events and ledger
 
-Lifecycle events: `dispatch.paused` (with `reason`), `dispatch.resumed`, `ask.resolved` (`askId`, `resolvedBy`), `ask.escalated`, `steer.sent`, `steer.acked`, `steer.unacked`, `steer.failed` (a steer whose publish failed after its `steer.sent` was logged), and `dispatch.cancelled`. Hooks receive them like any other event; see `docs/agents/lifecycle-hooks.md`.
+Lifecycle events: `dispatch.paused` (with `reason`), `dispatch.resumed`, `ask.created` (`askId`, `question`, `options`, `default`, `deadlineS`, `blockedOn`, `severity`, `tier`, `orchestratorSession`, `harness`), `ask.resolved` (`askId`, `resolvedBy`), `ask.escalated` (`askId`, `reason`, `orchestratorSession`, `harness`), `steer.sent`, `steer.acked`, `steer.unacked`, `steer.failed` (a steer whose publish failed after its `steer.sent` was logged), and `dispatch.cancelled`. Hooks receive them like any other event; see `docs/agents/lifecycle-hooks.md`.
 
 The `finished` ledger row gains channel aggregates whenever the run has a mailbox (§9.3): `askCount`, `askRatePerHour` (covers every attempt across pauses), `askResolutions` (`"<ask-id>:<answered-by>"`), `steerCount`, `steerAckLatencyS`, and `unackedSteerIds` (blocking steers still unacknowledged at exit). These are routing-quality signal, never question content.

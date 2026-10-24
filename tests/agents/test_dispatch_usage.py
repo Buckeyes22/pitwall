@@ -14,6 +14,7 @@ import pytest
 
 from pitwall.agents.harnesses.base import ParsedRequest, PreparedCommand
 from pitwall.agents.harnesses.codex import CodexAdapter
+from pitwall.agents.harnesses.pi import PiAdapter
 from pitwall.agents.resources import read_resource_json
 from pitwall.agents.result import ResultError, validate_result
 from pitwall.agents.run_store import MANAGED_LAUNCH_ENV
@@ -36,6 +37,16 @@ class FakeJsonCodex(CodexAdapter):
         if b"empty answer" in raw:
             return ParsedOutput(b"", TokenUsage(0, 0), "no answer")
         return ParsedOutput(b"", None, "unparseable")
+
+
+class FakeFailingJsonCodex(CodexAdapter):
+    """A JSON harness that exits 0 after a failed provider turn, reported only in its raw stream."""
+
+    output_mode = "json"
+    detect_soft_denial = PiAdapter.detect_soft_denial
+
+    def parse_output(self, raw: bytes) -> ParsedOutput:
+        return ParsedOutput(b"", TokenUsage(0, 0), None)
 
 
 class FakeTextCodex(CodexAdapter):
@@ -80,10 +91,10 @@ def sandbox() -> Iterator[ShimSandbox]:
     # ShimSandbox.run starts a fresh interpreter: register the test adapter there.
     bootstrap = (
         "import os, sys; from unittest.mock import patch; "
-        "from tests.agents.test_dispatch_usage import FakeJsonCodex, FakeTextCodex, FakeUsageFileCodex; "
+        "from tests.agents.test_dispatch_usage import FakeFailingJsonCodex, FakeJsonCodex, FakeTextCodex, FakeUsageFileCodex; "
         "from pitwall.agents.cli import main; "
         "adapter = {'json': FakeJsonCodex, 'usage-file': FakeUsageFileCodex, "
-        "'text': FakeTextCodex}[os.environ.get('FAKE_OUTPUT_MODE', 'json')]; "
+        "'text': FakeTextCodex, 'failing-json': FakeFailingJsonCodex}[os.environ.get('FAKE_OUTPUT_MODE', 'json')]; "
         "sys.argv.remove('agents'); "
         "patcher = patch.dict('pitwall.agents.harnesses._ADAPTERS', {'codex': adapter}); "
         "patcher.start(); raise SystemExit(main())"
@@ -206,6 +217,26 @@ def test_rendered_empty_answer_triggers_empty_stdout_failure(sandbox: ShimSandbo
     assert document["usage"] == TokenUsage(0, 0).to_public_dict()
     assert (run / "stdout.log").read_bytes() == b""
     assert (run / "stderr.log").read_bytes() == b"no answer\n"
+
+
+def test_failed_provider_turn_in_the_raw_stream_becomes_exit_77(sandbox: ShimSandbox) -> None:
+    failed = json.dumps(
+        {
+            "type": "auto_retry_end",
+            "success": False,
+            "attempt": 3,
+            "finalError": "Connection error.",
+        }
+    )
+    completed = sandbox.run(
+        "codex",
+        [str(sandbox.prompt())],
+        env=sandbox.environment(FAKE_OUTPUT_MODE="failing-json", FAKE_STDOUT=failed + "\n"),
+    )
+    assert completed.returncode == 77, completed.stderr
+    assert b"Connection error." in completed.stderr
+    (run,) = sandbox.run_directories()
+    assert "Connection error." in json.loads((run / "run.json").read_text())["softDenialReason"]
 
 
 @pytest.mark.parametrize(
