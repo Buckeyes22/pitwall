@@ -17468,7 +17468,7 @@
       "reviewer": "root journey review (journey-coverage plan, Task 14)",
       "review_state": "journey_bound_execution_by_harness",
       "status": "not_run",
-      "test_node_id": "tests/agents/test_project_control.py::test_project_control_is_opt_in_and_orchestrator_only",
+      "test_node_id": "tests/agents/test_project_control.py::test_project_control_is_opt_in_and_orchestrator_only[True-False-True]",
       "generated": "journey-rule"
     },
     {

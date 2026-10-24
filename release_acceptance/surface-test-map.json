@@ -501,7 +501,7 @@
       "reviewed_oracle": "inbox lists the waiting ask"
     },
     "routing:mcp:orchestrator:project_control": {
-      "test_node_id": "tests/agents/test_project_control.py::test_project_control_is_opt_in_and_orchestrator_only",
+      "test_node_id": "tests/agents/test_project_control.py::test_project_control_is_opt_in_and_orchestrator_only[True-False-True]",
       "framework": "pytest",
       "proof_lane": "hermetic",
       "reviewed_oracle": "project_control is listed only for an opted-in orchestrator and answers acquire"
