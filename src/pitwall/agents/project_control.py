@@ -20,35 +20,6 @@ from .managed_channel import answer_once, start_dispatch
 from .mcp_server import ToolError
 from .run_store import atomic_write_json, ensure_private_directory, state_root
 
-PROPERTIES: dict[str, Any] = {
-    "operation": {"type": "string", "enum": ["status", "acquire", "dispatch", "observe", "answer"]},
-    "controller_id": {"type": "string", "minLength": 1, "maxLength": 128},
-    "binding_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "owner": {"type": "string", "minLength": 1, "maxLength": 128},
-    "epoch": {"type": "integer", "minimum": 0},
-    "key": {"type": "string", "minLength": 1, "maxLength": 128},
-    "launch_key": {"type": "string", "minLength": 1, "maxLength": 128},
-    "request": {"type": "object"},
-    "ask_id": {"type": "string"},
-    "choice": {"type": "string"},
-}
-PROJECT_CONTROL_TOOL = {
-    "name": "project_control",
-    "description": "Acquire a project epoch; dispatch, observe or answer by durable caller key. Never retry an unknown launch with a new key.",
-    "inputSchema": {
-        "type": "object",
-        "properties": PROPERTIES,
-        "required": ["operation", "controller_id", "binding_hash"],
-        "additionalProperties": False,
-    },
-    "annotations": {
-        "readOnlyHint": False,
-        "destructiveHint": True,
-        "idempotentHint": False,
-        "openWorldHint": True,
-    },
-}
-
 
 def digest(value: Any) -> str:
     return hashlib.sha256(

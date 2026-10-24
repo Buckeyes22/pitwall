@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The opt-in orchestrator MCP tool `project_control` (`PITWALL_AGENTS_PROJECT_CONTROL=1`) dispatches,
+  observes and answers by durable caller key, with per-controller epoch fencing so a lost reply never
+  relaunches work. See `docs/agents/architecture.md`.
+
 - Claude Code routing now uses `pitwall:<harness>-shim` Agent dispatch with the `pitwall-asks`
   monitor. New `ask.created` events identify the parent session, and `pitwall agents inbox --watch`
   reports questions while keeping the session listener heartbeat fresh.
