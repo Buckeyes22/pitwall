@@ -107,3 +107,30 @@ The runtime adds opt-in isolated worktrees, the local doctor, explicit discovery
 ## Clean-room constraint
 
 Devchain informed the capability analysis, but this implementation is independently designed for this repository and must not copy Elastic License 2.0 source code.
+
+### Opt-in project controller
+
+An orchestrator MCP process started with `PITWALL_AGENTS_PROJECT_CONTROL=1` additionally exposes
+`project_control`. It remains hidden by default and from specialist-role clients. This local
+trusted-controller operation adds caller-keyed admission to the existing managed launcher and
+mailbox; it does not replace their lifecycle or expose a separate provider dispatcher.
+
+Each controller ID binds a configuration hash and canonical working directory. `status` returns
+its epoch; `acquire` compares the expected epoch and records a new owner at the next epoch. Exact
+lost-response replay by the same owner returns the acquired epoch. All other operations require
+the current owner and epoch. A per-controller POSIX file lock covers both ownership replacement
+and mutation admission, so a replaced controller cannot launch a different action key.
+
+`dispatch` records a request hash and deterministic dispatch UUID before calling the managed
+launcher. Repeating the same key/request returns that UUID without another launch; a different
+request conflicts. `observe` returns absence only when no admission exists. A reservation lacking
+its launch sidecar is unknown, never permission to relaunch. `answer` binds a separate caller key
+to an admitted launch key, ask ID and offered choice; the native mailbox reconciles a crash between
+answer publication and controller receipt persistence. Both launch and answer receipts survive
+MCP process replacement under the same state root.
+
+The caller supplies `operation`, `controller_id`, `binding_hash` and, after acquisition, `owner`
+and `epoch`. Dispatch requires `key` and a `request` with `route`, `prompt`, `task_mode` and optional
+`timeout_seconds`. Answer requires `key`, `launch_key`, `ask_id` and `choice`. Start the MCP server
+in the desired worktree: there is no caller-controlled cwd argument. Existing child-channel
+capability checks, managed harness pinning and MCP call-rate limits still apply.

@@ -36,6 +36,7 @@ ORCHESTRATOR_TOOLS = (
     "inbox",
     "answer_ask",
     "dispatch_and_wait",
+    "project_control",
     "answer_and_wait",
     "wait_dispatch",
     "steer_and_wait",

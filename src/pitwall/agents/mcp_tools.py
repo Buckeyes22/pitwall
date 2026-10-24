@@ -276,6 +276,35 @@ STEER_AND_WAIT_TOOL = {
     },
 }
 
+PROJECT_CONTROL_PROPERTIES: dict[str, Any] = {
+    "operation": {"type": "string", "enum": ["status", "acquire", "dispatch", "observe", "answer"]},
+    "controller_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "binding_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "owner": {"type": "string", "minLength": 1, "maxLength": 128},
+    "epoch": {"type": "integer", "minimum": 0},
+    "key": {"type": "string", "minLength": 1, "maxLength": 128},
+    "launch_key": {"type": "string", "minLength": 1, "maxLength": 128},
+    "request": {"type": "object"},
+    "ask_id": {"type": "string"},
+    "choice": {"type": "string"},
+}
+PROJECT_CONTROL_TOOL = {
+    "name": "project_control",
+    "description": "Acquire a project epoch; dispatch, observe or answer by durable caller key. Never retry an unknown launch with a new key.",
+    "inputSchema": {
+        "type": "object",
+        "properties": PROJECT_CONTROL_PROPERTIES,
+        "required": ["operation", "controller_id", "binding_hash"],
+        "additionalProperties": False,
+    },
+    "annotations": {
+        "readOnlyHint": False,
+        "destructiveHint": True,
+        "idempotentHint": False,
+        "openWorldHint": True,
+    },
+}
+
 
 def _answer_payload(ask: Mapping[str, Any], answer: Mapping[str, Any]) -> dict[str, Any]:
     payload: dict[str, Any] = {
@@ -456,6 +485,12 @@ def build_server(env: Mapping[str, str], stdin: BinaryIO, stdout: BinaryIO) -> C
         server.register(ANSWER_AND_WAIT_TOOL, orchestrator.answer_and_wait)
         server.register(WAIT_DISPATCH_TOOL, orchestrator.wait_dispatch)
         server.register(STEER_AND_WAIT_TOOL, orchestrator.steer_and_wait)
+        if env.get("PITWALL_AGENTS_PROJECT_CONTROL") == "1":
+            from .project_control import ProjectControl
+
+            server.register(
+                PROJECT_CONTROL_TOOL, ProjectControl(orchestrator.env, orchestrator).call
+            )
     return server
 
 

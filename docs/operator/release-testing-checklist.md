@@ -82,3 +82,13 @@ means a gate failed. Artifacts land under `dist/alpha-artifacts/`.
 - [ ] Optional live tiers, if selected by a deploying operator, use only that operator's
       local credentials, endpoints, budget, and cleanup procedure; they do not gate the
       project release.
+
+## Optional project controller
+
+When changing the opt-in project controller, run `tests/agents/test_project_control.py` alongside
+the MCP, managed-channel and import-boundary tests. Verify the tool remains absent from a default
+orchestrator and from specialist clients, even when the opt-in flag is inherited. Verify replacement
+ownership prevents the old owner from dispatching a new key, and an interrupted launch reservation
+stays unknown rather than producing a second process. These checks are hermetic and require no
+provider credentials. A caller integration must separately demonstrate persisted action recovery;
+provider inference and a live operator walkthrough are not established by these fixtures.

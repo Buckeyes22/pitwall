@@ -145,7 +145,8 @@ _PROBE_SCRIPT = textwrap.dedent(
         )
 
     environments = {
-        "orchestrator": {CHANNEL_STATE_ROOT_ENV: state_root},
+        # project_control is opt-in; the probe enables it so every declared tool is captured.
+        "orchestrator": {CHANNEL_STATE_ROOT_ENV: state_root, "PITWALL_AGENTS_PROJECT_CONTROL": "1"},
         "subagent": {
             CHANNEL_STATE_ROOT_ENV: state_root,
             CHANNEL_DISPATCH_ENV: request["subagent_dispatch_id"],
