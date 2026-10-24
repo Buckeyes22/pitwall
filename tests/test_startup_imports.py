@@ -75,9 +75,16 @@ def test_inbox_watch_imports_no_heavy_modules(tmp_path: Path) -> None:
             if "| pitwall.agents.ask_watch" in line:
                 break
     finally:
+        # The watcher runs until signalled. A loaded machine can delay its SIGTERM exit, so
+        # fall back to SIGKILL; a raised timeout here would leak the stderr pipe into whichever
+        # test the worker runs next.
         if process.poll() is None:
             process.terminate()
-        _, remaining = process.communicate(timeout=5)
+        try:
+            _, remaining = process.communicate(timeout=10)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            _, remaining = process.communicate()
         stderr_lines.append(remaining)
     stderr = "".join(stderr_lines)
     modules = {
