@@ -416,7 +416,7 @@ def test_task_record_creation_validates_the_generated_record_before_writing_it(
 
 CRASH_SCRIPT = textwrap.dedent(
     """
-    import json, sys, time
+    import json, os, sys, time
     from pitwall.workbench.task_record import TaskRecordStore
 
     root, marker = sys.argv[1], sys.argv[2]
@@ -429,8 +429,10 @@ CRASH_SCRIPT = textwrap.dedent(
                                    parent_session_id="parent-crash", task=role + " task")
         store.update(record["taskId"], {"childId": "child-" + role, "executionState": "running"})
         published.append({k: record[k] for k in ("taskId", "runId", "attemptId", "role")})
-    with open(marker, "w") as handle:
+    # Publish atomically: the parent polls for the marker and kills this process at once.
+    with open(marker + ".tmp", "w") as handle:
         json.dump(published, handle)
+    os.replace(marker + ".tmp", marker)
     time.sleep(60)
     """
 )
