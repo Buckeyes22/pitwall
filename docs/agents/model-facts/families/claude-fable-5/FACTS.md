@@ -48,6 +48,7 @@ None recorded.
 - anthropic-fable-5-1-prompting: changed since it was reviewed
 - anthropic-fable-5-1-whats-new: changed since it was reviewed
 - anthropic-fable-5-1-migration: changed since it was reviewed
+- anthropic-mythos-5-1: changed since it was reviewed
 
 ## Not published
 

@@ -72,7 +72,7 @@
           ]
         },
         "revision": {
-          "value": "f0e1c1e04d40177e4673a22097036854f536e9c0",
+          "value": "d95e30cb912fe3021bb9c2ba66a8ce60b6c937a9",
           "method": "extracted",
           "evidence": [
             {
@@ -182,7 +182,7 @@
           "note": "The model files set top_p 0.95 with top_k 40; the vendor API table gives 0.9 for M2.x. The artifact default is kept."
         },
         "revision": {
-          "value": "d494266a4affc0d2995ba1fa35c8481cbd84294b",
+          "value": "0a6536713b0b03f3be97494e5cf8d22f668a3164",
           "method": "extracted",
           "evidence": [
             {

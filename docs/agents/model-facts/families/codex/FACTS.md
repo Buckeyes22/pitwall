@@ -45,12 +45,15 @@ None recorded.
 ## Pending sources
 
 - openai-gpt-6-guide: changed since it was reviewed
+- openai-models: changed since it was reviewed
+- openai-reasoning: changed since it was reviewed
 - openai-changelog: changed since it was reviewed
 - openai-deprecations: changed since it was reviewed
 - codex-models: changed since it was reviewed
 - openai-model-gpt-6-sol: changed since it was reviewed
 - openai-model-gpt-6-luna: changed since it was reviewed
 - openai-gpt-6-astra-guide: changed since it was reviewed
+- openai-prompt-caching: changed since it was reviewed
 - openai-model-gpt-6-1-sol: changed since it was reviewed
 
 ## Not published

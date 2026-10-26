@@ -27,6 +27,7 @@
 
 ## Pending sources
 
+- google-gemini-3-8-flash: changed since it was reviewed
 - google-gemini-3-7-flash: changed since it was reviewed
 - google-gemini-3-5-flash: changed since it was reviewed
 - google-gemini-3-1-pro: changed since it was reviewed

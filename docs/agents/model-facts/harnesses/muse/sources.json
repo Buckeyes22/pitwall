@@ -21,8 +21,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:a43998535617ac19ecb45a39e9ba1c7565d51b6825ae88c4479a1a385dade504",
-      "observedAt": "2026-10-19",
+      "observedHash": "sha256:40b7ab4082ba0bea15ec3e35e9e6aaf9be5be1f5a66bf72bd9553941b867844a",
+      "observedAt": "2026-10-26",
       "reviewedHash": "sha256:46b716c0a01e63ce4069a29a98483f4f862223c28520e89a5cdc3509456a8c03",
       "reviewedAt": "2026-09-28"
     },
@@ -57,8 +57,8 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:dd15a480a02164f7d615970bedc3ad4de71642a28c89763e17bc03a0c2757f74",
-      "observedAt": "2026-10-19",
+      "observedHash": "sha256:9e1f5de97bcc2ba5b72a8d3ff6c403e99c57104ef876e1d4477777063c941ec3",
+      "observedAt": "2026-10-26",
       "reviewedHash": "sha256:4916632d3da7733d37e428290af0256ae83ad5307e42b29fd98361ded84aa425",
       "reviewedAt": "2026-09-28"
     }

@@ -27,8 +27,10 @@ None recorded.
 ## Pending sources
 
 - kimi-code-command: changed since it was reviewed
+- kimi-code-agents: changed since it was reviewed
 - kimi-code-config: changed since it was reviewed
 - kimi-code-providers: changed since it was reviewed
+- kimi-code-changelog: changed since it was reviewed
 
 ## Not published
 

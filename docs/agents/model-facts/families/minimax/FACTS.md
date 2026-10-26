@@ -31,6 +31,8 @@
 - minimax-invocation: changed since it was reviewed
 - minimax-anthropic-api: changed since it was reviewed
 - minimax-m3-tool-use: changed since it was reviewed
+- hf-minimax-m3: changed since it was reviewed
+- hf-minimax-m2.7: changed since it was reviewed
 
 ## Not published
 

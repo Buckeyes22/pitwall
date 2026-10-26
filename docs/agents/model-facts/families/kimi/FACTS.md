@@ -25,7 +25,12 @@ None recorded.
 
 ## Pending sources
 
-None.
+- kimi-models: changed since it was reviewed
+- kimi-k3: changed since it was reviewed
+- kimi-reasoning-effort: changed since it was reviewed
+- kimi-thinking-models: changed since it was reviewed
+- kimi-k3-tool-calling: changed since it was reviewed
+- kimi-changelog: changed since it was reviewed
 
 ## Not published
 

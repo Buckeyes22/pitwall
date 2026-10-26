@@ -20,6 +20,7 @@ None recorded.
 
 - meta-muse-glimmer: changed since it was reviewed
 - meta-muse-glimmer-prompting: changed since it was reviewed
+- hf-muse-glimmer-30b: changed since it was reviewed
 
 ## Not published
 

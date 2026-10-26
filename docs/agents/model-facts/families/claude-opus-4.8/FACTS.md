@@ -45,6 +45,7 @@ None recorded.
 
 - anthropic-opus-4-8: changed since it was reviewed
 - anthropic-effort: changed since it was reviewed
+- anthropic-opus-4-8-prompting: changed since it was reviewed
 - anthropic-deprecations: changed since it was reviewed
 - cc-model-config: changed since it was reviewed
 - anthropic-opus-5-5: changed since it was reviewed
