@@ -13,7 +13,7 @@ x-pitwall-service: &pitwall-service
 
 services:
   postgres:
-    image: postgres:16@sha256:33f923b05f64ca54ac4401c01126a6b92afe839a0aa0a52bc5aeb5cc958e5f20
+    image: postgres:16@sha256:1beaa3084eee2676f20a9cd9928f0bf2c5bf674f8e49f81017912183d377c61c
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-pitwall}
