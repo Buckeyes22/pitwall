@@ -9,8 +9,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:c1d45a0fb921afa09179d2b5764d47ebbe5311d148ea6f933d469cdfec4a909f",
-      "observedAt": "2026-10-26",
+      "observedHash": "sha256:d1cec65fe4774d8d50b2afbadd340b88faa28a1a6f74ae14e2b12e9b6adf973d",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:9456fc0c4f499d89151f4098f51483f15936046cb9a20efd89aa1c0a362aed33",
       "reviewedAt": "2026-09-28"
     },
@@ -21,8 +21,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:d85ac22ff0c82a35e1f75759e275b53c9fdd6695fa60556a2a8a8b92f7f3f51f",
-      "observedAt": "2026-10-26",
+      "observedHash": "sha256:386fd1e34d1af4e075d4b4d65d28ce0451e550527dbf7f1b0ef15e261ffced5d",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:04fb1c59a324d7b4e8e83bd7e061cf1b0250fcc8e64bcd95269c1638ad9470e9",
       "reviewedAt": "2026-09-28"
     },
@@ -33,8 +33,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:be6341b1273294cec6635dc61248402433b9b4d0384293aa09c27cf20988cec0",
-      "observedAt": "2026-10-26",
+      "observedHash": "sha256:5b3cf15d61f2b9e724cc862f1f5b1ade137e1af4ee2e76ef7be800b3545a62de",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:de8bfcdb93a43d131de590adcb43955c71544c49c520b8a08298ae4d0d3a6d5d",
       "reviewedAt": "2026-09-28"
     },
@@ -45,8 +45,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:7074c3c776a2511698b9fd69376203be5d181f766fef32dd7ab43319018ab49f",
-      "observedAt": "2026-09-28",
+      "observedHash": "sha256:ed5084609ab0e6df4fd1e1b7e0a93a70db354c9270629338f4be929665399e1e",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:7074c3c776a2511698b9fd69376203be5d181f766fef32dd7ab43319018ab49f",
       "reviewedAt": "2026-09-28"
     },
@@ -57,8 +57,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "html",
-      "observedHash": "sha256:c9f789d2b5d5e902435f405b830c7446fb2e8e9d1f0febd427871dab576c026c",
-      "observedAt": "2026-10-26",
+      "observedHash": "sha256:56c8d5712fc7856973a015e8990ba85bd2300166fe5ea1d90d130966b70ccd92",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:5f5aac941178adc13e7c953bdc4914c437c9409086303b06c9086fb48865cc4d",
       "reviewedAt": "2026-09-28"
     }

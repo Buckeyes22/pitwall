@@ -20,7 +20,8 @@ None recorded.
 
 ## Pending sources
 
-None.
+- hf-mimo-v2.5: changed since it was reviewed
+- hf-mimo-v2.5-pro: changed since it was reviewed
 
 ## Not published
 

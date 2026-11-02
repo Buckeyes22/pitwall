@@ -46,8 +46,8 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:52e780d0cdf1c7f49ffdefe549390fcda6d95f6345897deec8b831924b2390fc",
-      "observedAt": "2026-10-26",
+      "observedHash": "sha256:0c96f1b099cbb5fe23d11beed60a94f6878e7a749a60238f83710789d8c1ca4b",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:ff4c876fbf0707ee7439b06357af40f5acc1103b4e7a9b264be7909f8a8753c7",
       "reviewedAt": "2026-09-28"
     },

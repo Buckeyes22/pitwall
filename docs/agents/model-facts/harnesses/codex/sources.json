@@ -69,8 +69,8 @@
       "pageType": "harness",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:8daae3138add1351cd2537bc4bfad4a7d673988de1ff808b592984d1e38c5454",
-      "observedAt": "2026-10-19",
+      "observedHash": "sha256:939c59383778671f2d1311b35aa14fc9b32f9a2b595739ed0fbb64ff53f7f490",
+      "observedAt": "2026-11-02",
       "reviewedHash": "sha256:acfab53b453567f90f707f964afd94a23a9166e03aa4d588efec8f16585ceca9",
       "reviewedAt": "2026-09-28"
     }

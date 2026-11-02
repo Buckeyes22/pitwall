@@ -85,8 +85,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "google/gemma-4-12B",
-      "observedHash": "revision:023679ed352de9bb66cc873c9009ce3482585c08",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:1a2c7729392586f5ecddae8807ee2ef741eabb9a",
+      "observedAt": "2026-11-02",
       "reviewedHash": "revision:023679ed352de9bb66cc873c9009ce3482585c08",
       "reviewedAt": "2026-09-28"
     },

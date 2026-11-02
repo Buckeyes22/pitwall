@@ -22,7 +22,7 @@ None recorded.
 
 ## Pending sources
 
-None.
+- hf-gemma-4-12b: changed since it was reviewed
 
 ## Not published
 

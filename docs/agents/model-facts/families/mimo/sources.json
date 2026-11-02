@@ -58,8 +58,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "XiaomiMiMo/MiMo-V2.5",
-      "observedHash": "revision:63651580ca774f8504f676040460aed3e1244ac1",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:d6bf9db68673d1f903a53d8da417b293fdc97d1f",
+      "observedAt": "2026-11-02",
       "reviewedHash": "revision:63651580ca774f8504f676040460aed3e1244ac1",
       "reviewedAt": "2026-09-28"
     },
@@ -71,8 +71,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "XiaomiMiMo/MiMo-V2.5-Pro",
-      "observedHash": "revision:21d1ecfecd7bd70f31be25ca49d7edd21f003659",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:98e90df48208087a2eb974866a736a20f8122d2a",
+      "observedAt": "2026-11-02",
       "reviewedHash": "revision:21d1ecfecd7bd70f31be25ca49d7edd21f003659",
       "reviewedAt": "2026-09-28"
     }
