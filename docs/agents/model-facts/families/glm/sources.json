@@ -33,8 +33,8 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:94c8bb5cbbd6c01b8f66b3b3d1860b1e7598efe47ed5a93cab8fb553ee37d46b",
-      "observedAt": "2026-11-02",
+      "observedHash": "sha256:17b48cfb1c01089e663179216718fb491ed74c9bb1211a5bebabddaf9f9a555e",
+      "observedAt": "2026-11-09",
       "reviewedHash": "sha256:6abc795542c1eaa546704754b4dcba2160eadec3bdf715875b07105b90e027e9",
       "reviewedAt": "2026-09-28"
     },

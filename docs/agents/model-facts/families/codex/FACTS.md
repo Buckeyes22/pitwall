@@ -51,6 +51,10 @@ None recorded.
 - openai-changelog: changed since it was reviewed
 - openai-deprecations: changed since it was reviewed
 - codex-models: changed since it was reviewed
+- openai-model-gpt-5-6-sol: changed since it was reviewed
+- openai-model-gpt-5-6-terra: changed since it was reviewed
+- openai-model-gpt-5-6-luna: changed since it was reviewed
+- openai-model-gpt-6-astra: changed since it was reviewed
 - openai-model-gpt-6-sol: changed since it was reviewed
 - openai-model-gpt-6-luna: changed since it was reviewed
 - openai-gpt-6-astra-guide: changed since it was reviewed

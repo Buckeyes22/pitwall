@@ -98,8 +98,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "google/gemma-4-E4B",
-      "observedHash": "revision:411aa17b749aa952df1359d2dcea73917a544d9a",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:11b8250ef59eb3ebc5dae7b21144d7b84f2c06dd",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:411aa17b749aa952df1359d2dcea73917a544d9a",
       "reviewedAt": "2026-09-28"
     },
@@ -111,8 +111,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "google/gemma-4-E2B",
-      "observedHash": "revision:d29ff6b45f081a49ee2733a859c9c9c2d95d1a6f",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:433813a669639fd7eaa83155828e9000ed357d53",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:d29ff6b45f081a49ee2733a859c9c9c2d95d1a6f",
       "reviewedAt": "2026-09-28"
     }

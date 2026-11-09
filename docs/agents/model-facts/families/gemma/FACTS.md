@@ -23,6 +23,8 @@ None recorded.
 ## Pending sources
 
 - hf-gemma-4-12b: changed since it was reviewed
+- hf-gemma-4-e4b: changed since it was reviewed
+- hf-gemma-4-e2b: changed since it was reviewed
 
 ## Not published
 

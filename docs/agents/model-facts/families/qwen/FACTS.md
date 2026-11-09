@@ -30,6 +30,11 @@ None recorded.
 - alibaba-text-models: changed since it was reviewed
 - alibaba-deep-thinking: changed since it was reviewed
 - alibaba-prompt-guide: changed since it was reviewed
+- hf-qwen3.8-27b: changed since it was reviewed
+- hf-qwen3.8-flash-next: changed since it was reviewed
+- hf-qwen3.6-27b: changed since it was reviewed
+- hf-qwen3.6-35b-a3b: changed since it was reviewed
+- hf-qwen3.8-2.4t-a95b: changed since it was reviewed
 
 ## Not published
 

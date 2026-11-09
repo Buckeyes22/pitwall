@@ -70,8 +70,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "Qwen/Qwen3.8-27B",
-      "observedHash": "revision:1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
       "reviewedAt": "2026-09-28"
     },
@@ -83,8 +83,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "Qwen/Qwen3.8-Flash-Next",
-      "observedHash": "revision:de4b8e4d43b917e7706784d8bb445c9af86a3540",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:812d96e10a0dd82b69d749e68693698cf6c36daa",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:de4b8e4d43b917e7706784d8bb445c9af86a3540",
       "reviewedAt": "2026-09-28"
     },
@@ -96,8 +96,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "Qwen/Qwen3.6-27B",
-      "observedHash": "revision:6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:8f33b98937c6031bb49e713dee3e8e185aafd26f",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
       "reviewedAt": "2026-09-28"
     },
@@ -109,8 +109,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "Qwen/Qwen3.6-35B-A3B",
-      "observedHash": "revision:995ad96eacd98c81ed38be0c5b274b04031597b0",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:345d467b117d1fd5eda9b879a5988de9ae5f47a7",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:995ad96eacd98c81ed38be0c5b274b04031597b0",
       "reviewedAt": "2026-09-28"
     },
@@ -135,8 +135,8 @@
       "fetch": "huggingface",
       "format": "json",
       "repo": "Qwen/Qwen3.8-2.4T-A95B",
-      "observedHash": "revision:207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
-      "observedAt": "2026-09-28",
+      "observedHash": "revision:4f885e51d6bbfee5866446d56d3f96f336c39723",
+      "observedAt": "2026-11-09",
       "reviewedHash": "revision:207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
       "reviewedAt": "2026-09-28"
     }
