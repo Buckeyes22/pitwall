@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Vendor | OpenAI |
-| Models in scope | GPT-6 family (Astra, 6.1 Sol, Sol, Luna); GPT-5.x series, including GPT-5.6 Sol/Terra/Luna; Codex-tuned models (e.g., `gpt-5.3-codex`); legacy GPT-4.1 |
+| Models in scope | GPT-6.2 Astra/Sol; GPT-6.1 Terra/Sol; earlier GPT-6 Astra/Sol/Luna; GPT-5.x and legacy GPT-4.1 |
 | Primary access | OpenAI API (Responses + Chat Completions), ChatGPT, Codex (CLI / IDE extension / app / web / SDK) |
 | Official guidance | Extensive and actively maintained — dedicated prompt-engineering, model-version prompt-guidance, and Codex-specific tracks |
 | Canonical doc host | `developers.openai.com` (migrated from `platform.openai.com`); Help Center at `help.openai.com` |
-| Compiled | July 2026; GPT-6 family section, API changes, and source list updated 2026-10-07 |
+| Compiled | July 2026; GPT-6.2 release and migration reviewed 2026-11-17 |
 
 This document consolidates OpenAI's official prompting guidance for its text and agentic-coding models. OpenAI maintains the most complete first-party prompting documentation of the major vendors and splits it into two tracks: a general GPT track (prompt engineering + model-version-specific guidance) and a Codex track (agentic coding). Both are covered here.
 
@@ -31,7 +31,7 @@ Coverage assessment: comprehensive for text generation, reasoning, agentic codin
 
 OpenAI models are driven through role-structured messages. The **Responses API** is the current recommended interface and is preferred for long-running and stateful GPT-5.x sessions; the **Chat Completions API** remains available and is the format most third-party tooling targets. System/developer messages define behavior and persona; user messages carry the task; assistant messages and tool calls follow.
 
-For GPT-6 models, tool calling belongs in the Responses API: GPT-6 Astra and GPT-6.1 Sol accept Chat Completions only without tools, and GPT-6 Sol and GPT-6 Luna accept tools there only at effort `none`. Mid-turn steering and the other long-running controls in section 6 also assume Responses.
+For GPT-6 models, tool calling belongs in the Responses API: GPT-6.2 Astra/Sol, GPT-6 Astra, and GPT-6.1 Sol/Terra require Responses for tools. Earlier GPT-6 Sol and GPT-6 Luna accept Chat Completions tools only at effort `none`. Mid-turn steering and the other long-running controls in section 6 also assume Responses.
 
 For long-running GPT-5.x sessions in the Responses API, OpenAI documents **compaction** (`developers.openai.com/api/docs/guides/compaction`) as first-class guidance for multi-hour reasoning and long conversations, alongside prompt caching and token counting.
 
@@ -87,20 +87,39 @@ Source for family roles and safety behavior: https://deploymentsafety.openai.com
 
 ## 6. GPT-6 family guidance
 
-Source for this whole section: the GPT-6 model guide and the pages it links to (listed in section 12, fetched 2026-10-07).
+Sources: the versioned GPT-6.2 and GPT-6 model guides and their linked pages, reviewed 2026-11-17. Earlier behavior stays attributed to the versioned GPT-6 guide; the unversioned latest-model URL now serves GPT-6.2.
+
+### GPT-6.2 adoption
+
+OpenAI released `gpt-6.2-astra` and `gpt-6.2-sol` on November 17, 2026. Choose Astra for demanding reasoning, coding, and professional work, and Sol for everyday coding and agents. Pitwall's examples now select 6.2 Sol. A dispatch without a model override still uses the operator's Codex configuration. Earlier registry entries remain available for saved profiles; adoption does not supply a local capability ranking.
+
+Both models reject effort `none`; the migration guide maps `none` and `minimal` to `low` and recommends `medium` for a new API integration. Codex 0.169.0 metadata advertises `low`, `medium`, `high`, `xhigh`, `max`, and `ultra` for both, with a client default of `low`. `ultra` controls Codex delegation and is separate from API effort. The reviewed metadata is preserved, with only public model fields, in [runtime-models.json](../agents/model-facts/families/codex/runtime-models.json). GPT-6.1 Terra is also registered; its API supports `none`, while the registered Codex route follows the catalog's `low` through `ultra` choices. Terra requires CLI 0.159.0 or later.
+
+GPT-6.2 Astra writes more briefly by default. Reassess broad brevity instructions, state the intended audience and required context, and require final answers to stand on their own. Specify the completion evidence, allow reasonable reversible assumptions, and require follow-through on authorized work. For coding, name project conventions, preserve behavior callers depend on, and add tests for repository requirements or a specific regression. Use visual references and review rendered output at its intended size when appearance matters. These are starting points from OpenAI's guides, not local benchmark results.
+
+Starting with 6.2, edits to earlier history can discard subsequent reasoning items. Model downgrades and changes of user or organization can also discard reasoning. Append instructions, tools, and supported configuration updates instead of rewriting the prefix; keep replayed output items in order. Diagnose removals with `input_transformations`. OpenAI compaction preserves subsequent reasoning under its documented rules; custom summaries can change the prefix. Pitwall's Codex shim delegates conversation management to the installed CLI; it does not implement a Responses client.
+
+Both 6.2 models support text and image input, a 1,050,000-token API window, 922,000 input tokens, and 128,000 output tokens. The reviewed Codex catalog advertises smaller client windows: 272,000 for Astra and 500,000 for Sol and Terra. The API knowledge cutoffs are May 18, 2026 for 6.2 Astra and June 1, 2026 for 6.2 Sol and 6.1 Terra.
+
+Standard API pricing per million tokens is $8 input / $0.40 cached input / $10 cache write / $40 output for 6.2 Astra, and $2 / $0.10 / $2.50 / $10 for 6.2 Sol, with 30-minute writes. Above 272K input tokens, input and cache rates double and output rates multiply by 1.5 for the full request. Both support US and EU residency with Standard, Fast, and Batch; Ultrafast supports US residency only. Ultrafast costs 3× Standard through February 28, 2027 and 6× starting March 1, 2027, Pacific time. Recheck the model pages before budgeting.
+
+The watcher also found `gpt-6-cyber`, released November 5. Its facts are recorded, but no ordinary Codex route is registered: OpenAI requires Daybreak Red approval. An API listing does not establish access.
 
 ### Models and roles
 
 | Model | API id | Role | Effort values | Default effort | `none` |
 |---|---|---|---|---|---|
-| GPT-6 Astra | `gpt-6-astra` | Highest intelligence; the hardest reasoning, coding, and professional work | low, medium, high, xhigh, max | not stated on its model page | not supported (HTTP 400) |
+| GPT-6.2 Astra | `gpt-6.2-astra` | Demanding reasoning, coding, and professional work | low through max; Codex additionally offers ultra | API default not stated; migration recommends medium; reviewed Codex default low | not supported |
+| GPT-6.2 Sol | `gpt-6.2-sol` | Everyday coding and agents at lower cost | low through max; Codex additionally offers ultra | API default not stated; migration recommends medium; reviewed Codex default low | not supported |
+| GPT-6.1 Terra | `gpt-6.1-terra` | Visual reasoning, computer use, and writing | none, low, medium, high, xhigh, max; Codex additionally offers ultra | API medium; reviewed Codex default low | API supported |
+| GPT-6 Astra | `gpt-6-astra` | Earlier flagship for reasoning, coding, and professional work | low, medium, high, xhigh, max | not stated on its model page | not supported (HTTP 400) |
 | GPT-6.1 Sol | `gpt-6.1-sol` | Near-Astra results on complex work at a lower price | low, medium, high, xhigh, max | medium | not supported; `minimal` also unsupported |
 | GPT-6 Sol | `gpt-6-sol` | Earlier Sol, for complex coding and agentic work; the 6.1 page names 6.1 Sol as the newer one | none, low, medium, high, xhigh, max | medium | supported |
 | GPT-6 Luna | `gpt-6-luna` | Fastest and cheapest; focused, high-volume tasks | none, low, medium, high, xhigh, max | medium | supported |
 
-All four list a 1,050,000-token context window, 922,000 maximum input tokens, and 128,000 maximum output tokens. Knowledge cutoffs are Apr 30, 2026 (Astra and 6.1 Sol), Apr 20, 2026 (Sol), and May 18, 2026 (Luna). Codex selects `gpt-6.1-sol` the same way as the others, with `-m` or `model = ` in its configuration. The Codex docs describe a UI-level "Ultra" setting that works by using subagents; it is not an API effort value, and the registry lists only the API values above.
+The earlier four models also list a 1,050,000-token API window, 922,000 maximum input tokens, and 128,000 maximum output tokens. Their knowledge cutoffs are Apr 30, 2026 (Astra and 6.1 Sol), Apr 20, 2026 (Sol), and May 18, 2026 (Luna). Codex selects model IDs with `-m` or `model = ` in its configuration. Registry effort values describe the harness route, including client settings such as `ultra` where verified.
 
-The guide tells GPT-6 Sol users to read its migration section before switching to 6.1 Sol, and to compare 6.1 Sol with Astra on their own tasks. Astra also offers Fast mode and Ultrafast mode. Fast mode is unavailable with EU data residency (Astra, Sol, Luna, and 6.1 Sol); Ultrafast supports global processing and US residency only.
+The earlier guide tells GPT-6 Sol users to read its migration section before switching to 6.1 Sol, and to compare models on their own tasks. Fast mode now supports EU residency for 6.1 Sol, 6.1 Terra, and Luna, but not earlier GPT-6 Astra or Sol. GPT-6.1 Sol Ultrafast supports US and EU residency; earlier Astra Ultrafast supports US residency and global processing.
 
 ### Reasoning effort and modes
 
@@ -110,7 +129,7 @@ The guide tells GPT-6 Sol users to read its migration section before switching t
 
 ### Changing effort mid-conversation
 
-To raise effort for a hard step or lower it for a routine follow-up, add a `configuration_update` input item carrying the new effort before the next user message and leave the request-level `reasoning.effort` unchanged. That keeps the prompt prefix, and so the cache, intact. The change applies to later responses until another update replaces it. Limits: GPT-6 family only, single-agent mode only, effort is the only thing it changes, two updates may not sit next to each other, and it cannot be combined with automatic compaction or truncation (add a fresh update after explicit compaction). The response still reports the request-level effort, not the updated one.
+To change effort between responses, append a `configuration_update` item and keep request-level `reasoning.effort` fixed. Replay updates in order. Updates can now change effort and `text.format` together; automatic compaction via `context_management` carries both forward. Automatic truncation and standalone `/responses/compact` reject histories containing updates. Follow the current compaction guide for explicit compaction. The response still reports request-level effort, not the update's value.
 
 ### Async tool calling
 
@@ -122,13 +141,13 @@ Over a Responses WebSocket connection, a user can add instructions to a response
 
 ### Prompt caching changes
 
-From GPT-5.6 onward, cache lifetime is set with `prompt_cache_options.ttl` (the only value is `30m`, also the default) instead of `prompt_cache_retention`, which remains for older models. Cache writes are billed at 1.25 times the uncached input rate; reads cost 0.1 times (0.05 times on GPT-6.1 Sol). You can choose implicit breakpoints or an explicit-only mode with up to four writes per request. The minimum cacheable prefix is 1,024 tokens, and a stable `prompt_cache_key` is no longer needed for routing. Compaction and edits before a breakpoint reduce reuse, so append to history rather than rewriting it, and keep tool definitions stable.
+From GPT-5.6 onward, use `prompt_cache_options.ttl` instead of `prompt_cache_retention`. The default `30m` writes cost 1.25 times uncached input; Responses also offers `12h` at 2.5 times input. These are total write rates, not extra fees. Reads cost 0.05 times input on 6.2 Astra/Sol and 6.1 Sol/Terra, or 0.1 times on the other models here. The minimum prefix is 1,024 tokens; implicit and explicit breakpoints are available. Append changes to preserve the prefix and distinguish reduced cache reuse from discarded reasoning.
 
 ### Migration quickstart (from GPT-5.x)
 
-1. Set `model` to `gpt-6-astra`, `gpt-6.1-sol`, or `gpt-6-luna` (or `gpt-6-sol`).
+1. Set `model` to `gpt-6.2-astra` or `gpt-6.2-sol`, or choose Terra/Luna for their documented roles.
 2. Move tool use to the Responses API.
-3. Map effort as described above (`none` and `minimal` become `low` on Astra and 6.1 Sol).
+3. Map `none` and `minimal` to `low` for both 6.2 models, earlier GPT-6 Astra, and 6.1 Sol.
 4. Remove `temperature`, `top_p`, and `top_logprobs` when effort is not `none`; in Chat Completions also remove `logprobs`, and in Responses remove the log-probability entry from `include`.
 5. If you change effort between turns, switch to `configuration_update` items.
 6. Replace `prompt_cache_retention` with `prompt_cache_options.ttl`, and review cache-write billing.
@@ -137,7 +156,7 @@ From GPT-5.6 onward, cache lifetime is set with `prompt_cache_options.ttl` (the 
 
 ### Prompting guidance for GPT-6
 
-OpenAI offers these as starting points for the whole GPT-6 family, observed on Astra, and tells readers to evaluate them on their own model and workload. The page contains ready-made prompt text for each topic; link to it rather than copying it: https://developers.openai.com/api/docs/guides/latest-model#prompting-best-practices.
+The following guidance describes earlier GPT-6 Astra; use the 6.2 guidance above for the new models and evaluate it on your workload. OpenAI publishes prompt examples in its [versioned GPT-6 guide](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra#prompting-best-practices).
 
 - **Initiative and follow-through.** Astra is better at staying coherent on long tasks and more willing to stop and ask when an answer could change the outcome, where earlier models would assume. To get autonomy, state that intent and scope should be inferred and the work carried to completion; treat "can you...", "help me..." requests as instructions; and do the authorized preparation first so a human approves a concrete, reviewable result. Adjust this to how much autonomy your product allows, because the model also asks non-blocking questions by default.
 - **Instruction following, skills, and `AGENTS.md`.** Astra follows long instructions better and is also more affected by whatever is in context, so unclear or conflicting text in a skill can make it stop early. OpenAI strongly recommends auditing every skill and instruction file the model can reach. State that the user's instructions outrank a skill's, and ask the model to name the exact file and rule whenever a skill causes it to pause, ask permission, or leave work unfinished.
@@ -219,7 +238,10 @@ The official guidance flags several recurring failure modes. Over-eager early st
 | GPT-6, change effort between turns | Add a `configuration_update` item; leave request-level effort alone (cache-preserving) |
 | GPT-6, slow tool you can run in the background | `async: true` on the tool; return the result on its `call_id` |
 | GPT-6, user corrects a running response | Mid-turn steering over the Responses WebSocket |
-| GPT-6, cache lifetime | `prompt_cache_options.ttl` (`30m`), not `prompt_cache_retention` |
+| GPT-6, cache lifetime | `prompt_cache_options.ttl`: `30m` default; Responses also offers `12h` |
+| GPT-6.2, migration | Use Responses for tools; map none/minimal to low; omit sampling options |
+| GPT-6.2, lost reasoning | Keep history append-only and inspect `input_transformations` |
+| Codex 6.2, deepest setting | `ultra` is a client delegation setting; API effort tops out at `max` |
 | GPT-6, sampling parameters | Omit `temperature`, `top_p`, `top_logprobs` unless effort is `none` |
 | GPT-6 Astra stops to ask | Add the initiative and follow-through guidance in section 6 |
 | GPT-6 Astra over-formats or over-tests | State the writing style and the testing scope you want |
@@ -231,19 +253,24 @@ The official guidance flags several recurring failure modes. Over-eager early st
 
 All first-party. Migration from `platform.openai.com` to `developers.openai.com` is ongoing; prefer the `developers.openai.com` URLs.
 
-- GPT-6 model guide (Using GPT-6): https://developers.openai.com/api/docs/guides/latest-model (fetched 2026-10-07)
-- GPT-6 Astra page of the model guide: https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra (fetched 2026-10-07)
-- Reasoning models (effort, modes, mid-conversation changes): https://developers.openai.com/api/docs/guides/reasoning (fetched 2026-10-07)
-- Prompt engineering (current text, prompt-object retirement): https://developers.openai.com/api/docs/guides/prompt-engineering (fetched 2026-10-07)
-- Prompt caching: https://developers.openai.com/api/docs/guides/prompt-caching (fetched 2026-10-07)
-- Mid-turn steering: https://developers.openai.com/api/docs/guides/steering (fetched 2026-10-07)
-- Async tool calling: https://developers.openai.com/api/docs/guides/async-tool-calling (fetched 2026-10-07)
-- GPT-6.1 Sol model page: https://developers.openai.com/api/docs/models/gpt-6.1-sol (fetched 2026-10-07)
-- GPT-6 Astra, GPT-6 Sol, and GPT-6 Luna model pages: https://developers.openai.com/api/docs/models/gpt-6-astra, https://developers.openai.com/api/docs/models/gpt-6-sol, https://developers.openai.com/api/docs/models/gpt-6-luna (fetched 2026-10-07)
-- Model catalog: https://developers.openai.com/api/docs/models (fetched 2026-10-07)
-- API changelog: https://developers.openai.com/api/docs/changelog (fetched 2026-10-07)
-- API deprecations (reusable prompts): https://developers.openai.com/api/docs/deprecations (fetched 2026-10-07)
-- Codex models page: https://learn.chatgpt.com/docs/models (fetched 2026-10-07)
+- GPT-6.2 migration and prompting guide: https://developers.openai.com/api/docs/guides/latest-model/gpt-6.2-astra (reviewed 2026-11-17)
+- GPT-6.2 Astra and Sol model pages: https://developers.openai.com/api/docs/models/gpt-6.2-astra, https://developers.openai.com/api/docs/models/gpt-6.2-sol (reviewed 2026-11-17)
+- GPT-6.1 Terra model page: https://developers.openai.com/api/docs/models/gpt-6.1-terra (reviewed 2026-11-17)
+- Prefix preservation: https://developers.openai.com/api/docs/guides/keep-prefix-unchanged (reviewed 2026-11-17)
+- Codex 6.2 prompting: https://learn.chatgpt.com/guides/prompting-gpt-6-2-astra (reviewed 2026-11-17)
+- Codex model and effort selection: https://learn.chatgpt.com/docs/models, https://learn.chatgpt.com/docs/agent-configuration/subagents (reviewed 2026-11-17)
+- GPT-6 Astra page of the model guide: https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra (reviewed 2026-11-17)
+- Reasoning models (effort, modes, mid-conversation changes): https://developers.openai.com/api/docs/guides/reasoning (reviewed 2026-11-17)
+- Prompt engineering (current text, prompt-object retirement): https://developers.openai.com/api/docs/guides/prompt-engineering (reviewed 2026-11-17)
+- Prompt caching: https://developers.openai.com/api/docs/guides/prompt-caching (reviewed 2026-11-17)
+- Mid-turn steering: https://developers.openai.com/api/docs/guides/steering (reviewed 2026-11-17)
+- Async tool calling: https://developers.openai.com/api/docs/guides/async-tool-calling (reviewed 2026-11-17)
+- GPT-6.1 Sol model page: https://developers.openai.com/api/docs/models/gpt-6.1-sol (reviewed 2026-11-17)
+- GPT-6 Astra, GPT-6 Sol, and GPT-6 Luna model pages: https://developers.openai.com/api/docs/models/gpt-6-astra, https://developers.openai.com/api/docs/models/gpt-6-sol, https://developers.openai.com/api/docs/models/gpt-6-luna (reviewed 2026-11-17)
+- Model catalog: https://developers.openai.com/api/docs/models (reviewed 2026-11-17)
+- API changelog: https://developers.openai.com/api/docs/changelog (reviewed 2026-11-17)
+- API deprecations (reusable prompts): https://developers.openai.com/api/docs/deprecations (reviewed 2026-11-17)
+- Codex models page: https://learn.chatgpt.com/docs/models (reviewed 2026-11-17)
 - GPT-5.6 System Card: https://deploymentsafety.openai.com/gpt-5-6
 - General prompt engineering, legacy mirror: https://platform.openai.com/docs/guides/prompt-engineering
 - Model-version prompt guidance (current GPT-5.x): https://developers.openai.com/api/docs/guides/prompt-guidance

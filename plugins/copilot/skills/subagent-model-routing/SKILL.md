@@ -118,7 +118,7 @@ The canonical Copilot-hosted transport/model inventory is generated from `src/pi
 | MiniMax Code | `~/.claude/scripts/mcode-shim.sh <prompt-file> --model minimax/<model-id> [flags]` | stdin | MiniMax account login; effort selection is available only on M3.1-Flash-Preview. |
 
 **Tier example (seed — copy into your own ledger and adjust):**
-codex GPT-6 Sol (provisional flagship seat) ≥ GLM-5.3 > Kimi K3 > MiniMax M3.1 Flash Preview; Grok 4.7, GPT-6 Astra/Luna, and local/self-hosted models remain unranked pending local evidence. Within the Claude family, the officially hosted system cards provide a provisional capability prior of Fable 5.1 > Opus 5.5 > Sonnet 5.5, but not a cross-provider local ranking: use Sonnet 5.5 as the default workhorse, Opus 5.5 for difficult or verification-heavy work, and Fable 5.1 for the hardest generally available Claude work where its safeguards and possible fallback are acceptable. GLM-5.3 holds the default authoring seat; GPT-6 Sol is reserved for the hardest/critical units and deepest review; Kimi is mid-tier utility, parallel candidates, and burst; MiniMax M3 handles Sonnet-grade throughput (stall policy retained).
+Codex GPT family (historical seed seat; GPT-6.2 Astra/Sol and GPT-6.1 Terra remain unranked) ≥ GLM-5.3 > Kimi K3 > MiniMax M3.1 Flash Preview; Grok 4.7, GPT-6 Astra/Luna, and local/self-hosted models remain unranked pending local evidence. Within the Claude family, the officially hosted system cards provide a provisional capability prior of Fable 5.1 > Opus 5.5 > Sonnet 5.5, but not a cross-provider local ranking: use Sonnet 5.5 as the default workhorse, Opus 5.5 for difficult or verification-heavy work, and Fable 5.1 for the hardest generally available Claude work where its safeguards and possible fallback are acceptable. GLM-5.3 holds the default authoring seat; the Codex family holds the seed hardest/critical and deepest-review seat; Kimi is mid-tier utility, parallel candidates, and burst; MiniMax M3 handles Sonnet-grade throughput (stall policy retained).
 
 Per-model capability cards (excels-at / struggles-with / operational caveats / evidence) live in the Claude Code package within a Pitwall source clone at `plugins/claude/skills/subagent-model-routing/ledger/{claude-fable-5,claude-haiku-5,claude-opus-4.8,claude-sonnet-5,codex,deepseek,gemini,gemma,glm,grok,hy,kimi,longcat,mimo,minimax,muse-glimmer,muse-spark,muse-wonder,qwen}.md` (or directly below `plugins/` in a legacy standalone source checkout). They are maintained there by that package's `/pitwall:distill` command and are read-only reference material from Codex/Copilot; they are present in a source clone but not in an isolated plugin-cache install.
 
@@ -211,19 +211,23 @@ Use these cards when writing prompt files for the local shims. For new, high-sta
 
 ### codex / GPT
 
-- Select Sol (`gpt-6.1-sol`) for demanding work, Luna (`gpt-6-luna`) for fast, narrowly scoped work, or Astra (`gpt-6-astra`) for the lowest-effort route; the GPT-5.6 IDs remain available.
+- Select Astra (`gpt-6.2-astra`) for the hardest work, Sol (`gpt-6.2-sol`) for everyday agents, Terra (`gpt-6.1-terra`) for visual work and writing, or Luna (`gpt-6-luna`) for focused tasks. Earlier IDs remain registered.
+- Both 6.2 routes accept low through max plus Codex `ultra`; `none` and `minimal` are rejected. Omit the selector to retain the operator's configured Codex default.
 - Use Goal, Context, Constraints, and Completion Criteria.
 - Name allowed files, allowed edits, validation commands, and exact completion criteria.
 - State authorization boundaries and destructive actions that require confirmation; GPT-5.6 system-card evaluations found a greater tendency than GPT-5.5 to go beyond user intent.
 - Include deterministic verification such as tests, typecheck, lint, or static detectors, and inspect artifacts rather than trusting completion claims after tool failures.
 - Add an initiative nudge before raising effort when the model stops at the first plausible answer.
 - Tools: if your CLI has MCP tools configured, prompts may direct their use.
+
+The generated facts below describe API limits; Codex client efforts, defaults, and windows are described above or in the full reference.
+
 <!-- MODEL-FACTS:codex START (generated from docs/agents/model-facts/families/codex; edit facts.json, not this block) -->
-- **Models:** `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`
+- **Models:** `gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-luna`
 - **Context:** 1,050,000 tokens, output 128,000.
-- **Effort:** `gpt-6-astra`: low, medium, high, xhigh, max, cannot be disabled; `gpt-6.1-sol`: low, medium, high, xhigh, max (default medium), cannot be disabled; `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`: none, low, medium, high, xhigh, max (default medium).
-- **Effort on other values:** `gpt-6-astra`: other values are rejected.
-- **Facts checked:** 2026-10-07. Sources: `docs/agents/model-facts/families/codex/FACTS.md`.
+- **Effort:** `gpt-6.2-astra`, `gpt-6.2-sol`: low, medium, high, xhigh, max, cannot be disabled; `gpt-6.1-terra`, `gpt-6-luna`: none, low, medium, high, xhigh, max (default medium).
+- **Effort on other values:** `gpt-6.2-astra`, `gpt-6.2-sol`: other values are rejected.
+- **Facts checked:** 2026-11-17. Sources: `docs/agents/model-facts/families/codex/FACTS.md`.
 <!-- MODEL-FACTS:codex END -->
 - Full reference: `references/model-prompting.md#openai-gpt-6-through-codex`
 

@@ -18,7 +18,7 @@ Before choosing or briefing an external harness, read `${XDG_CONFIG_HOME:-~/.con
 **Seed rankings** -- an example roster; maintain yours via `/pitwall:distill`.
 
 <!-- LEDGER:RANKINGS START (maintained by /pitwall:distill -- edit via distill, not by hand) -->
-**Current tiers (seed example -- maintain via `/pitwall:distill` and your own ledger; last distilled 2026-07-09 (seed); model names updated 2026-09-28):** codex GPT-6 Sol (provisional flagship seat; adopted 2026-09-28, no local evidence yet) >= GLM-5.3 > Kimi K3 > MiniMax M3.1 Flash Preview (provisional: adopted 2026-09-28, no local evidence yet). Seats: GLM = default author; GPT-6 Sol = hardest/critical + deepest review; Kimi = mid-tier/burst; MiniMax = throughput. Grok 4.7 (provisional: adopted 2026-09-28, no local evidence yet), GPT-6 Astra (provisional: adopted 2026-09-28, no local evidence yet), and GPT-6 Luna (provisional: adopted 2026-09-28, no local evidence yet) remain unranked pending local evidence. Per-model detail: `ledger/*.md`.
+**Current tiers (seed example -- maintain via `/pitwall:distill` and your own ledger; last distilled 2026-07-09):** the historical seed places Codex's GPT family in the hardest/critical and deepest-review seat, followed by GLM-5.3, Kimi K3, and MiniMax M3.1 Flash Preview. GPT-6.2 Astra/Sol and GPT-6.1 Terra are adopted without a local ranking; release adoption does not transfer a predecessor's measured standing. Seats: GLM = default author; Codex = hardest/critical + deepest review; Kimi = mid-tier/burst; MiniMax = throughput. Grok 4.7 and GPT-6 Luna also remain unranked pending local evidence. Per-model detail: `ledger/*.md`.
 <!-- LEDGER:RANKINGS END -->
 
 ### Route profiles
@@ -84,18 +84,21 @@ If your CLI has MCP tools configured, prompts may direct their use.
 ### codex / GPT
 
 - **Use for:** strongest implementer in the seed roster; hardest units, deepest review.
-- **GPT-6 routes:** current Codex runtime model IDs are Astra (`gpt-6-astra`), Sol (`gpt-6.1-sol`, which replaces `gpt-6-sol`), and Luna (`gpt-6-luna`); the GPT-5.6 IDs (`gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`) stay registered. Codex starts demanding agents on Sol and fast, narrowly scoped agents on Luna.
+- **GPT-6 routes:** use `gpt-6.2-astra` for the hardest work, `gpt-6.2-sol` for everyday agents, `gpt-6.1-terra` for visual work and writing, or `gpt-6-luna` for focused tasks. Earlier routes stay registered. Both 6.2 models offer low through max plus Codex `ultra`; neither allows `none` or `minimal`.
 - **Prompt shape:** include Goal, Context, Constraints, Completion Criteria, exact files, allowed edits, validation commands, and done criteria.
 - **Authorization boundary:** state what may be changed, which destructive actions are forbidden or require confirmation, and what must remain untouched. GPT-5.6 system-card evaluations found a greater tendency than GPT-5.5 to go beyond user intent.
 - **Verification:** name deterministic checks in the prompt and inspect the actual artifacts. A completion claim is not proof, especially after tool failures.
 - **Reasoning control:** use the cheapest effort that can notice failure; raise effort only when the task needs it.
 - **Gotcha:** do not omit validation criteria. Codex becomes much more reliable when it can prove its own work.
+
+The generated facts below describe API limits; Codex client efforts, defaults, and windows are described above or in the full reference.
+
 <!-- MODEL-FACTS:codex START (generated from docs/agents/model-facts/families/codex; edit facts.json, not this block) -->
-- **Models:** `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`
+- **Models:** `gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-luna`
 - **Context:** 1,050,000 tokens, output 128,000.
-- **Effort:** `gpt-6-astra`: low, medium, high, xhigh, max, cannot be disabled; `gpt-6.1-sol`: low, medium, high, xhigh, max (default medium), cannot be disabled; `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`: none, low, medium, high, xhigh, max (default medium).
-- **Effort on other values:** `gpt-6-astra`: other values are rejected.
-- **Facts checked:** 2026-10-07. Sources: `docs/agents/model-facts/families/codex/FACTS.md`.
+- **Effort:** `gpt-6.2-astra`, `gpt-6.2-sol`: low, medium, high, xhigh, max, cannot be disabled; `gpt-6.1-terra`, `gpt-6-luna`: none, low, medium, high, xhigh, max (default medium).
+- **Effort on other values:** `gpt-6.2-astra`, `gpt-6.2-sol`: other values are rejected.
+- **Facts checked:** 2026-11-17. Sources: `docs/agents/model-facts/families/codex/FACTS.md`.
 <!-- MODEL-FACTS:codex END -->
 - Full reference: `references/model-prompting.md#openai-gpt-6-through-codex`
 
@@ -854,7 +857,7 @@ For a non-Claude-native write task (any registered external harness) that must n
 | `pitwall:kimi-shim` -> Kimi | configured Kimi default | override with `-m`/`--model` |
 | `pitwall:opencode-shim` -> GLM | `zai-coding-plan/glm-5.3` | routes listed by `opencode models` |
 | `pitwall:opencode-shim` -> MiniMax | `minimax-coding-plan/MiniMax-M3.1-Flash-Preview` | routes listed by `opencode models`; stall policy applies |
-| `pitwall:codex-shim` -> GPT | Codex CLI default | GPT-6 Astra: `gpt-6-astra`; Sol: `gpt-6.1-sol`; Luna: `gpt-6-luna` |
+| `pitwall:codex-shim` -> GPT | Codex CLI default | GPT-6.2 Astra: `gpt-6.2-astra`; Sol: `gpt-6.2-sol`; Terra: `gpt-6.1-terra`; Luna: `gpt-6-luna` |
 | `pitwall:grok-shim` -> Grok | `grok-4.7` | override with `-m`/`--model`; effort is `low`, `medium`, `high`, or `xhigh` |
 | `pitwall:qwen-shim` -> Qwen | configured Qwen Code default (`QWEN_MODEL` / `~/.qwen/settings.json`) | override with `-m`/`--model`; no per-invocation effort flag |
 | `pitwall:agy-shim` -> Gemini | `gemini-3.8-flash` at medium effort | `--model` base ID plus `--effort low|medium|high`; never route Claude slugs through agy on this host |
@@ -1060,8 +1063,8 @@ Exit codes a dispatch reports (the last line is always `SHIM-DONE exit=<n>`):
 The Codex CLI owns available model strings and effort flags. Typical forms:
 
 ```bash
-~/.claude/scripts/codex-shim.sh /tmp/task.md -m gpt-6.1-sol -c model_reasoning_effort=low
-~/.claude/scripts/codex-shim.sh /tmp/task.md --model=gpt-6-astra
+~/.claude/scripts/codex-shim.sh /tmp/task.md -m gpt-6.2-sol -c model_reasoning_effort=low
+~/.claude/scripts/codex-shim.sh /tmp/task.md --model=gpt-6.2-astra
 ~/.claude/scripts/codex-shim.sh /tmp/task.md -m gpt-6-luna
 ~/.claude/scripts/codex-shim.sh /tmp/task.md -c model_reasoning_effort=medium
 ```

@@ -136,6 +136,20 @@ statuses (`pitwall.agents.usage.serve`).
 
 ## Model facts
 
+The Codex facts register GPT-6.2 Astra/Sol and GPT-6.1 Terra. Model-level API efforts and
+route-level Codex efforts are separate: 6.2 routes accept `low` through `max` plus the
+client's `ultra` delegation setting, and reject `none`/`minimal`. Terra's API supports `none`,
+while its Codex route follows the catalog's `low` through `ultra` choices.
+The Codex adapter declares the same harness effort list for workflow support
+(`src/pitwall/agents/harnesses/codex.py:CodexAdapter.effort_values`).
+Sanitized Codex 0.169.0 catalog evidence is stored in
+`docs/agents/model-facts/families/codex/runtime-models.json`; its client windows and defaults
+are distinguished from API limits. Earlier model entries remain for saved profiles; the
+Codex default still comes from the operator's configuration. GPT-6 Cyber is recorded without
+a registered route because its model page requires Daybreak Red approval
+(`docs/agents/model-facts/families/codex/facts.json`, model `gpt-6-cyber`;
+`src/pitwall/agents/resources/config/harness-registry.json`, `harnesses.codex`).
+
 `docs/agents/model-facts/` records what vendors, harnesses, hosts, and released model
 files state about each model family, with a source for every claim. Each unit lists its sources
 with an observed and a reviewed hash; a source is pending when they differ, and a page type that

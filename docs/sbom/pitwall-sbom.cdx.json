@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:e60b25f5-04a8-4b7c-b0e0-9dca475cc018",
+  "serialNumber": "urn:uuid:3ccdcc3e-7f37-451d-98b6-9b5d63daa3ae",
   "metadata": {
-    "timestamp": "2026-10-23T23:15:20.475036355Z",
+    "timestamp": "2026-11-18T03:39:08.450238805Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -221,10 +221,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "dnspython-27@2.9.0",
+      "bom-ref": "dnspython-27@2.9.2",
       "name": "dnspython",
-      "version": "2.9.0",
-      "purl": "pkg:pypi/dnspython@2.9.0"
+      "version": "2.9.2",
+      "purl": "pkg:pypi/dnspython@2.9.2"
     },
     {
       "type": "library",
@@ -457,10 +457,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "opentelemetry-api-59@1.45.1",
+      "bom-ref": "opentelemetry-api-59@1.45.2",
       "name": "opentelemetry-api",
-      "version": "1.45.1",
-      "purl": "pkg:pypi/opentelemetry-api@1.45.1"
+      "version": "1.45.2",
+      "purl": "pkg:pypi/opentelemetry-api@1.45.2"
     },
     {
       "type": "library",
@@ -499,17 +499,17 @@
     },
     {
       "type": "library",
-      "bom-ref": "opentelemetry-sdk-65@1.45.1",
+      "bom-ref": "opentelemetry-sdk-65@1.45.2",
       "name": "opentelemetry-sdk",
-      "version": "1.45.1",
-      "purl": "pkg:pypi/opentelemetry-sdk@1.45.1"
+      "version": "1.45.2",
+      "purl": "pkg:pypi/opentelemetry-sdk@1.45.2"
     },
     {
       "type": "library",
-      "bom-ref": "opentelemetry-semantic-conventions-66@0.66b1",
+      "bom-ref": "opentelemetry-semantic-conventions-66@0.66b2",
       "name": "opentelemetry-semantic-conventions",
-      "version": "0.66b1",
-      "purl": "pkg:pypi/opentelemetry-semantic-conventions@0.66b1"
+      "version": "0.66b2",
+      "purl": "pkg:pypi/opentelemetry-semantic-conventions@0.66b2"
     },
     {
       "type": "library",
@@ -1059,12 +1059,12 @@
       "ref": "detect-installer-26@0.2.1"
     },
     {
-      "ref": "dnspython-27@2.9.0"
+      "ref": "dnspython-27@2.9.2"
     },
     {
       "ref": "email-validator-28@2.3.0",
       "dependsOn": [
-        "dnspython-27@2.9.0",
+        "dnspython-27@2.9.2",
         "idna-43@3.20"
       ]
     },
@@ -1077,9 +1077,9 @@
         "httpx-40@0.28.1",
         "itsdangerous-46@2.2.0",
         "jinja2-47@3.1.6",
-        "opentelemetry-api-59@1.45.1",
+        "opentelemetry-api-59@1.45.2",
         "opentelemetry-exporter-otlp-proto-http-63@1.45.1",
-        "opentelemetry-sdk-65@1.45.1",
+        "opentelemetry-sdk-65@1.45.2",
         "pydantic-79@2.14.0",
         "pydantic-extra-types-81@2.11.1",
         "pydantic-settings-82@2.15.0",
@@ -1232,7 +1232,7 @@
         "httpx2-41@2.13.1",
         "jsonschema-49@4.26.0",
         "mcp-types-55@2.3.0",
-        "opentelemetry-api-59@1.45.1",
+        "opentelemetry-api-59@1.45.2",
         "pydantic-79@2.14.0",
         "pyjwt-84@2.15.1",
         "python-multipart-88@0.0.32",
@@ -1264,7 +1264,7 @@
       "ref": "multidict-58@6.9.1"
     },
     {
-      "ref": "opentelemetry-api-59@1.45.1",
+      "ref": "opentelemetry-api-59@1.45.2",
       "dependsOn": [
         "typing-extensions-113@4.16.0"
       ]
@@ -1272,14 +1272,14 @@
     {
       "ref": "opentelemetry-exporter-http-transport-60@0.66b1",
       "dependsOn": [
-        "opentelemetry-api-59@1.45.1",
+        "opentelemetry-api-59@1.45.2",
         "requests-94@2.34.2"
       ]
     },
     {
       "ref": "opentelemetry-exporter-otlp-common-61@0.66b1",
       "dependsOn": [
-        "opentelemetry-sdk-65@1.45.1"
+        "opentelemetry-sdk-65@1.45.2"
       ]
     },
     {
@@ -1292,12 +1292,12 @@
       "ref": "opentelemetry-exporter-otlp-proto-http-63@1.45.1",
       "dependsOn": [
         "googleapis-common-protos-34@1.75.5",
-        "opentelemetry-api-59@1.45.1",
+        "opentelemetry-api-59@1.45.2",
         "opentelemetry-exporter-http-transport-60@0.66b1",
         "opentelemetry-exporter-otlp-common-61@0.66b1",
         "opentelemetry-exporter-otlp-proto-common-62@1.45.1",
         "opentelemetry-proto-64@1.45.1",
-        "opentelemetry-sdk-65@1.45.1",
+        "opentelemetry-sdk-65@1.45.2",
         "requests-94@2.34.2",
         "typing-extensions-113@4.16.0"
       ]
@@ -1309,17 +1309,17 @@
       ]
     },
     {
-      "ref": "opentelemetry-sdk-65@1.45.1",
+      "ref": "opentelemetry-sdk-65@1.45.2",
       "dependsOn": [
-        "opentelemetry-api-59@1.45.1",
-        "opentelemetry-semantic-conventions-66@0.66b1",
+        "opentelemetry-api-59@1.45.2",
+        "opentelemetry-semantic-conventions-66@0.66b2",
         "typing-extensions-113@4.16.0"
       ]
     },
     {
-      "ref": "opentelemetry-semantic-conventions-66@0.66b1",
+      "ref": "opentelemetry-semantic-conventions-66@0.66b2",
       "dependsOn": [
-        "opentelemetry-api-59@1.45.1",
+        "opentelemetry-api-59@1.45.2",
         "typing-extensions-113@4.16.0"
       ]
     },

@@ -135,10 +135,10 @@ class RoutesConfigTests(unittest.TestCase):
                 {"pro": {"model": "gemini-3.1-pro", "effort": "medium"}},
                 "low, high",
             ),
-            "route value not for harness": (
+            "legacy model does not acquire ultra": (
                 {},
                 {"sol": {"model": "gpt-5.6-sol", "effort": "ultra"}},
-                "none, minimal, low, medium, high, xhigh, max",
+                "none, low, medium, high, xhigh, max",
             ),
             "route effort on none harness": (
                 {},
@@ -163,7 +163,7 @@ class RoutesConfigTests(unittest.TestCase):
             (
                 "config",
                 "model_reasoning_effort",
-                ("none", "minimal", "low", "medium", "high", "xhigh", "max"),
+                ("none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"),
             ),
             profiles.effort_spec(self.registry, "codex"),
         )
@@ -578,6 +578,38 @@ class RouteResolutionTests(unittest.TestCase):
         muse = self.resolve("muse-spark-1.2")
         self.assertEqual(("muse", "muse-spark-1.2"), (muse.harness, muse.model))
         self.assertEqual(("/tmp/p.md", "--model", "muse-spark-1.2"), muse.argv)
+
+    def test_gpt_62_routes_resolve_and_forward_supported_codex_efforts(self) -> None:
+        for model in ("gpt-6.2-astra", "gpt-6.2-sol"):
+            with self.subTest(model=model):
+                route = self.resolve(model)
+                self.assertEqual(("codex", model), (route.harness, route.model))
+                self.assertEqual(("/tmp/p.md", "-m", model), route.argv)
+                self.assertEqual(("codex",), route.native_to)
+            for effort in ("low", "medium", "high", "xhigh", "max", "ultra"):
+                with self.subTest(model=model, effort=effort):
+                    data = {"models": {"new": {"model": model, "effort": effort}}}
+                    route = self.resolve("new", data=data)
+                    self.assertEqual(effort, route.effort)
+                    self.assertEqual(
+                        ("/tmp/p.md", "-m", model, "-c", f"model_reasoning_effort={effort}"),
+                        route.argv,
+                    )
+
+    def test_gpt_62_rejects_nonreasoning_efforts_without_changing_luna(self) -> None:
+        for model in ("gpt-6.2-astra", "gpt-6.2-sol"):
+            for effort in ("none", "minimal"):
+                with self.subTest(model=model, effort=effort):
+                    data = {"models": {"new": {"model": model, "effort": effort}}}
+                    with self.assertRaises(profiles.ProfilesError):
+                        self.resolve("new", data=data)
+        luna = self.resolve(
+            "fast", data={"models": {"fast": {"model": "gpt-6-luna", "effort": "none"}}}
+        )
+        self.assertEqual("none", luna.effort)
+        terra = self.resolve("gpt-6.1-terra")
+        self.assertEqual(("codex", "gpt-6.1-terra"), (terra.harness, terra.model))
+        self.assertNotIn("gpt-6-cyber", self.registry["harnesses"]["codex"]["models"])
 
     def test_route_family_models_pass_through_to_their_vendor_harness(self) -> None:
         # An unregistered id claimed by a harness's routeFamilies patterns (e.g. an effort-suffixed

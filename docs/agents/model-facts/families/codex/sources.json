@@ -9,10 +9,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:f2538d02c75330e119c07bf453b872c6195c8a3569df2721566a43abda5aff4e",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:f2538d02c75330e119c07bf453b872c6195c8a3569df2721566a43abda5aff4e",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:49f95987a3128286cc12ef77ecd8481b46c86a45cdf0cb3700256a18318843d9",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:49f95987a3128286cc12ef77ecd8481b46c86a45cdf0cb3700256a18318843d9",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-gpt-5-6-guide",
@@ -33,10 +33,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:fcd21f918d5198a6bd6357fd61d74aebd99e16de0b98610e42c91454dc7460be",
-      "observedAt": "2026-09-28",
-      "reviewedHash": "sha256:fcd21f918d5198a6bd6357fd61d74aebd99e16de0b98610e42c91454dc7460be",
-      "reviewedAt": "2026-09-28"
+      "observedHash": "sha256:ef480ada15c5f4a21a9fe5fc78f85e24f3c39ca7d464f7a611cd099a092e3838",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:ef480ada15c5f4a21a9fe5fc78f85e24f3c39ca7d464f7a611cd099a092e3838",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-models",
@@ -45,10 +45,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:150ad20e855e44ccb861e945a1d55ecc9746d615205810160b5790bad2d02344",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:150ad20e855e44ccb861e945a1d55ecc9746d615205810160b5790bad2d02344",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:c9d3616bd43cdc89b7f0794cc26a1c8e02645190e0077a4f99173b904da5b399",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:c9d3616bd43cdc89b7f0794cc26a1c8e02645190e0077a4f99173b904da5b399",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-reasoning",
@@ -57,10 +57,10 @@
       "pageType": "effort",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:57cf377b76535be3e9b5b52980e051adb92e52568d9c4c6d520742c4626b101c",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:57cf377b76535be3e9b5b52980e051adb92e52568d9c4c6d520742c4626b101c",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:72c3ee120c6cfd175fb2953f7aa9287d2a4dd3fdcedf7d0153f1c711fd1e4bb4",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:72c3ee120c6cfd175fb2953f7aa9287d2a4dd3fdcedf7d0153f1c711fd1e4bb4",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-changelog",
@@ -69,10 +69,10 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:46dad3dc35997531c82e28b88f6df29419002ff90ef46afdfd172a266f10c5d9",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:46dad3dc35997531c82e28b88f6df29419002ff90ef46afdfd172a266f10c5d9",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:aec13a8829d2ebc6442e2523f0279d19bfcb4430d69983d47907e6f0fcfe65d9",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:aec13a8829d2ebc6442e2523f0279d19bfcb4430d69983d47907e6f0fcfe65d9",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-deprecations",
@@ -81,10 +81,10 @@
       "pageType": "changes",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:d09021b8d2a3fbb5b8cc9954944861f013f6e91fa7706f73ce01baa4251b5f29",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:d09021b8d2a3fbb5b8cc9954944861f013f6e91fa7706f73ce01baa4251b5f29",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:6396f9ad9b6ae5e9d8a201395169db93f0f1d232252d40e8e93823cc1381f94a",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:6396f9ad9b6ae5e9d8a201395169db93f0f1d232252d40e8e93823cc1381f94a",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "codex-models",
@@ -93,10 +93,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:51d6050304e7444cae3ac87e788d14e1c6f72685e4bff3aebff19384d5d1da10",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:51d6050304e7444cae3ac87e788d14e1c6f72685e4bff3aebff19384d5d1da10",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:db88c5b08371b990b731b8490b1be75bfd632daf7a7ce571df61816d0c98e7b5",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:db88c5b08371b990b731b8490b1be75bfd632daf7a7ce571df61816d0c98e7b5",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-5-6-sol",
@@ -105,10 +105,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:5afb8d587e02be517ecf973aeb941cddc8c90cf834037ddc23fb9f74f95296e8",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:5afb8d587e02be517ecf973aeb941cddc8c90cf834037ddc23fb9f74f95296e8",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:c0c7f9a635a572335cfe0ba4ea9b920d9b3d2b40aa1ba9f31f3adff203834637",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:c0c7f9a635a572335cfe0ba4ea9b920d9b3d2b40aa1ba9f31f3adff203834637",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-5-6-terra",
@@ -117,10 +117,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:fc7b41226f0ae27528801ec7b5be2a6bc67606ed9b74171471ecc53fea16ea17",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:fc7b41226f0ae27528801ec7b5be2a6bc67606ed9b74171471ecc53fea16ea17",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:77a5b6c2fcf0b921354158199e2a76f6e90abf895e09c6d30fdc9dc6b56c3702",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:77a5b6c2fcf0b921354158199e2a76f6e90abf895e09c6d30fdc9dc6b56c3702",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-5-6-luna",
@@ -129,10 +129,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:bf9fdb1c3b6466c37fb856e5f8e5973ff088164b6c7792d3fb15e0d9927bd781",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:bf9fdb1c3b6466c37fb856e5f8e5973ff088164b6c7792d3fb15e0d9927bd781",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:0851edda7f1a257348c2f307fba721df9f6b7963fe6b0b4b1052fb6df3893979",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:0851edda7f1a257348c2f307fba721df9f6b7963fe6b0b4b1052fb6df3893979",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-6-astra",
@@ -141,10 +141,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:b7c19b3bb89e87a392a0f3f8b732c5e7c9f0bf558cbe3022c491575a947fcef8",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:b7c19b3bb89e87a392a0f3f8b732c5e7c9f0bf558cbe3022c491575a947fcef8",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:31d55873985379d2b4e129fd41f974e8511b9de1a5105dc4e0692b53b504a8cb",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:31d55873985379d2b4e129fd41f974e8511b9de1a5105dc4e0692b53b504a8cb",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-6-sol",
@@ -153,10 +153,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:ae565284e1285009ee1758919e8b627944419986ff74bc8a9959700b2c555448",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:ae565284e1285009ee1758919e8b627944419986ff74bc8a9959700b2c555448",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:8e3cd3378f0686313dd489ed37347d481d24d4b791e7bd28b1538c4df7762fc4",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:8e3cd3378f0686313dd489ed37347d481d24d4b791e7bd28b1538c4df7762fc4",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-6-luna",
@@ -165,10 +165,10 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:efb95e473a811ad36452a8b5f560e820b8b03bde18a9a462ba3b18348630d87f",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:efb95e473a811ad36452a8b5f560e820b8b03bde18a9a462ba3b18348630d87f",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:dacc9870e67c0d68e4272f8394d4296ffe7cf70f18d3f4675ee6bd4c666966b7",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:dacc9870e67c0d68e4272f8394d4296ffe7cf70f18d3f4675ee6bd4c666966b7",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-gpt-6-astra-guide",
@@ -177,10 +177,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:f2538d02c75330e119c07bf453b872c6195c8a3569df2721566a43abda5aff4e",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:f2538d02c75330e119c07bf453b872c6195c8a3569df2721566a43abda5aff4e",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:4b7711aeff38e865e8fef318dc6cab583e3f4d8ddf2e83acdc0161e88634ef80",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:4b7711aeff38e865e8fef318dc6cab583e3f4d8ddf2e83acdc0161e88634ef80",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-prompt-engineering",
@@ -189,10 +189,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:7d9614d56318025e0febad0a861878dc1e589834f594a17f44f78d906ed724fb",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:7d9614d56318025e0febad0a861878dc1e589834f594a17f44f78d906ed724fb",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:81b514b52e26b6e89c8aca58307465f2377905ee5eae61036f86c1e92068bf31",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:81b514b52e26b6e89c8aca58307465f2377905ee5eae61036f86c1e92068bf31",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-prompt-caching",
@@ -201,10 +201,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:b5184980252ff65ad921af0bfd36a5ee0f2d2aa6748f1809620a576b7fbbddee",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:b5184980252ff65ad921af0bfd36a5ee0f2d2aa6748f1809620a576b7fbbddee",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:c4b1c5466916ded70e75699b044a2ceaf2fa0c83c835e3712fc3e3a370c61821",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:c4b1c5466916ded70e75699b044a2ceaf2fa0c83c835e3712fc3e3a370c61821",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-steering",
@@ -213,10 +213,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:502e3cb433df70d6adcc98e1e54b0be6a4c806b46d9a8a5b01982830eb13438f",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:502e3cb433df70d6adcc98e1e54b0be6a4c806b46d9a8a5b01982830eb13438f",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:e723b1967c493767a2e44d97359f379840c1757aef77f42bce689bf01e323e11",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:e723b1967c493767a2e44d97359f379840c1757aef77f42bce689bf01e323e11",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-async-tool-calling",
@@ -225,10 +225,10 @@
       "pageType": "guidance",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:b2cf79819e4038c48703c7a581f94fa8cd02ec7f0386c45166d739b13d9f5865",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:b2cf79819e4038c48703c7a581f94fa8cd02ec7f0386c45166d739b13d9f5865",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:e6dd504adfb7050a3665eb32b3dbc53047a39b302dada489a54add596f1d1373",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:e6dd504adfb7050a3665eb32b3dbc53047a39b302dada489a54add596f1d1373",
+      "reviewedAt": "2026-11-17"
     },
     {
       "id": "openai-model-gpt-6-1-sol",
@@ -237,10 +237,106 @@
       "pageType": "model",
       "fetch": "http",
       "format": "markdown",
-      "observedHash": "sha256:1d9758e64a86c1f5445a2bbee51e20132400fe80b71a41c4ec2e3a8a42caeb74",
-      "observedAt": "2026-10-07",
-      "reviewedHash": "sha256:1d9758e64a86c1f5445a2bbee51e20132400fe80b71a41c4ec2e3a8a42caeb74",
-      "reviewedAt": "2026-10-07"
+      "observedHash": "sha256:02dff9ef937bbc97fb24ba7c936269a549563cfb8a49b91a6ba1c1575d2b77c0",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:02dff9ef937bbc97fb24ba7c936269a549563cfb8a49b91a6ba1c1575d2b77c0",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "openai-model-gpt-6-2-astra",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6.2-astra.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:89611cfc6a48262e6e73d2bca8e9aed9c6694b9ae2955a12d16f0d949081d639",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:89611cfc6a48262e6e73d2bca8e9aed9c6694b9ae2955a12d16f0d949081d639",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "openai-model-gpt-6-2-sol",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6.2-sol.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3c1aa626387fc854be2560f16620f0c913f4a2aa97e8208d4239efd3279fe913",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:3c1aa626387fc854be2560f16620f0c913f4a2aa97e8208d4239efd3279fe913",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "openai-model-gpt-6-1-terra",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6.1-terra.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:b7db94c4ba947e82ef8cf72df3e4fec7212f085bce310557085f048b7314bce6",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:b7db94c4ba947e82ef8cf72df3e4fec7212f085bce310557085f048b7314bce6",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "openai-model-gpt-6-cyber",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-cyber.md",
+      "kind": "vendor",
+      "pageType": "model",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:4ef808a763bda3cc7b65ed7cd9cd247deb34fcd5f27e9b03a82bf75b0f9d3553",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:4ef808a763bda3cc7b65ed7cd9cd247deb34fcd5f27e9b03a82bf75b0f9d3553",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "openai-gpt-6-2-guide",
+      "url": "https://developers.openai.com/api/docs/guides/latest-model/gpt-6.2-astra.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:49f95987a3128286cc12ef77ecd8481b46c86a45cdf0cb3700256a18318843d9",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:49f95987a3128286cc12ef77ecd8481b46c86a45cdf0cb3700256a18318843d9",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "openai-keep-prefix",
+      "url": "https://developers.openai.com/api/docs/guides/keep-prefix-unchanged.md",
+      "kind": "vendor",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3d9ab660691efabe19af5acfc1148dde2897b8931bcfac200ec2561d8c17bef6",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:3d9ab660691efabe19af5acfc1148dde2897b8931bcfac200ec2561d8c17bef6",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "codex-gpt-6-2-prompting",
+      "url": "https://learn.chatgpt.com/guides/prompting-gpt-6-2-astra.md",
+      "kind": "harness",
+      "pageType": "guidance",
+      "fetch": "http",
+      "format": "markdown",
+      "observedHash": "sha256:3bbd7399a7f19a66e82c2ef0736b43e8e56c1a9317d819af6c4dc3333eeccff5",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:3bbd7399a7f19a66e82c2ef0736b43e8e56c1a9317d819af6c4dc3333eeccff5",
+      "reviewedAt": "2026-11-17"
+    },
+    {
+      "id": "codex-runtime-models",
+      "url": "https://chatgpt.com/backend-api/codex/models?client_version=0.169.0",
+      "kind": "harness",
+      "pageType": "effort",
+      "fetch": "manual",
+      "format": "json",
+      "observedHash": "sha256:226c2a6cdb04fc559d6eb4b8148beb6468376456419ecabc149a9d9fcacfabf8",
+      "observedAt": "2026-11-17",
+      "reviewedHash": "sha256:226c2a6cdb04fc559d6eb4b8148beb6468376456419ecabc149a9d9fcacfabf8",
+      "reviewedAt": "2026-11-17"
     }
   ],
   "notPublished": [],

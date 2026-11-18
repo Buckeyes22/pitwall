@@ -13,7 +13,7 @@ pitwall agents profiles add glimmer --model meta-models/Muse-Glimmer-30B --base-
 pitwall agents profiles list
 route-shim.sh glimmer prompt.md            # default harness for an endpoint entry (qwen)
 route-shim.sh glimmer@opencode prompt.md   # override the harness (after profiles sync)
-route-shim.sh gpt-6.1-sol prompt.md        # any registry model id works without an entry
+route-shim.sh gpt-6.2-sol prompt.md        # any registry model id works without an entry
 ```
 
 `route-shim.sh <name>[@harness] <prompt-source> [--routing-*] [harness flags]` is the profile entrypoint over the fifteen harnesses. It resolves the profile, prints one stderr line (`route-shim: glimmer -> qwen meta-models/Muse-Glimmer-30B (endpoint gpu-1:8000)`), and hands off to the same dispatch path the provider shims use, so the `SHIM-DONE` sentinel, `SHIM_RESULT` receipts, run records, timeouts, worktrees, and lifecycle hooks all apply unchanged.
@@ -68,7 +68,7 @@ harness = "opencode"
 seat = "default-author"
 
 [agents.profiles.models.sol]
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 args = ["-c", "model_reasoning_effort=high"]
 seat = "critical"
 ```
@@ -150,7 +150,7 @@ effort = "low"
 args = ["--sandbox"]
 
 [agents.profiles.models.sol]
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 seat = "critical"
 
 [agents.profiles.models.fast]

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- GPT-6.2 Astra and Sol are registered Codex routes, with sourced model facts and current
+  prompting guidance. Both routes accept low through max plus Codex's ultra setting and
+  reject none/minimal. GPT-6.1 Terra is also registered; GPT-6 Cyber's restricted availability
+  is recorded without registering a Codex route. Examples select 6.2 Sol, earlier model IDs
+  remain usable, and dispatches without a selector keep the operator's configured default.
+
 - The opt-in orchestrator MCP tool `project_control` (`PITWALL_AGENTS_PROJECT_CONTROL=1`) dispatches,
   observes and answers by durable caller key, with per-controller epoch fencing so a lost reply never
   relaunches work. See `docs/agents/architecture.md`.
@@ -66,6 +72,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   listing them; the `agy` sandbox default no longer cites the Antigravity app's preset table.
 
 ### Fixed
+
+- Locked dnspython 2.9.2 and OpenTelemetry API/SDK 1.45.2 close CVE-2026-128089 and
+  CVE-2026-126360. The dependency audit and SBOM include the patched versions.
 
 - A Pi dispatch whose every provider attempt failed (Pi still exits 0) now reports exit 77
   with Pi's error instead of an empty success. Dispatch reads the raw JSON stream of JSON-mode

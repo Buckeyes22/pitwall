@@ -20,5 +20,5 @@ model = "zai-coding-plan/glm-5.3"
 seat = "default-author"
 
 [agents.profiles.models.sol]
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 seat = "critical"

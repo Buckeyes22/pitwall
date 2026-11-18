@@ -4,8 +4,8 @@ description: >-
   Transports a single shell command (invoking ~/.claude/scripts/codex-shim.sh)
   and returns stdout verbatim. The ONLY sanctioned GPT/codex path. Dispatches a
   one-shot prompt to the codex CLI (model default is whatever ~/.codex/config.toml
-  sets; override per-invocation with -m, e.g. -m gpt-6.1-sol,
-  -m gpt-6-luna, or -m gpt-6-astra). Example roster
+  sets; override per-invocation with -m, e.g. -m gpt-6.2-sol,
+  -m gpt-6-luna, or -m gpt-6.2-astra). Example roster
   (seed): GPT-6 family for deep reasoning, second-opinion analyses, and
   critical implementations. The standalone shim accepts a real prompt file or
   stdin (-); do NOT use this for Kimi Code, GLM, MiniMax, or other external-provider

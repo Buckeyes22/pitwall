@@ -37,6 +37,12 @@ table rows in a different order on each request.
 
 Fetched text is kept in `.cache/`, which git ignores. It is never committed.
 
+The Codex family also keeps `families/codex/runtime-models.json`, a reviewed snapshot of selected
+public model fields from Codex 0.169.0's local model catalog. It contains no account configuration
+or credentials. Its manual source records the catalog endpoint and review hash; the snapshot
+distinguishes client defaults, context windows, and `ultra` from API model facts. Refresh it from
+model metadata when reviewing a newer client, rather than inferring CLI support from API limits.
+
 ## Facts
 
 `facts.json` holds facts from a closed list of keys and short guidance statements. Every fact
