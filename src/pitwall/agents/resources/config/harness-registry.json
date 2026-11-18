@@ -55,7 +55,8 @@
           "medium",
           "high",
           "xhigh",
-          "max"
+          "max",
+          "ultra"
         ]
       },
       "capabilities": {
@@ -153,6 +154,54 @@
             "high",
             "xhigh",
             "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-6.2-astra": {
+          "displayName": "GPT-6.2 Astra",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-6.2-sol": {
+          "displayName": "GPT-6.2 Sol",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "provenance": "model-facts:families/codex"
+        },
+        "gpt-6.1-terra": {
+          "displayName": "GPT-6.1 Terra",
+          "aliases": [],
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
           ],
           "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
           "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex",

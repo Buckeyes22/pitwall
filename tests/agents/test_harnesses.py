@@ -71,7 +71,8 @@ class HarnessInventoryTests(unittest.TestCase):
         self.assertIsNone(rows["pi"].version)
         self.assertEqual("--effort low|medium|high", rows["agy"].effort)
         self.assertEqual(
-            "-c model_reasoning_effort=none|minimal|low|medium|high|xhigh|max", rows["codex"].effort
+            "-c model_reasoning_effort=none|minimal|low|medium|high|xhigh|max|ultra",
+            rows["codex"].effort,
         )
         self.assertEqual("-", rows["kimi"].effort)
         self.assertEqual("--variant <harness-defined>", rows["opencode"].effort)

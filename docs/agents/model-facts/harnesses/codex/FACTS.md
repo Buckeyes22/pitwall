@@ -39,9 +39,9 @@ None.
 
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
-| codex-non-interactive | harness | harness | 2026-09-28 | <https://learn.chatgpt.com/docs/non-interactive-mode.md> |
-| codex-sandboxing | harness | harness | 2026-09-28 | <https://learn.chatgpt.com/docs/sandboxing.md> |
-| codex-permissions | harness | harness | 2026-09-28 | <https://learn.chatgpt.com/docs/permission-modes.md> |
+| codex-non-interactive | harness | harness | 2026-11-17 | <https://learn.chatgpt.com/docs/non-interactive-mode.md> |
+| codex-sandboxing | harness | harness | 2026-11-17 | <https://learn.chatgpt.com/docs/sandboxing.md> |
+| codex-permissions | harness | harness | 2026-11-17 | <https://learn.chatgpt.com/docs/permission-modes.md> |
 | codex-agents-md | harness | harness | 2026-09-28 | <https://learn.chatgpt.com/docs/agent-configuration/agents-md.md> |
-| codex-subagents | harness | harness | 2026-09-28 | <https://learn.chatgpt.com/docs/agent-configuration/subagents.md> |
-| codex-config-reference | harness | harness | 2026-09-28 | <https://learn.chatgpt.com/docs/config-file/config-reference.md> |
+| codex-subagents | harness | harness | 2026-11-17 | <https://learn.chatgpt.com/docs/agent-configuration/subagents.md> |
+| codex-config-reference | harness | harness | 2026-11-17 | <https://learn.chatgpt.com/docs/config-file/config-reference.md> |

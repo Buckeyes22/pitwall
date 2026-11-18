@@ -25,6 +25,7 @@ class CodexAdapter(HarnessAdapter):
         "high",
         "xhigh",
         "max",
+        "ultra",
     )
     prompt_delivery = "stdin"
     binary_override_env = "CODEX_BIN"

@@ -1,0 +1,46 @@
+{
+  "clientVersion": "0.169.0",
+  "observedAt": "2026-11-18T01:49:13.695735645Z",
+  "source": "Codex models_cache.json; selected public model metadata only",
+  "models": [
+    {
+      "id": "gpt-6.2-sol",
+      "defaultEffort": "low",
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ],
+      "contextWindow": 500000
+    },
+    {
+      "id": "gpt-6.2-astra",
+      "defaultEffort": "low",
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ],
+      "contextWindow": 272000
+    },
+    {
+      "id": "gpt-6.1-terra",
+      "defaultEffort": "low",
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ],
+      "contextWindow": 500000
+    }
+  ]
+}

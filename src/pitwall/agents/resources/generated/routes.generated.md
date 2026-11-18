@@ -6,7 +6,7 @@ A host runs its own native harness directly, not through a shim; the plugin for 
 
 | Harness | Shim | Known/default routes | Effort values | Runtime reference |
 |---|---|---|---|---|
-| `codex` | `~/.claude/scripts/codex-shim.sh` | configured Codex default, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-6-astra`, `gpt-6-luna`, `gpt-6.1-sol` | `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max` | [openai-gpt-6-through-codex](model-prompting.md#openai-gpt-6-through-codex) |
+| `codex` | `~/.claude/scripts/codex-shim.sh` | configured Codex default, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-6-astra`, `gpt-6-luna`, `gpt-6.1-sol`, `gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra` | `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, `ultra` | [openai-gpt-6-through-codex](model-prompting.md#openai-gpt-6-through-codex) |
 | `claude` | `~/.claude/scripts/claude-shim.sh` | `sonnet`, `opus`, `fable`, `haiku` | `low`, `medium`, `high`, `xhigh`, `max` | [claude-sonnet-55](model-prompting.md#claude-sonnet-55)<br>[claude-opus-55](model-prompting.md#claude-opus-55)<br>[claude-fable-51](model-prompting.md#claude-fable-51)<br>[claude-haiku-55](model-prompting.md#claude-haiku-55) |
 | `grok` | `~/.claude/scripts/grok-shim.sh` | `grok-4.7` | `low`, `medium`, `high`, `xhigh` | [xai-grok-47-through-grok-build](model-prompting.md#xai-grok-47-through-grok-build) |
 | `kimi` | `~/.claude/scripts/kimi-shim.sh` | configured Kimi default, `kimi-code/k3` | not supported | [kimi](model-prompting.md#kimi) |

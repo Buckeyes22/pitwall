@@ -52,9 +52,9 @@ EXPECTED: dict[str, tuple[str, str | None, list[str]]] = {
     "claude": ("sonnet", "high", [str(PROMPT), "--model", "sonnet", "--effort", "high"]),
     "cline": ("anthropic/x", "low", [str(PROMPT), "--model", "anthropic/x", "--thinking", "low"]),
     "codex": (
-        "gpt-5.6-sol",
-        "high",
-        [str(PROMPT), "-m", "gpt-5.6-sol", "-c", "model_reasoning_effort=high"],
+        "gpt-6.2-sol",
+        "ultra",
+        [str(PROMPT), "-m", "gpt-6.2-sol", "-c", "model_reasoning_effort=ultra"],
     ),
     "dsh": ("deepseek-x", None, [str(PROMPT), "--model", "deepseek-x"]),
     "goose": ("goose-x", None, [str(PROMPT), "--model", "goose-x"]),
@@ -163,7 +163,7 @@ def test_every_harness_is_workflow_capable(harness: str, tmp_path: Path) -> None
     _validate(_body(harness, model, None if harness == "opencode" else effort), tmp_path)
 
 
-@pytest.mark.parametrize("harness", NEW_HARNESSES)
+@pytest.mark.parametrize("harness", (*NEW_HARNESSES, "codex"))
 def test_workflow_runs_with_fake_harness_binaries(harness: str, tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
@@ -191,6 +191,13 @@ def test_workflow_runs_with_fake_harness_binaries(harness: str, tmp_path: Path) 
         "FAKE_ARGS_FILE": str(args_file),
         adapter.binary_override_env: str(fake),
     }
+    if harness == "codex":
+        env["FAKE_STDOUT"] = (
+            json.dumps(
+                {"type": "item.completed", "item": {"type": "agent_message", "text": "done"}}
+            )
+            + "\n"
+        )
     model, effort, _ = EXPECTED[harness]
     task = {
         "route": {"provider": harness, "model": model},
@@ -214,3 +221,5 @@ def test_workflow_runs_with_fake_harness_binaries(harness: str, tmp_path: Path) 
     assert state["tasks"]["second"]["state"] == "succeeded"
     argv = args_file.read_bytes().split(b"\0")
     assert model.encode() in argv
+    if harness == "codex":
+        assert b"model_reasoning_effort=ultra" in argv

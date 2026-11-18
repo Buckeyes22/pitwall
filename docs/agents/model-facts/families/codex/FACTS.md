@@ -6,6 +6,10 @@
 
 | Model | Harness | Host | Model id on the route | Context | Effort | Web search | Batch |
 |---|---|---|---|---|---|---|---|
+| `gpt-6.2-astra` | codex | direct | `gpt-6.2-astra` | 1,050,000 tokens, output 128,000 | low, medium, high, xhigh, max, cannot be disabled |  |  |
+| `gpt-6.2-sol` | codex | direct | `gpt-6.2-sol` | 1,050,000 tokens, output 128,000 | low, medium, high, xhigh, max, cannot be disabled |  |  |
+| `gpt-6.1-terra` | codex | direct | `gpt-6.1-terra` | 1,050,000 tokens, output 128,000 | none, low, medium, high, xhigh, max (default medium) |  |  |
+| `gpt-6-cyber` | codex | direct | `gpt-6-cyber` | 1,050,000 tokens, output 128,000 |  |  |  |
 | `gpt-6-astra` | codex | direct | `gpt-6-astra` | 1,050,000 tokens, output 128,000 | low, medium, high, xhigh, max, cannot be disabled |  |  |
 | `gpt-6.1-sol` | codex | direct | `gpt-6.1-sol` | 1,050,000 tokens, output 128,000 | low, medium, high, xhigh, max (default medium), cannot be disabled |  |  |
 | `gpt-6-sol` | codex | direct | `gpt-6-sol` | 1,050,000 tokens, output 128,000 | none, low, medium, high, xhigh, max (default medium) |  |  |
@@ -25,18 +29,27 @@
 - Stated by vendor (openai-gpt-5-6-prompting, Check work before finishing): Give the model tools to validate its output and say which checks matter, such as targeted tests, type checks, builds, or a rendered screenshot.
 - Stated by vendor (openai-gpt-5-6-prompting, Reasoning effort): Before raising reasoning effort, look for a missing success criterion, dependency rule, tool-routing rule, or verification loop in the prompt.
 - Stated by vendor (openai-gpt-5-6-guide, Pro mode): Pro mode is set with reasoning.mode pro on the same model slug, independent of effort. Use it when quality outweighs latency and tokens; do not ask for it in the prompt.
-- Stated by vendor (openai-gpt-6-guide, Prompting best practices, Initiative and follow-through): GPT-6 Astra asks a focused question when the answer could change the outcome. Say what a request authorizes and to proceed on reasonable assumptions, or it may stop where you expect it to continue.
-- Stated by vendor (openai-gpt-6-guide, Prompting best practices, Instruction following): GPT-6 Astra weighs skills and AGENTS.md closely, and conflicting text can make it pause. Audit those files and state that the user's instructions outrank a skill's.
-- Stated by vendor (openai-gpt-6-guide, Prompting best practices, Subagent delegation): GPT-6 Astra may delegate to subagents less often than a workflow wants. Say when and how much to split work for parallel subagents.
-- Stated by vendor (openai-gpt-6-guide, Migration quickstart, Update API and model parameters, Reasoning effort, Tool calling, Unsupported parameters bullets): With effort above none, omit temperature, top_p and top_logprobs (plus logprobs in Chat Completions, or its include entry in Responses). Tools need Responses; Sol and Luna allow Chat Completions tools only at none.
-- Stated by vendor (openai-gpt-6-guide, GPT-6.1 Sol section; Migration quickstart, Reasoning effort bullet): GPT-6.1 Sol aims for near-Astra results at lower cost; compare it with Astra on your own tasks. It has no none or minimal effort (use low in their place), and tool calls need the Responses API.
-- Stated by vendor (openai-reasoning, Change reasoning mid-conversation): To change effort between turns, add a configuration_update item before the next user message and keep request-level reasoning.effort fixed, which preserves the cached prefix. Single-agent only; no adjacent updates.
+- Stated by vendor (openai-gpt-6-astra-guide, Prompting best practices, Initiative and follow-through): GPT-6 Astra asks a focused question when the answer could change the outcome. Say what a request authorizes and to proceed on reasonable assumptions, or it may stop where you expect it to continue.
+- Stated by vendor (openai-gpt-6-astra-guide, Prompting best practices, Instruction following): GPT-6 Astra weighs skills and AGENTS.md closely, and conflicting text can make it pause. Audit those files and state that the user's instructions outrank a skill's.
+- Stated by vendor (openai-gpt-6-astra-guide, Prompting best practices, Subagent delegation): GPT-6 Astra may delegate to subagents less often than a workflow wants. Say when and how much to split work for parallel subagents.
+- Stated by vendor (openai-gpt-6-astra-guide, Migration quickstart, Update API and model parameters, Reasoning effort, Tool calling, Unsupported parameters bullets): Above none, omit temperature, top_p and log-probability options. Use Responses for tools; only the earlier GPT-6 Sol and Luna accept Chat Completions tools at none.
+- Stated by vendor (openai-gpt-6-astra-guide, GPT-6.1 Sol section; Migration quickstart, Reasoning effort bullet): GPT-6.1 Sol is an earlier lower-cost reasoning option. It has no none or minimal effort (use low in their place), and tool calls need the Responses API.
+- Stated by vendor (openai-reasoning, Change reasoning mid-conversation, preserve updates and compaction compatibility): Append configuration_update to change effort or text.format without rewriting the prefix. Replay updates in order; context_management carries them through automatic compaction. Automatic truncation rejects them.
 - Stated by vendor (openai-async-tool-calling, How async tools work; Compatibility): Set async: true on a function or custom tool and the model keeps working while your app runs it; return the result on the original call_id. Your app runs and tracks the jobs; hosted tools are excluded. Astra and later.
 - Stated by vendor (openai-steering, Send a steering message): A user can add instructions to a running response over the Responses WebSocket with response.steer. The input is queued, then continues in a new response; sent output and started tools are not undone.
-- Stated by vendor (openai-prompt-caching, Cache lifetime; Summary of model differences): From GPT-5.6 on, prompt_cache_options.ttl (only 30m) replaces prompt_cache_retention. Cache writes cost 1.25x input and reads 0.1x (0.05x on GPT-6.1 Sol), and an explicit mode places breakpoints.
+- Stated by vendor (openai-prompt-caching, Cache lifetime; Summary of model differences): Use prompt_cache_options.ttl: 30m writes cost 1.25x input; Responses also offers 12h at 2.5x. Reads cost 0.05x on 6.2 Astra/Sol and 6.1 Sol/Terra, otherwise 0.1x for these models.
 - Stated by vendor (openai-deprecations, 2026-06-03 Reusable prompts table): Reusable prompt objects are deprecated and v1/prompts shuts down on 2026-11-30. Keep prompts in application code and pass instructions and input straight to Responses.
-- Stated by vendor (openai-gpt-6-guide, Prompting best practices, Personality and writing style): Astra leans toward lists, tables, and Markdown, and repeats stock phrases across sessions. State the prose and format your product needs, and ban the specific filler phrases you see, rather than relying on defaults.
-- Stated by vendor (openai-gpt-6-guide, Prompting best practices, Testing and verification): Astra tests thoroughly, which can be more than a small change needs. Say which checks fit the change, and to broaden or repeat them only when something new or failing justifies it.
+- Stated by vendor (openai-gpt-6-astra-guide, Prompting best practices, Personality and writing style): Astra leans toward lists, tables, and Markdown, and repeats stock phrases across sessions. State the prose and format your product needs, and ban the specific filler phrases you see, rather than relying on defaults.
+- Stated by vendor (openai-gpt-6-astra-guide, Prompting best practices, Testing and verification): Astra tests thoroughly, which can be more than a small change needs. Say which checks fit the change, and to broaden or repeat them only when something new or failing justifies it.
+- Stated by harness (codex-models, Recommended models; Configure your default local model): Choose 6.2 Astra for the hardest reasoning and coding, or 6.2 Sol for everyday agents at lower cost. Move examples to the new IDs; keep the operator's Codex-configured default.
+- Stated by vendor (openai-gpt-6-2-guide, Migration quickstart, Update API and model parameters): For a new API integration, start at medium; replace none or minimal with low. Both 6.2 models need Responses for tools; omit sampling and log-probability options.
+- Stated by vendor (openai-gpt-6-2-guide, Task completion): Define the finish line and approval boundaries. Let 6.2 state reversible assumptions, keep working through final checks, and ask only for decisions that materially affect the result.
+- Stated by vendor (openai-gpt-6-2-guide, Writing style): 6.2 Astra is briefer by default: reassess blanket brevity rules. Require final answers to explain the result on their own, without shorthand from tools, reasoning, or progress updates.
+- Stated by vendor (openai-gpt-6-2-guide, Coding style): State project conventions, preserve caller behavior when reusing logic, and favor readable code. Add tests required by the repository or needed for a specific regression.
+- Stated by vendor (openai-keep-prefix, What is a prefix change?; Auditing your integration for prefix changes): 6.2 can discard prior reasoning after history edits, a model downgrade, or a user or organization change. Append changes and inspect input_transformations when diagnosing lost reasoning.
+- Stated by harness (codex-runtime-models, runtime-models.json, models[].effortValues; Codex 0.169.0 cached catalog): Codex 0.169.0 offers low through max plus ultra on both 6.2 models and 6.1 Terra. Ultra enables client delegation; it is not an API effort. runtime-models.json records the reviewed metadata and client defaults.
+- Stated by harness (codex-models, Choose a model, CLI; Recommended models): 6.1 Terra handles visual reasoning, computer use, and writing. Codex CLI needs version 0.159.0 or newer; tool calls require Responses.
+- Stated by vendor (openai-model-gpt-6-cyber, Opening access requirements): GPT-6 Cyber requires Daybreak Red approval. Record its release and limits without offering an ordinary Codex route; its API listing does not establish account access.
 
 ## Disagreements
 
@@ -54,23 +67,31 @@ None recorded.
 
 | Id | Kind | Page type | Reviewed | Link |
 |---|---|---|---|---|
-| openai-gpt-6-guide | vendor | guidance | 2026-10-07 | <https://developers.openai.com/api/docs/guides/latest-model.md> |
+| openai-gpt-6-guide | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/latest-model.md> |
 | openai-gpt-5-6-guide | vendor | guidance | 2026-09-28 | <https://developers.openai.com/api/docs/guides/latest-model/gpt-5.6.md> |
-| openai-gpt-5-6-prompting | vendor | guidance | 2026-09-28 | <https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6.md> |
-| openai-models | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models.md> |
-| openai-reasoning | vendor | effort | 2026-10-07 | <https://developers.openai.com/api/docs/guides/reasoning.md> |
-| openai-changelog | vendor | changes | 2026-10-07 | <https://developers.openai.com/api/docs/changelog.md> |
-| openai-deprecations | vendor | changes | 2026-10-07 | <https://developers.openai.com/api/docs/deprecations.md> |
-| codex-models | harness | model | 2026-10-07 | <https://learn.chatgpt.com/docs/models.md> |
-| openai-model-gpt-5-6-sol | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-5.6-sol.md> |
-| openai-model-gpt-5-6-terra | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-5.6-terra.md> |
-| openai-model-gpt-5-6-luna | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-5.6-luna.md> |
-| openai-model-gpt-6-astra | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-6-astra.md> |
-| openai-model-gpt-6-sol | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-6-sol.md> |
-| openai-model-gpt-6-luna | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-6-luna.md> |
-| openai-gpt-6-astra-guide | vendor | guidance | 2026-10-07 | <https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md> |
-| openai-prompt-engineering | vendor | guidance | 2026-10-07 | <https://developers.openai.com/api/docs/guides/prompt-engineering.md> |
-| openai-prompt-caching | vendor | guidance | 2026-10-07 | <https://developers.openai.com/api/docs/guides/prompt-caching.md> |
-| openai-steering | vendor | guidance | 2026-10-07 | <https://developers.openai.com/api/docs/guides/steering.md> |
-| openai-async-tool-calling | vendor | guidance | 2026-10-07 | <https://developers.openai.com/api/docs/guides/async-tool-calling.md> |
-| openai-model-gpt-6-1-sol | vendor | model | 2026-10-07 | <https://developers.openai.com/api/docs/models/gpt-6.1-sol.md> |
+| openai-gpt-5-6-prompting | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6.md> |
+| openai-models | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models.md> |
+| openai-reasoning | vendor | effort | 2026-11-17 | <https://developers.openai.com/api/docs/guides/reasoning.md> |
+| openai-changelog | vendor | changes | 2026-11-17 | <https://developers.openai.com/api/docs/changelog.md> |
+| openai-deprecations | vendor | changes | 2026-11-17 | <https://developers.openai.com/api/docs/deprecations.md> |
+| codex-models | harness | model | 2026-11-17 | <https://learn.chatgpt.com/docs/models.md> |
+| openai-model-gpt-5-6-sol | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-5.6-sol.md> |
+| openai-model-gpt-5-6-terra | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-5.6-terra.md> |
+| openai-model-gpt-5-6-luna | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-5.6-luna.md> |
+| openai-model-gpt-6-astra | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6-astra.md> |
+| openai-model-gpt-6-sol | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6-sol.md> |
+| openai-model-gpt-6-luna | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6-luna.md> |
+| openai-gpt-6-astra-guide | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md> |
+| openai-prompt-engineering | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/prompt-engineering.md> |
+| openai-prompt-caching | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/prompt-caching.md> |
+| openai-steering | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/steering.md> |
+| openai-async-tool-calling | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/async-tool-calling.md> |
+| openai-model-gpt-6-1-sol | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6.1-sol.md> |
+| openai-model-gpt-6-2-astra | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6.2-astra.md> |
+| openai-model-gpt-6-2-sol | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6.2-sol.md> |
+| openai-model-gpt-6-1-terra | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6.1-terra.md> |
+| openai-model-gpt-6-cyber | vendor | model | 2026-11-17 | <https://developers.openai.com/api/docs/models/gpt-6-cyber.md> |
+| openai-gpt-6-2-guide | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/latest-model/gpt-6.2-astra.md> |
+| openai-keep-prefix | vendor | guidance | 2026-11-17 | <https://developers.openai.com/api/docs/guides/keep-prefix-unchanged.md> |
+| codex-gpt-6-2-prompting | harness | guidance | 2026-11-17 | <https://learn.chatgpt.com/guides/prompting-gpt-6-2-astra.md> |
+| codex-runtime-models | harness | effort | 2026-11-17 | <https://chatgpt.com/backend-api/codex/models?client_version=0.169.0> |

@@ -287,7 +287,8 @@
           "medium",
           "high",
           "xhigh",
-          "max"
+          "max",
+          "ultra"
         ]
       },
       "endpointDelivery": "none",
@@ -387,6 +388,54 @@
             "high",
             "xhigh",
             "max"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "provenance": "model-facts:families/codex",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex"
+        },
+        "gpt-6.1-terra": {
+          "aliases": [],
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "displayName": "GPT-6.1 Terra",
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "provenance": "model-facts:families/codex",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex"
+        },
+        "gpt-6.2-astra": {
+          "aliases": [],
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "displayName": "GPT-6.2 Astra",
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ],
+          "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
+          "provenance": "model-facts:families/codex",
+          "runtimeReference": "references/model-prompting.md#openai-gpt-6-through-codex"
+        },
+        "gpt-6.2-sol": {
+          "aliases": [],
+          "capabilityCard": "plugins/claude/skills/subagent-model-routing/ledger/codex.md",
+          "displayName": "GPT-6.2 Sol",
+          "effortValues": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
           ],
           "promptReference": "docs/prompting/openai-codex-gpt-prompting-reference.md",
           "provenance": "model-facts:families/codex",

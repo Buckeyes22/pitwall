@@ -50,26 +50,54 @@ When a dispatch opts into the channel, the dispatcher appends the asking contrac
 
 Route from Claude Code or Copilot with `codex-shim.sh <prompt-file> [codex flags]`. Codex-hosted work stays native and inline.
 
-Current Codex runtime metadata exposes these model IDs:
+Current routes, reviewed against OpenAI's November 17 release and Codex 0.169.0 metadata:
 
-- `gpt-6-astra` — Astra.
-- `gpt-6.1-sol` — Sol (GPT-6.1).
-- `gpt-6-luna` — Luna.
-- `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` — the earlier GPT-5.6 family, still registered.
+- `gpt-6.2-astra` — demanding reasoning, coding, and professional work.
+- `gpt-6.2-sol` — everyday coding and agent workflows at lower cost.
+- `gpt-6.1-terra` — visual reasoning, computer use, and writing (CLI 0.159.0 or later).
+- `gpt-6-luna` — focused, high-volume work.
+- Earlier GPT-6 and GPT-5.6 IDs remain registered for existing profiles.
 
-Codex's subagent guide starts demanding agents on Sol and fast, narrowly scoped agents on Luna; for an explicit effort it starts at medium for Sol, high for Luna, and low for Astra. The GPT-5.6 System Card defined the earlier family roles: Sol is flagship, Terra is the capable lower-cost option, and Luna is the fastest and most cost-efficient option. The selector strings come from Codex runtime metadata, not from a system card. The shim is generic argument pass-through; it does not validate the installed CLI's model catalog.
+Both 6.2 Codex routes accept `low`, `medium`, `high`, `xhigh`, `max`, and `ultra`.
+`none` and `minimal` are invalid; choose `low` when migrating those settings. The API guide
+recommends `medium` for a new integration, while the reviewed Codex catalog selects `low` by
+default. `ultra` is a Codex delegation setting, not a Responses API effort. Enable it only when
+that delegation is intended. The Terra API also supports `none`; its Codex route follows the catalog's `low` through `ultra` choices.
+
+Keep Codex's configured default when no model override is supplied. Subagents inherit the
+parent model and effort unless explicitly configured; follow the host's delegation rules.
+GPT-6 Luna starts at `high` when selected explicitly. The shim forwards model selectors and
+reasoning settings to Codex and does not probe account access.
+
+For 6.2 prompts, define the result and the checks that establish completion, allow reversible
+assumptions within scope, and keep working through the final verification. Astra is more concise
+by default, so reassess blanket brevity rules and require a self-contained final answer. Describe
+project conventions, preserve caller behavior when reusing code, and add tests for repository
+requirements or a specific uncovered regression. Keep instruction files focused on requirements.
+
+For direct API integrations, use Responses for tools and omit sampling and log-probability options.
+Append changes to conversation history: GPT-6.2 can discard prior reasoning after prefix edits,
+model downgrades, or changes of user or organization. Inspect `input_transformations` when diagnosing
+lost reasoning. Pitwall's Codex transport leaves this conversation management to the installed CLI.
+API token limits differ from client limits: the reviewed Codex catalog advertises a 272,000-token
+window for 6.2 Astra and 500,000 for 6.2 Sol and 6.1 Terra; their API windows are 1,050,000 tokens.
+The sanitized catalog evidence is `docs/agents/model-facts/families/codex/runtime-models.json` in the
+source repository.
 
 The GPT-5.6 system card's agentic evaluations found a greater tendency than GPT-5.5 to go beyond user intent. Give explicit authorization boundaries, identify destructive or irreversible actions that need confirmation, and say what must remain untouched. Tool-failure case studies also support artifact-based verification: do not accept an unverified success claim after tools fail.
 
 Use the cheapest reasoning effort that can notice failure. Raise effort for genuinely harder reasoning, not to compensate for an underspecified prompt.
 
-Sources: the Codex subagents documentation for the GPT-6 roles, and `GPT-5.6 System Card`, https://deploymentsafety.openai.com/gpt-5-6, for the GPT-5.6 evaluations. Runtime selector metadata verified in Codex in July 2026.
+Sources: [GPT-6.2 migration guide](https://developers.openai.com/api/docs/guides/latest-model/gpt-6.2-astra), [Codex models](https://learn.chatgpt.com/docs/models), [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents), and [Codex prompting](https://learn.chatgpt.com/guides/prompting-gpt-6-2-astra), reviewed 2026-11-17. The [GPT-5.6 System Card](https://deploymentsafety.openai.com/gpt-5-6) supports the earlier evaluations.
+
+
+The generated facts below describe API limits; Codex client efforts, defaults, and windows are described above or in the full reference.
 
 <!-- MODEL-FACTS:codex START (generated from docs/agents/model-facts/families/codex; edit facts.json, not this block) -->
-- **Models:** `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`
+- **Models:** `gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-luna`
 - **Context:** 1,050,000 tokens, output 128,000.
-- **Effort:** `gpt-6-astra`: low, medium, high, xhigh, max, cannot be disabled; `gpt-6.1-sol`: low, medium, high, xhigh, max (default medium), cannot be disabled; `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`: none, low, medium, high, xhigh, max (default medium).
-- **Effort on other values:** `gpt-6-astra`: other values are rejected.
+- **Effort:** `gpt-6.2-astra`, `gpt-6.2-sol`: low, medium, high, xhigh, max, cannot be disabled; `gpt-6.1-terra`, `gpt-6-luna`: none, low, medium, high, xhigh, max (default medium).
+- **Effort on other values:** `gpt-6.2-astra`, `gpt-6.2-sol`: other values are rejected.
 - **Stated by vendor:** Describe the outcome, constraints, evidence, and completion bar, then let the model pick the path. Reserve ALWAYS and NEVER for true invariants.
 - **Stated by vendor:** Trim repeated rules, redundant examples, and unrelated tools. Cut one group at a time and rerun the evals; leaner prompts scored and cost better in OpenAI's sample.
 - **Stated by vendor:** State once what a request authorizes: inspect and report for questions, edit and validate locally for changes, confirm before external writes, destructive steps, or scope growth.
@@ -81,22 +109,31 @@ Sources: the Codex subagents documentation for the GPT-6 roles, and `GPT-5.6 Sys
 - **Stated by vendor (`gpt-6-astra`):** GPT-6 Astra asks a focused question when the answer could change the outcome. Say what a request authorizes and to proceed on reasonable assumptions, or it may stop where you expect it to continue.
 - **Stated by vendor (`gpt-6-astra`):** GPT-6 Astra weighs skills and AGENTS.md closely, and conflicting text can make it pause. Audit those files and state that the user's instructions outrank a skill's.
 - **Stated by vendor (`gpt-6-astra`):** GPT-6 Astra may delegate to subagents less often than a workflow wants. Say when and how much to split work for parallel subagents.
-- **Stated by vendor (`gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** With effort above none, omit temperature, top_p and top_logprobs (plus logprobs in Chat Completions, or its include entry in Responses). Tools need Responses; Sol and Luna allow Chat Completions tools only at none.
-- **Stated by vendor (`gpt-6.1-sol`):** GPT-6.1 Sol aims for near-Astra results at lower cost; compare it with Astra on your own tasks. It has no none or minimal effort (use low in their place), and tool calls need the Responses API.
-- **Stated by vendor (`gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** To change effort between turns, add a configuration_update item before the next user message and keep request-level reasoning.effort fixed, which preserves the cached prefix. Single-agent only; no adjacent updates.
-- **Stated by vendor (`gpt-6-astra`, `gpt-6.1-sol`):** Set async: true on a function or custom tool and the model keeps working while your app runs it; return the result on the original call_id. Your app runs and tracks the jobs; hosted tools are excluded. Astra and later.
-- **Stated by vendor (`gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** A user can add instructions to a running response over the Responses WebSocket with response.steer. The input is queued, then continues in a new response; sent output and started tools are not undone.
-- **Stated by vendor (`gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** From GPT-5.6 on, prompt_cache_options.ttl (only 30m) replaces prompt_cache_retention. Cache writes cost 1.25x input and reads 0.1x (0.05x on GPT-6.1 Sol), and an explicit mode places breakpoints.
+- **Stated by vendor (`gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`, `gpt-6.1-terra`):** Above none, omit temperature, top_p and log-probability options. Use Responses for tools; only the earlier GPT-6 Sol and Luna accept Chat Completions tools at none.
+- **Stated by vendor (`gpt-6.1-sol`):** GPT-6.1 Sol is an earlier lower-cost reasoning option. It has no none or minimal effort (use low in their place), and tool calls need the Responses API.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** Append configuration_update to change effort or text.format without rewriting the prefix. Replay updates in order; context_management carries them through automatic compaction. Automatic truncation rejects them.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-astra`, `gpt-6.1-sol`):** Set async: true on a function or custom tool and the model keeps working while your app runs it; return the result on the original call_id. Your app runs and tracks the jobs; hosted tools are excluded. Astra and later.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** A user can add instructions to a running response over the Responses WebSocket with response.steer. The input is queued, then continues in a new response; sent output and started tools are not undone.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`, `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, `gpt-6-luna`):** Use prompt_cache_options.ttl: 30m writes cost 1.25x input; Responses also offers 12h at 2.5x. Reads cost 0.05x on 6.2 Astra/Sol and 6.1 Sol/Terra, otherwise 0.1x for these models.
 - **Stated by vendor:** Reusable prompt objects are deprecated and v1/prompts shuts down on 2026-11-30. Keep prompts in application code and pass instructions and input straight to Responses.
 - **Stated by vendor (`gpt-6-astra`):** Astra leans toward lists, tables, and Markdown, and repeats stock phrases across sessions. State the prose and format your product needs, and ban the specific filler phrases you see, rather than relying on defaults.
 - **Stated by vendor (`gpt-6-astra`):** Astra tests thoroughly, which can be more than a small change needs. Say which checks fit the change, and to broaden or repeat them only when something new or failing justifies it.
+- **Stated by harness (`gpt-6.2-astra`, `gpt-6.2-sol`):** Choose 6.2 Astra for the hardest reasoning and coding, or 6.2 Sol for everyday agents at lower cost. Move examples to the new IDs; keep the operator's Codex-configured default.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`):** For a new API integration, start at medium; replace none or minimal with low. Both 6.2 models need Responses for tools; omit sampling and log-probability options.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`):** Define the finish line and approval boundaries. Let 6.2 state reversible assumptions, keep working through final checks, and ask only for decisions that materially affect the result.
+- **Stated by vendor (`gpt-6.2-astra`):** 6.2 Astra is briefer by default: reassess blanket brevity rules. Require final answers to explain the result on their own, without shorthand from tools, reasoning, or progress updates.
+- **Stated by vendor (`gpt-6.2-astra`):** State project conventions, preserve caller behavior when reusing logic, and favor readable code. Add tests required by the repository or needed for a specific regression.
+- **Stated by vendor (`gpt-6.2-astra`, `gpt-6.2-sol`):** 6.2 can discard prior reasoning after history edits, a model downgrade, or a user or organization change. Append changes and inspect input_transformations when diagnosing lost reasoning.
+- **Stated by harness (`gpt-6.2-astra`, `gpt-6.2-sol`, `gpt-6.1-terra`):** Codex 0.169.0 offers low through max plus ultra on both 6.2 models and 6.1 Terra. Ultra enables client delegation; it is not an API effort. runtime-models.json records the reviewed metadata and client defaults.
+- **Stated by harness (`gpt-6.1-terra`):** 6.1 Terra handles visual reasoning, computer use, and writing. Codex CLI needs version 0.159.0 or newer; tool calls require Responses.
+- **Stated by vendor (`gpt-6-cyber`):** GPT-6 Cyber requires Daybreak Red approval. Record its release and limits without offering an ordinary Codex route; its API listing does not establish account access.
 - **Stated by harness:** codex exec starts in a read-only sandbox. Pass --sandbox workspace-write for a run that edits files, or the run can only inspect.
 - **Stated by harness:** codex exec streams progress to stderr and prints only the final message to stdout. Use -o <path> to capture it, or --json for an event stream.
 - **Stated by harness:** codex exec refuses to run outside a Git repository. Add --skip-git-repo-check only where the environment is safe to change.
 - **Stated by harness:** Codex reads AGENTS.override.md or AGENTS.md from ~/.codex, then one file per directory from the project root down. Later files win, and total size stops at 32 KiB.
 - **Stated by harness:** The sandbox sets what files and network commands can reach; approvals set when Codex pauses. Changing who reviews a request does not widen the sandbox.
 - **Stated by harness:** Codex spawns subagents after a direct request or a project or skill instruction. Name the split, such as one agent per point, and say to wait and summarize.
-- **Facts checked:** 2026-10-07. Sources: `docs/agents/model-facts/families/codex/FACTS.md`.
+- **Facts checked:** 2026-11-17. Sources: `docs/agents/model-facts/families/codex/FACTS.md`.
 <!-- MODEL-FACTS:codex END -->
 
 ## Claude Code transport
