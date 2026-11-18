@@ -73,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Locked dnspython 2.9.2 and OpenTelemetry API/SDK 1.45.2 close CVE-2026-128089 and
+  CVE-2026-126360. The dependency audit and SBOM include the patched versions.
+
 - A Pi dispatch whose every provider attempt failed (Pi still exits 0) now reports exit 77
   with Pi's error instead of an empty success. Dispatch reads the raw JSON stream of JSON-mode
   harnesses when it looks for a soft denial.
